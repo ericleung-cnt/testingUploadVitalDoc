@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DN_Subreport" pageWidth="396" pageHeight="283" columnWidth="386" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="c641c663-6675-40b2-9bb9-99a3a9979591">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="dnAmt" class="java.lang.String"/>
+	<parameter name="bDNSR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="feeItemChi" class="java.lang.String"/>
+	<field name="feeItemEng" class="java.lang.String"/>
+	<field name="feeAmt" class="java.lang.String"/>
+	<field name="chargedUnits" class="java.lang.String"/>
+	<field name="unitPrice" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="275" y="1" width="81" height="21" uuid="5e57d4ee-7cfd-497f-8ccb-e8c82a2ad3ea">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{feeAmt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="1" width="140" height="16" uuid="4a58076b-081e-4ea7-9e0a-98e1a95c58a8"/>
+				<textElement>
+					<font size="8" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{feeItemChi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="17" width="251" height="16" uuid="f36d1f9d-3e10-49e6-988b-a4e7ae82d82e">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{feeItemEng}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="1" width="31" height="16" uuid="326ff195-0646-4543-b83c-af55223a9f99">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chargedUnits}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="1" width="41" height="16" uuid="1bf3bd68-5aa6-40f4-968b-fd563b469698">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{unitPrice}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
