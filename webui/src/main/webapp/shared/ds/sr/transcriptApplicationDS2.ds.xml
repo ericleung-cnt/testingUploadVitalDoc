@@ -1,0 +1,37 @@
+<DataSource ID="transcriptApplicationDS2" serverType="generic"
+	inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="certifiedTranscriptApplicationDMI" />
+	<fields>
+		<!-- <field name="ocrTranscriptId" type="integer" title="ID" primaryKey="true"/>
+		<field name="issueType"  type="text" title="Issue Type" length="100" />
+		<field name="vesselName"  type="text" title="Ship Name" length="100" />
+		<field name="imoNumber"  type="text" title="IMO No." length="100" />
+		<field name="officialNumber"  type="text" title="Official No." length="100" />
+		<field name="forDate" type="date" title="For Date" displayFormat="dd/MM/yyyy"/>
+		<field name="applicantCompanyName"  type="text" title="Applicant Company Name" length="100" />
+		<field name="contactPerson"  type="text" title="Contact Person" length="100" />
+		<field name="address"  type="text" title="Owner Address" length="100" />
+		<field name="email"  type="text" title="Email" length="100" />
+		<field name="fax"  type="text" title="Fax" length="100" />
+		<field name="tel"  type="text" title="Tel" length="100" /> -->
+		<field name="id" type="integer" title="ID" primaryKey="true" />
+		<field name="applNo" 		type="text" title="Appl No" 		length="9"/>
+		<!-- <field name="issueDateStr" type="text" title="Issue Date"/> -->
+		<field name="generationTime" type="date" title="Issue Date"/>
+		<field name="reportDate" type="datetime" title="Report Date"/>
+		<field name="genBy" type="text" title="Report generate by"/>
+		<field name="officeCode" type="text" title="Office Code"/>
+		<field name="demandNoteNo" type="text" title="Demand Note No"/>
+		<field name="registrar" type="integer" title="Registrar"/>
+		<field name="certified" type="boolean" title="Certified"/>
+		<field name="paymentRequired" type="boolean" title="Payment Required"/>
+		<field name="officeCode" type="text" title="Office Code"/>
+		<field name="paymentStatus" type="text" title="Payment Status"/>
+		<field name="reason" type="text" title="Reason Of No Payment"/>
+		<field name="delayPaymentRequired" type="boolean" title="Delay Payment Required"/>
+		<field name="delayPaymentReason" type="text" title="Reason Of Delay Payment"/>
+		<field name="printMortgage" type="boolean" title="Print Mortgage"/>
+		<!-- <field name="demandNoteNo"  type="text" title="Demand Note No" length="100" /> -->
+		<field name="issueOffice" type="text" title="Issue Office"/>
+	</fields>
+</DataSource>	

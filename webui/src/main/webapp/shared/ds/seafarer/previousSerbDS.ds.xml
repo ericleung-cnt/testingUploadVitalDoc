@@ -1,0 +1,9 @@
+<DataSource ID="previousSerbDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="previousSerbDMI" />
+	<fields>
+		<field name="seafarerId" 	type="text" 	title="Seafarer ID"  	primaryKey="true" 	required="true"/>
+		<field name="seqNo" 		type="integer" 	title="Seq NO." 		/>
+		<field name="serbNo" 		type="text" 	title="SERB NO."		length="10"/>
+		<field name="serbDate"  	type="date" displayFormat="dd/MM/yyyy" 	title="SERB Date"	/>
+	</fields>
+</DataSource>

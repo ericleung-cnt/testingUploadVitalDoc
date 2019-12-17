@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+D:\mdtrusted\SSRS_latest_20191204\SSRS_latest_0\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+2700155328.index
+2318337667.index
+3259932830.index
+3451048683.index
+1534437468.index
+2395215599.index
