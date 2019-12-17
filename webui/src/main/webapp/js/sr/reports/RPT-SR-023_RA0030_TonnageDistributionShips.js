@@ -1,1 +1,0 @@
-simpleSrReport("Tonnage Distribution of Ships","RPT_SR_023");

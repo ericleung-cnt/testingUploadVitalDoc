@@ -1,1 +1,0 @@
-simpleSrReport("Annual Report for Ships Registered / De-Registered - Details","RPT_SR_022_Detail");
