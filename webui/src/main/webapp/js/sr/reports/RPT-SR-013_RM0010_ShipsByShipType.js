@@ -1,0 +1,1 @@
+simpleSrReport("Summary of Ships by Ship Type","RPT_SR_013");

@@ -1,0 +1,11 @@
+<DataSource ID="certDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="certDMI" />
+	<fields>
+		<field name="seafarerId" 	type="text" 	title="Seafarer ID"  	primaryKey="true"/>
+		<field name="seqNo" 		type="integer" 	title="Seq NO." 		primaryKey="true"/>
+		<field name="certType" 		type="text" 	title="Cert Type"		length="40"/>
+		<field name="issueDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Issue Date"/>
+		<field name="issueAuthority"	type="text" title="Issue Authority"		length="40"/>
+		<field name="certNo" 		type="text" 	title="Cert NO."			length="30"/>
+	</fields>
+</DataSource>
