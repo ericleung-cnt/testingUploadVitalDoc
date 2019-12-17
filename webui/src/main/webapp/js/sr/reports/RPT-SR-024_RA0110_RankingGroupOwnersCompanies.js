@@ -1,1 +1,0 @@
-simpleSrReport("Ranking of Group Owners / Companies","RPT_SR_024");
