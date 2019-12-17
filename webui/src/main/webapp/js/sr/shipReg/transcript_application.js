@@ -1,3 +1,110 @@
+var openSrBillingPersonForm = function(windowTitle, applNo, callback){
+	console.log("open sr billing person");
+	console.log("applNo:" + applNo);
+	var srBillingPersonList = isc.ListGrid.create({
+		ID:"srBillingPersonList",
+		dataSource: "demandNoteBillingPersonDS",
+		showFilterEditor:true, 
+		//filterOnKeypress:true,
+		fields:[
+			{ name:"billingPerson", title:"Billing Person", width:200 },
+			{ name:"billingPersonType", title:"Type", width:100},
+			{ name:"address1", title:"Address1", width:"*" }
+		]
+	});
+	var srBillingPersonForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "srBilingPersonForm_BtnToolbar",
+		buttons:[
+			{ name: "copy", title:"Copy", width:50, 
+				click: function(){
+					var record = srBillingPersonList.getSelectedRecord();
+					console.log(record);
+					callback(record);
+					srBillingPersonWindow.close();
+				}
+			},
+			{ name:"close", title:"Close", width:50,
+				click: function(){
+					srBillingPersonWindow.close();
+				}
+			}
+		]
+	});
+	var srBillingPersonWindow = isc.Window.create({
+		ID: "srBillingPersonWindow",
+		title: windowTitle, //"Billing Person",
+		width: 800,
+		height: 200,
+		isModal: true,
+		items:[
+			isc.VLayout.create({
+				members:[
+					srBillingPersonList,
+					srBillingPersonForm_BtnToolbar
+				]
+			})
+		],
+		close: function() {srBillingPersonWindow.markForDestroy(); }
+	});
+	srBillingPersonWindow.show();
+	srBillingPersonList.setData([]);
+	srBillingPersonList.fetchData({"applNo":applNo}, function(){});
+	return srBillingPersonWindow;
+}
+
+var openTranscriptBillingPersonForm = function(windowTitle, callback){
+	var transcriptBillingPersonList = isc.ListGrid.create({
+		ID:"transcriptBillingPersonList",
+		dataSource: "demandNoteBillingPersonDS",
+		showFilterEditor:true, 
+		//filterOnKeypress:true,
+		//fetchDelay:500,
+		fields:[
+			{ name:"billingPerson", title:"Billing Person", width:200 },
+			{ name:"billingPersonType", title:"Type", width:100},
+			{ name:"address1", title:"Address1", width:"*" }
+		],
+	});
+	var transcriptBillingPersonForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "transcriptBilingPersonForm_BtnToolbar",
+		buttons:[
+			{ name: "copy", title:"Copy", width:50, 
+				click: function(){
+					var record = transcriptBillingPersonList.getSelectedRecord();
+					console.log(record);
+					callback(record);
+					transcriptBillingPersonWindow.close();
+				}
+			},
+			{ name:"close", title:"Close", width:50,
+				click: function(){
+					transcriptBillingPersonWindow.close();
+				}
+			}
+		]
+	});
+	var transcriptBillingPersonWindow = isc.Window.create({
+		ID: "transcriptBillingPersonWindow",
+		title: windowTitle, //"Billing Person",
+		width: 800,
+		height: 200,
+		isModal: true,
+		items:[
+			isc.VLayout.create({
+				members:[
+					transcriptBillingPersonList,
+					transcriptBillingPersonForm_BtnToolbar
+				]
+			})
+		],
+		close: function() {transcriptBillingPersonWindow.markForDestroy(); }
+	});
+	transcriptBillingPersonWindow.show();
+	transcriptBillingPersonList.setData([]);
+	transcriptBillingPersonList.fetchData({}, function(){});
+	return transcriptBillingPersonWindow;	
+}
+
 function openSrDemandNote(record){
 	var refreshItems = function(form,item,value) {
 		
@@ -144,17 +251,17 @@ function openSrDemandNote(record){
 									ReportViewWindow.displayReport(["demandNoteGenerator", {"demandNoteNo":data.demandNoteNo}]);
 									dynamicForm.getField("demandNoteNo").setValue(form.getField("demandNoteNo").getValue());
 
-//									dynamicForm.getField("paymentRequired").setDisabled(false);
-//									dynamicForm.getField("delayPaymentRequired").setDisabled(false);
-//									dynamicForm.getField("printMortgage").setDisabled(false);
-//									dynamicForm.getField("printMortgage").setValue(true);
-//									dynamicForm.getField("issueOffice").setValue(dynamicForm.getField("officeCode").getValue());
-//									dynamicForm.getField("generationTime").setDisabled(false);
-//									dynamicForm.getField("issueOffice").setDisabled(false);
-//									printBtn.show();
-//									saveButton.lazy();
-//									
-//								}				
+									dynamicForm.getField("paymentRequired").setDisabled(false);
+									dynamicForm.getField("delayPaymentRequired").setDisabled(false);
+									dynamicForm.getField("printMortgage").setDisabled(false);
+									dynamicForm.getField("printMortgage").setValue(true);
+									dynamicForm.getField("issueOffice").setValue(dynamicForm.getField("officeCode").getValue());
+									dynamicForm.getField("generationTime").setDisabled(false);
+									dynamicForm.getField("issueOffice").setDisabled(false);
+									printBtn.show();
+									saveButton.lazy();
+									
+			
 
 									
 									if(data.demandNoteNo){
@@ -317,8 +424,9 @@ var filterListGrid = isc.FilterListGrid.create({
 			 { name:"generationTime", title:"Issue Date", type:"date", width:150, format:"dd/MM/yyyy"},
 			 { name:"issueOffice", width:100 , title:"Issue Office", optionDataSource:"officeDS", displayField:"name", valueField:"id"}
 		],
-		rowClick : function(record, recordNum, fieldNum){
+			rowClick : function(record, recordNum, fieldNum){
 
+			
 			dynamicForm.editSelectedData(filterListGrid);
 			var DemandNoteIND = dynamicForm.getItem("demandNoteNo").getValue() == null ? true : false;
 			dynamicForm.getItem("paymentRequired").setDisabled(DemandNoteIND);
@@ -328,33 +436,6 @@ var filterListGrid = isc.FilterListGrid.create({
 			dynamicForm.getItem("issueOffice").setDisabled(DemandNoteIND);
 			
 			
-//			console.log(dynamicForm.getField("paymentStatus").getValue());
-//			console.log(dynamicForm.getField("paymentRequired").getValue());
-//			var paymentStatus = dynamicForm.getField("paymentStatus").getValue();
-//			if(paymentStatus == 1){
-//				printBtn.show();
-//				previewBtn.show();
-//			}else{
-//				printBtn.hide();
-//			}
-//			
-//			var issueDate = dynamicForm.getField("generationTime").getValue();
-//			if(issueDate != null){
-//				printBtn.hide();
-//				reprintBtn.show();
-//				previewBtn.show();
-//			}else{
-//				reprintBtn.hide();
-//			}
-//			
-//			var demandNoteNo = dynamicForm.getField("demandNoteNo").getValue();
-//			if(demandNoteNo == null){
-//				createDemandNote.show();
-//			}else{
-//				createDemandNote.hide();
-//				previewBtn.show();
-//			}
-//
 //			console.log(dynamicForm.getField("paymentStatus").getValue());
 //			console.log(dynamicForm.getField("paymentRequired").getValue());
 			
@@ -414,7 +495,6 @@ var filterListGrid = isc.FilterListGrid.create({
 
 
 			
-
 			if (dynamicForm.getItem("paymentRequired").getValue()) {
 			    dynamicForm.getItem("reason").setDisabled(true);
 			} else {
@@ -426,7 +506,18 @@ var filterListGrid = isc.FilterListGrid.create({
 			} else {
 			    dynamicForm.getItem("delayPaymentReason").setDisabled(true);
 			}
+				
+			
+//			if(issueDate != null){
+//				printBtn.hide();
+//				reprintBtn.show();
+//			}else{
+//				reprintBtn.hide();
+//			}
+			
 
+
+			
 			saveButton.setDisabled(!userFunctionList.contains('CODETABLE_UPDATE'));
 			if (["id"] != null){
 				var text = "";
@@ -497,7 +588,7 @@ var dynamicForm = isc.DynamicForm.create({
 //				  }
 //			  }
 //		  },
-//		  {name:"reason", title:"Reason Of No Payment", visible:true, type:"textArea", colSpan: 5, height: 50, disabled:true},
+//		  {name:"reason", title:"Reason Of No Payment", visible:true, type:"textArea", colSpan: 5, height: 50, disabled:true,length:50},
 //		  {name:"delayPaymentRequired", type:"boolean", title:"Delay Payment Required",defaultValue:false, startRow:"true",disabled:true, 
 //			  changed:function(_1,_2,_3){
 //				  this.form.getItem("delayPaymentReason").setEnabled(this.getValue()&&this.form.getItem("demandNoteNo").getValue()!=null);
@@ -513,7 +604,7 @@ var dynamicForm = isc.DynamicForm.create({
 //				  }
 //			  }
 //		  },
-//		  {name:"delayPaymentReason", title:"Reason Of Delay Payment", visible:true, disabled:true, type:"textArea", colSpan: 5, height: 50},
+//		  {name:"delayPaymentReason", title:"Reason Of Delay Payment", visible:true, disabled:true, type:"textArea", colSpan: 5, height: 50,length:50},
 //		  {name:"printMortgage", type:"boolean", title:"Print Mortgage",defaultValue:false, startRow:"true",disabled:true },
 //		  /*{name:"genBy",required:true, valueMap:{"HQ":"Headquarter","RD":"Regional Desk"}, displayField:"name", valueField:"id", title:"Report generate by", width:200 , startRow:"true"},*/
 //		  {name:"generationTime", title:"Issue Date", type:"date", width:200, format:"dd/MM/yyyy" , startRow:"true",disabled:true},
@@ -539,7 +630,7 @@ var dynamicForm = isc.DynamicForm.create({
 
 		  }}
 		  },
-		  {name:"reason", title:"Reason Of No Payment", disabled:true, type:"textArea", colSpan: 5, height: 50, changed:function(_1,_2,_3){
+		  {name:"reason", title:"Reason Of No Payment", disabled:true, type:"textArea", colSpan: 5, height: 50, length:50,changed:function(_1,_2,_3){
 			  console.log("reason",this.getValue());
 			  if(!this.form.getItem("paymentRequired").getValue()&&this.getValue()){
 				  printBtn.show();
@@ -569,7 +660,7 @@ var dynamicForm = isc.DynamicForm.create({
 			  }
 			  this.form.getItem("delayPaymentReason").changed();
 		  }},
-		  {name:"delayPaymentReason", title:"Reason Of Delay Payment", disabled:true, type:"textArea", colSpan: 5, height: 50, changed:function(_1,_2,_3){
+		  {name:"delayPaymentReason", title:"Reason Of Delay Payment", disabled:true, type:"textArea", colSpan: 5, height: 50, length:50,changed:function(_1,_2,_3){
 			  console.log('trigger delayPaymentReason changed func');
 			  if(this.form.getItem("delayPaymentRequired").getValue()&&this.getValue()){
 				  printBtn.show();
