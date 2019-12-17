@@ -51,6 +51,11 @@ public class UserGroup2 extends AbstractPersistentEntity<Long> {
 	@Column(name = "CHI_DESC", length=100)  
 	private String chiDesc;
 //
+
+	@Getter
+	@Setter
+	@Column(name = "OFFICE_CODE", length=10, nullable=true)
+	private String officeCode;
 //	@Getter
 //	@Setter
 //	@OneToMany(fetch=FetchType.EAGER)

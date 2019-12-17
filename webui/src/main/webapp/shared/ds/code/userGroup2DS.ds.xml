@@ -5,5 +5,6 @@
         <field name="roleCode" 	type="text" 	title="Role Code."  			length="30" 	required="true"/>
 		<field name="engDesc" 	type="text" 	title="English Description"  	length="100"	required="true"/>
 		<field name="chiDesc" 	type="text" 	title="Chinese Description"  	length="100"/>
+		<field name="officeCode" type="text" title="Office"/>
 	</fields>
 </DataSource>

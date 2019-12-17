@@ -10,6 +10,6 @@
 		<field name="address3" type="text" title="Address 3" length="50" />
 		<field name="email" type="text" title="Email" length="50" />
 		<field name="tel" type="text" title="Tel" length="18" />
-		<field name="status" type="text" title="Status" length="50" />
+
 	</fields>
 </DataSource>

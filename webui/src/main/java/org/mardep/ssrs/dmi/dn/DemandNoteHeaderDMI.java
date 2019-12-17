@@ -179,11 +179,11 @@ public class DemandNoteHeaderDMI extends AbstractDMI<DemandNoteHeader>{
 					//20190806 dnsService.createDemandNote(demandNoteNo, Action.U, false);
 
 					ControlData controlData = controlDataDao.find(ControlEntity.DN, ControlAction.CREATE, demandNoteNo);
-
 					/*
 					 * byte[] osContent = controlData.getFile(); if(osContent!=null){ //20190806
 					 * vitalDocClient.uploadDemandNote(demandNoteNo, osContent); }
 					 */
+
 				}
 			}else if(DemandNoteOperationId.CREATE_REGULAR_DEMAND_NOTE.equals(operationId)){
 //				TODO

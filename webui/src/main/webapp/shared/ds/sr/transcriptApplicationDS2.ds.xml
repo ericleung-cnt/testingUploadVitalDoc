@@ -21,6 +21,7 @@
 		<field name="reportDate" type="datetime" title="Report Date"/>
 		<field name="genBy" type="text" title="Report generate by"/>
 		<field name="officeCode" type="text" title="Office Code"/>
+
 		<field name="demandNoteNo" type="text" title="Demand Note No"/>
 		<field name="registrar" type="integer" title="Registrar"/>
 		<field name="certified" type="boolean" title="Certified"/>

@@ -62,11 +62,6 @@ public class Office extends AbstractPersistentEntity<Integer> {
 	@Column(name = "OFFICE_TEL", length=18)
 	private Integer tel;
 	
-	@Getter
-	@Setter
-	@Column(name = "STATUS", length=50)
-	private String status;
-	
 	@Override
 	public Integer getId() {
 		return id;

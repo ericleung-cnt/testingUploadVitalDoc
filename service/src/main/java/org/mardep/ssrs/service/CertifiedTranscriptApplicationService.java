@@ -6,7 +6,6 @@ import javax.transaction.Transactional;
 
 import org.mardep.ssrs.dao.ocr.IOcrTranscriptDao;
 import org.mardep.ssrs.dao.sr.ICertifiedTranscriptApplicationDao;
-import org.mardep.ssrs.domain.dn.DemandNoteHeader;
 import org.mardep.ssrs.domain.ocr.OcrEntityTranscript;
 import org.mardep.ssrs.domain.sr.CertifiedTranscriptApplication;
 import org.springframework.beans.factory.annotation.Autowired;

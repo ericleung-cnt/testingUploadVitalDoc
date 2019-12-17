@@ -42,7 +42,6 @@ public class DemandNoteItemDMI extends AbstractDMI<DemandNoteItem>{
 			List<DemandNoteItem> items = demandNoteService.findUnusedByAppl(entity.getApplNo());
 			items.forEach(i->{
 				i.setFeeCode(null);
-				//i.setFcFeeCode("11");
 				i.setDemandNoteHeader(null);
 			});
 			return new DSResponse(items, DSResponse.STATUS_SUCCESS);
