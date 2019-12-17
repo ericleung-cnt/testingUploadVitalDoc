@@ -1,0 +1,8 @@
+<DataSource ID="licenseDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="licenseDMI" />
+	<fields>
+		<field name="seafarerId" 	type="text" 	title="Seafarer ID"  	required="true"/>
+		<field name="seqNo" 		type="integer" 	title="Seq NO." 		/>
+		<field name="courseDesc" 	type="text" 	title="Course Description" 			length="400"/>
+	</fields>
+</DataSource>

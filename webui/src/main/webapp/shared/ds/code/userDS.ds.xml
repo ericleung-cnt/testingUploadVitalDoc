@@ -1,0 +1,13 @@
+<DataSource ID="userDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="userDMI" />
+	<fields>
+		<field name="id" 		type="text" title="User ID" 	primaryKey="true" length="10"/>
+		<field name="userName" 	type="text" title="User Name" 	length="30"/>
+		<field name="chiName" 	type="text" title="Chinese Name" 	length="10"/>
+		<field name="userPassword" 	type="password" title="Password" 	length="50"/>
+		<field name="userStatus" 	type="integer" title="Status" 	/>
+		<field name="userPasswordTime" 	type="dateTime" displayFormat="dd/MM/yyyy" title="Password Time"/>
+		<field name="email" 	type="text" title="Email" 	length="50"/>
+		<field name="roleIds" 	type="any"/>
+	</fields>
+</DataSource>

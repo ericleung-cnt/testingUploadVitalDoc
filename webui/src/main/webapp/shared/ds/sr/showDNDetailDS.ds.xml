@@ -1,0 +1,20 @@
+<DataSource ID="showDNDetailDS" serverType="generic">
+	<fields>
+		<field name="demandNoteNo" 	type="text"  title="Demand Note No." value = "104642" length="30" />
+		<field name="applNo" 	type="text" title="Appl No." 	length="30" value = "2019/438"/>
+		<field name="offNo" 	type="text" title="Official No." 	length="30" value = "9963"/>
+		<field name="shipName" 	type="text" title="Ship Name" 	length="30" value = "Ship Name"/>
+		<field name="billName" 	type="text" title="Billing Person" 	length="30" value = "WATSON FARLEY &amp; WILLIAMS"/>
+		<field name="coName" 	type="text" title="C/O" 	length="30" value = "WATSON FARLEY &amp; WILLIAMS"/>
+		<field name="address1" 	type="text" title="Address" 	length="30" value = "SUITES?4610-4619, JARDINE HOUSE,"/>
+		<field name="address2" 	type="text" title="" length="30" value = "1 CONNAUGHT PLACE,"	/>
+
+		<field name="address3" type="text" title="" length="30"  value = "HONG KONG."/>
+		<field name="generationTime" type="text" title="Issue Date" length="80"  value = "18/10/2019"/>
+		<field name="dueDate" type="text" title="Due Date" length="80" value = "18/10/2019" />
+		<field name="paymentStatusStr" type="text" title="Payment Status" length="80" value = "Outstanding" />
+		<field name="amount" type="text" title="EBS Flag" length="18" value = "520.00" />
+	</fields>
+</DataSource>
+
+
