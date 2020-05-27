@@ -27,6 +27,8 @@ import org.xml.sax.SAXException;
 public class OcrServiceEng2 implements IOcrServiceEng2 {
 
 	private final String XML_TAG_ENG2 = "_List_of_Crew:_List_of_Crew";
+	//private final String SPECIAL_STR = "[!@#$%^&?<>:-_»：*〔•）㈨]*";
+	//private final String SPECIAL_STR = "[!@#$%^&?<>:-_»]*";
 	
 	private String extractXmlStringValue(Node node) {
 		if (node.getChildNodes().getLength()>0) {
@@ -369,103 +371,173 @@ public class OcrServiceEng2 implements IOcrServiceEng2 {
 		return seafarerList;
 	}
 	
-	private OcrXmlEng2_Seafarer setupSeafarer(OcrXmlEng2_TableRow row1, OcrXmlEng2_TableRow row2, OcrXmlEng2_TableRow row3) {
-		OcrXmlUtility util = new OcrXmlUtility();
-		OcrXmlEng2_Seafarer seafarer = new OcrXmlEng2_Seafarer();
-		
-		seafarer.setSeafarerName(row1.getCellA()
+	public String parseSeafarerName(String rawStr, String specialStr) {
+		String parseStr = rawStr
 				.replaceAll("\\n+", "")
 				.replaceAll("\\(8", "")
 				.replaceAll("\\(a", "")
-				.replaceAll("\\)", ""));
-		
-		if (row1.getCellB().toUpperCase().contains("M")) {
-			seafarer.setGender("M");
-		} else {
-			seafarer.setGender("F");
-		}
-		//seafarer.setGender(row1.getCellB());
-		
-		seafarer.setAddress1(row1.getCellC()
+				.replaceAll("\\)", "")
+				.replaceAll(specialStr, "");
+				//.replaceAll("/*!@#$%^&*()\"{}_[]|\\?/<>,.:", "");
+				//.replaceAll("[^a-zA-Z0-9]", "");
+		return parseStr;
+	}
+	
+	private String parseGender(String rawStr) {
+		String parseStr = rawStr.toUpperCase().contains("M") ? "M" : "F";
+		return parseStr;
+	}
+	
+	private String parseAddress1(String rawStr) {
+		String parseStr = rawStr
 				.replaceAll("\\n+", " ")
 				.replaceAll("\\(a", "")
 				.replaceAll("\\)", "")
-				.replaceAll(">", ""));
-		
-		String capacity = row1.getCellD()
+				.replaceAll("\\^", "")
+				.replaceAll(">", "");
+		return parseStr;
+	}
+	
+	private String parseCapacity(String rawStr) {
+		String parseStr = rawStr
 				.replaceAll("\\n+", " ");
 		Pattern p = Pattern.compile("\\p{Alpha}");
-		Matcher m = p.matcher(capacity);
+		Matcher m = p.matcher(parseStr);
 		if (m.find()) {
-			seafarer.setCapacity(capacity.substring(m.start(), capacity.length()));
+			parseStr = parseStr.substring(m.start(), parseStr.length());
 		}
-//		seafarer.setCapacity(row1.getCellD()
-//				.replaceAll("\\n+", " ")
-//				.replaceAll("\\(4", "")
-//				.replaceAll("\\)", ""));
-		
-		String engagementData = row1.getCellE();
-		p = Pattern.compile("\\p{Alpha}");
-		m = p.matcher(engagementData);
+		return parseStr;
+	}
+	
+	private void setEngagementData(OcrXmlEng2_Seafarer seafarer, String rawStr) {
+		Pattern p = Pattern.compile("\\p{Alpha}");
+		Matcher m = p.matcher(rawStr);
 		if (m.find()) {
-			seafarer.setDateOfEngagement(engagementData.substring(0, m.start()).replaceAll("\\n+", ""));
-			seafarer.setPlaceOfEngagement(engagementData.substring(m.start(), engagementData.length()));
+			seafarer.setDateOfEngagement(rawStr.substring(0, m.start()).replaceAll("\\n+", ""));
+			seafarer.setPlaceOfEngagement(rawStr.substring(m.start(), rawStr.length()));
 		}
-		
-		seafarer.setSerb(row2.getCellA());
-		
-		int b = row2.getCellB().toUpperCase().indexOf('B');
-		String nationality = "";
+	}
+
+	private String parseSerb(String rawStr) {
+		String parseStr = rawStr
+				.replaceAll("\\^", ""); //.replaceAll(SPECIAL_STR, "");
+		return parseStr;
+	}
+	
+	private String parseNationality(String rawStr) {
+		rawStr = rawStr
+				.replaceAll("\\n+", "")
+				.replaceAll("\\^", "");
+		int b = rawStr.toUpperCase().indexOf('B');
+		String parseStr = "";
 		if (b>=0) {
-			nationality = row2.getCellB().substring(b+2, row2.getCellB().length());
+			parseStr = rawStr.substring(b+2, rawStr.length());
 		} else {
-			nationality = row2.getCellB();
+			parseStr = rawStr;
 		}
-		seafarer.setNationality(nationality.trim());
-		
-		seafarer.setNextOfKin(row2.getCellC());
-		
-		seafarer.setCert(row2.getCellD());
-		
-		p = Pattern.compile("^[0-9]{4}$");
-		m = p.matcher(row2.getCellE());
+		return parseStr.trim();
+	}
+	
+	private String parseNextOfKin(String rawStr) {
+		String parseStr = rawStr
+				.replaceAll("\\-", "")
+				.replaceAll("\\^", "")
+				.replaceAll("\\»", "");
+				//.replaceAll(SPECIAL_STR, "");
+		return parseStr;
+	}
+	
+	private String parseCert(String rawStr) {
+		String parseStr = rawStr;
+		return parseStr;		
+	}
+	
+	private void setDischargeData(OcrXmlEng2_Seafarer seafarer, String rawStr) {
+		Pattern p = Pattern.compile("^[0-9]{4}$");
+		Matcher m = p.matcher(rawStr);
 		if (m.find()) {
-			seafarer.setDateOfDischarge(row2.getCellE());
+			seafarer.setDateOfDischarge(rawStr);
 		}
-		
-		p = Pattern.compile("\\d");
-		m = p.matcher(row3.getCellA());
+	}
+	
+	private String parseDateOfBirth(String rawStr) {
+		String parseStr = "";
+		Pattern p = Pattern.compile("\\d");
+		Matcher m = p.matcher(rawStr);
 		if (m.find()) {
-			String dateOfBirth = row3.getCellA()
-					.substring(m.start(), row3.getCellA().length());
-			seafarer.setDateOfBirth(dateOfBirth);
+			parseStr = rawStr
+					.substring(m.start(), rawStr.length());
 		}
-		//seafarer.setDateOfBirth(row3.getCellA());
-		
-		int c = row3.getCellB().toUpperCase().indexOf('C');
+		return parseStr;
+	}
+	
+	private String parsePlaceOfBirth(String rawStr) {
+		String parseStr = "";
+		int c = rawStr.toUpperCase().indexOf('C');
 		if ( c>=0 ) {
-			seafarer.setPlaceofBirth(row3.getCellB().substring(c+2, row3.getCellB().length()));
+			parseStr = rawStr.substring(c+2, rawStr.length());
 		} else {
-			seafarer.setPlaceofBirth(row3.getCellB());
+			parseStr = rawStr;
+		}
+		return parseStr.replaceAll("\\^", "");//.replaceAll(SPECIAL_STR, "");
+	}
+
+	private String parseRelationship(String rawStr) {
+		rawStr = rawStr.replaceAll("\\@", "");
+		String parseStr = "";
+		int c = rawStr.toUpperCase().indexOf('C');
+		if (c>=0) {
+			parseStr = rawStr.substring(c+2, rawStr.length());
+		} else {
+			parseStr = rawStr;
 		}
 		
-		seafarer.setRelationship(row3.getCellC());
-		
-		if (row3.getCellD().toUpperCase().contains("USD")) {
+		return parseStr.trim();
+	}
+	
+	private void setWagesData(OcrXmlEng2_Seafarer seafarer, String rawStr) {
+		if (rawStr.toUpperCase().contains("USD")) {
 			seafarer.setWagesUnit("USD");
 		} else {
 			seafarer.setWagesUnit("HKD");
 		}
-		p = Pattern.compile("\\d");
-		m = p.matcher(row3.getCellD());
+		Pattern p = Pattern.compile("\\d");
+		Matcher m = p.matcher(rawStr);
 		if (m.find()) {
-			String wages = row3.getCellD()
-					.substring(m.start(), row3.getCellD().length());
+			String wages = rawStr
+					.substring(m.start(), rawStr.length());
 			seafarer.setWages(wages);
 		}
-		//seafarer.setWages(row3.getCellD());
+	}
+	
+	public String parsePlaceOfDischarge(String rawStr, String specialStr) {
+		String parseStr = rawStr
+				.replaceAll("\\^", "")
+				.replaceAll(specialStr, "");
+		return parseStr;
+	}
+	
+	private OcrXmlEng2_Seafarer setupSeafarer(OcrXmlEng2_TableRow row1, OcrXmlEng2_TableRow row2, OcrXmlEng2_TableRow row3) {
+		OcrXmlUtility util = new OcrXmlUtility();
+		OcrXmlEng2_Seafarer seafarer = new OcrXmlEng2_Seafarer();
 		
-		seafarer.setPlaceOfDischarge(row3.getCellE());
+		seafarer.setSeafarerName(parseSeafarerName(row1.getCellA(), "[\\t\\n\\r*：»〔•）]+"));		
+		seafarer.setGender(parseGender(row1.getCellB()));
+		seafarer.setAddress1(parseAddress1(row1.getCellC()));
+		seafarer.setCapacity(parseCapacity(row1.getCellD()));
+		setEngagementData(seafarer, row1.getCellE());
+		
+		seafarer.setSerb(parseSerb(row2.getCellA()));
+		seafarer.setNationality(parseNationality(row2.getCellB()));
+		seafarer.setNextOfKin(parseNextOfKin(row2.getCellC()));
+		seafarer.setCert(parseCert(row2.getCellD()));
+		setDischargeData(seafarer, row2.getCellE());
+		
+		seafarer.setDateOfBirth(parseDateOfBirth(row3.getCellA()));
+		seafarer.setPlaceofBirth(parsePlaceOfBirth(row3.getCellB()));
+		seafarer.setRelationship(parseRelationship(row3.getCellC()));
+		setWagesData(seafarer, row3.getCellD());	
+		seafarer.setPlaceOfDischarge(parsePlaceOfDischarge(row3.getCellE(), "[\\t\\n\\r(>;&_《«•]"));
 		
 		return seafarer;
 	}

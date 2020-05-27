@@ -28,7 +28,7 @@
 		<module>..\ssrs-dao-api</module>
 		<module>..\ssrs-dao-jpa</module>
 		<module>..\service</module>
-		<module>..\migration</module>
+		<!-- <module>..\migration</module> -->
 		<module>..\webui</module>
 		<module>..\ssrs-dms-ocr</module>
 	</modules>
