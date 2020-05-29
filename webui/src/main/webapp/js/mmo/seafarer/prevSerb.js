@@ -28,7 +28,7 @@ isc.ButtonToolbar.create({
 									sfRecFormDetail.setValue('serbDate', data.serbStartDate);
 									sfPreviousSerbListGrid.refresh();
 									
-									
+									var seafarerId = data.seafarerId;
 									sfRecFormDetail.fetchData({"id":data.seafarerId},function (dsResponse, data, dsRequest) {
 										SeafarerDetailWindow.setTitle("Seafarer Detail (ID: " + seafarerId + " )");
 										var birthPlace = data.birthPlace;
