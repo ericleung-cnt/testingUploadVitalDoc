@@ -99,6 +99,12 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			}
 			dsResponse.setData(arrayList);
 			return dsResponse;
+		} else if ("FETCH_FOR_TRANSCRIPT".equals(operationId)) {
+			String applNo = entity.getApplNo();
+			RegMaster rm = regMasterDao.findById(applNo);
+			DSResponse dsResponse = new DSResponse();
+			dsResponse.setData(rm);
+			return dsResponse;
 		} else {
 			return super.fetch(entity, dsRequest);
 		}

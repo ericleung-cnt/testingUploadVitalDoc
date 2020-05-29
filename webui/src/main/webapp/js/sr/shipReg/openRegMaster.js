@@ -85,6 +85,80 @@ Date.prototype.hhmm = function(){
 //	});
 //};
 
+var openLockTranscriptForm = function(record){
+	var lockTranscriptForm = isc.DynamicForm.create({
+		ID: "lockTranscriptForm",
+		fields:[
+	        {name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
+	        {name:"lockText", title:"Lock Text", type:"select", width:200,
+//	        	valueMap:[
+//	        	          "Change Registration Details",
+//	        	          "Change Owner Details",
+//	        	          "Change Representative Details",
+//	        	          "Transfer Ownership with Mortgage",
+//	        	          "Transfer Ownership without Mortgage",
+//	        	          "Transmit Ownership",
+//	        	          "Register Mortgage",
+//	        	          "Change Mortgage Details",
+//	        	          "Transfer Mortgage",
+//	        	          "Discharge Mortgage",
+//	        	          "Cancel Mortgage",
+//	        	          ""
+//	        	]
+	        	optionDataSource:"documentRemarkDS", 
+	        	optionCriteria: {"remarkGroup":"LCK"},
+	        	displayField:"remark",
+	        	valueField:"remark",
+	        	allowEmptyValue: false
+	        },
+	    ]
+	});
+	var lockTranscriptForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "lockTranscriptForm_BtnToolbar",
+		//layoutTopMargin: 15,
+		buttons:[
+			{ name: "lock", title: "Lock", width: 80, height: 30,
+				click: function() {
+	            	   var data = lockTranscriptForm.getData();
+	            	   data.lockTime = new Date();
+	            	   txnLockDS.addData(data, function() {
+	            		   lockTranscriptWindow.close();
+	            	   });
+				}
+			},
+			{ name: "cancel", title: "Cancel", width: 80, height: 30,
+				click: function(){
+					lockTranscriptWindow.close();
+				}
+			}
+		]
+	});
+	var lockTranscriptFormVLayout = isc.VLayout.create({
+		ID: "lockTranscriptFormVLayout",
+		layoutMargin: 15,
+		membersMargin: 10,
+		members:[
+			lockTranscriptForm,
+			lockTranscriptForm_BtnToolbar
+		]
+	});
+	
+	var lockTranscriptWindow = isc.Window.create({
+		ID: "lockTranscriptWindow",
+		title: "Lock ApplNo for Transcript",
+		width: 400,
+		height: 180,
+		items: [
+//			lockTranscriptForm,
+//			lockTranscriptForm_BtnToolbar
+			lockTranscriptFormVLayout
+		],
+		close: function() { lockTranscriptWindow.markForDestroy(); }
+	});
+	lockTranscriptWindow.show();
+	return lockTranscriptWindow;
+};
+
 var openAssignEtoCorForm = function(applNo, callback){
 	var assignEtoCorList = isc.ListGrid.create({
 		ID: "assignEtoCorList",
@@ -663,6 +737,18 @@ var addBtnOwnerDetailSave = function(item, win, recordNum, ownerGrid, mode, posi
 
 				if (win.form.validate()) {
 					var formData = win.form.getData();
+					if (formData.address1.length>50){
+						isc.warn("Address1 too long to print in demand note, should less than 50");
+						return;
+					}
+					if (formData.address2.length>50){
+						isc.warn("Address2 too long to print in demand note, should less than 50");
+						return;
+					}
+					if (formData.address3.length>50){
+						isc.warn("Address3 too long to print in demand note, should less than 50");
+						return;
+					}					
 					if (typeof formData.version != "undefined" && formData.applNo) {
 						ownerDS.updateData(formData, function(resp, data,req){
 							ownerDS.fetchData({applNo:data.applNo}, function(resp,data,req){
@@ -4598,56 +4684,66 @@ var openRegMaster = function(record, task, mode
 				title:"Lock",
 				height:thickBtnHeight, width:thickBtnWidth,
 				click:function(){
-					var lockForm = isc.DynamicForm.create({
-						fields:[
-						        {name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
-						        {name:"lockText", title:"Lock Text",
-						        	valueMap:[
-						        	          "Change Registration Details",
-						        	          "Change Owner Details",
-						        	          "Change Representative Details",
-						        	          "Transfer Ownership with Mortgage",
-						        	          "Transfer Ownership without Mortgage",
-						        	          "Transmit Ownership",
-						        	          "Register Mortgage",
-						        	          "Change Mortgage Details",
-						        	          "Transfer Mortgage",
-						        	          "Discharge Mortgage",
-						        	          "Cancel Mortgage",
-						        	          ""
-						        	          ]},
-						        	          ]
-					});
-					txnLockDS.fetchData({applNo:record.applNo,},
-							function(resp,data,req) {
-						var members = [
-						               isc.Button.create({title:"Lock", click:function(){
-						            	   var lockWin = this.parentElement.parentElement.parentElement;
-						            	   var data = lockForm.getData();
-						            	   data.lockTime = new Date();
-						            	   txnLockDS.addData(data, function() {
-						            		   lockWin.markForDestroy();
-						            	   });
-						               }}),
-						               isc.Button.create({title:"Cancel", click:function(){
-						            	   this.parentElement.parentElement.parentElement.markForDestroy();
-						               }}),
-						               ];
-						if (data.length > 0) {
-							lockForm.setData(data[0]);
-							members.removeAt(0);
+					txnLockDS.fetchData(
+						{applNo:record.applNo},
+						function(resp, data, req){
+							if (data.length>0){
+								isc.warn("Appl No." + record.applNo + " already locked");
+								return;
+							}	
+							openLockTranscriptForm(record);
 						}
-						isc.Window.create({
-							title:"Lock e-Transcript",
-							height:120,
-							width:300,
-							items:[
-							       lockForm,
-							       isc.ButtonsHLayout.create({
-							    	   members:members}),
-							    	            ]
-						}).show();
-					});
+					);
+//					var lockForm = isc.DynamicForm.create({
+//						fields:[
+//						        {name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
+//						        {name:"lockText", title:"Lock Text",
+//						        	valueMap:[
+//						        	          "Change Registration Details",
+//						        	          "Change Owner Details",
+//						        	          "Change Representative Details",
+//						        	          "Transfer Ownership with Mortgage",
+//						        	          "Transfer Ownership without Mortgage",
+//						        	          "Transmit Ownership",
+//						        	          "Register Mortgage",
+//						        	          "Change Mortgage Details",
+//						        	          "Transfer Mortgage",
+//						        	          "Discharge Mortgage",
+//						        	          "Cancel Mortgage",
+//						        	          ""
+//						        	          ]},
+//						        	          ]
+//					});
+//					txnLockDS.fetchData({applNo:record.applNo,},
+//							function(resp,data,req) {
+//						var members = [
+//						               isc.Button.create({title:"Lock", click:function(){
+//						            	   var lockWin = this.parentElement.parentElement.parentElement;
+//						            	   var data = lockForm.getData();
+//						            	   data.lockTime = new Date();
+//						            	   txnLockDS.addData(data, function() {
+//						            		   lockWin.markForDestroy();
+//						            	   });
+//						               }}),
+//						               isc.Button.create({title:"Cancel", click:function(){
+//						            	   this.parentElement.parentElement.parentElement.markForDestroy();
+//						               }}),
+//						               ];
+//						if (data.length > 0) {
+//							lockForm.setData(data[0]);
+//							members.removeAt(0);
+//						}
+//						isc.Window.create({
+//							title:"Lock e-Transcript",
+//							height:120,
+//							width:300,
+//							items:[
+//							       lockForm,
+//							       isc.ButtonsHLayout.create({
+//							    	   members:members}),
+//							    	            ]
+//						}).show();
+//					});
 				}
 			}));
 		}

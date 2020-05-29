@@ -380,7 +380,7 @@ var openSrDemandNote=function(record){
 						form.getField(btnCopyFromLawyerTranscriptApplicant).setDisabled(true);
 						form.getField(btnCopyFromShipManager).setDisabled(true);
 						form.getField(btnCopyCOFromShipManager).setDisabled(true);
-					});
+					}, {operationId:"demandNoteItemDS_demandNoteNo"});
 				}
 			}
 	});
@@ -503,6 +503,18 @@ var openSrDemandNote=function(record){
 		click:function(){
 			console.log("save and print demand log");
 			if (form.validate()) {
+				if (form.getField("address1").getValue().length>50){
+					isc.warn("Address1 too long to print in demand note, should less than 50");
+					return;
+				}
+				if (form.getField("address2").getValue().length>50){
+					isc.warn("Address2 too long to print in demand note, should less than 50");
+					return;
+				}
+				if (form.getField("address3").getValue().length>50){
+					isc.warn("Address3 too long to print in demand note, should less than 50");
+					return;
+				}
 				var amt = form.getField("amount").getValue();
 				if (amt == null || amt <= 0) {
 					isc.warn("0 amount");

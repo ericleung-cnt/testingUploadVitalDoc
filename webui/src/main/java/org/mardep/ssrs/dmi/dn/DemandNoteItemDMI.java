@@ -44,7 +44,7 @@ public class DemandNoteItemDMI extends AbstractDMI<DemandNoteItem>{
 				i.setDemandNoteHeader(null);
 			});
 			return new DSResponse(items, DSResponse.STATUS_SUCCESS);
-		} else if (FETCH_BY_DEMAND_NOTE_NO.contentEquals(dsRequest.getOperationId())) {
+		} else if (FETCH_BY_DEMAND_NOTE_NO.equals(dsRequest.getOperationId())) {
 			List<DemandNoteItem> items = demandNoteService.findByDemandNoteNo(entity.getDnDemandNoteNo());
 			DSResponse dsResponse = new DSResponse();
 			dsResponse.setData(items);

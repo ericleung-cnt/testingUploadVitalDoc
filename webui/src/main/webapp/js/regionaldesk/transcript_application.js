@@ -822,6 +822,18 @@ function openTaDemandNote(applicationId, record, callback){
 				click:function(){
 					console.log("print demand log");
 					if (form.validate()) {
+						if (form.getField("address1").getValue().length>50){
+							isc.warn("Address1 too long to print in demand note, should less than 50");
+							return;
+						}
+						if (form.getField("address2").getValue().length>50){
+							isc.warn("Address2 too long to print in demand note, should less than 50");
+							return;
+						}
+						if (form.getField("address3").getValue().length>50){
+							isc.warn("Address3 too long to print in demand note, should less than 50");
+							return;
+						}
 						var amt = form.getField("amount").getValue();
 						if (amt == null || amt <= 0) {
 							isc.warn("0 amount");
@@ -1151,15 +1163,36 @@ var dynamicForm = isc.DynamicForm.create({
 //					  newDemandNoteBtn.hide();
 //				  }
 				  if (value.length>=8){
-					  regMasterDS.fetchData({applNo:value},
-						function(resp,data) {
-					  		if (data.length > 0) {
-					  			form.getField("imoNo").setValue(data[0].imoNo);
-					  			form.getField("shipNameEng").setValue(data[0].regName);
-					  			form.getField("shipNameChi").setValue(data[0].regCName);
-					  			form.getField("officialNo").setValue(data[0].offNo);
-					  		}
-				  		});
+					  regMasterDS.fetchData(
+							  {applNo:value},
+							  function(resp, rm) {
+								  if (rm == null){
+									  isc.warn("Appl No. not found");
+									  return;
+								  }
+								  //if (data.length > 0) {
+									  //var rm = data;
+									  if (rm.regStatus=="A"){
+										isc.warn("Application not registered yet");
+										return;
+									  };
+									  txnLockDS.fetchData(
+										{applNo:value},
+										function(resp, txnLock, req){
+											if (txnLock.length>0){
+												isc.warn("Appl No. " + value + " was locked by SR");
+												return;
+											}
+											  form.getField("imoNo").setValue(rm.imoNo);
+											  form.getField("shipNameEng").setValue(rm.regName);
+											  form.getField("shipNameChi").setValue(rm.regCName);
+											  form.getField("officialNo").setValue(rm.offNo);
+										}
+									  );
+								  //}
+							  },
+							  {operationId: "FETCH_FOR_TRANSCRIPT"}
+				  		);
 				  }
 				  uiCtrl.availability(uiMode.pendingCreateDemandNote);
 			  },

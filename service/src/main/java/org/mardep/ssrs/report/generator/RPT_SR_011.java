@@ -417,9 +417,14 @@ public class RPT_SR_011 extends AbstractSrReport {
 			if (demise && (owner.getCharterEdate() == null || owner.getCharterSdate() == null)) {
 				continue;
 			}
-			String ownerAddr = (owner.getAddress1() != null ? owner.getAddress1() :"") +
+			String ownerAddr = ""; 
+			if ("I".equals(owner.getStatus())) {
+				ownerAddr = (owner.getAddress3()!=null  && !owner.getAddress3().isEmpty() ? owner.getAddress3() : "") + "\n\n";				
+			} else {
+				ownerAddr = (owner.getAddress1() != null ? owner.getAddress1() :"") +
 					(owner.getAddress2()!=null && !owner.getAddress2().isEmpty() ? "\n" + owner.getAddress2() : "") +
 					(owner.getAddress3()!=null  && !owner.getAddress3().isEmpty() ? "\n" + owner.getAddress3() : "");
+			}
 			String ownerAddrConc = (owner.getAddress1() != null ? owner.getAddress1() :"") +
 					(StringUtils.isNotBlank(owner.getAddress2()) ? " "+owner.getAddress2().trim() : "") +
 					(StringUtils.isNotBlank(owner.getAddress3()) ? " "+owner.getAddress3().trim() : "");

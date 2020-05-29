@@ -73,9 +73,34 @@
 
 	 var reportForm = simpleSrReport("Transcript","RPT_SR_011",
 			 [
-			  {name:"applNo", required:true, title:"Appl No.", width:500, changed:function(form, item, value) {
+			  {name:"applNo", required:true, title:"Appl No.", width:500, 
+				  changed:function(form, item, value) {
 				  //form.getItem("zip").setValue(value.includes(","));
-			  },},
+					  console.log("transcript applno changed");
+					  if (value.length<8 || value.includes(",")){
+						  return;
+					  }
+//					  regMasterDS.fetchData(
+//						{applNo:applNo},
+//						function(resp, data, req){
+//							if (data.regStatus=="A") {
+//								isc.warn("Application not registered yet");
+//								return;
+//							}
+//							txnLockDS.fetchData(
+//								{applNo:applNo}, 
+//								function(resp, data, req){
+//									if (data.length>0){
+//										isc.warn("Appl No." + record.applNo + " already locked");
+//										return;
+//									}  												  
+//								}
+//							);
+//						},
+//						{operationId: "FETCH_FOR_TRANSCRIPT"}
+//					 );
+				  },
+			  },
 			  {name:"reportDate", type:"datetime", required:true, defaultValue:new Date(), title:"Report Date", width:200, dateFormatter:"dd/MM/yyyy HH:mm",
 				  changed:function(form,item,value) {
 					  console.log("report date " + value);
@@ -115,8 +140,33 @@
 			 var i = 0;
 			 while (i < applNoList.length) {
 				 if (applNoList[i].trim().length > 0) {
-					 data.applNo = applNoList[i].trim();
-					 ReportViewWindow.displayReport(["RPT_SR_011", data]);
+					 applNo = applNoList[i].trim();
+					  regMasterDS.fetchData(
+						{applNo: data.applNo},
+						function(resp, rm, req){
+							if (rm==null){
+								isc.warn("Appl No. not found");
+								return;
+							}
+							if (rm.regStatus=="A") {
+								isc.warn("Application not registered yet");
+								return;
+							}
+							txnLockDS.fetchData(
+								{applNo: data.applNo}, 
+								function(resp, txnLock, req){
+									if (txnLock.length>0){
+										isc.warn("Appl No." + data.applNo + " was locked by SR");
+										return;
+									}  	
+									ReportViewWindow.displayReport(["RPT_SR_011", data]);
+								}
+							);
+						},
+						{operationId: "FETCH_FOR_TRANSCRIPT"}
+					  );
+					 
+					 //ReportViewWindow.displayReport(["RPT_SR_011", data]);
 				 }
 				 i++;
 			 }
