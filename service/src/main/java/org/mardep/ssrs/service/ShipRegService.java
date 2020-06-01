@@ -118,6 +118,9 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	@Autowired
 	IOfficeDao officeDao;
 	
+	@Autowired
+	ILvpfsService lvpfs;
+
 	private ExecutorService es = Executors.newFixedThreadPool(1);
 
 	private SrEntityListener listener = new SrEntityListener(){
@@ -148,6 +151,15 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 						logger.warn("failed to write {}", e);
 					}
 				} );
+				if (Boolean.getBoolean("LvpfsService.allInterested") || obj instanceof RegMaster) {
+					es.submit(()-> {
+						try {
+							lvpfs.send(operation, applNo_);
+						} catch (JsonProcessingException e) {
+							logger.warn("failed to write {}", e);
+						}
+					} );
+				}
 			}
 		}
 

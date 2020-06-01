@@ -194,6 +194,10 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	void logFsqc(String jsonInputString, Exception e);
 
+	void logLvpfs(String jsonInputString, String string);
+
+	void logLvpfs(String jsonInputString, Exception e);
+
 	BigDecimal calculateRegFee(BigDecimal grossTon);
 	
 	RegMaster findForCsr(String imoNo);

@@ -115,6 +115,10 @@
 	     <servlet-name>trackCode</servlet-name>
 	     <url-pattern>/trackCode/*</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+	     <servlet-name>trackCode</servlet-name>
+	     <url-pattern>/vmss/*</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 	     <servlet-name>trackCode</servlet-name>
