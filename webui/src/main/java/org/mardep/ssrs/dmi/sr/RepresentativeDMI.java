@@ -1,5 +1,6 @@
 package org.mardep.ssrs.dmi.sr;
 
+import java.util.Date;
 import java.util.Map;
 
 import org.mardep.ssrs.domain.sr.Amendment;
@@ -44,15 +45,16 @@ public class RepresentativeDMI extends AbstractSrDMI<Representative> {
 		case "repDS_change_withdraw":
 			shipRegService.withdrawRpChange(taskId);
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
-//		case "rpDS_amend":
-//			Transaction tx = getTx(values);
-//			Amendment amm = new Amendment();
-//			amm.setApplNo(entity.getApplNo());
-//			amm.setCode(Transaction.CODE_CHG_RP_OTHERS);
-//			amm.setDetails(tx.getDetails());
-//			amm.setUserId(UserContextThreadLocalHolder.getCurrentUserId());
-//			Representative result = shipRegService.amendRP(entity, amm);
-//			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+		case "rpDS_amend":
+			Transaction tx = getTx(values);
+			Amendment amm = new Amendment();
+			amm.setApplNo(entity.getApplNo());
+			amm.setCode(Transaction.CODE_CHG_RP_OTHERS);
+			amm.setDetails(tx.getDetails());
+			amm.setTransactionTime(new Date());
+			amm.setUserId(UserContextThreadLocalHolder.getCurrentUserId());
+			Representative result = shipRegService.amendRP(entity, amm);
+			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		}
 		return super.update(entity, dsRequest);
 	}

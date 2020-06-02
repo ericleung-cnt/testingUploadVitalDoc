@@ -448,6 +448,10 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 		return rp != null ? rp.getName() : null;
 	}
 
+	public void setRepresentativeName(String rpName) {
+		// dummy method added 2020.06.01
+	}
+	
 	@Override
 	public String getId() {
 		return getApplNo();

@@ -3,6 +3,6 @@
 	<fields>
 		<field name="applNo" 		type="text" title="Appl No" 		length="9" 	primaryKey="true" />
 		<field name="lockTime"	type="dateTime" displayFormat="dd/MM/yyyy HH:mm:ss" 	title="Lock Time"		length="50"/>
-		<field name="lockText"	type="text" title="Lock Text"		length="50"/>
+		<field name="lockText"	type="text" title="Lock Text"		length="100"/>
 	</fields>
 </DataSource>

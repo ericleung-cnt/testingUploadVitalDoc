@@ -1014,14 +1014,14 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		inbox.proceed(taskId, "withdraw", "");
 	}
 
-//	@Override
-//	public Representative amendRP(Representative entity, Amendment amm) {
-//		IRepresentativeDao rpDao = (IRepresentativeDao) getDao(Representative.class);
-//		entity = rpDao.save(entity);
-//		saveHistory(entity.getApplNo(), amm);
-//		return entity;
-//	}
-//
+	@Override
+	public Representative amendRP(Representative entity, Amendment amm) {
+		IRepresentativeDao rpDao = (IRepresentativeDao) getDao(Representative.class);
+		entity = rpDao.save(entity);
+		saveHistory(entity.getApplNo(), amm);
+		return entity;
+	}
+
 	@Override
 	public void receiveBuilderMakerChange(String applNo, String builderCode) {
 		inbox.startWorkflow("bmChange", applNo, builderCode, "", "");

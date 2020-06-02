@@ -391,10 +391,15 @@ public class RPT_SR_011 extends AbstractSrReport {
 			} else {
 				params.put("noRP","F");
 				regMaster.put("repName", rep.getName());
-				regMaster.put("repAddress",
-					(rep.getAddress1() == null ? "" : rep.getAddress1()) + "\n" +
-							(rep.getAddress2() == null ? "" : rep.getAddress2()) + "\n" +
-							(rep.getAddress3() == null ? "" : rep.getAddress3()));
+				if ("I".equals(rep.getStatus())) {
+					regMaster.put("repAddress",
+							(rep.getAddress3()==null ? "" : rep.getAddress3()) + "\n\n");
+				} else {
+					regMaster.put("repAddress",
+							(rep.getAddress1() == null ? "" : rep.getAddress1()) + "\n" +
+									(rep.getAddress2() == null ? "" : rep.getAddress2()) + "\n" +
+									(rep.getAddress3() == null ? "" : rep.getAddress3()));
+				}
 			}
 //			regMaster.put("repName", rep.getName() + "\n" +
 //					(rep.getAddress1() == null ? "--" : rep.getAddress1()) + "\n" +

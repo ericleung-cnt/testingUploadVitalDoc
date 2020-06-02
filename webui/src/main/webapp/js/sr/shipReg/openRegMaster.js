@@ -1917,12 +1917,14 @@ var openRegMaster = function(record, task, mode
 		title:"ShipReg<br>Application<br>Complete",
 		height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){
+			//var regTime = form.getField("regTime").getValue();
+			var regTime = form.getItem("regTime").getValue();
 			getTransaction( function(tx){
 				var changeHour = tx.changeHour.toString();
 				var changeHourStr = (parseInt(changeHour/100)).toString() + ":" + (changeHour%100).toString(); 
 				form.getField("regTime").setValue(changeHourStr);
 				proceedTask("RegMasterDS_updateData_complete", null, tx, refreshRegMasterAfterCompleteChange);
-			}, {details:"REGISTRATION ", changeDate:form.getField("regTime").getValue()});
+			}, {details:"REGISTRATION ", changeDate: regTime});
 			//form.getField(btnSrCompleteApplication).setDisabled(true);
 		}
 	});
@@ -1963,7 +1965,18 @@ var openRegMaster = function(record, task, mode
 			//onControl:"SR_WITHDRAW",
 			click:function(){ proceedTask("RegMasterDS_updateData_withdraw_changeDetails", mode); },
 		});
-	var btnSrAmendParticulars = isc.Button.create({title:"Amend<br>Ship<br>Particulars", height:thickBtnHeight, width:thickBtnWidth, click:function(){ getTransaction(function(tx) { proceedTask("RegMasterDS_updateData_amend_particulars", mode, tx); } ) } });
+	var btnSrAmendParticulars = isc.Button.create({
+		title:"Amend<br>Ship<br>Particulars", 
+		height:thickBtnHeight, 
+		width:thickBtnWidth, 
+		click:function(){ 
+			getTransaction(
+					function(tx) { 
+						proceedTask("RegMasterDS_updateData_amend_particulars", mode, tx); 
+					} 
+			)
+		} 
+	});
 	var btnSrAcceptDeReReg = isc.Button.create({
 		title: mode==1 ? "Accept<br>Re-Reg" : "Accept<br>De-Reg",
 		height:thickBtnHeight, width:thickBtnWidth,
@@ -2338,9 +2351,12 @@ var openRegMaster = function(record, task, mode
 				var formData = form.getData()["representative"];
 				formData.applNo = form.getField("applNo").getValue();
 				copyVer(form.representative, formData);
-				repDS.updateData(formData,
-						function(resp,data,req) { setRep(data); });
-						//{data:formData, operationId:"rpDS_amend"});
+				getTransaction(function(tx){
+					formData.tx = tx;
+					repDS.updateData(null,
+							function(resp,data,req) { setRep(data); }, //);
+							{data:formData, operationId:"rpDS_amend"});
+				});
 			}
 		 }
 	});
@@ -4228,6 +4244,7 @@ var openRegMaster = function(record, task, mode
 		form.getItem("representative.email").setValue(rep.email);
 		form.getItem("representative.hkic").setValue(rep.hkic);
 		form.getItem("representative.incorpCert").setValue(rep.incorpCert);
+		form.getItem("representative.status").setValue(rep.status);
 		form.getItem("representative.createdDate").setValue(rep.createdDate);
 		form.getItem("representative.updatedDate").setValue(rep.updatedDate);
 		form.getItem("representative.createdBy").setValue(rep.createdBy);

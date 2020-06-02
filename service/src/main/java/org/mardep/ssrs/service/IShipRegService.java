@@ -178,7 +178,7 @@ public interface IShipRegService extends IBaseService{
 	void crosscheckRpChange(Long taskId);
 	void withdrawRpChange(Long taskId);
 	Representative completeRpChange(Representative rp, Long taskId, Transaction tx);
-	//Representative amendRP(Representative entity, Amendment tx);
+	Representative amendRP(Representative entity, Amendment amm);
 	
 	void receiveBuilderMakerChange(String applNo, String builderCode);
 	void approveBuilderMakerChange(Long taskId);
