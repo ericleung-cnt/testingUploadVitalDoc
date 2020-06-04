@@ -143,7 +143,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				String applNo_ = applNo;
 				es.submit(()-> {
 					try {
-						fsqc.send(operation, applNo_);
+						fsqc.sendShipParticulars(operation, applNo_);
 					} catch (JsonProcessingException e) {
 						logger.warn("failed to write {}", e);
 					}

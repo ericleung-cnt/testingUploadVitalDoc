@@ -1895,6 +1895,23 @@ var openRegMaster = function(record, task, mode
 	var btnSrAcceptApplication = isc.Button.create({title:"Accept<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth, click:function(){ proceedTask("RegMasterDS_updateData_accept"); },});
 	var btnSrResetApplication = isc.Button.create({title:"Reset<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){ proceedTask("RegMasterDS_updateData_reset"); },});
+	var btnSrRequestCertFSQC = isc.Button.create({
+		title: "Request<br>FSQC Cert",
+		height: thickBtnHeight,
+		width: thickBtnWidth,
+		click: function(){
+			console.log("request FSQC cert");
+			var formData = form.getData();
+			regMasterDS.updateData(
+				{imo: formData.imoNo},
+				function(resp, data, req){
+					console.log(resp);
+					//if ()
+				},
+				{operationId: "REQUEST_FSQC_CERT"}
+			);
+		},
+	});
 	var btnSrReadyApprovalApplication = isc.Button.create({
 			title:"Ready Approval<br>ShipReg<br>Application",
 			height:thickBtnHeight, width:thickBtnWidth,
@@ -4530,6 +4547,7 @@ var openRegMaster = function(record, task, mode
 					addButtons2("builders.actions",[btnBuilderListAddBuilder]);
 				}
 				if (form.todo.contains("ready")) {
+					actions.addMember(btnSrRequestCertFSQC);
 					actions.addMember(btnSrReadyApprovalApplication);
 					actions.addMember(btnSrSaveShipDetails);
 					addButtons2("representative.actions",[btnRpCopyFromCompanySearch, btnRpSave]);

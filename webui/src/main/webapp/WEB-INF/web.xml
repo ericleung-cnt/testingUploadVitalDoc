@@ -122,7 +122,7 @@
 	        <load-on-startup>2</load-on-startup>
 	</servlet>
 
-	 <servlet>
+	<servlet>
 		<servlet-name>UpdateShipDetainInfo</servlet-name>
 		<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
     </servlet>
@@ -131,6 +131,17 @@
         <servlet-name>UpdateShipDetainInfo</servlet-name>
         <url-pattern>/updateShipDetainInfo/*</url-pattern>
     </servlet-mapping>
+
+	<servlet>
+		<servlet-name>FsqcCertReply</servlet-name>
+		<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>FsqcCertReply</servlet-name>
+        <url-pattern>/fsqcCertReply/*</url-pattern>
+    </servlet-mapping>
+
 	<resource-ref>
 		<description>DB Connection</description>
 		<res-ref-name>jdbc/ssrsDS</res-ref-name>

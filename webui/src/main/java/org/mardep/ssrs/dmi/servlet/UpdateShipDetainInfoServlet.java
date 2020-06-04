@@ -31,7 +31,7 @@ public class UpdateShipDetainInfoServlet extends AbstractShipParticularsServlet 
 
 	@Override
 	protected void submitFsqcShip(FsqcShipDetainData ship_data, FsqcShipResultData result) {
-		fsqcShipService.updateFsqcShip(ship_data, result);
+		fsqcShipService.updateShipDetainFromFSQC(ship_data, result);
 	}
 
 	@Override

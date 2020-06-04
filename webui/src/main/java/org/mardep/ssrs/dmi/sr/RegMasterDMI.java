@@ -1,5 +1,6 @@
 package org.mardep.ssrs.dmi.sr;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,14 +25,17 @@ import org.mardep.ssrs.domain.sr.Representative;
 import org.mardep.ssrs.domain.sr.Transaction;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.service.IDeRegService;
+import org.mardep.ssrs.service.IFsqcService;
 import org.mardep.ssrs.service.IInboxService;
 import org.mardep.ssrs.service.IShipRegService;
 import org.mardep.ssrs.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.isomorphic.datasource.DSRequest;
 import com.isomorphic.datasource.DSResponse;
+import com.sun.mail.iap.ConnectionException;
 
 @Component
 public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
@@ -56,6 +60,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	
 	@Autowired
 	IApplDetailDao applDetailDao;
+	
+	@Autowired
+	IFsqcService fsqcSvc;
 	
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
@@ -289,10 +296,34 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		} else if ("UPDATE_MULTI_TRACK_CODE".equals(operationId)) {
 			Map suppliedValues = dsRequest.getClientSuppliedValues();		
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
+		} else if ("REQUEST_FSQC_CERT".equals(operationId)) {
+			DSResponse dsResponse = new DSResponse();
+			Map clientSuppliedValues = dsRequest.getClientSuppliedValues();
+			try {
+				sendRequestFsqcCert(clientSuppliedValues);
+				dsResponse.setSuccess();
+				return dsResponse;
+			} catch (Exception ex) {
+				dsResponse.setFailure(ex.getMessage());
+				return dsResponse;
+			}
 		}
 		return super.update(entity, dsRequest);
 	}
 
+	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {
+		try {
+			if (clientSuppliedValues.containsKey("imo")) {
+				String imo = clientSuppliedValues.get("imo").toString();
+				fsqcSvc.sendCertRequest(imo);
+			} else {
+				throw new Exception("Missing IMO");
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+	
 	private EntityCertIssueLog createIssueLog(String applNo, String regStatus, int issueOfficeId, Date issueDate) {
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		//List<EntityCertIssueLog> entities = certIssueLogDao.get(certApplicationId)

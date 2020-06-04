@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
@@ -80,7 +81,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	
 	protected final Logger logger = LoggerFactory.getLogger(FsqcService.class);
 
-	URL url;
+	URL urlForUpdateShipParticulars;
+	URL urlForCertRequest;
 	int maxRetry = Integer.parseInt(System.getProperty("FsqcService.maxRetry", "3"));
 
 	@Autowired
@@ -89,11 +91,85 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	private ObjectMapper mapper = new ObjectMapper();
 
 	public FsqcService() throws MalformedURLException {
-		url = new URL(System.getProperty("ShipRegService.pushUrl.update", "http://localhost:8080/ssrs/"));
+		urlForUpdateShipParticulars = new URL(System.getProperty("ShipRegService.pushUrl.update", "http://localhost:8080/ssrs/"));
+		urlForCertRequest = new URL(System.getProperty("FsqcService.certRequest", "http://localhost:8080/ssrs/fsqcCertReply/"));
 	}
 
 	@Override
-	public void send(int operation, String applNo)
+	public void sendCertRequest(String imo) throws Exception {
+		Map<String, Object> srMap = new LinkedHashMap<>();
+		srMap.put("imoNo", imo);
+		try {
+			String jsonInputString = mapper.writeValueAsString(srMap);
+			pushToFSQC(urlForCertRequest, jsonInputString);			
+		} catch (Exception ex) {
+			if (ex instanceof IOException) {
+				throw new Exception("FSQC Connection timeout or interface fail");
+			}
+			if (ex instanceof JsonProcessingException) {
+				throw new Exception("Web Interface JSON error");
+			}
+			throw ex;
+		}
+	}
+	
+	private void pushToFSQC(URL urlToPush, String jsonStr) throws IOException {
+		int retry = 0;
+		boolean sent = false;
+		while (!sent && retry <= maxRetry) {
+			try {
+				URLConnection _conn = urlToPush.openConnection();
+				HttpURLConnection con = (HttpURLConnection) _conn;
+				con.setRequestMethod("POST");
+				con.setRequestProperty("Content-Type", "application/json;charset=utf8");
+				con.setRequestProperty("Accept", "application/json");
+				setAuthorizationHeader(con);
+				con.setDoOutput(true);
+				try(OutputStream os = con.getOutputStream()) {
+					byte[] input = jsonStr.getBytes("utf-8");
+					os.write(input, 0, input.length);
+				}
+				try(BufferedReader br = new BufferedReader(
+						new InputStreamReader(con.getInputStream(), "utf-8"))) {
+					StringBuilder response = new StringBuilder();
+					String responseLine = null;
+					while ((responseLine = br.readLine()) != null) {
+						response.append(responseLine.trim());
+					}
+					//sent = true;
+					String string = response.toString();
+					Boolean success = (Boolean) mapper.readValue(string, Map.class).get("success");
+					if (!success) {
+						String failMsg = System.getProperty("FsqcService.FailMsg");
+						logger.info("Send FSQC failure {} {} ", failMsg, jsonStr + "<br> " + string);
+						if (failMsg != null) {
+							mail.send(failMsg, "Send FSQC failure", jsonStr + "<br> " + string);
+						}
+					} else {
+						sent = true;
+					}
+					rmDao.logFsqc(jsonStr, string);
+				}
+			} catch (IOException ex) {
+				if (retry == maxRetry) {
+					rmDao.logFsqc(jsonStr, ex);
+					String failMsg = System.getProperty("FsqcService.FailMsg");
+					logger.info("Send FSQC IO failure {} {} {} {}", urlToPush, ex.getMessage(), failMsg, jsonStr);
+					if (failMsg != null) {
+						mail.send(failMsg, "Send FSQC IO failure", jsonStr);
+					}
+					throw ex;
+					//break;
+				} else {
+					retry++;
+					logger.info("retry " + retry + " " + jsonStr);
+				}
+			}
+		}		
+	}
+	
+	@Override
+	public void sendShipParticulars(int operation, String applNo)
 			throws JsonProcessingException {
 		ApplDetail ad = null;
 		RegMaster rm = rmDao.findById(applNo);
@@ -284,7 +360,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		boolean sent = false;
 		while (!sent && retry <= maxRetry) {
 			try {
-				URLConnection _conn = url.openConnection();
+				URLConnection _conn = urlForUpdateShipParticulars.openConnection();
 				HttpURLConnection con = (HttpURLConnection) _conn;
 				con.setRequestMethod("POST");
 				con.setRequestProperty("Content-Type", "application/json;charset=utf8");
@@ -318,7 +394,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 				if (retry == maxRetry) {
 					rmDao.logFsqc(jsonInputString, ex);
 					String failMsg = System.getProperty("FsqcService.FailMsg");
-					logger.info("Send FSQC IO failure {} {} {} {}", url, ex.getMessage(), failMsg, jsonInputString);
+					logger.info("Send FSQC IO failure {} {} {} {}", urlForUpdateShipParticulars, ex.getMessage(), failMsg, jsonInputString);
 					if (failMsg != null) {
 						mail.send(failMsg, "Send FSQC IO failure", jsonInputString);
 					}
@@ -333,7 +409,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
     @Override
 	@Transactional
-	public void updateFsqcShip(FsqcShipDetainData recvdata, FsqcShipResultData result) {
+	public void updateShipDetainFromFSQC(FsqcShipDetainData recvdata, FsqcShipResultData result) {
 		logger.debug("recv_data" + recvdata.toString());
 		if (recvdata.getDetainDate() == null || recvdata.getImoNo() == null) {
 			result.setSuccess(false);
