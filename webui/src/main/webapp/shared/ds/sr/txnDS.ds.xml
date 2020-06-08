@@ -8,7 +8,7 @@
 		<field name="userId" length="8" />
 		<field name="dateChange" type="date" displayFormat="dd/MM/yyyy"  />
 		<field name="hourChange" length="15" required="true"/>
-		<field name="details" length="720" title="Nature Details"/>
+		<field name="details" length="3000" title="Nature Details"/>
 		<field name="handledBy" length="10" title="Handled By">
 			<valueMap>
 				<value ID=""></value>

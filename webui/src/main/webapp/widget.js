@@ -764,7 +764,7 @@ function getTransaction(callback, properties) {
 	var txForm = isc.DynamicForm.create({
 		numCols:3,
 		fields:[
-			{name:"details", length:720, title:"Details", width:500, colSpan:2,
+			{name:"details", length: 3000, title:"Details", width:500, colSpan:2,
 				changed:upperTA /*changed*/
 			},
 			{name:"changeDate", type:"date", title:"Change Date", required:true, defaultValue:new Date()},

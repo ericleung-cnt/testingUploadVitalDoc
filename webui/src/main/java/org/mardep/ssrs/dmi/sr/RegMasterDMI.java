@@ -190,16 +190,16 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			ApplDetail details = toApplDetails(clientValues);
 			List<Owner> owners = toOwners(clientValues);
 			Representative rep = toRep(clientValues);
-			List<String> errMsg = srService.validateApplicationData(entity);
+			///List<String> errMsg = srService.validateApplicationData(entity);
 			DSResponse dsResponse;
-			if (errMsg.size() == 0) {
+			//if (errMsg.size() == 0) {
 				RegMaster result = srService.create(entity, details, owners, rep);
 				dsResponse = new DSResponse(result, DSResponse.STATUS_SUCCESS);
-			} else {
-				String msg = String.join(",", errMsg);
-				dsResponse = new DSResponse();
-				dsResponse.setFailure(msg);
-			}
+//			} else {
+//				String msg = String.join(",", errMsg);
+//				dsResponse = new DSResponse();
+//				dsResponse.setFailure(msg);
+//			}
 			
 			//return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 			return dsResponse;
