@@ -200,5 +200,6 @@ public interface IShipRegService extends IBaseService{
 	String prepareTrackCode(String applNo);
 	RegMaster assignTrackCode(String applNo, String trackCode);
 	RegMaster assignRegDateTrackCode(String applNo,  String applNoSuf, Date regDate, String trackCode);
+	List<String> validateApplicationData(RegMaster entity);
 	
 }

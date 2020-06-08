@@ -26,6 +26,10 @@ public class EtoCorDMI {
 	@Autowired
 	IShipRegService srSvc;
 	
+	private final String OPERATION_INSERT_MULTI_PRO_REG_COR = "INSERT_MULTI_PRO_REG_COR";
+	private final String OPERATION_INSERT_MULTI_FULL_REG_COR = "INSERT_MULTI_FULL_REG_COR";
+	private final String OPERATION_UPDATE_VALID_COR = "UPDATE_VALID_COR";
+	
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public DSResponse fetch(EtoCoR entity, DSRequest dsRequest) {
@@ -54,7 +58,7 @@ public class EtoCorDMI {
 			String operationId = dsRequest.getOperationId();
 			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 			
-			if ("INSERT_MULTI_PRO_REG_COR".equals(operationId)) {
+			if (OPERATION_INSERT_MULTI_PRO_REG_COR.equals(operationId)) {
 				List<EtoCoR> etoCoRs = new ArrayList<EtoCoR>();
 				
 				Map suppliedValues = dsRequest.getClientSuppliedValues();
@@ -76,7 +80,7 @@ public class EtoCorDMI {
 				etoCorSvc.replaceMultiEtoCoR_ProReg(etoCoRs, etoCoRs.get(0).getApplNo());
 				List<EtoCoR> resultList = etoCorSvc.findEtoCorList(etoCoRs.get(0).getApplNo(), "P");
 				dsResponse.setData(resultList);
-			} else if ("INSERT_MULTI_FULL_REG_COR".equals(operationId)) {
+			} else if (OPERATION_INSERT_MULTI_FULL_REG_COR.equals(operationId)) {
 				List<EtoCoR> etoCoRs = new ArrayList<EtoCoR>();
 				
 				Map suppliedValues = dsRequest.getClientSuppliedValues();
@@ -98,7 +102,7 @@ public class EtoCorDMI {
 				etoCorSvc.replaceMultiEtoCoR_FullReg(etoCoRs, etoCoRs.get(0).getApplNo());
 				List<EtoCoR> resultList = etoCorSvc.findEtoCorList(etoCoRs.get(0).getApplNo(), "F");
 				dsResponse.setData(resultList);
-			} else if ("UPDATE_VALID_COR".equals(operationId)) {
+			} else if (OPERATION_UPDATE_VALID_COR.equals(operationId)) {
 				SimpleDateFormat sdfRegDate = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				Map suppliedValues = dsRequest.getClientSuppliedValues();
 				

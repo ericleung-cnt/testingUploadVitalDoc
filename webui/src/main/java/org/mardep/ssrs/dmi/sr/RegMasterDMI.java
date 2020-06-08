@@ -64,6 +64,10 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	@Autowired
 	IFsqcService fsqcSvc;
 	
+	//private final String OPERATION_UPDATE_MULTI_TRACK_CODE = "UPDATE_MULTI_TRACK_CODE";
+	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
+	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
+	
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
 		IShipRegService srService = (IShipRegService) getBaseService();
@@ -186,9 +190,19 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			ApplDetail details = toApplDetails(clientValues);
 			List<Owner> owners = toOwners(clientValues);
 			Representative rep = toRep(clientValues);
-
-			RegMaster result = srService.create(entity, details, owners, rep);
-			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+			List<String> errMsg = srService.validateApplicationData(entity);
+			DSResponse dsResponse;
+			if (errMsg.size() == 0) {
+				RegMaster result = srService.create(entity, details, owners, rep);
+				dsResponse = new DSResponse(result, DSResponse.STATUS_SUCCESS);
+			} else {
+				String msg = String.join(",", errMsg);
+				dsResponse = new DSResponse();
+				dsResponse.setFailure(msg);
+			}
+			
+			//return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+			return dsResponse;
 		} else if ("RegMasterDS_updateData_requestAccept".equals(operationId)) {
 			Map<?,?> values = clientValues;
 			List<Owner> owners = toOwners(values);
@@ -275,7 +289,7 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			}
 			
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
-		} else if ("REVISE_REG_DATE_TIME".equals(operationId)) {
+		} else if (OPERATION_REVISE_REG_DATE_TIME.equals(operationId)) {
 			Map suppliedValues = dsRequest.getClientSuppliedValues();
 			String applNo = "";
 			String regDate = "";
@@ -293,10 +307,10 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			//entity.setRegDate(registrationDate);
 			entity = srService.reviseRegDateTimeAndProvExpiryDate(applNo, registrationDate);
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
-		} else if ("UPDATE_MULTI_TRACK_CODE".equals(operationId)) {
-			Map suppliedValues = dsRequest.getClientSuppliedValues();		
-			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
-		} else if ("REQUEST_FSQC_CERT".equals(operationId)) {
+//		} else if (OPERATION_UPDATE_MULTI_TRACK_CODE.equals(operationId)) {
+//			Map suppliedValues = dsRequest.getClientSuppliedValues();		
+//			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
+		} else if (OPERATION_REQUEST_FSQC_CERT.equals(operationId)) {
 			DSResponse dsResponse = new DSResponse();
 			Map clientSuppliedValues = dsRequest.getClientSuppliedValues();
 			try {

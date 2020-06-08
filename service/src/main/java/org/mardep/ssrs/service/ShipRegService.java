@@ -1162,4 +1162,10 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		return entity;
 	}
 	
+	@Override
+	public List<String> validateApplicationData(RegMaster entity){
+		List<String> errMsg = new ArrayList<String>();
+		
+		return errMsg;
+	}
 }

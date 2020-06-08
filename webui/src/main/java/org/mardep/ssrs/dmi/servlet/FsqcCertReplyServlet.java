@@ -52,6 +52,7 @@ public class FsqcCertReplyServlet implements HttpRequestHandler {
 			// JSON string to Java Object
 			//FsqcShipDetainData ship_data = mapper.readValue(jb.toString(), FsqcShipDetainData.class);
 			//submitFsqcShip(ship_data, result);
+			System.out.println(jb.toString());
 			result.setSuccess(true);
 			result.setMessage("got");
 		} catch (Exception e) {

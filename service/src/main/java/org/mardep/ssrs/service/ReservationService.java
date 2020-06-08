@@ -99,11 +99,21 @@ public class ReservationService extends AbstractService implements IReservationS
 
 	@Override
 	public Map<String, String[]> check(List<String> names, boolean eng) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		Map<String, String[]> result = new HashMap<String, String[]>();
 		// check if it is reserved
 		List<PreReservedName> reservedList = dao.isReserved(names, eng);
 		for (PreReservedName r : reservedList) {
-			result.put(r.getName(), new String[] {RESULT_RESERVED, r.getId().toString(), r.getExpiryTime().getTime()+"", r.getOwnerName()});
+			//result.put(r.getName(), new String[] {RESULT_RESERVED, r.getId().toString(), r.getExpiryTime().getTime()+"", r.getOwnerName()});
+			result.put(
+					r.getName(), 
+					new String[] {
+							RESULT_RESERVED, 
+							"PreReserve Id: " + r.getId().toString(), 
+							"expiry: " + sdf.format(r.getExpiryTime()), //.getTime()+"", 
+							"PreReserve Owner: " + r.getOwnerName()
+					}
+			);
 		}
 		// check if it is offensive word
 		if (eng) {

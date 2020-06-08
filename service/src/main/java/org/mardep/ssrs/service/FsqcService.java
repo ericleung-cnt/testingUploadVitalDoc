@@ -85,6 +85,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	URL urlForCertRequest;
 	int maxRetry = Integer.parseInt(System.getProperty("FsqcService.maxRetry", "3"));
 
+	private final String CERT_REQUEST_NEW_SHIP_REG = "CERT_REQUEST_NEW_SHIP_REG";
+	
 	@Autowired
 	MailService mail;
 
@@ -99,6 +101,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	public void sendCertRequest(String imo) throws Exception {
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
+		srMap.put("requestType", CERT_REQUEST_NEW_SHIP_REG);
 		try {
 			String jsonInputString = mapper.writeValueAsString(srMap);
 			pushToFSQC(urlForCertRequest, jsonInputString);			
