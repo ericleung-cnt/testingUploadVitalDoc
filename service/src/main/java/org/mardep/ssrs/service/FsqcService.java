@@ -142,15 +142,14 @@ public class FsqcService extends AbstractService implements IFsqcService {
 					//sent = true;
 					String string = response.toString();
 					Boolean success = (Boolean) mapper.readValue(string, Map.class).get("success");
+					sent = true;
 					if (!success) {
 						String failMsg = System.getProperty("FsqcService.FailMsg");
 						logger.info("Send FSQC failure {} {} ", failMsg, jsonStr + "<br> " + string);
 						if (failMsg != null) {
 							mail.send(failMsg, "Send FSQC failure", jsonStr + "<br> " + string);
 						}
-					} else {
-						sent = true;
-					}
+					} 
 					rmDao.logFsqc(jsonStr, string);
 				}
 			} catch (IOException ex) {

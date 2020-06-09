@@ -396,15 +396,16 @@ var openPrintMultiCorForm = function(parentForm, record) {
 	        				{applNo:etoCor.applNo, applNoSuf:etoCor.applNoSuf, id:etoCor.id, regDate:regDateStr, trackCode:etoCor.trackCode},
 	        				function(resp, data, req){
 	        					printMultiCorWindow.close();
-	        					var dateStr = regDateStr.substring(0, 10);
-	        					var timeStr = regDateStr.substring(11,17);
-	        					parentForm.getField("regDate").setValue(dateStr);
-	        					parentForm.getField("regTime").setValue(timeStr);
+	        					//var dateStr = regDateStr.substring(0, 10);
+	        					//var timeStr = regDateStr.substring(11,17);
+	        					//parentForm.getField("regDate").setValue(dateStr);
+	        					//parentForm.getField("regTime").setValue(timeStr);
 	        					regMasterDS.fetchData({applNo:etoCor.applNo},
 	        						function(resp, data){
-	        							parentForm.getField("applNoSuf").setValue(data[0].applNoSuf);
-	        							parentForm.getField("provExpDate").setValue(data[0].provExpDate);
-	        							parentForm.getField("trackCode").setValue(data[0].trackCode);
+	        							//parentForm.getField("applNoSuf").setValue(data[0].applNoSuf);
+	        							//parentForm.getField("provExpDate").setValue(data[0].provExpDate);
+	        							//parentForm.getField("trackCode").setValue(data[0].trackCode);
+	        							parentForm.setData(data[0]);
 	        						}
 	        					);
 	        				}, 
@@ -737,18 +738,18 @@ var addBtnOwnerDetailSave = function(item, win, recordNum, ownerGrid, mode, posi
 
 				if (win.form.validate()) {
 					var formData = win.form.getData();
-					if (formData.address1.length>50){
-						isc.warn("Address1 too long to print in demand note, should less than 50");
-						return;
-					}
-					if (formData.address2.length>50){
-						isc.warn("Address2 too long to print in demand note, should less than 50");
-						return;
-					}
-					if (formData.address3.length>50){
-						isc.warn("Address3 too long to print in demand note, should less than 50");
-						return;
-					}					
+//					if (formData.address1.length>50){
+//						isc.warn("Address1 too long to print in demand note, should less than 50");
+//						return;
+//					}
+//					if (formData.address2.length>50){
+//						isc.warn("Address2 too long to print in demand note, should less than 50");
+//						return;
+//					}
+//					if (formData.address3.length>50){
+//						isc.warn("Address3 too long to print in demand note, should less than 50");
+//						return;
+//					}					
 					if (typeof formData.version != "undefined" && formData.applNo) {
 						ownerDS.updateData(formData, function(resp, data,req){
 							ownerDS.fetchData({applNo:data.applNo}, function(resp,data,req){
@@ -1935,13 +1936,19 @@ var openRegMaster = function(record, task, mode
 		height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){
 			//var regTime = form.getField("regTime").getValue();
+			var regDate = form.getItem("regDate").getValue();
+			if (regDate instanceof Date == false){
+				regDate = new Date(regDate);
+			}
 			var regTime = form.getItem("regTime").getValue();
+			regDate.setHours(regTime.getHours());
+			regDate.setMinutes(regTime.getMinutes());
 			getTransaction( function(tx){
 				var changeHour = tx.changeHour.toString();
 				var changeHourStr = (parseInt(changeHour/100)).toString() + ":" + (changeHour%100).toString(); 
 				form.getField("regTime").setValue(changeHourStr);
 				proceedTask("RegMasterDS_updateData_complete", null, tx, refreshRegMasterAfterCompleteChange);
-			}, {details:"REGISTRATION ", changeDate: regTime});
+			}, {details:"REGISTRATION ", changeDate: regDate});
 			//form.getField(btnSrCompleteApplication).setDisabled(true);
 		}
 	});

@@ -58,7 +58,7 @@ public class Amendment extends AbstractPersistentEntity<Long> {
 
 	@Getter
 	@Setter
-	@Column(name="TXN_NATURE_DETAILS", length=720)
+	@Column(name="TXN_NATURE_DETAILS", length=3000)
 	private String details;
 
 	@Override

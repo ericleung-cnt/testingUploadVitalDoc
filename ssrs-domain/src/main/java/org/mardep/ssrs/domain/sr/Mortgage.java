@@ -74,7 +74,7 @@ public class Mortgage extends AbstractPersistentEntity<MortgagePK> {
 
 	@Getter
 	@Setter
-	@Column(name = "AGREE_TXT", length=2000)
+	@Column(name = "AGREE_TXT", length=3000)
 	private String agreeTxt; // TODO 2000??
 
 	@Getter
