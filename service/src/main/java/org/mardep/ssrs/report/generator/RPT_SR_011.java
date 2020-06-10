@@ -78,6 +78,14 @@ public class RPT_SR_011 extends AbstractSrReport {
 
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
+		String printFullAddr = "";
+		if (inputParam.containsKey("fullAddr")) {	// 2020.06.08, in case full addr not inside input param as from eBS and RD
+			if (Boolean.TRUE.equals(inputParam.get("fullAddr"))) {
+				printFullAddr = "Y";
+			} else {
+				printFullAddr = "N";
+			}
+		};
 		Date reportDate = (Date)inputParam.get("reportDate");
 		Date generateTime = new Date(System.currentTimeMillis() + 5000 /* buffer for server time gap */);
 		if (reportDate == null) {
@@ -124,6 +132,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 			reportDate = new Date(reportDate.getTime() + 60000); // add some delay for showing latest tx
 		}
 		String applNoList = (String) inputParam.get("applNo");
+		//boolean printFullAddr = Boolean.TRUE.equals(inputParam.get("fullAddr1"));
 		boolean printMortgage = Boolean.TRUE.equals(inputParam.get("printMortgage"));
 		logger.info("Report Date:{}", reportDate);
 
@@ -177,7 +186,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 				ZipOutputStream zip = new ZipOutputStream(baos);
 				for (String applNo : applNoList.split("\\,")) {
-					byte[] pdf = getPdf(reportDate, printMortgage, params, applNo);
+					byte[] pdf = getPdf(reportDate, printMortgage, params, applNo, printFullAddr);
 					String name = applNo.replace('/', '_')+ ".pdf";
 					ZipEntry entry = new ZipEntry(name);
 					zip.putNextEntry(entry);
@@ -189,7 +198,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 				return baos.toByteArray();
 			}
 		} else {
-			return getPdf(reportDate, printMortgage, params, applNoList);
+			return getPdf(reportDate, printMortgage, params, applNoList, printFullAddr);
 		}
 	}
 
@@ -272,9 +281,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 		return sb.toString();
 	}
 
-	private byte[] getPdf(Date reportDate, boolean printMortgage, Map<String, Object> params, String applNo)
+	private byte[] getPdf(Date reportDate, boolean printMortgage, Map<String, Object> params, String applNo, String printFullAddr)
 			throws JRException, ParseException {
-		return jasperReportService.generateReport(getReportFileName(), Arrays.asList(getReportContent(applNo, reportDate, printMortgage, params)), params);
+		return jasperReportService.generateReport(getReportFileName(), Arrays.asList(getReportContent(applNo, reportDate, printMortgage, params, printFullAddr)), params);
 	}
 
 	private String evaluatePlaceOfIncorp(Owner owner) {
@@ -299,7 +308,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 		}
 	}
 
-	private HashMap<Object, Object> getReportContent(String applNo, Date reportDate, boolean printMortgage, Map<String, Object> params) throws ParseException {
+	private HashMap<Object, Object> getReportContent(String applNo, Date reportDate, boolean printMortgage, Map<String, Object> params, String printFullAddr) throws ParseException {
 		boolean isCod = getClass().getName().endsWith("_cod");
 		boolean isPercentage = true;
 		
@@ -391,7 +400,10 @@ public class RPT_SR_011 extends AbstractSrReport {
 			} else {
 				params.put("noRP","F");
 				regMaster.put("repName", rep.getName());
-				if ("I".equals(rep.getStatus())) {
+				if ("I".equals(rep.getStatus()) && printFullAddr.isEmpty()) {
+					printFullAddr = "N";
+				}
+				if ("N".equals(printFullAddr)) {
 					regMaster.put("repAddress",
 							(rep.getAddress3()==null ? "" : rep.getAddress3()) + "\n\n");
 				} else {
@@ -423,7 +435,10 @@ public class RPT_SR_011 extends AbstractSrReport {
 				continue;
 			}
 			String ownerAddr = ""; 
-			if ("I".equals(owner.getStatus())) {
+			if ("I".equals(owner.getStatus()) && printFullAddr.isEmpty()) {
+				printFullAddr = "N";
+			}
+			if ("N".equals(printFullAddr)) {
 				ownerAddr = (owner.getAddress3()!=null  && !owner.getAddress3().isEmpty() ? owner.getAddress3() : "") + "\n\n";				
 			} else {
 				ownerAddr = (owner.getAddress1() != null ? owner.getAddress1() :"") +

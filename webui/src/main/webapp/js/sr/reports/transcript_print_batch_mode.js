@@ -119,6 +119,7 @@
 			  {name:"paymentRequired", type:"boolean", title:"Payment Required", changed:function(_1,_2,_3){
 				  this.form.getItem("reason").setEnabled(!this.getValue());
 				  }},
+			  {name:"fullAddr", type:"boolean", title:"Full Address", defaultValue:true }, 
 			  {name:"reason", title:"Reason", characterCasing:"upper"},
 			  {name:"printMortgage", type:"boolean", title:"Print Mortgage", defaultValue:true },
 			  {name:"zip", type:"boolean", value:false, visible:false}
