@@ -400,6 +400,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 			} else {
 				params.put("noRP","F");
 				regMaster.put("repName", rep.getName());
+				if ("C".equals(rep.getStatus())) {
+					printFullAddr = "Y";
+				}
 				if ("I".equals(rep.getStatus()) && printFullAddr.isEmpty()) {
 					printFullAddr = "N";
 				}
@@ -435,6 +438,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 				continue;
 			}
 			String ownerAddr = ""; 
+			if ("C".equals(owner.getStatus())) {
+				printFullAddr = "Y";
+			}
 			if ("I".equals(owner.getStatus()) && printFullAddr.isEmpty()) {
 				printFullAddr = "N";
 			}
