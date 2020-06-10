@@ -143,6 +143,10 @@ public class RPT_SR_011 extends AbstractSrReport {
 		}
 
 		Map<String, Object> params = new HashMap<String, Object>();
+
+		params.put("pInterestHeldEng", "---");
+		params.put("pInterestHeldChi", "---");
+
 		params.put("certified", inputParam.get("certified"));
 		if (Boolean.TRUE.equals(inputParam.get("printLogo"))) {
 			params.put("logo", RPT_SR_011.class.getResource("/images/400px-Regional_Emblem_of_Hong_Kong.svg.png"));

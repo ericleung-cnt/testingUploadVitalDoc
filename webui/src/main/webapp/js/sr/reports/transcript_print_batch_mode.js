@@ -119,16 +119,16 @@
 			  {name:"paymentRequired", type:"boolean", title:"Payment Required", changed:function(_1,_2,_3){
 				  this.form.getItem("reason").setEnabled(!this.getValue());
 				  }},
-			  {name:"fullAddr", type:"boolean", title:"Full Address", defaultValue:true }, 
+			  {name:"fullAddr", type:"boolean", title:"Full Address (uncheck for Individual Owner or Representative Person only)", defaultValue:true }, 
 			  {name:"reason", title:"Reason", characterCasing:"upper"},
 			  {name:"printMortgage", type:"boolean", title:"Print Mortgage", defaultValue:true },
 			  {name:"zip", type:"boolean", value:false, visible:false}
 			  ]
 	 );
 
-	 reportForm.form.items[8].endRow = false;
-	 console.log("reportForm.form.items[8].click = function()");
-	 reportForm.form.items[8].click = function() {
+	 reportForm.form.items[9].endRow = false;
+	 console.log("reportForm.form.items[9].click = function()");
+	 reportForm.form.items[9].click = function() {
 		 if (reportForm.form.getField("certified").getValue()) {
 			 if (!reportForm.form.getField("registrar").getValue()) {
 				 isc.say("Registrar required for certified transcript.");

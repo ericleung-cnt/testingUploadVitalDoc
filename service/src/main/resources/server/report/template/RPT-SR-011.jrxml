@@ -24,6 +24,8 @@
 	<parameter name="MortgagorList" class="java.util.List"/>
 	<parameter name="MortgageeList" class="java.util.List"/>
 	<parameter name="noRP" class="java.lang.String"/>
+	<parameter name="pInterestHeldEng" class="java.lang.String"/>
+	<parameter name="pInterestHeldChi" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -462,7 +464,7 @@ $F{regMaster}.getRegChiName() :
 $F{regMaster}.getProvRegDate() != null &&
 $F{regMaster}.getRegDate() != null )
 ?
-$V{dmy}.format($F{regMaster}.getProvRegDate()).toUpperCase() : ($F{regMaster}.getRegDate() == null ? "-" : new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getRegDate()).toUpperCase())]]></textFieldExpression>
+new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getProvRegDate()).toUpperCase() : ($F{regMaster}.getRegDate() == null ? "-" : new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getRegDate()).toUpperCase())]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="388" y="218" width="137" height="31" uuid="13d5fb99-0a01-4803-9cd3-aa5b21ba021c">
@@ -632,6 +634,12 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 		<band height="14">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="525" height="10" uuid="2e2a912b-4da4-4ab9-a776-2cc5de14cab9"/>
+				<subreportParameter name="pInterestHeldChi">
+					<subreportParameterExpression><![CDATA[$P{pInterestHeldChi}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pInterestHeldEng">
+					<subreportParameterExpression><![CDATA[$P{pInterestHeldEng}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{owners})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_1}]]></subreportExpression>
 			</subreport>
