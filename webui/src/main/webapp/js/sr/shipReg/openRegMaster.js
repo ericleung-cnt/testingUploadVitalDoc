@@ -4554,7 +4554,7 @@ var openRegMaster = function(record, task, mode
 					addButtons2("builders.actions",[btnBuilderListAddBuilder]);
 				}
 				if (form.todo.contains("ready")) {
-					actions.addMember(btnSrRequestCertFSQC);
+					//actions.addMember(btnSrRequestCertFSQC);
 					actions.addMember(btnSrReadyApprovalApplication);
 					actions.addMember(btnSrSaveShipDetails);
 					addButtons2("representative.actions",[btnRpCopyFromCompanySearch, btnRpSave]);
