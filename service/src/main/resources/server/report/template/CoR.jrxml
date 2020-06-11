@@ -102,133 +102,175 @@ org.mardep.ssrs.report.EnglishReportDateFormat()]]></variableExpression>
 				<text><![CDATA[船  名]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="144" width="149" height="16" uuid="142190c1-95aa-433d-bc2e-0ed81ba0d962"/>
+				<reportElement x="108" y="144" width="390" height="16" uuid="142190c1-95aa-433d-bc2e-0ed81ba0d962">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="155" width="100" height="16" uuid="fecc5d2f-6941-44d6-8a59-289094f6f727"/>
+				<reportElement x="5" y="185" width="100" height="16" uuid="fecc5d2f-6941-44d6-8a59-289094f6f727">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[國際海事組織編號]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="144" width="100" height="16" uuid="450e8e35-53d4-48d3-a195-b3d7fb5ec86b"/>
+				<reportElement x="5" y="174" width="100" height="16" uuid="450e8e35-53d4-48d3-a195-b3d7fb5ec86b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[IMO Number]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="144" width="137" height="31" uuid="8741bc1c-6306-4632-9c23-c373382fc5e8"/>
+				<reportElement x="108" y="174" width="137" height="28" uuid="8741bc1c-6306-4632-9c23-c373382fc5e8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{imoNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="177" width="100" height="16" uuid="88037a51-0eda-4746-9585-be800e83f183"/>
+				<reportElement x="270" y="204" width="100" height="16" uuid="88037a51-0eda-4746-9585-be800e83f183">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Call Sign]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="188" width="100" height="16" uuid="b2a35d22-3dab-448d-81c3-db5093a172d9"/>
+				<reportElement x="5" y="215" width="100" height="16" uuid="b2a35d22-3dab-448d-81c3-db5093a172d9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[註  冊  港]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="177" width="100" height="16" uuid="df4cfa6d-f97b-4776-a6f4-a7a78c7f765a"/>
+				<reportElement x="5" y="204" width="100" height="16" uuid="df4cfa6d-f97b-4776-a6f4-a7a78c7f765a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Port of Registry]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="188" width="100" height="16" uuid="4d62182a-b571-41e7-92a1-dc321fb98773"/>
+				<reportElement x="270" y="215" width="100" height="16" uuid="4d62182a-b571-41e7-92a1-dc321fb98773">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[呼  號]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="177" width="137" height="31" uuid="e2c3d6c0-1426-414a-b641-bee985daabd6"/>
+				<reportElement x="388" y="204" width="137" height="31" uuid="e2c3d6c0-1426-414a-b641-bee985daabd6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{callSign}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="219" width="100" height="16" uuid="2059eaf6-5887-4e65-b05a-abe8a61e8ade"/>
+				<reportElement x="5" y="246" width="100" height="16" uuid="2059eaf6-5887-4e65-b05a-abe8a61e8ade">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[註冊編號]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="219" width="100" height="16" uuid="305811b0-a17b-4c9c-b224-ecb8433cc8d3"/>
+				<reportElement x="270" y="246" width="100" height="16" uuid="305811b0-a17b-4c9c-b224-ecb8433cc8d3">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[註冊日期]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="208" width="149" height="31" uuid="def0c30a-62b7-4fb3-bb40-1c6f393f338b"/>
+				<reportElement x="108" y="232" width="149" height="31" uuid="def0c30a-62b7-4fb3-bb40-1c6f393f338b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{officialNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="208" width="100" height="16" uuid="38925a4a-b33b-455a-bf56-4b755cdeab10"/>
+				<reportElement x="5" y="232" width="100" height="16" uuid="38925a4a-b33b-455a-bf56-4b755cdeab10">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Official Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="208" width="100" height="16" uuid="79f28b04-4516-40f1-a217-edbcbaab1abb"/>
+				<reportElement x="270" y="232" width="100" height="16" uuid="79f28b04-4516-40f1-a217-edbcbaab1abb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Date of Registry]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="385" width="137" height="31" uuid="1bd3d360-7bad-42e0-adf4-6f81135b0bd7"/>
+				<reportElement x="388" y="397" width="137" height="31" uuid="1bd3d360-7bad-42e0-adf4-6f81135b0bd7">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{materialOfHull}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="385" width="100" height="16" uuid="af11edb3-8ca5-4b72-bac1-106d422784e4"/>
+				<reportElement x="270" y="397" width="100" height="16" uuid="af11edb3-8ca5-4b72-bac1-106d422784e4">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Material of Hull]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="252" width="100" height="16" uuid="b31e98d6-89e5-4418-afa6-b40fa3a876be"/>
+				<reportElement x="5" y="276" width="100" height="16" uuid="b31e98d6-89e5-4418-afa6-b40fa3a876be">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[船舶類型]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="396" width="100" height="16" uuid="5c036a97-5171-4b49-8438-6f84022ceaf0"/>
+				<reportElement x="270" y="408" width="100" height="16" uuid="5c036a97-5171-4b49-8438-6f84022ceaf0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[船體材料]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="241" width="149" height="31" uuid="d88c9d2d-0374-4961-b39b-2eec8a7a6246"/>
+				<reportElement x="108" y="265" width="149" height="31" uuid="d88c9d2d-0374-4961-b39b-2eec8a7a6246">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -236,49 +278,63 @@ org.mardep.ssrs.report.EnglishReportDateFormat()]]></variableExpression>
 "-" : $F{regMaster}.getSurveyShipType()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="241" width="100" height="16" uuid="ba56285a-cf8d-4c08-9c8e-1e8a3f02da29"/>
+				<reportElement x="5" y="265" width="100" height="16" uuid="ba56285a-cf8d-4c08-9c8e-1e8a3f02da29">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Type of Ship]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="287" width="100" height="16" uuid="6cb829f8-0cbb-4580-9e2b-41bee0232024"/>
+				<reportElement x="5" y="308" width="100" height="16" uuid="6cb829f8-0cbb-4580-9e2b-41bee0232024">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[龍骨安放日期]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="276" width="100" height="16" uuid="53ff82af-e879-4e0f-a0ce-e0eb14c08d2a"/>
+				<reportElement x="5" y="297" width="100" height="16" uuid="53ff82af-e879-4e0f-a0ce-e0eb14c08d2a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Date Keel Laid]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="276" width="149" height="31" uuid="82a1f6fa-4a46-4905-b1f0-6bcb0f7cec44"/>
+				<reportElement x="108" y="297" width="149" height="31" uuid="82a1f6fa-4a46-4905-b1f0-6bcb0f7cec44">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{dateKeelLaid}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="316" width="172" height="16" uuid="b387204a-aaf2-44eb-b6ee-30b0a9020f5e"/>
+				<reportElement x="5" y="334" width="172" height="16" uuid="b387204a-aaf2-44eb-b6ee-30b0a9020f5e">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Name and Address of Builder]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="327" width="135" height="16" uuid="f3f52dad-40e1-4e00-80b5-16b4a8f32a8a"/>
+				<reportElement x="5" y="345" width="135" height="16" uuid="f3f52dad-40e1-4e00-80b5-16b4a8f32a8a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[造船廠名稱､ 地址]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="161" y="327" width="339" height="30" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28"/>
+				<reportElement x="161" y="345" width="339" height="30" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -289,42 +345,54 @@ org.mardep.ssrs.report.EnglishReportDateFormat()]]></variableExpression>
 				 )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="161" y="316" width="339" height="16" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7"/>
+				<reportElement x="161" y="334" width="339" height="16" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{builder} == null || $F{builder}.getName() == null ? "-" : $F{builder}.getName())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="354" width="100" height="16" uuid="9f2a2b10-fbc6-45a1-8a02-6cdab0c47cde"/>
+				<reportElement x="270" y="369" width="100" height="16" uuid="9f2a2b10-fbc6-45a1-8a02-6cdab0c47cde">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Breadth]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="365" width="100" height="16" uuid="50f46434-41db-4f1b-bf4a-c8954bb6dfeb"/>
+				<reportElement x="270" y="380" width="100" height="16" uuid="50f46434-41db-4f1b-bf4a-c8954bb6dfeb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[寬  度]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="365" width="100" height="16" uuid="cd20b863-8520-4a39-a2c8-b7013219288d"/>
+				<reportElement x="5" y="380" width="100" height="16" uuid="cd20b863-8520-4a39-a2c8-b7013219288d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[長  度]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="354" width="100" height="16" uuid="957a4b76-289d-4758-ae77-8fdd375be6b6"/>
+				<reportElement x="5" y="369" width="100" height="16" uuid="957a4b76-289d-4758-ae77-8fdd375be6b6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Length]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="354" width="149" height="31" uuid="b3bab8f6-6b28-4fe2-94f6-e8800d5b46bb"/>
+				<reportElement x="108" y="369" width="149" height="31" uuid="b3bab8f6-6b28-4fe2-94f6-e8800d5b46bb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -342,7 +410,9 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="354" width="137" height="31" uuid="7f97817b-811c-4750-b7c6-df3b8e0532ad"/>
+				<reportElement x="388" y="369" width="137" height="31" uuid="7f97817b-811c-4750-b7c6-df3b8e0532ad">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -360,21 +430,27 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="396" width="100" height="16" uuid="83508dd4-48b6-428f-86de-380d1d2d99f9"/>
+				<reportElement x="5" y="408" width="100" height="16" uuid="83508dd4-48b6-428f-86de-380d1d2d99f9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[型  深]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="385" width="100" height="16" uuid="b8b5815f-bba1-4222-aa34-f5b5a4046b26"/>
+				<reportElement x="5" y="397" width="100" height="16" uuid="b8b5815f-bba1-4222-aa34-f5b5a4046b26">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Moulded Depth]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="385" width="149" height="31" uuid="04e45a9e-b4eb-445e-b24b-8b81c64f85d8"/>
+				<reportElement x="108" y="397" width="149" height="31" uuid="04e45a9e-b4eb-445e-b24b-8b81c64f85d8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -392,126 +468,163 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="428" width="100" height="16" uuid="1626b9bf-1e5e-4730-80e0-e0cc292a0db6"/>
+				<reportElement x="5" y="437" width="100" height="16" uuid="1626b9bf-1e5e-4730-80e0-e0cc292a0db6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[總噸位]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="417" width="137" height="31" uuid="baccb4bb-5a31-4cdc-83f2-05f719cbd31c"/>
+				<reportElement x="388" y="426" width="137" height="31" uuid="baccb4bb-5a31-4cdc-83f2-05f719cbd31c">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{netTonnage}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="428" width="100" height="16" uuid="29a9aa51-43ec-415c-ab49-7f32f531a081"/>
+				<reportElement x="270" y="437" width="100" height="16" uuid="29a9aa51-43ec-415c-ab49-7f32f531a081">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[淨噸位]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="417" width="100" height="16" uuid="479ab4b0-af38-486b-b243-e551a9082b45"/>
+				<reportElement x="5" y="426" width="100" height="16" uuid="479ab4b0-af38-486b-b243-e551a9082b45">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Gross Tonnage]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="417" width="149" height="31" uuid="9bd12070-02d5-4e5b-ac08-76567a1f7fb0"/>
+				<reportElement x="108" y="426" width="149" height="31" uuid="9bd12070-02d5-4e5b-ac08-76567a1f7fb0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grossTonnage}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="417" width="100" height="16" uuid="0d5896cf-ea1a-4065-be37-2fbe8a6c9974"/>
+				<reportElement x="270" y="426" width="100" height="16" uuid="0d5896cf-ea1a-4065-be37-2fbe8a6c9974">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Net Tonnage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="463" width="100" height="16" uuid="2c35fd71-aad9-42ad-a71a-7659a239abb6"/>
+				<reportElement x="5" y="469" width="100" height="16" uuid="2c35fd71-aad9-42ad-a71a-7659a239abb6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[主機種類]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="452" width="149" height="31" uuid="28a43f18-ca3e-42b1-a324-96afc34bc1d9"/>
+				<reportElement x="108" y="458" width="149" height="31" uuid="28a43f18-ca3e-42b1-a324-96afc34bc1d9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mainEngineType}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="452" width="150" height="47" uuid="42b59a4b-a5f1-403f-83a4-853e5efc6bee"/>
+				<reportElement x="388" y="458" width="150" height="31" uuid="42b59a4b-a5f1-403f-83a4-853e5efc6bee">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{engineMakeAndModel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="452" width="100" height="16" uuid="465dd9b7-49de-4031-9f45-e104168e7177"/>
+				<reportElement x="5" y="458" width="100" height="16" uuid="465dd9b7-49de-4031-9f45-e104168e7177">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Main Engine Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="452" width="126" height="16" uuid="8b4e3b17-2c24-4b13-8709-059d2b5e90fb"/>
+				<reportElement x="270" y="458" width="126" height="16" uuid="8b4e3b17-2c24-4b13-8709-059d2b5e90fb">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Engine Make and Model]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="463" width="126" height="16" uuid="3c849cb7-cb7e-4d66-933f-608317937859"/>
+				<reportElement x="270" y="469" width="126" height="16" uuid="3c849cb7-cb7e-4d66-933f-608317937859">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[主機名稱､ 型號]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="499" width="100" height="16" uuid="cbf14e81-9ee7-45bc-a222-7de6cc531266"/>
+				<reportElement x="5" y="502" width="100" height="16" uuid="cbf14e81-9ee7-45bc-a222-7de6cc531266">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[主機台數]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="488" width="149" height="31" uuid="cba23de3-4dad-4ea4-bd23-4547cb027c72"/>
+				<reportElement x="108" y="491" width="149" height="31" uuid="cba23de3-4dad-4ea4-bd23-4547cb027c72">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{noOfSetsEngine} != null ? $F{noOfSetsEngine} : "-"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="488" width="137" height="31" uuid="f1a6bee1-48a9-4fb6-b9bb-c7db2d65db3f"/>
+				<reportElement x="388" y="491" width="137" height="31" uuid="f1a6bee1-48a9-4fb6-b9bb-c7db2d65db3f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{totalEnginePower}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="488" width="100" height="16" uuid="c383ed95-cad7-454e-bc47-5477550df1e4"/>
+				<reportElement x="5" y="491" width="100" height="16" uuid="c383ed95-cad7-454e-bc47-5477550df1e4">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[No. of Sets of Engine]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="488" width="100" height="16" uuid="18a7a168-6787-443c-9985-d545bff0f956"/>
+				<reportElement x="270" y="491" width="100" height="16" uuid="18a7a168-6787-443c-9985-d545bff0f956">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Total Engine Power]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="499" width="100" height="16" uuid="fc29d679-2d47-4e42-9006-0475eb22ec76"/>
+				<reportElement x="270" y="502" width="100" height="16" uuid="fc29d679-2d47-4e42-9006-0475eb22ec76">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -588,7 +701,9 @@ String.valueOf($F{regMaster}.getNoOfShafts()) :
 				<reportElement x="0" y="135" width="525" height="1" uuid="5b943d1f-1309-4e3c-a6bd-f959e5ac5ca4"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="241" width="137" height="31" uuid="15e54c19-d7ca-4495-bc37-c9f18e76f04f"/>
+				<reportElement x="388" y="265" width="137" height="31" uuid="15e54c19-d7ca-4495-bc37-c9f18e76f04f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -660,7 +775,9 @@ $V{cYMD}.format($F{demiseEDate}) +
 ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="108" y="155" width="149" height="16" uuid="1c99b954-d6e4-427f-a40b-3a471d962052"/>
+				<reportElement x="108" y="155" width="390" height="16" uuid="1c99b954-d6e4-427f-a40b-3a471d962052">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -669,21 +786,26 @@ $F{regMaster}.getRegChiName() :
 ""]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="108" y="177" width="68" height="16" uuid="65bfb001-65aa-4173-8019-c32096521c34"/>
+				<reportElement x="108" y="204" width="68" height="16" uuid="65bfb001-65aa-4173-8019-c32096521c34">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Left">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[HONG KONG]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="108" y="188" width="50" height="16" uuid="6cc64d07-e3f6-4ad2-b49b-74d3afba5534"/>
+				<reportElement x="108" y="215" width="50" height="16" uuid="6cc64d07-e3f6-4ad2-b49b-74d3afba5534">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="10"/>
 				</textElement>
 				<text><![CDATA[香 港]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="276" width="100" height="16" uuid="98379917-21b6-4ada-82f9-4c91175d4209">
+				<reportElement x="280" y="297" width="100" height="16" uuid="98379917-21b6-4ada-82f9-4c91175d4209">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($P{pApplNoSuf}) && $P{pProRegDate} != null && $P{pFullRegDate} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -692,7 +814,8 @@ $F{regMaster}.getRegChiName() :
 				<text><![CDATA[Registration]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="287" width="100" height="16" uuid="dda501c6-4308-4deb-94f6-364c96e54f86">
+				<reportElement x="280" y="308" width="100" height="16" uuid="dda501c6-4308-4deb-94f6-364c96e54f86">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($P{pApplNoSuf}) && $P{pProRegDate} != null && $P{pFullRegDate} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Top">
@@ -701,7 +824,8 @@ $F{regMaster}.getRegChiName() :
 				<text><![CDATA[註冊]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="276" width="137" height="31" uuid="78f8b103-2e88-4bcf-9ae7-e7ceb569b811">
+				<reportElement x="388" y="297" width="137" height="31" uuid="78f8b103-2e88-4bcf-9ae7-e7ceb569b811">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($P{pApplNoSuf}) && $P{pProRegDate} != null && $P{pFullRegDate} != null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -710,7 +834,9 @@ $F{regMaster}.getRegChiName() :
 				<textFieldExpression><![CDATA[$P{pLowerRegDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="280" y="241" width="100" height="16" uuid="f00f39f6-e5dc-4247-abf9-1a998f80353d"/>
+				<reportElement x="280" y="265" width="100" height="16" uuid="f00f39f6-e5dc-4247-abf9-1a998f80353d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -719,7 +845,9 @@ $P{pFullRegDate} != null ) || ("P".equals($P{pApplNoSuf}))
 ? "Provisional Registration":"Registration"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="280" y="252" width="100" height="16" uuid="f1e2a844-766c-4cb2-9525-a44316df9c55"/>
+				<reportElement x="280" y="276" width="100" height="16" uuid="f1e2a844-766c-4cb2-9525-a44316df9c55">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="10"/>
 				</textElement>
