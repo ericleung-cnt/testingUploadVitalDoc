@@ -102,21 +102,27 @@
 				<text><![CDATA[淨噸位]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="17" width="100" height="16" uuid="dd7ff7cc-72be-4452-8a34-f7c753772db9"/>
+				<reportElement x="301" y="50" width="100" height="16" uuid="dd7ff7cc-72be-4452-8a34-f7c753772db9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<text><![CDATA[國際海事組織編號]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="1" width="100" height="16" uuid="02a2f4bd-5d79-4fa8-8d7b-8faebfc75c9a"/>
+				<reportElement x="301" y="34" width="100" height="16" uuid="02a2f4bd-5d79-4fa8-8d7b-8faebfc75c9a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Bottom">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[IMO Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="50" width="100" height="16" uuid="c284d2fa-894d-471e-a9a3-dfc39439b5a0"/>
+				<reportElement x="301" y="83" width="100" height="16" uuid="c284d2fa-894d-471e-a9a3-dfc39439b5a0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="10"/>
 				</textElement>
@@ -130,7 +136,9 @@
 				<text><![CDATA[Net Tonnage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="301" y="34" width="100" height="16" uuid="b3d9b997-d42e-4005-898b-111350604d8b"/>
+				<reportElement x="301" y="67" width="100" height="16" uuid="b3d9b997-d42e-4005-898b-111350604d8b">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Bottom">
 					<font size="9"/>
 				</textElement>
@@ -169,7 +177,7 @@
 				<reportElement x="1" y="148" width="555" height="1" uuid="86306caa-ce0a-4b2f-8a62-324a6d695946"/>
 			</line>
 			<textField>
-				<reportElement x="111" y="1" width="185" height="16" uuid="2985cf24-63ae-4340-a517-844d9908f19f">
+				<reportElement x="111" y="1" width="400" height="16" uuid="2985cf24-63ae-4340-a517-844d9908f19f">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Bottom">
@@ -178,14 +186,19 @@
 				<textFieldExpression><![CDATA[$F{regMaster}.getRegName()]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="111" y="17" width="100" height="16" uuid="eb496ed2-e39a-48f7-8554-750f9a853706"/>
+				<reportElement x="111" y="17" width="400" height="16" uuid="eb496ed2-e39a-48f7-8554-750f9a853706">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{regMaster}.getRegChiName()]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="111" y="67" width="350" height="16" uuid="b7e2aa01-eebd-4c3d-a1c3-8055d1167170"/>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement x="111" y="67" width="180" height="30" uuid="b7e2aa01-eebd-4c3d-a1c3-8055d1167170">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Bottom">
 					<font size="9"/>
 				</textElement>
@@ -202,14 +215,18 @@ new java.text.DecimalFormat("#,###.##").format(
     $F{regMaster}.getGrossTon()) + " tons": "-"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="401" y="1" width="100" height="16" uuid="9ff312ee-ce75-4923-a90c-e933a34e93a9"/>
+				<reportElement x="401" y="34" width="100" height="16" uuid="9ff312ee-ce75-4923-a90c-e933a34e93a9">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Bottom">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{regMaster}.getImoNo() != null ? $F{regMaster}.getImoNo() : "-"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="401" y="34" width="100" height="16" uuid="efc44849-2f04-4a54-a802-eea758eea741"/>
+				<reportElement x="401" y="67" width="100" height="16" uuid="efc44849-2f04-4a54-a802-eea758eea741">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement verticalAlignment="Bottom">
 					<font size="9"/>
 				</textElement>
