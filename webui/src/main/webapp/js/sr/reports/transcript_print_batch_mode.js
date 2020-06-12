@@ -69,8 +69,39 @@
 	        	  }
 	          }
 		]
-	 })
+	 });
 
+	 var printTranscript = function(formData){
+		  regMasterDS.fetchData(
+					{applNo: formData.applNo},
+					function(resp, rm, req){
+						if (rm==null){
+							isc.warn("Appl No. not found");
+							return;
+						}
+						if (rm.regStatus=="A") {
+							isc.warn("Application not registered yet");
+							return;
+						}
+						
+						txnLockDS.fetchData(
+							{applNo: formData.applNo}, 
+							function(resp, txnLock, req){
+								if (txnLock.length>0){
+									isc.warn("Appl No." + formData.applNo + " was locked by SR");
+									return;
+								}  	
+								ReportViewWindow.displayReport(["RPT_SR_011", formData]);
+							}
+						);
+					},
+					{operationId: "FETCH_FOR_TRANSCRIPT"}
+				  );
+				 
+				 //ReportViewWindow.displayReport(["RPT_SR_011", data]);
+
+	 };
+	 
 	 var reportForm = simpleSrReport("Transcript","RPT_SR_011",
 			 [
 			  {name:"applNo", required:true, title:"Appl No.", width:500, 
@@ -138,36 +169,42 @@
 		 if (reportForm.form.validate()) {
 			 var data = reportForm.form.getData();
 			 var applNoList = data.applNo.split(/,/);
+			 var formData = [];
+			 for (j=0; j<applNoList.length; j++){
+				 formData.push(Object.assign({},reportForm.form.getData()));
+				 formData[j].applNo = applNoList[j];
+			 }
 			 var i = 0;
 			 while (i < applNoList.length) {
 				 if (applNoList[i].trim().length > 0) {
-					 applNo = applNoList[i].trim();
-					  regMasterDS.fetchData(
-						{applNo: data.applNo},
-						function(resp, rm, req){
-							if (rm==null){
-								isc.warn("Appl No. not found");
-								return;
-							}
-							if (rm.regStatus=="A") {
-								isc.warn("Application not registered yet");
-								return;
-							}
-							txnLockDS.fetchData(
-								{applNo: data.applNo}, 
-								function(resp, txnLock, req){
-									if (txnLock.length>0){
-										isc.warn("Appl No." + data.applNo + " was locked by SR");
-										return;
-									}  	
-									ReportViewWindow.displayReport(["RPT_SR_011", data]);
-								}
-							);
-						},
-						{operationId: "FETCH_FOR_TRANSCRIPT"}
-					  );
-					 
-					 //ReportViewWindow.displayReport(["RPT_SR_011", data]);
+					 printTranscript(formData[i]);
+//					  regMasterDS.fetchData(
+//						{applNo: formData[i].applNo},
+//						function(resp, rm, req){
+//							if (rm==null){
+//								isc.warn("Appl No. not found");
+//								return;
+//							}
+//							if (rm.regStatus=="A") {
+//								isc.warn("Application not registered yet");
+//								return;
+//							}
+//							
+//							txnLockDS.fetchData(
+//								{applNo: formData[i].applNo}, 
+//								function(resp, txnLock, req){
+//									if (txnLock.length>0){
+//										isc.warn("Appl No." + formData[i].applNo + " was locked by SR");
+//										return;
+//									}  	
+//									ReportViewWindow.displayReport(["RPT_SR_011", formData[i]]);
+//								}
+//							);
+//						},
+//						{operationId: "FETCH_FOR_TRANSCRIPT"}
+//					  );
+//					 
+//					 //ReportViewWindow.displayReport(["RPT_SR_011", data]);
 				 }
 				 i++;
 			 }

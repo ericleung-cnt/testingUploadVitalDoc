@@ -18,6 +18,7 @@ import org.mardep.ssrs.domain.entity.cert.EntityCertIssueLog;
 import org.mardep.ssrs.domain.sr.Amendment;
 import org.mardep.ssrs.domain.sr.ApplDetail;
 import org.mardep.ssrs.domain.sr.BuilderMaker;
+import org.mardep.ssrs.domain.sr.FsqcCertResult;
 //import org.mardep.ssrs.domain.sr.EtoCoR;
 import org.mardep.ssrs.domain.sr.Owner;
 import org.mardep.ssrs.domain.sr.RegMaster;
@@ -25,6 +26,7 @@ import org.mardep.ssrs.domain.sr.Representative;
 import org.mardep.ssrs.domain.sr.Transaction;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.service.IDeRegService;
+import org.mardep.ssrs.service.IFsqcCertResultService;
 import org.mardep.ssrs.service.IFsqcService;
 import org.mardep.ssrs.service.IInboxService;
 import org.mardep.ssrs.service.IShipRegService;
@@ -63,6 +65,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	
 	@Autowired
 	IFsqcService fsqcSvc;
+	
+	@Autowired
+	IFsqcCertResultService fsqcCertResultSvc;
 	
 	//private final String OPERATION_UPDATE_MULTI_TRACK_CODE = "UPDATE_MULTI_TRACK_CODE";
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
@@ -329,7 +334,11 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		try {
 			if (clientSuppliedValues.containsKey("imo")) {
 				String imo = clientSuppliedValues.get("imo").toString();
-				fsqcSvc.sendCertRequest(imo);
+				FsqcCertResult entity = new FsqcCertResult();
+				entity.setImo(imo);
+				entity.setApplNo("2020/611");
+				fsqcCertResultSvc.save(entity);
+				//fsqcSvc.sendCertRequest(imo);
 			} else {
 				throw new Exception("Missing IMO");
 			}
