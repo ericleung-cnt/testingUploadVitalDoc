@@ -142,6 +142,16 @@
         <url-pattern>/fsqcCertReply/*</url-pattern>
     </servlet-mapping>
 
+	<servlet>
+		<servlet-name>SimulateFsqcCertReply</servlet-name>
+		<servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>SimulateFsqcCertReply</servlet-name>
+        <url-pattern>/simulateFsqcCertReply/*</url-pattern>
+    </servlet-mapping>
+
 	<resource-ref>
 		<description>DB Connection</description>
 		<res-ref-name>jdbc/ssrsDS</res-ref-name>

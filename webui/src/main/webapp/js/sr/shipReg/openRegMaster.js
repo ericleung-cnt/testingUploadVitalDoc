@@ -1907,11 +1907,27 @@ var openRegMaster = function(record, task, mode
 				{imo: formData.imoNo},
 				function(resp, data, req){
 					console.log(resp);
-					//if ()
+					isc.say("send succeed");
 				},
 				{operationId: "REQUEST_FSQC_CERT"}
 			);
 		},
+	});
+	var btnSrSimulateFsqcCertReply = isc.Button.create({
+		title: "Simulate<br>FSQC Cert<br>Reply",
+		height: thickBtnHeight,
+		width: thickBtnWidth,
+		click: function(){
+			console.log("FSQC cert Reply");
+			regMasterDS.updateData(
+					{},
+					function(resp, data, req){
+						console.log(resp);
+						isc.say("send succeed");
+					},
+					{operationId: "SIMULATE_FSQC_CERT_REPLY"}
+				);
+		}
 	});
 	var btnSrReadyApprovalApplication = isc.Button.create({
 			title:"Ready Approval<br>ShipReg<br>Application",
@@ -4555,6 +4571,7 @@ var openRegMaster = function(record, task, mode
 				}
 				if (form.todo.contains("ready")) {
 					actions.addMember(btnSrRequestCertFSQC);
+					actions.addMember(btnSrSimulateFsqcCertReply);
 					actions.addMember(btnSrReadyApprovalApplication);
 					actions.addMember(btnSrSaveShipDetails);
 					addButtons2("representative.actions",[btnRpCopyFromCompanySearch, btnRpSave]);

@@ -1,6 +1,7 @@
 package org.mardep.ssrs.service;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.mardep.ssrs.fsqcwebService.pojo.FsqcShipDetainData;
 import org.mardep.ssrs.fsqcwebService.pojo.FsqcShipResultData;
@@ -21,5 +22,7 @@ public interface IFsqcService extends IBaseService{
 	public boolean checkSSRS_WhiteList(String ipAddress);
 	
 	public void sendCertRequest(String imo) throws Exception;
+
+	void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate) throws Exception;
 
 }

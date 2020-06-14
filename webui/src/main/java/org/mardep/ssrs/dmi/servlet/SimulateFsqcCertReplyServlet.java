@@ -9,24 +9,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mardep.ssrs.fsqcwebService.pojo.FsqcCertResultPojo;
-import org.mardep.ssrs.fsqcwebService.pojo.FsqcShipDetainData;
 import org.mardep.ssrs.fsqcwebService.pojo.FsqcShipResultData;
-import org.mardep.ssrs.service.IFsqcCertResultService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component("FsqcCertReply")
-public class FsqcCertReplyServlet implements HttpRequestHandler {
-
-	@Autowired
-	IFsqcCertResultService fsqcCertResultSvc;
-	
-	protected final Logger logger = LoggerFactory.getLogger(FsqcCertReplyServlet.class);
+@Component("SimulateFsqcCertReply")
+public class SimulateFsqcCertReplyServlet  implements HttpRequestHandler {
+	protected final Logger logger = LoggerFactory.getLogger(SimulateFsqcCertReplyServlet.class);
 
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response)
@@ -59,8 +52,8 @@ public class FsqcCertReplyServlet implements HttpRequestHandler {
 			//FsqcShipDetainData ship_data = mapper.readValue(jb.toString(), FsqcShipDetainData.class);
 			//submitFsqcShip(ship_data, result);
 			System.out.println(jb.toString());
-			//FsqcCertResultPojo resultData = mapper.readValue(jb.toString(), FsqcCertResultPojo.class);
-			result.setSuccess(true);
+			FsqcCertResultPojo resultData = mapper.readValue(jb.toString(), FsqcCertResultPojo.class);			
+			result.setSuccess(false);
 			result.setMessage("got");
 		} catch (Exception e) {
 			/* report an error */
@@ -76,6 +69,5 @@ public class FsqcCertReplyServlet implements HttpRequestHandler {
 
 		logger.info(json_output);
 	}
-
 
 }

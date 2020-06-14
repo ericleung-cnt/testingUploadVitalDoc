@@ -83,6 +83,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	URL urlForUpdateShipParticulars;
 	URL urlForCertRequest;
+	URL urlForSimulateCertReply;
+	
 	int maxRetry = Integer.parseInt(System.getProperty("FsqcService.maxRetry", "3"));
 
 	private final String CERT_REQUEST_NEW_SHIP_REG = "CERT_REQUEST_NEW_SHIP_REG";
@@ -94,7 +96,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	public FsqcService() throws MalformedURLException {
 		urlForUpdateShipParticulars = new URL(System.getProperty("ShipRegService.pushUrl.update", "http://localhost:8080/ssrs/"));
-		urlForCertRequest = new URL(System.getProperty("FsqcService.certRequest", "http://localhost:8080/ssrs/fsqcCertReply/"));
+		urlForCertRequest = new URL(System.getProperty("FsqcService.certRequest", "http://localhost:8080/ssrs/simulateFsqcCertReply/"));
+		urlForSimulateCertReply = new URL(System.getProperty("FsqcService.certReply", "http://localhost:8080/ssrs/fsqcCertReply/"));
 	}
 
 	@Override
@@ -105,6 +108,28 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		try {
 			String jsonInputString = mapper.writeValueAsString(srMap);
 			pushToFSQC(urlForCertRequest, jsonInputString);			
+		} catch (Exception ex) {
+			if (ex instanceof IOException) {
+				throw new Exception("FSQC Connection timeout or interface fail");
+			}
+			if (ex instanceof JsonProcessingException) {
+				throw new Exception("Web Interface JSON error");
+			}
+			throw ex;
+		}
+	}
+	
+	@Override
+	public void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate)  throws Exception {
+		Map<String, Object> jsonMap = new LinkedHashMap<>();
+		jsonMap.put("imo", imo);
+		jsonMap.put("applNo", applNo);
+		jsonMap.put("certType", certType);
+		jsonMap.put("certResult", certResult);
+		jsonMap.put("certResultDate", new SimpleDateFormat("yyyy-MM-dd").format(resultDate));
+		try {
+			String jsonInputString = mapper.writeValueAsString(jsonMap);
+			pushToFSQC(urlForCertRequest, jsonInputString);
 		} catch (Exception ex) {
 			if (ex instanceof IOException) {
 				throw new Exception("FSQC Connection timeout or interface fail");

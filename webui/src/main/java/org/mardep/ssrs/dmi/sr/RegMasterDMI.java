@@ -71,6 +71,7 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	
 	//private final String OPERATION_UPDATE_MULTI_TRACK_CODE = "UPDATE_MULTI_TRACK_CODE";
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
+	private final String OPERATION_SIMULATE_FSQC_CERT_REPLY = "SIMULATE_FSQC_CERT_REPLY";
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
 	
 	@Override
@@ -321,6 +322,17 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			try {
 				sendRequestFsqcCert(clientSuppliedValues);
 				dsResponse.setSuccess();
+				//dsResponse.setFailure("failed");
+				return dsResponse;
+			} catch (Exception ex) {
+				dsResponse.setFailure(ex.getMessage());
+				return dsResponse;
+			}
+		} else if (OPERATION_SIMULATE_FSQC_CERT_REPLY.equals(operationId)) {
+			DSResponse dsResponse = new DSResponse();
+			try {
+				simulateFsqcCertReply();
+				dsResponse.setSuccess();
 				return dsResponse;
 			} catch (Exception ex) {
 				dsResponse.setFailure(ex.getMessage());
@@ -334,14 +346,22 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		try {
 			if (clientSuppliedValues.containsKey("imo")) {
 				String imo = clientSuppliedValues.get("imo").toString();
-				FsqcCertResult entity = new FsqcCertResult();
-				entity.setImo(imo);
-				entity.setApplNo("2020/611");
-				fsqcCertResultSvc.save(entity);
-				//fsqcSvc.sendCertRequest(imo);
+//				FsqcCertResult entity = new FsqcCertResult();
+//				entity.setImo(imo);
+//				entity.setApplNo("2020/611");
+//				fsqcCertResultSvc.save(entity);
+				fsqcSvc.sendCertRequest(imo);
 			} else {
 				throw new Exception("Missing IMO");
 			}
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+	
+	private void simulateFsqcCertReply() throws Exception {
+		try {
+			fsqcSvc.simulateCertReply("999111", "2021/001", "BCC", "Succeed", new Date());
 		} catch (Exception ex) {
 			throw ex;
 		}
