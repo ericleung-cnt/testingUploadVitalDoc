@@ -3002,7 +3002,16 @@ var openRegMaster = function(record, task, mode
 					}, {data:formData, operationId:"mortgageDS_updateData_withdraw"});
 				},
 			});
-
+	var btnFsqcDownloadCert = isc.IButton.create(
+			{
+				title: "Download Cert",
+				height: thickBtnHeight,
+				width: thickBtnWidth,
+				click: function() {
+					
+				},				
+			});
+	
 	var taskId = task ? task.id : null;
 	var hasApplNo = function() { return record && record.applNo; };
 	var isRegistered = function() {
@@ -3213,7 +3222,27 @@ var openRegMaster = function(record, task, mode
                  {name:"applDetails.clientDeregRemark", title:"Client De-registraion Remark", length:100, enforceLength:true, type:"textArea", colSpan:2,
                 	 changed:upperTA},
                  {name:"applDetails.actions", type:"canvas", layoutAlign :"right", colSpan:6 , showTitle:false,height:22},
- 		        {name:"sectionOwner", type:"section", defaultValue:"Owners and Demise", itemIds:["owners","owners.actions"] ,sectionExpanded:false},
+ 		        {name:"sectionFSQC", type:"section", defaultValue:"FSQC Certs", 
+                	 itemIds:[
+                		 //"fsqc.prqcResult", "fsqc.prqcResultDate", "fsqc.prqcExpiryDate", "fsqc.prqcDocLinkId", "fsqc.prqcDownload"
+                		 "fsqcCerts",
+                		 "fsqc.actions",
+                	 ],
+                	 sectionExpanded:false,
+ 		        },
+ 		        {name: "fsqcCerts", type:"canvas", colSpan:6, vAlign:"top", showTitle:false},
+ 		        {name: "fsqc.actions", type: "canvas", colSpan:6, layoutAlign: "right", showTitle: false, height: 22},
+// 		        {name: "fsqc.prqcResult", title:"PRQC Result", type:"text", width:100, canEdit: "false"},
+// 		        {name: "fsqc.prqcResultDate", title: "Received Date", type: "Date", width:100, canEdit: "false"},
+// 		        {name: "fsqc.prqcExpiryDate", title: "Expiry Date", type: "Date", width:100, canEdit: "false"},
+// 		        {name: "fsqc.prqcDocLinkId", title: "", type:"text", width:100},
+// 		        {name: "fsqc.prqcDownload", title: "Download", type:"button",
+// 		        	click: function(){
+// 		        		
+// 		        	},
+// 		        	endRow:true
+// 		        },
+                {name:"sectionOwner", type:"section", defaultValue:"Owners and Demise", itemIds:["owners","owners.actions"] ,sectionExpanded:false},
                 {name:"owners",type:"canvas", colSpan:6, vAlign:"top", showTitle:false},
                 {name:"owners.actions", type:"canvas", layoutAlign :"right", colSpan:6 , showTitle:false,height:22},
   		        {name:"representative",type:"section", defaultValue:"Representative",
@@ -3299,6 +3328,11 @@ var openRegMaster = function(record, task, mode
 				});
 				injuctionDS.fetchData({applNo:applNo}, function(resp,data,req){
 					form.injuctionGrid.setData(data);
+					loaded();
+				});
+				console.log("imo" + data.imoNo);
+				fsqcCertResultDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertResultData, req){
+					form.fsqcCertResultGrid.setData(fsqcCertResultData);
 					loaded();
 				});
 				if (record.shipTypeCode) {
@@ -4031,6 +4065,20 @@ var openRegMaster = function(record, task, mode
 	form.getItem("injuctions").canvas.addChild(isc.VLayout.create({members:[form.injuctionGrid]}));
 	form.getItem("injuctions").canvas.children[0].setWidth(1000);
 
+	form.fsqcCertResultGrid = isc.ListGrid.create({
+		width: 1000,
+		height: 120,
+		fields: [
+			{name: "certType", title: "Cert Type"},
+			{name: "certResult", title: "Cert Result"},
+			{name: "certResultDate", title: "Received Date"},
+			{name: "certExpiryDate", title: "Expiry Date"},
+			{name: "docLinkId", title: "Vital Doc"}
+		],		
+	});
+	form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertResultGrid]}));
+	form.getItem("fsqcCerts").canvas.children[0].setWidth(1000);
+	
 	var docFields = [];
 
 	var rmForm = form;
@@ -4508,6 +4556,7 @@ var openRegMaster = function(record, task, mode
 //			});
 //		 }
 //		}}));
+		addButtons2("fsqc.actions", [btnFsqcDownloadCert]);
 		// 20190813 actions.addMember(btnSrCheckShipName);
 		if (mode==0) {	// ship registration
 			if (form.todo.length==0){	// not opened from inbox

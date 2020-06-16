@@ -404,13 +404,14 @@ public class RPT_SR_011 extends AbstractSrReport {
 			} else {
 				params.put("noRP","F");
 				regMaster.put("repName", rep.getName());
+				String printFullAddr_RP = printFullAddr;
 				if ("C".equals(rep.getStatus())) {
-					printFullAddr = "Y";
+					printFullAddr_RP = "Y";
 				}
 				if ("I".equals(rep.getStatus()) && printFullAddr.isEmpty()) {
-					printFullAddr = "N";
+					printFullAddr_RP = "N";
 				}
-				if ("N".equals(printFullAddr)) {
+				if ("N".equals(printFullAddr_RP)) {
 					regMaster.put("repAddress",
 							(rep.getAddress3()==null ? "" : rep.getAddress3()) + "\n\n");
 				} else {
@@ -442,13 +443,14 @@ public class RPT_SR_011 extends AbstractSrReport {
 				continue;
 			}
 			String ownerAddr = ""; 
+			String printFullAddr_Owner = printFullAddr;
 			if ("C".equals(owner.getStatus())) {
-				printFullAddr = "Y";
+				printFullAddr_Owner = "Y";
 			}
 			if ("I".equals(owner.getStatus()) && printFullAddr.isEmpty()) {
-				printFullAddr = "N";
+				printFullAddr_Owner = "N";
 			}
-			if ("N".equals(printFullAddr)) {
+			if ("N".equals(printFullAddr_Owner)) {
 				ownerAddr = (owner.getAddress3()!=null  && !owner.getAddress3().isEmpty() ? owner.getAddress3() : "") + "\n\n";				
 			} else {
 				ownerAddr = (owner.getAddress1() != null ? owner.getAddress1() :"") +

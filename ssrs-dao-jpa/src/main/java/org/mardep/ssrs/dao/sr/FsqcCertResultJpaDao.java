@@ -37,4 +37,19 @@ public class FsqcCertResultJpaDao extends AbstractJpaDao<FsqcCertResult, Long> i
 			return null;
 		}
 	}
+	
+	@Override
+	public List<FsqcCertResult> findByImo(String imo){
+		try {
+			List<FsqcCertResult> entities;
+			String sql = "select fcr from FsqcCertResult fcr where fcr.imo=:imo";
+			Query query = em.createQuery(sql)
+					.setParameter("imo", imo);
+			entities = query.getResultList();
+			return entities;
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return null;
+		}		
+	}
 }

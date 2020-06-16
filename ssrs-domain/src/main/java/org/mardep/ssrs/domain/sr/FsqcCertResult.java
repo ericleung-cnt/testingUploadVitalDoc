@@ -62,6 +62,12 @@ public class FsqcCertResult extends AbstractPersistentEntity<Long> {
 	@Temporal(TemporalType.DATE)
 	private Date certResultDate;
 
+	@Getter
+	@Setter
+	@Column(name = "CERT_EXPIRY_DATE")
+	@Temporal(TemporalType.DATE)
+	private Date certExpiryDate;
+
 	@Override
 	public Long getId() {
 		// TODO Auto-generated method stub

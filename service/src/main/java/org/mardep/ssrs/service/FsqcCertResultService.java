@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class FsqcCerResultService extends AbstractService implements IFsqcCertResultService {
+public class FsqcCertResultService extends AbstractService implements IFsqcCertResultService {
 
 	@Autowired
 	IFsqcCertResultDao fsqcCertResultDao;
@@ -27,5 +27,11 @@ public class FsqcCerResultService extends AbstractService implements IFsqcCertRe
 		// TODO Auto-generated method stub
 		FsqcCertResult entity = fsqcCertResultDao.findByApplNo(applNo);
 		return entity;
+	}
+	
+	@Override
+	public List<FsqcCertResult> findByImo(String imo) {
+		List<FsqcCertResult> entities = fsqcCertResultDao.findByImo(imo);
+		return entities;
 	}
 }
