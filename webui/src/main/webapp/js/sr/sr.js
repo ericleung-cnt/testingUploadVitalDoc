@@ -1,6 +1,6 @@
 var thickBtnHeight = 50;
 var paymentStatusValueMap = {"0":"Outstanding", "1":"Paid (Full)", "2":"Outstanding (Partial)", "3":"Paid (Overpaid)"};
-var dnStatusValueMap = {"3":"Issued", "11":"Written Off", "12":"Cancelled", "16":"Refunded"};
+var dnStatusValueMap = {"3":"Issued", "4":"Autopay Arranged", "11":"Written Off", "12":"Cancelled", "16":"Refunded"};
 var dnFormUtil = {
 		performCopy: function(record, callback, win){
 			console.log(record);
