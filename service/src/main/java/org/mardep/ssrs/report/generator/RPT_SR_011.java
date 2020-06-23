@@ -17,6 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang.StringUtils;
+import org.mardep.ssrs.helperService.IMapHelperService;
 import org.mardep.ssrs.dao.codetable.IFeeCodeDao;
 import org.mardep.ssrs.dao.codetable.IReasonCodeDao;
 import org.mardep.ssrs.dao.codetable.IRegistrarDao;
@@ -72,6 +73,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 	@Autowired
 	IFeeCodeDao fcDao;
 
+	@Autowired
+	IMapHelperService mapHelper;
+	
 	public RPT_SR_011() {
 		super("RPT-SR-011.jrxml", null);
 	}
@@ -86,8 +90,17 @@ public class RPT_SR_011 extends AbstractSrReport {
 				printFullAddr = "N";
 			}
 		};
-		Date reportDate = (Date)inputParam.get("reportDate");
+		//Date reportDate = (Date)inputParam.get("reportDate");
 		Date generateTime = new Date(System.currentTimeMillis() + 5000 /* buffer for server time gap */);
+		Date reportDate = mapHelper.extractDateFromMap(inputParam, "dd/MM/yyyy", "reportDate");
+//		Object objReportDate = inputParam.get("reportDate");
+//		if (objReportDate instanceof Date) {
+//			reportDate = (Date)objReportDate;
+//		} else if (objReportDate instanceof String) {
+//			reportDate = new SimpleDateFormat("dd/MM/yyyy").parse(objReportDate.toString());
+//		}
+		
+//		Date generateTime = new Date(System.currentTimeMillis() + 5000 /* buffer for server time gap */);
 		if (reportDate == null) {
 			reportDate = generateTime;
 		}
@@ -137,11 +150,20 @@ public class RPT_SR_011 extends AbstractSrReport {
 		logger.info("Report Date:{}", reportDate);
 
 		//for user to override issueDate (Date Back)
-		Date issueDateUI = (Date)inputParam.get("issueDate");
+//		Date issueDateUI = (Date)inputParam.get("issueDate");
+//		if (issueDateUI == null) {
+//			issueDateUI = new Date();
+//		}
+		Date issueDateUI = mapHelper.extractDateFromMap(inputParam, "dd/MM/yyyy", "issueDate"); 
 		if (issueDateUI == null) {
 			issueDateUI = new Date();
 		}
-
+//		Object objIssueDate = inputParam.get("issueDate");
+//		if (objIssueDate instanceof Date) {
+//			issueDateUI = (Date)objIssueDate;
+//		} else if (objIssueDate instanceof String) {
+//			issueDateUI = new SimpleDateFormat("dd/MM/yyyy").parse(objIssueDate.toString());
+//		}
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		params.put("pInterestHeldEng", "---");
@@ -173,7 +195,10 @@ public class RPT_SR_011 extends AbstractSrReport {
 		Date issueDate = cal.getTime(); // generateTime;
 		params.put("issueTime", (new EnglishReportLongDateFormat(false).format(issueDate) + " at " + new SimpleDateFormat("HH:mm").format(issueDate)).replace(",", ""));
 		params.put("issueTimeChi", new SimpleDateFormat("y\u5e74M\u6708d\u65e5HH\u6642mm\u5206", Locale.CHINESE).format(issueDate));
-		Long registrarId = (Long) inputParam.get("registrar");
+		Long registrarId = mapHelper.extractLongFromMap(inputParam, "registrar");
+//		if (inputParam.containsKey("registrar")) {
+//			registrarId = new Long(inputParam.get("registrar").toString());//(Long) inputParam.get("registrar");
+//		}
 		params.put("registrar", "");
 		if (registrarId != null) {
 			Registrar registrar = rDao.findById(registrarId);

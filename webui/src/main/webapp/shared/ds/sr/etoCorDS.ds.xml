@@ -9,5 +9,6 @@
 		<field name="trackCode" type="text" length="20"/>
 		<field name="corValid" type="text" length="1" />
 		<field name="active" type="text" length="1" />
+		<field name="registrarId" type="long"/>
 	</fields>
 </DataSource>

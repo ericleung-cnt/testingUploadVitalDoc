@@ -1,3 +1,10 @@
+Date.prototype.ddMMyyyy = function() {
+	var mm = this.getMonth() + 1;
+	var dd = this.getDate();
+	var yyyy = this.getFullYear();
+	
+	return '' + (dd<=9 ? '0' + dd : dd) + '/' + (mm<=9 ? '0' + mm : mm) + '/' + yyyy;
+};
 
 	 var shipRegList = isc.ListGrid.create({
 		 ID: "SrList",
@@ -91,7 +98,27 @@
 									isc.warn("Appl No." + formData.applNo + " was locked by SR");
 									return;
 								}  	
-								ReportViewWindow.displayReport(["RPT_SR_011", formData]);
+								var reportType = "RPT_SR_011";
+								ReportViewWindow.vitalDocReport(
+									[reportType, formData],
+									function(){
+										regMasterDS.updateData(
+											{
+												reportType: reportType,
+												applNo: formData.applNo,
+												registrar: formData.registrar.toString(),
+												certified: formData.certified,
+												fullAddr: formData.fullAddr,
+												printMortgage: formData.printMortgage,
+												reportDate: formData.reportDate.ddMMyyyy(),
+												zip: formData.zip
+											},
+											function() {
+											},
+											{operationId: "UPLOAD_VITALDOC_SRDOC"}
+										);
+									}
+								);
 							}
 						);
 					},

@@ -196,6 +196,25 @@ var ReportViewWindow = {
 
 				},
 			});
+	},
+	vitalDocReport:function(requestArguments, reportCallback){
+		 DMI.call({appID:"ssrsApp",
+				className:"reportDMI",
+				methodName:"generate",
+				arguments:requestArguments,
+				callback:function(rpcResponse, data, rpcRequest){
+				    var mapForm = document.createElement("form");
+				    mapForm.target = "Map" + new Date().getTime() +"_"+ Math.random();
+				    console.log("vitaldoc mapForm.target="+mapForm.target);
+				    mapForm.method = "POST";
+				    mapForm.action = data;
+				    document.body.appendChild(mapForm);
+
+				    var map = window.open("", mapForm.target, "status=0,title=0,height=600,width=800,scrollbars=1");
+				    mapForm.submit();
+				    reportCallback();
+				},
+			});
 	}
 };
 

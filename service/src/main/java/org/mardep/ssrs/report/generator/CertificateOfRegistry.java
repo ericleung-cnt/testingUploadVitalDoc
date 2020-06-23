@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.mardep.ssrs.helperService.IMapHelperService;
 import org.mardep.ssrs.dao.codetable.IFeeCodeDao;
 import org.mardep.ssrs.dao.codetable.IReasonCodeDao;
 import org.mardep.ssrs.dao.codetable.IRegistrarDao;
@@ -61,6 +62,9 @@ public class CertificateOfRegistry extends AbstractSrReport {
 	@Autowired
 	IFeeCodeDao fcDao;
 
+	@Autowired
+	IMapHelperService mapHelper;
+	
 	public CertificateOfRegistry() {
 		super("CoR.jrxml", null);
 	}
@@ -115,16 +119,24 @@ public class CertificateOfRegistry extends AbstractSrReport {
 			trackCode = regM.getTrackCode();
 		}
 		
-		Date reportDate = (Date)inputParam.get("reportDate");
-		if (reportDate == null) {
+		//Date reportDate = (Date)inputParam.get("reportDate");
+//		Date reportDate = new SimpleDateFormat("dd/MM/yyyy").parse(inputParam.get("reportDate").toString());
+//		if (reportDate == null) {
+//			reportDate = new Date();
+//		}
+		Date reportDate = mapHelper.extractDateFromMap(inputParam, "dd/MM/yyyy", "reportDate");
+		if (reportDate==null) {
 			reportDate = new Date();
 		}
-
-		Date issueDate = (Date)inputParam.get("issueDate");
-		if (issueDate == null) {
-			issueDate = reportDate;
+		//Date issueDate = (Date)inputParam.get("issueDate");
+//		Date issueDate = new SimpleDateFormat("dd/MM/yyyy").parse(inputParam.get("issueDate").toString());
+//		if (issueDate == null) {
+//			issueDate = reportDate;
+//		}
+		Date issueDate = mapHelper.extractDateFromMap(inputParam, "dd/MM/yyyy", "issueDate");
+		if (issueDate==null) {
+			issueDate = new Date();
 		}
-
 //		String applNo = (String) inputParam.get("applNo");
 		logger.info("Report Date:{}", reportDate);
 
@@ -174,7 +186,9 @@ public class CertificateOfRegistry extends AbstractSrReport {
 		// 20200513
 		
 		if (!crosscheck) {
-			Long registrarId = (Long) inputParam.get("registrar");
+			//Long registrarId = (Long) inputParam.get("registrar");
+			//Long registrarId = new Long(inputParam.get("registrar").toString());
+			Long registrarId = mapHelper.extractLongFromMap(inputParam, "registrar");
 			if (registrarId != null) {
 				Registrar registrar = rDao.findById(registrarId);
 				if(registrar!=null){

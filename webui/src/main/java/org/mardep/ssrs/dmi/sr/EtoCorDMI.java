@@ -3,10 +3,12 @@ package org.mardep.ssrs.dmi.sr;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.mardep.ssrs.domain.sr.EtoCoR;
+import org.mardep.ssrs.domain.sr.RegMaster;
 import org.mardep.ssrs.service.IEtoCorService;
 import org.mardep.ssrs.service.IShipRegService;
 import org.slf4j.Logger;
@@ -68,10 +70,12 @@ public class EtoCorDMI {
 					String applNo = values.get(i).get("applNo").toString();
 					Date regDate = sdf.parse(values.get(i).get("regDate").toString());
 					Date issueDate = sdf.parse(values.get(i).get("issueDate").toString());
+					Long registrarId = new Long(values.get(i).get("registrar").toString());
 					String trackCode = srSvc.prepareTrackCode(applNo);
 					etoCor.setApplNo(applNo);
 					etoCor.setRegDate(regDate);
 					etoCor.setCertIssueDate(issueDate);
+					etoCor.setRegistrarId(registrarId);
 					etoCor.setTrackCode(trackCode);
 					
 					etoCoRs.add(etoCor);
@@ -90,10 +94,12 @@ public class EtoCorDMI {
 					String applNo = values.get(i).get("applNo").toString();
 					Date regDate = sdf.parse(values.get(i).get("regDate").toString());
 					Date issueDate = sdf.parse(values.get(i).get("issueDate").toString());
+					Long registrarId = new Long(values.get(i).get("registrarId").toString());
 					String trackCode = srSvc.prepareTrackCode(applNo);
 					etoCor.setApplNo(applNo);
 					etoCor.setRegDate(regDate);
 					etoCor.setCertIssueDate(issueDate);
+					etoCor.setRegistrarId(registrarId);
 					etoCor.setTrackCode(trackCode);
 					
 					etoCoRs.add(etoCor);
@@ -110,18 +116,31 @@ public class EtoCorDMI {
 				Long id = new Long(suppliedValues.get("id").toString());
 				String applNo = suppliedValues.get("applNo").toString();
 				String applNoSuf = suppliedValues.get("applNoSuf").toString();
+				Long registrarId = new Long(suppliedValues.get("registrarId").toString());
 				String trackCode = suppliedValues.get("trackCode").toString();
 				
 				EtoCoR etoCor = new EtoCoR();
 				etoCor.setApplNo(applNo);
 				etoCor.setApplNoSuf(applNoSuf);
+				etoCor.setRegistrarId(registrarId);
 				etoCor.setTrackCode(trackCode);
 				etoCor.setId(id);
 				
 				etoCorSvc.updateValidEtoCoR(entity);
-				srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getTrackCode());
+				RegMaster rm = srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode());
 			//} else if ("REPLACE_MULTI_COR".equals(operationId)) {
-				
+				//RegMaster rm = srSvc.findById(RegMaster.class, entity.getApplNo());
+				Map<String, Object> map = new HashMap<String, Object>();
+				map.put("applNo", rm.getApplNo());
+				map.put("regStatus", rm.getRegStatus());
+				map.put("registrar", rm.getRegistrar().toString());
+				map.put("certified", false);
+				map.put("paymentRequired", false);
+				map.put("reason","");
+				map.put("printMortgage", true);
+				map.put("zip", false);
+				map.put("issueDate", new SimpleDateFormat("dd/MM/yyyy").format(rm.getRegDate()));
+				srSvc.uploadCoRToVitalDoc(map);
 			}
 			dsResponse.setStatus(DSResponse.STATUS_SUCCESS);
 			return dsResponse;

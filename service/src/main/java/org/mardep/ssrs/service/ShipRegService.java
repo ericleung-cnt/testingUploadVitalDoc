@@ -1,5 +1,8 @@
 package org.mardep.ssrs.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -49,14 +52,20 @@ import org.mardep.ssrs.domain.sr.RegMaster;
 import org.mardep.ssrs.domain.sr.Representative;
 import org.mardep.ssrs.domain.sr.SrEntityListener;
 import org.mardep.ssrs.domain.sr.Transaction;
+import org.mardep.ssrs.helperService.IMapHelperService;
 import org.mardep.ssrs.pojo.trackcode.FieldName;
 import org.mardep.ssrs.pojo.trackcode.Language;
 import org.mardep.ssrs.pojo.trackcode.Result;
 import org.mardep.ssrs.pojo.trackcode.SearchResult;
 import org.mardep.ssrs.pojo.trackcode.State;
 import org.mardep.ssrs.pojo.trackcode.StatusEnum;
+import org.mardep.ssrs.report.IReportGenerator;
+import org.mardep.ssrs.report.generator.CertificateOfRegistry;
+import org.mardep.ssrs.report.generator.RPT_SR_011_cod;
+import org.mardep.ssrs.vitaldoc.IVitalDocClient;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -76,6 +85,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @Service
 @Transactional
 public class ShipRegService extends AbstractService implements IShipRegService, DisposableBean {
+
+	@Autowired
+	ApplicationContext applicationContext;
 
 	@Autowired
 	IInboxService inbox;
@@ -117,6 +129,12 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 
 	@Autowired
 	IOfficeDao officeDao;
+	
+	@Autowired
+	IVitalDocClient vdClient;
+	
+	@Autowired
+	IMapHelperService mapHelperSvc;
 	
 	private ExecutorService es = Executors.newFixedThreadPool(1);
 
@@ -769,7 +787,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	}
 	
 	@Override
-	public RegMaster assignRegDateTrackCode(String applNo, String applNoSuf, Date regDate, String trackCode) {
+	public RegMaster assignRegDateTrackCode(String applNo, String applNoSuf, Date regDate, Long registrarId, String trackCode) {
 		RegMaster rm = rmDao.findById(applNo);
 		
 		rm.setApplNoSuf(applNoSuf);
@@ -783,6 +801,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		} else if ("F".equals(applNoSuf)) {
 			rm.setProvExpDate(null);
 		}
+		rm.setRegistrar(registrarId);
 		rm.setTrackCode(trackCode);
 		RegMaster result = rmDao.save(rm);
 		
@@ -1167,5 +1186,82 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		List<String> errMsg = new ArrayList<String>();
 		
 		return errMsg;
+	}
+	
+	private String createSrIssuedDocName(String docName) {
+		docName = docName + "_" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
+		docName = docName.replaceAll("\\s+", "_");
+		return docName;
+	}
+	
+	private Map<String, String> createVitalDocPropertiesForSrIssuedDoc(RegMaster rmEntity) {
+		Map<String, String> vitalDocProperties = new HashMap<String, String>();
+		vitalDocProperties.put("IMO number", rmEntity.getImoNo()==null ? "" : rmEntity.getImoNo());
+		vitalDocProperties.put("Ship name", rmEntity.getRegName());
+		vitalDocProperties.put("Official Number", rmEntity.getOffNo());
+		return vitalDocProperties;
+	}
+
+	@Override
+	public void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception {
+		try {
+		//CertificateOfRegistry generator = new CertificateOfRegistry();
+			Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
+			IReportGenerator generator = rptGeneratorMap.get("CoR");
+			byte[] cor = generator.generate(clientSuppliedValues);
+//		File file = new File("c:\\temp\\cor.pdf");
+//		OutputStream os = new FileOutputStream(file);
+//		os.write(cor);
+//		os.close();
+			String applNo = mapHelperSvc.extractStrFromMap(clientSuppliedValues, "applNo");
+			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String docName = rmEntity.getImoNo()==null ? rmEntity.getOffNo() : rmEntity.getImoNo();
+			docName = createSrIssuedDocName(docName);
+			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
+			vitalDocProperties.put("Issue type", "CoR");
+			Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
+	
+
+	@Override
+	public void uploadCoDToVitalDoc(Map clientSuppliedValues) throws Exception {
+		//RPT_SR_011_cod generator = new RPT_SR_011_cod();
+		Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
+		IReportGenerator generator = rptGeneratorMap.get("CertOfD");
+		byte[] cod = generator.generate(clientSuppliedValues);
+//		File file = new File("c:\\temp\\cod.pdf");
+//		OutputStream os = new FileOutputStream(file);
+//		os.write(cod);
+//		os.close();
+	}
+	
+	@Override
+	public void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception {
+		try {
+			Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
+			IReportGenerator generator = rptGeneratorMap.get("RPT_SR_011");
+			byte[] transcript = generator.generate(clientSuppliedValues);
+//			Date today = new Date();
+//			SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_hhmmss");
+//			String dateStr = sdf.format(today);
+//			File file = new File("c:\\temp\\transcript_" + dateStr + ".pdf");
+//			OutputStream os = new FileOutputStream(file);
+//			os.write(transcript);
+//			os.close();		
+			String applNo = mapHelperSvc.extractStrFromMap(clientSuppliedValues, "applNo");
+			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String docName = rmEntity.getImoNo()==null 
+					? rmEntity.getRegName() + "_" + rmEntity.getOffNo() 
+					: rmEntity.getImoNo() + "_" + rmEntity.getRegName() + "_" + rmEntity.getOffNo();
+			docName = createSrIssuedDocName(docName);
+			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
+			vitalDocProperties.put("Issue type", "Transcript");
+			Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, transcript);
+		} catch (Exception ex) {
+			throw ex;
+		}
 	}
 }

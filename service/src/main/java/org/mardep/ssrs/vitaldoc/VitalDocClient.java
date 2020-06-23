@@ -52,6 +52,10 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String DOCTYPE_MMO_SEAFARER_IMAGE = "MMO-Seafarer Image";
 	private static final String DOC_TYPE_SR_CSR_FORM = "SR-CSR Form";
 
+	private static final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration";
+	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration";
+	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration";
+	
 	@Setter
 	private WebServiceTemplate webServiceTemplate;
 
@@ -693,4 +697,26 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return null;
 	}
 
+	private long uploadIssuedDocToVitalDoc(String vitalDocPath, String docName, Map<String, String> vitalDocProperties, byte[] pdf) throws IOException {
+		Long docId = sendToVitalDoc(vitalDocPath, docName, DOC_TYPE_SR_ISSUED_DOCUMENT, vitalDocProperties, pdf, false);
+		return docId;
+	}
+	
+	@Override
+	public long uploadIssuedCoR(Map<String, String> vitalDocProperties, String docName, byte[] pdf)  throws IOException {
+		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COR, docName, vitalDocProperties, pdf);
+		return docId;
+	}
+	
+	@Override
+	public long uploadIssuedCoD(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException  {
+		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COD, docName, vitalDocProperties, pdf);
+		return docId;		
+	}
+	
+	@Override
+	public long uploadIssuedTranscript(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException  {
+		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_TRANSCRIPT, docName, vitalDocProperties, pdf);
+		return docId;		
+	}
 }

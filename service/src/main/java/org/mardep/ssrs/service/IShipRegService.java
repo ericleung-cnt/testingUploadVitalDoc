@@ -2,6 +2,7 @@ package org.mardep.ssrs.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.mardep.ssrs.domain.sr.Amendment;
 import org.mardep.ssrs.domain.sr.ApplDetail;
@@ -199,7 +200,11 @@ public interface IShipRegService extends IBaseService{
 	
 	String prepareTrackCode(String applNo);
 	RegMaster assignTrackCode(String applNo, String trackCode);
-	RegMaster assignRegDateTrackCode(String applNo,  String applNoSuf, Date regDate, String trackCode);
+	RegMaster assignRegDateTrackCode(String applNo,  String applNoSuf, Date regDate, Long registrarId, String trackCode);
 	List<String> validateApplicationData(RegMaster entity);
+	
+	void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception;
+	void uploadCoDToVitalDoc(Map clientSuppliedValues) throws Exception;
+	void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception;
 	
 }

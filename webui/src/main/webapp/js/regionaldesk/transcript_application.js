@@ -822,15 +822,18 @@ function openTaDemandNote(applicationId, record, callback){
 				click:function(){
 					console.log("print demand log");
 					if (form.validate()) {
-						if (form.getField("address1").getValue().length>50){
+						if (form.getField("address1").getValue()!=null &&
+								form.getField("address1").getValue().length>50){
 							isc.warn("Address1 too long to print in demand note, should less than 50");
 							return;
 						}
-						if (form.getField("address2").getValue().length>50){
+						if (form.getField("address2").getValue()!=null &&
+								form.getField("address2").getValue().length>50){
 							isc.warn("Address2 too long to print in demand note, should less than 50");
 							return;
 						}
-						if (form.getField("address3").getValue().length>50){
+						if (form.getField("address3").getValue()!=null && 
+								form.getField("address3").getValue().length>50){
 							isc.warn("Address3 too long to print in demand note, should less than 50");
 							return;
 						}

@@ -71,6 +71,11 @@ public class EtoCoR extends AbstractPersistentEntity<Long> {
 	//@Enumerated(EnumType.STRING)
 	private String active;
 	
+	@Getter
+	@Setter
+	@Column(name = "REGISTRAR_ID")
+	private Long registrarId;
+	
 	@Override
 	public Long getId() {
 		return id;

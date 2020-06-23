@@ -1,3 +1,4 @@
+console.log("Maintain seafarer record");
 
 isc.TitleLabel.create({
 	ID:"seafarerRegMainSearchResultListLGSummary", contents: "<p> Total no. of search item: <b> 0 </b> </p>"

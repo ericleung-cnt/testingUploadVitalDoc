@@ -23,10 +23,11 @@ var workflow = {
 	}
 };
 
-function etoCor(applNo, regDate, issueDate){
+function etoCor(applNo, regDate, issueDate, registrarId){
 	this.applNo = applNo;
 	this.regDate = regDate;
 	this.issueDate = issueDate;
+	this.registrarId = registrarId;
 };
 
 Date.prototype.ddMMyyyy = function() {
@@ -170,7 +171,8 @@ var openAssignEtoCorForm = function(applNo, callback){
 		fields:[
 			{ name: "applNoSuf", title: "P/F", width: 50 },
 			{ name: "regDate", title: "Reg Date", width: 100 },
-			{ name: "trackCode", title: "Track Code", width: "*" }
+			{ name: "trackCode", title: "Track Code", width: 200 },
+			{ name: "registrarId", title: "", width: "*", optionDataSource:"registrarDS", displayField:"name", valueField:"id"}
 		]
 	});
 	var assignEtoCorForm = isc.DynamicForm.create({
@@ -274,6 +276,7 @@ var openPrintMultiCorForm = function(parentForm, record) {
 	        {name:"date2", title:"Date 2", type:"date", dateFormatter:"dd/MM/yyyy"},
 	        {name:"date3", title:"Date 3", type:"date", dateFormatter:"dd/MM/yyyy"},
 	        {name:"date4", title:"Date 4", type:"date", dateFormatter:"dd/MM/yyyy"},
+	        {name:"registrar", title:"Registrar", optionDataSource:"registrarDS", displayField:"name", valueField:"id", required:true }
 		]
 	});
 	var printMultiCorForm_BtnToolbar = isc.ButtonToolbar.create({
@@ -285,19 +288,19 @@ var openPrintMultiCorForm = function(parentForm, record) {
 		        		var etoCorList = [];
 		        		var dateFormData = printMultiCorForm.getData();
 		        		if (dateFormData.date1) {
-		        			var cor1 = new etoCor(record.applNo, dateFormData.date1.ddMMyyyy(), dateFormData.date1.ddMMyyyy());
+		        			var cor1 = new etoCor(record.applNo, dateFormData.date1.ddMMyyyy(), dateFormData.date1.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor1);
 		        		};
 		        		if (dateFormData.date2) {
-		        			var cor2 = new etoCor(record.applNo, dateFormData.date2.ddMMyyyy(), dateFormData.date2.ddMMyyyy());
+		        			var cor2 = new etoCor(record.applNo, dateFormData.date2.ddMMyyyy(), dateFormData.date2.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor2);			        			
 		        		};
 		        		if (dateFormData.date3) {
-		        			var cor3 = new etoCor(record.applNo, dateFormData.date3.ddMMyyyy(), dateFormData.date3.ddMMyyyy());
+		        			var cor3 = new etoCor(record.applNo, dateFormData.date3.ddMMyyyy(), dateFormData.date3.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor3);			        			
 		        		};
 		        		if (dateFormData.date4) {
-		        			var cor4 = new etoCor(record.applNo, dateFormData.date4.ddMMyyyy(), dateFormData.date4.ddMMyyyy());
+		        			var cor4 = new etoCor(record.applNo, dateFormData.date4.ddMMyyyy(), dateFormData.date4.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor4);
 		        		};
 		        		etoCorDS.updateData(
@@ -308,7 +311,7 @@ var openPrintMultiCorForm = function(parentForm, record) {
 			        				var rptData = {
 				        					applNo: record.applNo,
 				        					applNoSuf: "P",
-				        					registrar: record.registrar,
+				        					registrar: printMultiCorForm.getField("registrar").getValue(), //record.registrar,
 				        					certified: false,
 				        					paymentRequired: false,
 				        					reason: "",
@@ -340,19 +343,19 @@ var openPrintMultiCorForm = function(parentForm, record) {
 		        		var etoCorList = [];
 		        		var dateFormData = printMultiCorForm.getData();
 		        		if (dateFormData.date1) {
-		        			var cor1 = new etoCor(record.applNo, dateFormData.date1.ddMMyyyy(), dateFormData.date1.ddMMyyyy());
+		        			var cor1 = new etoCor(record.applNo, dateFormData.date1.ddMMyyyy(), dateFormData.date1.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor1);
 		        		};
 		        		if (dateFormData.date2) {
-		        			var cor2 = new etoCor(record.applNo, dateFormData.date2.ddMMyyyy(), dateFormData.date2.ddMMyyyy());
+		        			var cor2 = new etoCor(record.applNo, dateFormData.date2.ddMMyyyy(), dateFormData.date2.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor2);			        			
 		        		};
 		        		if (dateFormData.date3) {
-		        			var cor3 = new etoCor(record.applNo, dateFormData.date3.ddMMyyyy(), dateFormData.date3.ddMMyyyy());
+		        			var cor3 = new etoCor(record.applNo, dateFormData.date3.ddMMyyyy(), dateFormData.date3.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor3);			        			
 		        		};
 		        		if (dateFormData.date4) {
-		        			var cor4 = new etoCor(record.applNo, dateFormData.date4.ddMMyyyy(), dateFormData.date4.ddMMyyyy());
+		        			var cor4 = new etoCor(record.applNo, dateFormData.date4.ddMMyyyy(), dateFormData.date4.ddMMyyyy(), dateFormData.registrar);
 		        			etoCorList.push(cor4);
 		        		};
 		        		etoCorDS.updateData(
@@ -363,7 +366,7 @@ var openPrintMultiCorForm = function(parentForm, record) {
 			        				var rptData = {
 				        					applNo: record.applNo,
 				        					applNoSuf: "F",
-				        					registrar: record.registrar,
+				        					registrar: printMultiCorForm.getField("registrar").getValue(), //record.registrar,
 				        					certified: false,
 				        					paymentRequired: false,
 				        					reason: "",
@@ -393,7 +396,7 @@ var openPrintMultiCorForm = function(parentForm, record) {
 				click: function() {
 	        		openAssignEtoCorForm(record.applNo, function(etoCor, regDateStr){
 	        			etoCorDS.updateData(
-	        				{applNo:etoCor.applNo, applNoSuf:etoCor.applNoSuf, id:etoCor.id, regDate:regDateStr, trackCode:etoCor.trackCode},
+	        				{applNo:etoCor.applNo, applNoSuf:etoCor.applNoSuf, id:etoCor.id, regDate:regDateStr, trackCode:etoCor.trackCode, registrarId:etoCor.registrarId},
 	        				function(resp, data, req){
 	        					printMultiCorWindow.close();
 	        					//var dateStr = regDateStr.substring(0, 10);
@@ -426,13 +429,14 @@ var openPrintMultiCorForm = function(parentForm, record) {
 		ID: "printMultiCorWindow",
 		title: "Print Certificates",
 		width: 400,
-		height: 180,
+		height: 210,
 		items:[
 			printMultiCorForm,
 			printMultiCorForm_BtnToolbar
 		],
 		close: function() { printMultiCorWindow.markForDestroy(); }
 	});
+	printMultiCorForm.getField("registrar").setValue(record.registrar);
 	printMultiCorWindow.show();
 	return printMultiCorWindow;
 };
@@ -613,6 +617,7 @@ isc.Window.create({
 								var regStatus = record.regStatus;
 								var issueOfficeId = record.corCollect;
 								var issueDate = confirmPrintCODForm.getValue('issueDate').ddMMyyyy();
+								var registrarStr = confirmPrintCODForm.getValue('registrar').toString();
 								var taskId = workflow.getTask();
 								console.log(openRegMaster);
 
@@ -624,42 +629,105 @@ isc.Window.create({
 									regMasterDS.updateData({applNo:applNo, regStatus:regStatus, issueOfficeId:issueOfficeId, issueDate:issueDate, taskId:taskId},
 											function(){ refreshInbox(); },
 											{operationId:"UPDATE_ISSUE_LOG"});
+									var printCoRInfo = confirmPrintCoDWindow;
 									regMasterDS.updateData(null, function(resp, data, req) {
 										//form.setData(data);
 										var callback = confirmPrintCoDWindow.callback;
 										var record = confirmPrintCoDWindow.record;
-										ReportViewWindow.displayReport(
+										ReportViewWindow.vitalDocReport(
 												[report,
-												 {applNo:confirmPrintCoDWindow.record.applNo,
-													reportDate:confirmPrintCODForm.getValue('issueDate'),
-													registrar:confirmPrintCODForm.getValue('registrar'), // Long
+//												 {applNo:confirmPrintCoDWindow.record.applNo,
+//													reportDate:confirmPrintCODForm.getValue('issueDate'),
+//													registrar:confirmPrintCODForm.getValue('registrar'), // Long
+//													certified:false,
+//													paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
+//													reason:"",
+//													printMortgage:true,
+//													zip:false,
+//													issueDate:confirmPrintCODForm.getValue('issueDate')
+//												 }
+												{
+													applNo:applNo, //confirmPrintCoDWindow.record.applNo,
+													reportDate:issueDate, //confirmPrintCODForm.getValue('issueDate'),
+													registrar:registrarStr, //confirmPrintCODForm.getValue('registrar'), // Long
 													certified:false,
 													paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
 													reason:"",
 													printMortgage:true,
 													zip:false,
-													issueDate:confirmPrintCODForm.getValue('issueDate')
+													issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
 												 }
-												]);
+												], function(){
+													console.log(registrarStr);
+													regMasterDS.updateData(
+														{
+															reportType:report,
+															applNo:applNo,
+															reportDate:issueDate,
+															registrar: registrarStr, // Long
+															certified:false,
+															paymentRequired:false,
+															reason:"",
+															printMortgage:true,
+															zip:false,
+															issueDate:issueDate
+														},
+														function(){
+															
+														},
+														{operationId: "UPLOAD_VITALDOC_SRDOC"}
+													);
+												}
+												);
 										confirmPrintCoDWindow.hide();
 										if (callback!=null){
 											callback(data);										
 										}
 									}, {data:record, operationId:"updateTrackCode"});
 								} else {
-									ReportViewWindow.displayReport(
+									ReportViewWindow.vitalDocReport(
 									[report,
-									 {applNo:confirmPrintCoDWindow.record.applNo,
-										reportDate:confirmPrintCODForm.getValue('issueDate'),
-										registrar:confirmPrintCODForm.getValue('registrar'), // Long
+//									 {applNo:confirmPrintCoDWindow.record.applNo,
+//										reportDate:confirmPrintCODForm.getValue('issueDate'),
+//										registrar:confirmPrintCODForm.getValue('registrar'), // Long
+//										certified:false,
+//										paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
+//										reason:"",
+//										printMortgage:true,
+//										zip:false,
+//										issueDate:confirmPrintCODForm.getValue('issueDate')
+//									 }
+									{
+										applNo:applNo, //confirmPrintCoDWindow.record.applNo,
+										reportDate:issueDate, //confirmPrintCODForm.getValue('issueDate'),
+										registrar:registrarStr, //confirmPrintCODForm.getValue('registrar'), // Long
 										certified:false,
 										paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
 										reason:"",
 										printMortgage:true,
 										zip:false,
-										issueDate:confirmPrintCODForm.getValue('issueDate')
+										issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
 									 }
-									]);
+									], function(){
+										regMasterDS.updateData(
+												{
+													reportType:report,
+													applNo:applNo,
+													reportDate:issueDate,
+													registrar: registrarStr, // Long
+													certified:false,
+													paymentRequired:false,
+													reason:"",
+													printMortgage:true,
+													zip:false,
+													issueDate:issueDate
+												},
+												function(){
+													
+												},
+												{operationId: "UPLOAD_VITALDOC_SRDOC"}
+										)} 									
+									);
 									confirmPrintCoDWindow.hide();									
 								}
 								
@@ -4630,6 +4698,7 @@ var openRegMaster = function(record, task, mode
 				if (form.todo.contains("corReady")) {
 					form.getField("regDate").setRequired(true);
 					form.getField("regTime").setRequired(true);
+					form.getField("registrar").setRequired(true);
 					if (form.getField("regTime").getValue()==null) {
 						form.getField("regTime").setValue("23:59");
 					}
