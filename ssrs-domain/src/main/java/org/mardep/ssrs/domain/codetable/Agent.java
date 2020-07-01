@@ -34,7 +34,7 @@ public class Agent extends AbstractPersistentEntity<String> {
 
 	@Getter
 	@Setter
-	@Column(name = "AGENT_NAME1", nullable=false, length=40)
+	@Column(name = "AGENT_NAME1", nullable=false, length=80)
 	private String name;
 
 	@Getter

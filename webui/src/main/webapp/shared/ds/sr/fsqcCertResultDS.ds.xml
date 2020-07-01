@@ -1,0 +1,12 @@
+<DataSource ID="fsqcCertResultDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="fsqcCertResultDMI" />
+	<fields>
+		<field name="id" type="integer" primaryKey="true" required="true"/>
+		<field name="applNo" type="text" length="9" title="Appl No."/>
+		<field name="imo" type="text" title="IMO"/>
+		<field name="certType" type="text" title="Cert Type"/>
+		<field name="certResult" type="text" title="Result"/>
+		<field name="certResultDate" type="date" title="Result Date" displayFormat="dd/MM/yyyy"/>
+		<field name="certExpiryDate" type="date" title="Expiry Date" displayFormat="dd/MM/yyyy"/>
+	</fields>
+</DataSource>

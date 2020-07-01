@@ -3,7 +3,7 @@
 	<fields>
 		<field name="id" 	type="text" title="ID" 	primaryKey="true" length="3"/>
 
-		<field name="name" 	type="text" title="Name" 	length="40"/>
+		<field name="name" 	type="text" title="Name" 	length="80"/>
 		<field name="agentType" type="text" title="Type" 	length="1"/>
 		<field name="qualifiedRep" 	type="boolean" title="Qualified Rep" 	length="1"/>
 		<field name="prcInterest"  	type="boolean" title="Prc Interest" 	length="1"/>

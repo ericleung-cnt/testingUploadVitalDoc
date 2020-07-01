@@ -615,6 +615,7 @@ var openOwnerEnq = function(record){
 
 
 var openReserveApp=function(record, taskId, hide) {
+	console.log("pre reserve app");
 	var _update = function(form, target)
 	{
 		var vm = {"":""};
