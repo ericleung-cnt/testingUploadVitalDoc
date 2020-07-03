@@ -31,12 +31,15 @@ public class ShipManagerJpaDao extends AbstractJpaDao<ShipManager, Long> impleme
 	}
 
 	@Override
-	public ShipManager findByName(String name) {
+	public ShipManager findByName(String name, String addr1, String addr2, String addr3) {
 		try{
 			StringBuffer sb = new StringBuffer();
-			sb.append("select sm from ShipManager sm where sm.shipMgrName =:shipMgrName ");
+			sb.append("select sm from ShipManager sm where sm.shipMgrName =:shipMgrName and sm.addr1=:addr1 and sm.addr2=:addr2 and sm.addr3=:addr3");
 			Query query = em.createQuery(sb.toString());
-			query.setParameter("shipMgrName", name);
+			query.setParameter("shipMgrName", name)
+				.setParameter("addr1", addr1)
+				.setParameter("addr2", addr2)
+				.setParameter("addr3", addr3);
 			//query.setMaxResults(1);
 			//ShipManager entity =  (ShipManager) query.getSingleResult();
 			List<ShipManager> entities = query.getResultList();

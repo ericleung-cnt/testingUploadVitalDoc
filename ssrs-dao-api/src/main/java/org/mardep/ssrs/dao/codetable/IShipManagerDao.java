@@ -7,7 +7,7 @@ import org.mardep.ssrs.domain.codetable.ShipManager;
 
 public interface IShipManagerDao extends IBaseDao<ShipManager, Long> {
 
-	ShipManager findByName(String name);
+	ShipManager findByName(String name, String addr1, String addr2, String addr3);
 	
 	List<ShipManager> getAll();
 }

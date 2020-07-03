@@ -23,7 +23,7 @@ public class ShipManagerDMI extends AbstractCodeTableDMI<ShipManager> {
 				dsResponse.setData(sm);
 				return dsResponse;
 			} else if ("FETCH_BY_EXACT_SHIP_MGR_NAME".equalsIgnoreCase(operationId) && entity.getShipMgrName()!=null) {
-				ShipManager sManager = codeTableService.findShipManagerByShipName(entity.getShipMgrName());
+				ShipManager sManager = codeTableService.findShipManagerByShipName(entity.getShipMgrName(), entity.getAddr1(), entity.getAddr2(), entity.getAddr3());
 				dsResponse.setData(sManager);
 				return dsResponse;
 			}

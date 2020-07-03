@@ -56,8 +56,8 @@ public class CodeTableService extends AbstractService implements ICodeTableServi
 	}
 	
 	@Override
-	public ShipManager findShipManagerByShipName(String name){
-		return shipManagerDao.findByName(name);
+	public ShipManager findShipManagerByShipName(String name, String addr1, String addr2, String addr3){
+		return shipManagerDao.findByName(name, addr1, addr2, addr3);
 	}
 
 	private void saveUser(User user){

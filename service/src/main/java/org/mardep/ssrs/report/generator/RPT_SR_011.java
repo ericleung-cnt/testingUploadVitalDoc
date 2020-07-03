@@ -720,7 +720,8 @@ public class RPT_SR_011 extends AbstractSrReport {
 				subreportRow.put("transferRegDate", "");
 				subreportRow.put("transferDetail", "");
 					for (Transaction t : transactionList) {
-						if ("34".equals(t.getTransactionCode())) { // transfer
+						System.out.println("transaction code: " + t.getCode());
+						if ("34".equals(t.getCode())) { // transfer
 							String priorityCode = StringUtils.substring(t.getDetails(), 22, 23);
 							//if (StringUtils.substring(t.getDetails(), 22, 23)==mortgageCode) {
 							if (priorityCode.equals(mortgageCode)) {

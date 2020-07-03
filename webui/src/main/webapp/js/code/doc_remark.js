@@ -7,6 +7,6 @@ createCodeTable2(documentRemarkDS,
 	[
 		 { name: "id", required: true},
 		 { name: "remarkGroup", startRow:true},
-		 { name: "remark", length:500, type:"textArea", startRow:true, colSpan:3, width:"*" }
+		 { name: "remark", length:2000, type:"textArea", startRow:true, colSpan:3, width:"*" }
 	],
 	["id"]);
