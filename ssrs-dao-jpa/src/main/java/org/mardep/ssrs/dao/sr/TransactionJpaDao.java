@@ -151,4 +151,18 @@ public class TransactionJpaDao extends AbstractJpaDao<Transaction, Long> impleme
 		return list;
 	}
 
+	@Override
+	public List<Transaction> findForRegistration(String applNo) throws Exception {
+		try {
+			String sql = "select tx from Transaction tx where tx.applNo = :applNo and tx.code = :txCode order by tx.id desc";
+			Query query = em.createQuery(sql)
+					.setParameter("applNo", applNo)
+					.setParameter("txCode", Transaction.CODE_REGISTRATION);
+			List<Transaction> entities = query.getResultList();
+			return entities;
+		} catch (Exception ex) {
+			logger.error("Fail to fetch-{}, Exception-{}", new Object[]{applNo, ex}, ex);			
+			throw ex;
+		}
+	}
 }

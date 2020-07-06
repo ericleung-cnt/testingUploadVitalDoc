@@ -1841,6 +1841,22 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		return list.isEmpty() ? null : list;
 	}
 
-
+	@Override
+	public RegMaster findRegMasterHistory(Long txId) throws Exception {
+		try {
+			String sql = "select TX_ID, APPL_NO, APPL_NO_SUF from REG_MASTERS_HIST where TX_ID = :txId";
+			Query query = em.createNativeQuery(sql)
+					.setParameter("txId", txId);
+			List<Object[]> list = query.getResultList();
+			Object[] arr = list.get(0);
+			RegMaster entity = new RegMaster();
+			entity.setApplNo(arr[1].toString());
+			entity.setApplNoSuf(arr[2].toString());
+			return entity;
+		} catch (Exception ex) {
+			logger.error("Fail to fetch RegMaster History-{}, Exception-{}", new Object[]{txId, ex}, ex);
+			throw ex;
+		}
+	}
 
 }

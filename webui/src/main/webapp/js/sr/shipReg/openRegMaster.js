@@ -2250,7 +2250,7 @@ var openRegMaster = function(record, task, mode
 			if (record && record.regStatus == "D") {
 				confirmPrintCoDWindow.showRecord(record);
 			} else if (record && record.regStatus == "R") {
-				if (record.applNoSuf=="P" && record.proExpDate==null){	// pro-Reg should have pro-reg date
+				if (record.applNoSuf=="P" && record.provExpDate==null){	// pro-Reg should have pro-reg date
 					isc.warn("Missing Pro-Reg expiry date for this Pro-Registration");
 					return;
 				}

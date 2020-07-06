@@ -895,14 +895,35 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		saveHistory(entity.getApplNo(), amm);
 		return saved;
 	}
+	
+	private boolean isProRegToFullReg(RegMaster entity) throws Exception{
+		try {
+			boolean bResult = false;
+			ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);
+			List<Transaction> txList = txDao.findForRegistration(entity.getApplNo());
+			if (txList.size()>0) {
+				Long txId = txList.get(0).getId();
+				RegMaster rm = rmDao.findRegMasterHistory(txId);
+				if ("F".equals(entity.getApplNoSuf()) && "P".equals(rm.getApplNoSuf())) {
+					bResult = true;
+				} 
+			}
+			return bResult;
+		} catch (Exception ex) {
+			logger.error("Fail to isProToFullReg-{}, Exception-{}", new Object[]{entity, ex}, ex);
+			throw ex;
+		}
+	}
+	
 	@Override
-	public RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx) {
+	public RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx) throws Exception {
 		RegMaster saved = rmDao.save(entity);
 		tx.setCode(Transaction.CODE_CHG_SHIP_PARTICULARS);
 		if ("F".equals(saved.getApplNoSuf())) {
 			List<RegMaster> history = rmDao.findHistory(entity.getApplNo(), new Date());
 			if (!history.isEmpty()) {
-				if (!"F".equals(history.get(0).getApplNoSuf())) {
+				//if (!"F".equals(history.get(0).getApplNoSuf())) {
+				if (isProRegToFullReg(entity)) {
 					// P to F
 					if (saved.getFirstRegDate() == null) {
 						saved.setFirstRegDate(saved.getRegDate());

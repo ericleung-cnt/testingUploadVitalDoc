@@ -23,4 +23,6 @@ public interface ITransactionDao extends IBaseDao<Transaction, Long> {
 
 	List<Map<String, Object>> mortgageTransactionsReport(Date start, Date end);
 
+	List<Transaction> findForRegistration(String applNo) throws Exception;
+
 }

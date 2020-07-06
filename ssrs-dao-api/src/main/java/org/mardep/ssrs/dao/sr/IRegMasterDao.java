@@ -208,5 +208,7 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	List<Map<String, Object>> getTonnageDistributionNewScale(Date reportDate);
 
+	RegMaster findRegMasterHistory(Long txId) throws Exception;
+
 
 }

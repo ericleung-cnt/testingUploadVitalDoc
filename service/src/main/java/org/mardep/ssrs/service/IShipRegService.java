@@ -170,7 +170,7 @@ public interface IShipRegService extends IBaseService{
 	List<RegMaster> findByApplNoList(List list);
 	RegMaster updateTrackCode(String applNo);
 
-	RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx);
+	RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx) throws Exception;
 
 	Result check(String trackCode, Language language);
 	void receiveRpChange(String applNo);
