@@ -21,6 +21,7 @@ import org.mardep.ssrs.domain.codetable.FeeCode;
 import org.mardep.ssrs.domain.codetable.ReasonCode;
 import org.mardep.ssrs.domain.codetable.ReasonCodePK;
 import org.mardep.ssrs.domain.codetable.Registrar;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.dn.DemandNoteItem;
 import org.mardep.ssrs.domain.sr.BuilderMaker;
 import org.mardep.ssrs.domain.sr.Mortgage;
@@ -48,7 +49,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 	IRegistrarDao rDao;
 
 	@Autowired
-	IShipRegService service;
+	IShipRegService srService;
 
 	@Autowired
 	IMortgageService mortgageSrv;
@@ -74,7 +75,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 		SimpleDateFormat regDateFmt = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
 		
 		String applNo = (String) inputParam.get("applNo");
-		RegMaster regM = service.findById(RegMaster.class, applNo);
+		RegMaster regM = srService.findById(RegMaster.class, applNo);
 
 		boolean crosscheck = Boolean.TRUE.equals(inputParam.get("crosscheck"));
 		if (Boolean.TRUE.equals(inputParam.get("paymentRequired"))) {
@@ -201,7 +202,9 @@ public class CertificateOfRegistry extends AbstractSrReport {
 			}
 		}
 
-		return getPdf(reportDate, params, applNo, crosscheck, regM);
+		byte[] cor = getPdf(reportDate, params, applNo, crosscheck, regM);
+		srService.uploadCoRToVitalDoc(applNo, cor);
+		return cor;
 	}
 
 	private byte[] getPdf(Date reportDate, Map<String, Object> params, String applNo, boolean crosscheck, RegMaster regM)
@@ -272,7 +275,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 			blders = bmDao .findByCriteria(bmCriteria);
 		} else {
 			//blders = service.findBuilders(applNo, reportDate);
-			blders = service.findBuildersByApplId(applNo);
+			blders = srService.findBuildersByApplId(applNo);
 		}
 		if (!blders.isEmpty()) {
 			BuilderMaker builder = blders.get(0);
@@ -314,10 +317,10 @@ public class CertificateOfRegistry extends AbstractSrReport {
 
 		Representative rep;
 		if (crosscheck) {
-			rep = service.findById(Representative.class, applNo);
+			rep = srService.findById(Representative.class, applNo);
 		} else {
 			//rep = service.findRepById(applNo, reportDate);
-			rep = service.findRpByApplId(applNo);
+			rep = srService.findRpByApplId(applNo);
 		}
 		if (rep != null) {
 			regMaster.put("repName", rep.getName());
@@ -331,10 +334,10 @@ public class CertificateOfRegistry extends AbstractSrReport {
 		if (crosscheck) {
 			Owner criteria = new Owner();
 			criteria.setApplNo(applNo);
-			owners = service.findByCriteria(criteria);
+			owners = srService.findByCriteria(criteria);
 		} else {
 			//owners = service.findOwners(applNo, reportDate);
-			owners = service.findOwnersByApplId(applNo);
+			owners = srService.findOwnersByApplId(applNo);
 		}
 		regMaster.put("demiseDetails", "");
 		regMaster.put("ownerDetails", "");
@@ -421,7 +424,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 		if (crosscheck) {
 			Mortgage entity = new Mortgage();
 			entity.setApplNo(applNo);
-			mortgages = service.findByCriteria(entity);
+			mortgages = srService.findByCriteria(entity);
 		} else {
 			//mortgages = mortgageSrv.findMortgages(applNo, reportDate);
 			mortgages = mortgageSrv.findMortgagesByApplId(applNo);
@@ -451,7 +454,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 			if (crosscheck) {
 				Mortgagor entity = new Mortgagor();
 				entity.setApplNo(applNo);
-				mortgagors = service.findByCriteria(entity);
+				mortgagors = srService.findByCriteria(entity);
 			} else {
 				//mortgagors = mortgageSrv.findMortgagors(mortgage, reportDate);
 				mortgagors = mortgageSrv.findMortgagorsByMortgage(mortgage);
@@ -481,7 +484,7 @@ public class CertificateOfRegistry extends AbstractSrReport {
 			if (crosscheck) {
 				Mortgagee entity = new Mortgagee();
 				entity.setApplNo(applNo);
-				mortgagees = service.findByCriteria(entity);
+				mortgagees = srService.findByCriteria(entity);
 			} else {
 				//mortgagees = mortgageSrv.findMortgagees(mortgage, reportDate);
 				mortgagees = mortgageSrv.findMortgageesByMortgage(mortgage);

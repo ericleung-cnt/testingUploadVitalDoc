@@ -197,7 +197,7 @@ var ReportViewWindow = {
 				},
 			});
 	},
-	vitalDocReport:function(requestArguments, reportCallback){
+	vitalDocReport:function(requestArguments){
 		 DMI.call({appID:"ssrsApp",
 				className:"reportDMI",
 				methodName:"generate",
@@ -212,7 +212,6 @@ var ReportViewWindow = {
 
 				    var map = window.open("", mapForm.target, "status=0,title=0,height=600,width=800,scrollbars=1");
 				    mapForm.submit();
-				    reportCallback();
 				},
 			});
 	}

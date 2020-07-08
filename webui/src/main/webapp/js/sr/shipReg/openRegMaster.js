@@ -30,6 +30,14 @@ function etoCor(applNo, regDate, issueDate, registrarId){
 	this.registrarId = registrarId;
 };
 
+function fsqcLinked(imo){
+	if (imo!=null){
+		return true;
+	} else {
+		return false;
+	}
+};
+
 Date.prototype.ddMMyyyy = function() {
 	var mm = this.getMonth() + 1;
 	var dd = this.getDate();
@@ -657,27 +665,28 @@ isc.Window.create({
 													zip:false,
 													issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
 												 }
-												], function(){
-													console.log(registrarStr);
-													regMasterDS.updateData(
-														{
-															reportType:report,
-															applNo:applNo,
-															reportDate:issueDate,
-															registrar: registrarStr, // Long
-															certified:false,
-															paymentRequired:false,
-															reason:"",
-															printMortgage:true,
-															zip:false,
-															issueDate:issueDate
-														},
-														function(){
-															
-														},
-														{operationId: "UPLOAD_VITALDOC_SRDOC"}
-													);
-												}
+												]
+//												function(){
+//													console.log(registrarStr);
+//													regMasterDS.updateData(
+//														{
+//															reportType:report,
+//															applNo:applNo,
+//															reportDate:issueDate,
+//															registrar: registrarStr, // Long
+//															certified:false,
+//															paymentRequired:false,
+//															reason:"",
+//															printMortgage:true,
+//															zip:false,
+//															issueDate:issueDate
+//														},
+//														function(){
+//															
+//														},
+//														{operationId: "UPLOAD_VITALDOC_SRDOC"}
+//													);
+//												}
 												);
 										confirmPrintCoDWindow.hide();
 										if (callback!=null){
@@ -686,47 +695,19 @@ isc.Window.create({
 									}, {data:record, operationId:"updateTrackCode"});
 								} else {
 									ReportViewWindow.vitalDocReport(
-									[report,
-//									 {applNo:confirmPrintCoDWindow.record.applNo,
-//										reportDate:confirmPrintCODForm.getValue('issueDate'),
-//										registrar:confirmPrintCODForm.getValue('registrar'), // Long
-//										certified:false,
-//										paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
-//										reason:"",
-//										printMortgage:true,
-//										zip:false,
-//										issueDate:confirmPrintCODForm.getValue('issueDate')
-//									 }
-									{
-										applNo:applNo, //confirmPrintCoDWindow.record.applNo,
-										reportDate:issueDate, //confirmPrintCODForm.getValue('issueDate'),
-										registrar:registrarStr, //confirmPrintCODForm.getValue('registrar'), // Long
-										certified:false,
-										paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
-										reason:"",
-										printMortgage:true,
-										zip:false,
-										issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
-									 }
-									], function(){
-										regMasterDS.updateData(
-												{
-													reportType:report,
-													applNo:applNo,
-													reportDate:issueDate,
-													registrar: registrarStr, // Long
-													certified:false,
-													paymentRequired:false,
-													reason:"",
-													printMortgage:true,
-													zip:false,
-													issueDate:issueDate
-												},
-												function(){
-													
-												},
-												{operationId: "UPLOAD_VITALDOC_SRDOC"}
-										)} 									
+										[report,
+											{
+												applNo:applNo, //confirmPrintCoDWindow.record.applNo,
+												reportDate:issueDate, //confirmPrintCODForm.getValue('issueDate'),
+												registrar:registrarStr, //confirmPrintCODForm.getValue('registrar'), // Long
+												certified:false,
+												paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
+												reason:"",
+												printMortgage:true,
+												zip:false,
+												issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
+											}
+										] 
 									);
 									confirmPrintCoDWindow.hide();									
 								}
@@ -3296,7 +3277,7 @@ var openRegMaster = function(record, task, mode
                 		 "fsqcCerts",
                 		 "fsqc.actions",
                 	 ],
-                	 sectionExpanded:false,
+                	 sectionExpanded:false
  		        },
  		        {name: "fsqcCerts", type:"canvas", colSpan:6, vAlign:"top", showTitle:false},
  		        {name: "fsqc.actions", type: "canvas", colSpan:6, layoutAlign: "right", showTitle: false, height: 22},
@@ -3399,10 +3380,12 @@ var openRegMaster = function(record, task, mode
 					loaded();
 				});
 				console.log("imo" + data.imoNo);
-				fsqcCertResultDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertResultData, req){
-					form.fsqcCertResultGrid.setData(fsqcCertResultData);
-					loaded();
-				});
+				if (fsqcLinked(data.imoNo)){
+					fsqcCertResultDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertResultData, req){
+						form.fsqcCertResultGrid.setData(fsqcCertResultData);
+						loaded();
+					});
+				}
 				if (record.shipTypeCode) {
 					latch += 1;
 					shipTypeDS.fetchData({id:record.shipTypeCode}, function(resp,data,req){
@@ -4133,19 +4116,20 @@ var openRegMaster = function(record, task, mode
 	form.getItem("injuctions").canvas.addChild(isc.VLayout.create({members:[form.injuctionGrid]}));
 	form.getItem("injuctions").canvas.children[0].setWidth(1000);
 
-	form.fsqcCertResultGrid = isc.ListGrid.create({
-		width: 1000,
-		height: 120,
-		fields: [
-			{name: "certType", title: "Cert Type"},
-			{name: "certResult", title: "Cert Result"},
-			{name: "certResultDate", title: "Received Date"},
-			{name: "certExpiryDate", title: "Expiry Date"},
-			{name: "docLinkId", title: "Vital Doc"}
-		],		
-	});
-	form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertResultGrid]}));
-	form.getItem("fsqcCerts").canvas.children[0].setWidth(1000);
+		form.fsqcCertResultGrid = isc.ListGrid.create({
+			width: 1000,
+			height: 120,
+			fields: [
+				{name: "certType", title: "Cert Type"},
+				{name: "certResult", title: "Cert Result"},
+				{name: "certResultDate", title: "Received Date"},
+				{name: "certExpiryDate", title: "Expiry Date"},
+				{name: "docLinkId", title: "Vital Doc"}
+			],		
+		});
+		form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertResultGrid]}));
+		form.getItem("fsqcCerts").canvas.children[0].setWidth(1000);
+
 	
 	var docFields = [];
 
@@ -4624,7 +4608,9 @@ var openRegMaster = function(record, task, mode
 //			});
 //		 }
 //		}}));
-		addButtons2("fsqc.actions", [btnFsqcDownloadCert]);
+		if (fsqcLinked(record.imoNo)){
+			addButtons2("fsqc.actions", [btnFsqcDownloadCert]);
+		}
 		// 20190813 actions.addMember(btnSrCheckShipName);
 		if (mode==0) {	// ship registration
 			if (form.todo.length==0){	// not opened from inbox

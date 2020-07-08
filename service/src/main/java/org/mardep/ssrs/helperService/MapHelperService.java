@@ -33,7 +33,11 @@ public class MapHelperService implements IMapHelperService {
 		try {
 			Long lValue = null;
 			if (map.containsKey(key)) {
-				lValue = new Long(map.get(key).toString());				
+				String sValue = map.get(key).toString();
+				if (sValue != null) {
+				//lValue = new Long(map.get(key).toString());
+					lValue = new Long(sValue);
+				}
 			}
 			return lValue;
 			

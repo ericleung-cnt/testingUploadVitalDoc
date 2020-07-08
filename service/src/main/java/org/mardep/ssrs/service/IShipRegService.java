@@ -203,8 +203,10 @@ public interface IShipRegService extends IBaseService{
 	RegMaster assignRegDateTrackCode(String applNo,  String applNoSuf, Date regDate, Long registrarId, String trackCode);
 	List<String> validateApplicationData(RegMaster entity);
 	
+	//void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception;
+	void uploadCoDToVitalDoc(String applNo, byte[] codPdf) throws Exception;
+	void uploadCoRToVitalDoc(String applNo, byte[] corPdf) throws Exception;
 	void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception;
-	void uploadCoDToVitalDoc(Map clientSuppliedValues) throws Exception;
-	void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception;
+	void uploadTranscriptToVitalDoc(String applNo, byte[] transcriptPdf) throws Exception;
 	
 }

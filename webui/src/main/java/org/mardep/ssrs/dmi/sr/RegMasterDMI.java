@@ -10,9 +10,11 @@ import java.util.Map;
 import org.mardep.ssrs.certService.ICertIssueLogService;
 import org.mardep.ssrs.dao.cert.ICertIssueLogDao;
 import org.mardep.ssrs.dao.codetable.IClassSocietyDao;
+import org.mardep.ssrs.dao.codetable.ISystemParamDao;
 import org.mardep.ssrs.dao.sr.IApplDetailDao;
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
 import org.mardep.ssrs.domain.codetable.ClassSociety;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.constant.CertificateTypeEnum;
 import org.mardep.ssrs.domain.entity.cert.EntityCertIssueLog;
 import org.mardep.ssrs.domain.sr.Amendment;
@@ -73,7 +75,6 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
 	private final String OPERATION_SIMULATE_FSQC_CERT_REPLY = "SIMULATE_FSQC_CERT_REPLY";
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
-	private final String OPERATION_UPLOAD_VITALDOC_SRDOC = "UPLOAD_VITALDOC_SRDOC";
 	
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
@@ -339,35 +340,8 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 				dsResponse.setFailure(ex.getMessage());
 				return dsResponse;
 			}
-		} else if (OPERATION_UPLOAD_VITALDOC_SRDOC.equals(operationId)) {
-			DSResponse dsResponse = new DSResponse();
-			Map clientSuppliedValues = dsRequest.getClientSuppliedValues();
-			try {
-				uploadVitalDoc(srService, clientSuppliedValues);
-				return dsResponse;
-			} catch (Exception ex) {
-				dsResponse.setFailure(ex.getMessage());
-				return dsResponse;
-			}
-		}
+		} 
 		return super.update(entity, dsRequest);
-	}
-
-	private void uploadVitalDoc(IShipRegService srService, Map clientSuppliedValues) throws Exception {
-		try {
-			String reportType = clientSuppliedValues.get("reportType").toString();
-			if ("CoR".equals(reportType)) {
-				srService.uploadCoRToVitalDoc(clientSuppliedValues);
-			} else if ("CertOfD".equals(reportType)) {
-				srService.uploadCoDToVitalDoc(clientSuppliedValues);
-			} else if ("RPT_SR_011".equals(reportType)) {
-				srService.uploadTranscriptToVitalDoc(clientSuppliedValues);
-			} else {
-				throw new Exception("unknown report type");
-			}
-		}catch (Exception ex) {
-			throw ex;
-		}
 	}
 	
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {

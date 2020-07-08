@@ -59,7 +59,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 	ITransactionDao transactionDao;
 
 	@Autowired
-	IShipRegService service;
+	IShipRegService srService;
 
 	@Autowired
 	IMortgageService mortgageSrv;
@@ -144,7 +144,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 		if (System.currentTimeMillis() - reportDate.getTime() < 60000) {
 			reportDate = new Date(reportDate.getTime() + 60000); // add some delay for showing latest tx
 		}
-		String applNoList = (String) inputParam.get("applNo");
+		String applNo = (String) inputParam.get("applNo");
 		//boolean printFullAddr = Boolean.TRUE.equals(inputParam.get("fullAddr1"));
 		boolean printMortgage = Boolean.TRUE.equals(inputParam.get("printMortgage"));
 		logger.info("Report Date:{}", reportDate);
@@ -211,24 +211,30 @@ public class RPT_SR_011 extends AbstractSrReport {
 			params.put("registrar", "");
 		}
 
-		if (applNoList.contains(",")) {
-			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-				ZipOutputStream zip = new ZipOutputStream(baos);
-				for (String applNo : applNoList.split("\\,")) {
-					byte[] pdf = getPdf(reportDate, printMortgage, params, applNo, printFullAddr);
-					String name = applNo.replace('/', '_')+ ".pdf";
-					ZipEntry entry = new ZipEntry(name);
-					zip.putNextEntry(entry);
-					zip.write(pdf);
-					zip.closeEntry();
-				}
-				zip.finish();
-				zip.flush();
-				return baos.toByteArray();
-			}
-		} else {
-			return getPdf(reportDate, printMortgage, params, applNoList, printFullAddr);
+//		if (applNoList.contains(",")) {
+//			try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+//				ZipOutputStream zip = new ZipOutputStream(baos);
+//				for (String applNo : applNoList.split("\\,")) {
+//					byte[] pdf = getPdf(reportDate, printMortgage, params, applNo, printFullAddr);
+//					String name = applNo.replace('/', '_')+ ".pdf";
+//					ZipEntry entry = new ZipEntry(name);
+//					zip.putNextEntry(entry);
+//					zip.write(pdf);
+//					zip.closeEntry();
+//				}
+//				zip.finish();
+//				zip.flush();
+//				return baos.toByteArray();
+//			}
+//		} else {
+//			return getPdf(reportDate, printMortgage, params, applNoList, printFullAddr);
+//		}
+		byte[] pdf = getPdf(reportDate, printMortgage, params, applNo, printFullAddr);
+		String reportId = mapHelper.extractStrFromMap(inputParam, "reportId");
+		if (!"CertOfD".equals(reportId)) {
+			srService.uploadTranscriptToVitalDoc(applNo, pdf);
 		}
+		return pdf;
 	}
 
 	private List<Map<String, Object>> prepareMortgagorList(){
@@ -545,22 +551,22 @@ public class RPT_SR_011 extends AbstractSrReport {
 	}
 
 	protected List<Owner> getOwners(String applNo, Date reportDate) {
-		List<Owner> owners = service.findOwners(applNo, reportDate);
+		List<Owner> owners = srService.findOwners(applNo, reportDate);
 		return owners;
 	}
 
 	protected Representative getRep(String applNo, Date reportDate) {
-		Representative rep = service.findRepById(applNo, reportDate);
+		Representative rep = srService.findRepById(applNo, reportDate);
 		return rep;
 	}
 
 	protected List<BuilderMaker> getBuilders(String applNo, Date reportDate) {
-		List<BuilderMaker> blders = service.findBuilders(applNo, reportDate);
+		List<BuilderMaker> blders = srService.findBuilders(applNo, reportDate);
 		return blders;
 	}
 
 	protected RegMaster getRegMaster(String applNo, Date reportDate) {
-		RegMaster regM = service.findById(applNo, reportDate);
+		RegMaster regM = srService.findById(applNo, reportDate);
 		return regM;
 	}
 

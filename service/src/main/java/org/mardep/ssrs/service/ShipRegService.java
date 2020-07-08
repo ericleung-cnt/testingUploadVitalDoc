@@ -136,6 +136,8 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	@Autowired
 	IMapHelperService mapHelperSvc;
 	
+	private final String SYSTEM_PARAM_VITALDOC_USE = "VITALDOC_USE";
+
 	private ExecutorService es = Executors.newFixedThreadPool(1);
 
 	private SrEntityListener listener = new SrEntityListener(){
@@ -1212,6 +1214,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	private String createSrIssuedDocName(String docName) {
 		docName = docName + "_" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date());
 		docName = docName.replaceAll("\\s+", "_");
+		docName = docName + ".pdf";
 		return docName;
 	}
 	
@@ -1240,39 +1243,95 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			docName = createSrIssuedDocName(docName);
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
 			vitalDocProperties.put("Issue type", "CoR");
-			Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
+			//Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("1".equals(sysParam.getValue())) {
+				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
+			} else {
+				File file = new File("c:\\temp\\" + docName);
+				OutputStream os = new FileOutputStream(file);
+				os.write(cor);
+				os.close();				
+			}
 		} catch (Exception ex) {
 			throw ex;
 		}
 	}
-	
+		
+	@Override
+	public void uploadCoRToVitalDoc(String applNo, byte[] corPdf) throws Exception {
+		try {
+			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String docName = rmEntity.getImoNo()==null ? rmEntity.getOffNo() : rmEntity.getImoNo();
+			docName = createSrIssuedDocName(docName);
+			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
+			vitalDocProperties.put("Issue type", "CoR");
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("1".equals(sysParam.getValue())) {
+				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, corPdf);
+			} else {
+				File file = new File("c:\\temp\\" + docName);
+				OutputStream os = new FileOutputStream(file);
+				os.write(corPdf);
+				os.close();				
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}
+	}
 
 	@Override
-	public void uploadCoDToVitalDoc(Map clientSuppliedValues) throws Exception {
-		//RPT_SR_011_cod generator = new RPT_SR_011_cod();
-		Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
-		IReportGenerator generator = rptGeneratorMap.get("CertOfD");
-		byte[] cod = generator.generate(clientSuppliedValues);
-//		File file = new File("c:\\temp\\cod.pdf");
-//		OutputStream os = new FileOutputStream(file);
-//		os.write(cod);
-//		os.close();
+	public void uploadCoDToVitalDoc(String applNo, byte[] codPdf) throws Exception {
+		try {
+			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String docName = rmEntity.getImoNo()==null ? rmEntity.getOffNo() : rmEntity.getImoNo();
+			docName = createSrIssuedDocName(docName);
+			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
+			vitalDocProperties.put("Issue type", "CoD");
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("1".equals(sysParam.getValue())) {
+				Long docId = vdClient.uploadIssuedCoD(vitalDocProperties, docName, codPdf);
+			} else {
+				File file = new File("c:\\temp\\" + docName);
+				OutputStream os = new FileOutputStream(file);
+				os.write(codPdf);
+				os.close();				
+			}
+		} catch (Exception ex) {
+			throw ex;
+		}		
 	}
 	
+//	@Override
+//	public void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception {
+//		try {
+//			Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
+//			IReportGenerator generator = rptGeneratorMap.get("RPT_SR_011");
+//			byte[] transcript = generator.generate(clientSuppliedValues);
+////			Date today = new Date();
+////			SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_hhmmss");
+////			String dateStr = sdf.format(today);
+////			File file = new File("c:\\temp\\transcript_" + dateStr + ".pdf");
+////			OutputStream os = new FileOutputStream(file);
+////			os.write(transcript);
+////			os.close();		
+//			String applNo = mapHelperSvc.extractStrFromMap(clientSuppliedValues, "applNo");
+//			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+//			String docName = rmEntity.getImoNo()==null 
+//					? rmEntity.getRegName() + "_" + rmEntity.getOffNo() 
+//					: rmEntity.getImoNo() + "_" + rmEntity.getRegName() + "_" + rmEntity.getOffNo();
+//			docName = createSrIssuedDocName(docName);
+//			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
+//			vitalDocProperties.put("Issue type", "Transcript");
+//			Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, transcript);
+//		} catch (Exception ex) {
+//			throw ex;
+//		}
+//	}
+
 	@Override
-	public void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception {
+	public void uploadTranscriptToVitalDoc(String applNo, byte[] transcriptPdf) throws Exception {
 		try {
-			Map<String, IReportGenerator> rptGeneratorMap = applicationContext.getBeansOfType(IReportGenerator.class);
-			IReportGenerator generator = rptGeneratorMap.get("RPT_SR_011");
-			byte[] transcript = generator.generate(clientSuppliedValues);
-//			Date today = new Date();
-//			SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy_hhmmss");
-//			String dateStr = sdf.format(today);
-//			File file = new File("c:\\temp\\transcript_" + dateStr + ".pdf");
-//			OutputStream os = new FileOutputStream(file);
-//			os.write(transcript);
-//			os.close();		
-			String applNo = mapHelperSvc.extractStrFromMap(clientSuppliedValues, "applNo");
 			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
 			String docName = rmEntity.getImoNo()==null 
 					? rmEntity.getRegName() + "_" + rmEntity.getOffNo() 
@@ -1280,7 +1339,16 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			docName = createSrIssuedDocName(docName);
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
 			vitalDocProperties.put("Issue type", "Transcript");
-			Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, transcript);
+			//Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, transcriptPdf);
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("1".equals(sysParam.getValue())) {
+				Long docId = vdClient.uploadIssuedTranscript(vitalDocProperties, docName, transcriptPdf);
+			} else {
+				File file = new File("c:\\temp\\" + docName);
+				OutputStream os = new FileOutputStream(file);
+				os.write(transcriptPdf);
+				os.close();				
+			}
 		} catch (Exception ex) {
 			throw ex;
 		}

@@ -52,9 +52,9 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String DOCTYPE_MMO_SEAFARER_IMAGE = "MMO-Seafarer Image";
 	private static final String DOC_TYPE_SR_CSR_FORM = "SR-CSR Form";
 
-	private static final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration";
-	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration";
-	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration";
+	private static final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
+	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
+	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
 	
 	@Setter
 	private WebServiceTemplate webServiceTemplate;
