@@ -3381,8 +3381,8 @@ var openRegMaster = function(record, task, mode
 				});
 				console.log("imo" + data.imoNo);
 				if (fsqcLinked(data.imoNo)){
-					fsqcCertResultDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertResultData, req){
-						form.fsqcCertResultGrid.setData(fsqcCertResultData);
+					fsqcCertProgressDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertProgressData, req){
+						form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
 						loaded();
 					});
 				}
@@ -4116,18 +4116,18 @@ var openRegMaster = function(record, task, mode
 	form.getItem("injuctions").canvas.addChild(isc.VLayout.create({members:[form.injuctionGrid]}));
 	form.getItem("injuctions").canvas.children[0].setWidth(1000);
 
-		form.fsqcCertResultGrid = isc.ListGrid.create({
+		form.fsqcCertProgressGrid = isc.ListGrid.create({
 			width: 1000,
 			height: 120,
 			fields: [
 				{name: "certType", title: "Cert Type"},
-				{name: "certResult", title: "Cert Result"},
-				{name: "certResultDate", title: "Received Date"},
+				{name: "certStatus", title: "Cert Status"},
+				{name: "certCompleteDate", title: "Complete Date"},
 				{name: "certExpiryDate", title: "Expiry Date"},
 				{name: "docLinkId", title: "Vital Doc"}
 			],		
 		});
-		form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertResultGrid]}));
+		form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertProgressGrid]}));
 		form.getItem("fsqcCerts").canvas.children[0].setWidth(1000);
 
 	

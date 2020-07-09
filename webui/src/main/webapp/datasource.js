@@ -40,6 +40,7 @@ var datasourcesList = [
 	"feeCodeDS",
 	"financeCompanyDS",
 	"firstRegFeeDS",
+	"fsqcCertProgressDS",
 	"fsqcCertResultDS",
 	"funcEntitleDS",
 	"dmsDataDS",

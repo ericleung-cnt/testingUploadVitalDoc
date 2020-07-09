@@ -1,0 +1,10 @@
+<DataSource ID="fsqcCertProgressDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="fsqcCertProgressDMI" />
+	<fields>
+		<field name="imo" type="text" title="IMO"/>
+		<field name="certType" type="text" title="Cert Type"/>
+		<field name="certStatus" type="text" title="Cert Status"/>
+		<field name="certCompleteDate" type="date" title="Complete Date" displayFormat="dd/MM/yyyy"/>
+		<field name="certExpiryDate" type="date" title="Expiry Date" displayFormat="dd/MM/yyyy"/>
+	</fields>
+</DataSource>
