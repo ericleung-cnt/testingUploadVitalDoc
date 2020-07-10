@@ -136,6 +136,10 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	@Autowired
 	IMapHelperService mapHelperSvc;
 	
+	@Autowired
+	ILvpfsService lvpfs;
+
+
 	private final String SYSTEM_PARAM_VITALDOC_USE = "VITALDOC_USE";
 
 	private ExecutorService es = Executors.newFixedThreadPool(1);
@@ -168,6 +172,17 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 						logger.warn("failed to write {}", e);
 					}
 				} );
+				logger.info("ready to check lvpfs property");
+				if (Boolean.getBoolean("LvpfsService.allInterested") || obj instanceof RegMaster) {
+					es.submit(()-> {
+						try {
+							logger.info("ready to send lvpfs");
+							lvpfs.send(operation, applNo_);
+						} catch (JsonProcessingException e) {
+							logger.warn("failed to write {}", e);
+						}
+					} );
+				}
 			}
 		}
 
