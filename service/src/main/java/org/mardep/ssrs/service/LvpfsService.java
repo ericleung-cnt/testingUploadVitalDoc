@@ -116,6 +116,7 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 
 	public void send(int operation, String applNo)
 			throws JsonProcessingException {
+		logger.info("sending {} to lvpfs url {} {} {} {}", applNo, url.getProtocol(), url.getHost(), url.getFile(), url.getPort());
 		RegMaster rm = rmDao.findById(applNo);
 		LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<String, Object>();
 		linkedHashMap.put("shipID", applNo);
