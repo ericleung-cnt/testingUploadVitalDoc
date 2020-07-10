@@ -1755,6 +1755,27 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	}
 
 	@Override
+	public void logLvpfs(String jsonInputString, String string) {
+		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT, REPLY, SUCCESS) values (?,?,?,?)");
+		query.setParameter(1, new Date());
+		query.setParameter(2, jsonInputString);
+		query.setParameter(3, string);
+		query.setParameter(4, "Y");
+		query.executeUpdate();
+	}
+	
+	@Override
+	public void logLvpfs(String jsonInputString, Exception e) {
+		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT_MSG, REPLY_MSG, SUCCESS) values (?,?,?,?)");
+		query.setParameter(1, new Date());
+		query.setParameter(2, jsonInputString);
+		query.setParameter(3, e.getMessage());
+		query.setParameter(4, "N");
+		query.executeUpdate();
+
+	}
+
+	@Override
 	public RegMaster findForCsr(String imoNo){
 		try{
 			StringBuffer sb = new StringBuffer();
