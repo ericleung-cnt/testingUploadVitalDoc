@@ -22,10 +22,13 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.mardep.ssrs.dao.codetable.ISystemParamDao;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.util.PasswordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.scheduling.annotation.Async;
@@ -56,6 +59,12 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
 	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
 	
+	private static final String SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR = "VITALDOC_COR_FSQC_DIR";
+	private static final String SYSTEM_PARAM_VITALDOC_COS_FSQC_DIR = "VITALDOC_COS_FSQC_DIR";
+
+	@Autowired
+	ISystemParamDao systemParamDao;
+
 	@Setter
 	private WebServiceTemplate webServiceTemplate;
 
@@ -702,9 +711,23 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return docId;
 	}
 	
+	private void createShortcutInFsqcVitalDoc(Long docId, Long destDirId) throws IOException{
+		String sessionId = getSessionId();
+		DocumentCreateShortCut shortcut = new DocumentCreateShortCut();
+		shortcut.setSessionIDIn(sessionId);
+		shortcut.setDocID(docId);
+		shortcut.setDestDirID(destDirId);
+		DocumentCreateShortCutResponse resp = (DocumentCreateShortCutResponse) send(shortcut);
+		return;
+	} 
+
 	@Override
 	public long uploadIssuedCoR(Map<String, String> vitalDocProperties, String docName, byte[] pdf)  throws IOException {
+		System.out.println("uploadIssuedCoR");
 		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COR, docName, vitalDocProperties, pdf);
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR);
+		Long destDirId = new Long(sysParam.getValue());
+		createShortcutInFsqcVitalDoc(docId, destDirId);
 		return docId;
 	}
 	
