@@ -544,8 +544,14 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		Map<String, String> properties = new HashMap<>();
 		properties.put("Name of Ship", name);
 		properties.put("IMO Number", imo);
-		return sendToVitalDoc("SR\\COS", docName,
+		long docId = sendToVitalDoc("SR\\COS", docName,
 				"SR-Certificate of Survery", properties, pdf, false);
+
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR);
+		Long destDirId = new Long(sysParam.getValue());		
+		createShortcutInFsqcVitalDoc(docId, destDirId);
+
+		return docId;
 	}
 
 	@Override
@@ -723,11 +729,12 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 
 	@Override
 	public long uploadIssuedCoR(Map<String, String> vitalDocProperties, String docName, byte[] pdf)  throws IOException {
-		System.out.println("uploadIssuedCoR");
 		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COR, docName, vitalDocProperties, pdf);
+		
 		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR);
 		Long destDirId = new Long(sysParam.getValue());
 		createShortcutInFsqcVitalDoc(docId, destDirId);
+		
 		return docId;
 	}
 	
