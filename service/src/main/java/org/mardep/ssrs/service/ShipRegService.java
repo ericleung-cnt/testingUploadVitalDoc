@@ -1368,4 +1368,13 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			throw ex;
 		}
 	}
+
+	@Override
+	public void downloadFsqcCertFromVitalDoc(String imo, String certType) throws Exception {
+		try {
+			vdClient.downloadFsqcCert(imo, certType);
+		} catch (Exception ex){
+			throw ex;
+		}
+	}
 }

@@ -22,7 +22,8 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		
-			String sql = "select Top 1 * from [hkcert].[dbo].[vWorkListForSSRS]\r\n" + 
+			//String sql = "select Top 1 * from [hkcert].[dbo].[vWorkListForSSRS]\r\n" + 
+			String sql = "select Top 1 * from [dbo].[vWorkListForSSRS]\r\n" + 
 					"where imo_no = :imo and cert_type = :certType\r\n" + 
 					"order by begin_date desc";
 			Query query = em.createNativeQuery(sql)

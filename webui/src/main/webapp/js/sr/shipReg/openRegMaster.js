@@ -3051,13 +3051,16 @@ var openRegMaster = function(record, task, mode
 					}, {data:formData, operationId:"mortgageDS_updateData_withdraw"});
 				},
 			});
-	var btnFsqcDownloadCert = isc.IButton.create(
+	var btnFsqcCertDownload = isc.IButton.create(
 			{
 				title: "Download Cert",
 				height: thickBtnHeight,
 				width: thickBtnWidth,
 				click: function() {
-					
+					regMasterDS.fetchData({imoNo:form.getData().imoNo}, 
+						function(){}, 
+						{operationId:"FSQC_CERT_DOWNLOAD"}
+					);
 				},				
 			});
 	
@@ -4609,7 +4612,7 @@ var openRegMaster = function(record, task, mode
 //		 }
 //		}}));
 		if (fsqcLinked(record.imoNo)){
-			addButtons2("fsqc.actions", [btnFsqcDownloadCert]);
+			addButtons2("fsqc.actions", [btnFsqcCertDownload]);
 		}
 		// 20190813 actions.addMember(btnSrCheckShipName);
 		if (mode==0) {	// ship registration

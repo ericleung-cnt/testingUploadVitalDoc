@@ -75,7 +75,8 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
 	private final String OPERATION_SIMULATE_FSQC_CERT_REPLY = "SIMULATE_FSQC_CERT_REPLY";
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
-	
+	private final String OPERATION_FSQC_CERT_DOWNLOAD = "FSQC_CERT_DOWNLOAD";
+
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
 		IShipRegService srService = (IShipRegService) getBaseService();
@@ -124,6 +125,17 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			DSResponse dsResponse = new DSResponse();
 			dsResponse.setData(rm);
 			return dsResponse;
+		} else if (OPERATION_FSQC_CERT_DOWNLOAD.equals(operationId)){
+			Map<?,?> values = dsRequest.getClientSuppliedValues();
+			String imo = values.get("imoNo").toString();
+			try {
+				srService.downloadFsqcCertFromVitalDoc(imo, "BCC");
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			DSResponse dsResponse = new DSResponse();
+			dsResponse.setSuccess();
+			return dsResponse;		
 		} else {
 			return super.fetch(entity, dsRequest);
 		}
