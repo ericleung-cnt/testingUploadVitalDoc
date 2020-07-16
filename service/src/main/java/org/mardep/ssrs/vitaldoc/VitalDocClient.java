@@ -749,4 +749,27 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_TRANSCRIPT, docName, vitalDocProperties, pdf);
 		return docId;		
 	}
+
+	@Override
+	public byte[] downloadFsqcCert(String imo, String certType) throws IOException {
+		String sessionId = getSessionId();
+		Map<String, String> properties = new HashMap<>();
+		properties.put("IMO Number", imo);
+		//properties.put("Supporting Type", "Issued BCC Cert");
+		properties.put("DocType", "BCC (Cert)");
+		//long attId = findAttachment(sessionId, "FSQCMIS-BCC Cert", properties, null);
+		long attId = findAttachment(sessionId, "FSQC-Documents", properties, null);
+		byte[] content;
+		if (attId != -1) {
+			AttachmentDownloadFile adf = new AttachmentDownloadFile();
+			adf.setAttachmentID(attId);
+			adf.setSessionIDIn(sessionId);
+			AttachmentDownloadFileResponse resp = (AttachmentDownloadFileResponse) send(adf);
+			content = resp.getAttachmentDownloadFileResult();
+		} else {
+			content = new byte[0];
+		}
+		logger.debug("download docType:{} prop:{} length:{} ", certType, properties, content != null ? content.length : -1);
+		return content;
+	}
 }
