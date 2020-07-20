@@ -59,6 +59,39 @@ Date.prototype.hhmm = function(){
 	var mm = this.getMinutes();
 	return '' + (hh<=9 ? '0' + hh : hh) + ":" + (mm<=9 ? '0' + mm : mm);
 }
+
+var downloadFsqcCert = function(imo, type){
+	console.log(imo);
+	console.log(type);
+	var form = document.createElement("form");
+	form.target = "downloadFsqcCert" + new Date().getTime() + "_" + Math.random();
+	form.method = "POST";
+	form.action = "./dmsImage/";
+
+	var hiddenField = document.createElement('input');
+	hiddenField.type = 'hidden';
+	hiddenField.name = 'imo';
+	hiddenField.value = imo;
+	form.append(hiddenField);
+
+	hiddenField = document.createElement('input');
+	hiddenField.type = 'hidden';
+	hiddenField.name = 'type';
+	hiddenField.value = type;
+	form.append(hiddenField);
+
+	hiddenField = document.createElement('input');
+	hiddenField.type = 'hidden';
+	hiddenField.name = 'issueDept';
+	hiddenField.value = "FSQC";
+	form.append(hiddenField);
+
+	document.body.appendChild(form);
+
+	window.open("", form.target, "status=0,title=0,height=600, width=800,scrollbars=1");
+	form.submit();
+};
+
 /*	mode == 0 ? "Ship Registration" :
 	mode == 1 ? "Re Registration" :
 	mode == 2 ? "De Registration" :
@@ -1962,6 +1995,23 @@ var openRegMaster = function(record, task, mode
 			);
 		},
 	});
+	var btnSrRequestFsqcPrqc = isc.Button.create({
+		title: "Request<br>PRQC",
+		height: thickBtnHeight,
+		width: thickBtnWidth,
+		click: function(){
+			console.log("request PRQC");
+			var formData = form.getData();
+			regMasterDS.updateData(
+				{imo: formData.imoNo},
+				function(resp, data, req){
+					console.log(resp);
+					isc.say("send succeed");
+				},
+				{operationId: "REQUEST_FSQC_PRQC"}
+			);
+		},
+	});
 	var btnSrSimulateFsqcCertReply = isc.Button.create({
 		title: "Simulate<br>FSQC Cert<br>Reply",
 		height: thickBtnHeight,
@@ -3057,10 +3107,13 @@ var openRegMaster = function(record, task, mode
 				height: thickBtnHeight,
 				width: thickBtnWidth,
 				click: function() {
-					regMasterDS.fetchData({imoNo:form.getData().imoNo}, 
-						function(){}, 
-						{operationId:"FSQC_CERT_DOWNLOAD"}
-					);
+					var record = form.fsqcCertProgressGrid.getSelectedRecord();
+					if (record==null){
+						isc.warn("No FSQC cert being selected...");
+						return;
+					}
+					downloadFsqcCert(form.getData().imoNo, record.certType);
+					//);
 				},				
 			});
 	
@@ -4122,6 +4175,7 @@ var openRegMaster = function(record, task, mode
 		form.fsqcCertProgressGrid = isc.ListGrid.create({
 			width: 1000,
 			height: 120,
+			selectionType:"single",
 			fields: [
 				{name: "certType", title: "Cert Type"},
 				{name: "certStatus", title: "Cert Status"},
@@ -4612,6 +4666,9 @@ var openRegMaster = function(record, task, mode
 //		 }
 //		}}));
 		if (fsqcLinked(record.imoNo)){
+			addButtons2("fsqc.actions", [btnSrRequestCertFSQC]);
+			addButtons2("fsqc.actions", [btnSrRequestFsqcPrqc]);
+			//addButtons2("fsqc.actions", [btnSrSimulateFsqcCertReply]);
 			addButtons2("fsqc.actions", [btnFsqcCertDownload]);
 		}
 		// 20190813 actions.addMember(btnSrCheckShipName);
@@ -4676,8 +4733,8 @@ var openRegMaster = function(record, task, mode
 					addButtons2("builders.actions",[btnBuilderListAddBuilder]);
 				}
 				if (form.todo.contains("ready")) {
-					actions.addMember(btnSrRequestCertFSQC);
-					actions.addMember(btnSrSimulateFsqcCertReply);
+					//actions.addMember(btnSrRequestCertFSQC);
+					//actions.addMember(btnSrSimulateFsqcCertReply);
 					actions.addMember(btnSrReadyApprovalApplication);
 					actions.addMember(btnSrSaveShipDetails);
 					addButtons2("representative.actions",[btnRpCopyFromCompanySearch, btnRpSave]);

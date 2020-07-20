@@ -88,7 +88,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	int maxRetry = Integer.parseInt(System.getProperty("FsqcService.maxRetry", "3"));
 
 	private final String CERT_REQUEST_NEW_SHIP_REG = "CERT_REQUEST_NEW_SHIP_REG";
-	
+	private final String CERT_REQUEST_PRQC = "CERT_REQUEST_PRQC";
+
 	@Autowired
 	MailService mail;
 
@@ -101,7 +102,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	}
 
 	@Override
-	public void sendCertRequest(String imo) throws Exception {
+	public void sendRequestFsqcCert(String imo) throws Exception {
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
 		srMap.put("requestType", CERT_REQUEST_NEW_SHIP_REG);
@@ -119,6 +120,25 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		}
 	}
 	
+	@Override
+	public void sendRequestFsqcPrqc(String imo) throws Exception {
+		Map<String, Object> srMap = new LinkedHashMap<>();
+		srMap.put("imoNo", imo);
+		srMap.put("requestType", CERT_REQUEST_PRQC);
+		try {
+			String jsonInputString = mapper.writeValueAsString(srMap);
+			pushToFSQC(urlForCertRequest, jsonInputString);			
+		} catch (Exception ex) {
+			if (ex instanceof IOException) {
+				throw new Exception("FSQC Connection timeout or interface fail");
+			}
+			if (ex instanceof JsonProcessingException) {
+				throw new Exception("Web Interface JSON error");
+			}
+			throw ex;
+		}
+	}
+
 	@Override
 	public void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate)  throws Exception {
 		Map<String, Object> jsonMap = new LinkedHashMap<>();

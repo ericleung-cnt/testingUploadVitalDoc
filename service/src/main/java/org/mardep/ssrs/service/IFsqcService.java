@@ -21,7 +21,9 @@ public interface IFsqcService extends IBaseService{
 
 	public boolean checkSSRS_WhiteList(String ipAddress);
 	
-	public void sendCertRequest(String imo) throws Exception;
+	public void sendRequestFsqcCert(String imo) throws Exception;
+
+	public void sendRequestFsqcPrqc(String imo) throws Exception;
 
 	void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate) throws Exception;
 

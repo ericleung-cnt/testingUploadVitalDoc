@@ -184,6 +184,12 @@ var openCsrForm = function(record, recordNum, fieldNum){
 		hiddenField.value = type;
 		form.append(hiddenField);
 
+		hiddenField = document.createElement('input');
+		hiddenField.type = 'hidden';
+		hiddenField.name = 'issueDept';
+		hiddenField.value = "SSRS";
+		form.append(hiddenField);
+		
 		document.body.appendChild(form);
 
 		window.open("", form.target, "status=0,title=0,height=600, width=800,scrollbars=1");

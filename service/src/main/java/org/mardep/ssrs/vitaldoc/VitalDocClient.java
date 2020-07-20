@@ -61,6 +61,10 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	
 	private static final String SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR = "VITALDOC_COR_FSQC_DIR";
 	private static final String SYSTEM_PARAM_VITALDOC_COS_FSQC_DIR = "VITALDOC_COS_FSQC_DIR";
+	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE = "VITALDOC_FSQC_SUPPORTING_TYPE";
+	private static final String SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE = "VITALDOC_FSQC_DOCUMENT_TYPE";
+	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP";
+	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP";
 
 	@Autowired
 	ISystemParamDao systemParamDao;
@@ -756,9 +760,9 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		Map<String, String> properties = new HashMap<>();
 		properties.put("IMO Number", imo);
 		//properties.put("Supporting Type", "Issued BCC Cert");
-		properties.put("DocType", "BCC (Cert)");
+		properties.put(getVitalDocFsqcSupportingType(), getVitalDocFsqcSupportingTypeCertTypeMap(certType));
 		//long attId = findAttachment(sessionId, "FSQCMIS-BCC Cert", properties, null);
-		long attId = findAttachment(sessionId, "FSQC-Documents", properties, null);
+		long attId = findAttachment(sessionId, getVitalDocFsqcDocumentType(), properties, null);
 		byte[] content;
 		if (attId != -1) {
 			AttachmentDownloadFile adf = new AttachmentDownloadFile();
@@ -772,4 +776,28 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		logger.debug("download docType:{} prop:{} length:{} ", certType, properties, content != null ? content.length : -1);
 		return content;
 	}
+
+	private String getVitalDocFsqcSupportingType(){
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE);
+		return sysParam.getValue();
+	}
+
+	private String getVitalDocFsqcDocumentType(){
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE);
+		return sysParam.getValue();
+	}
+
+	private String getVitalDocFsqcSupportingTypeCertTypeMap(String certType){
+		String certTypeMap = "";
+		if (certType.equals("BCC")){
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP);
+			certTypeMap = sysParam.getValue();	
+		} else if (certType.equals("MSMC")) {
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP);
+			certTypeMap = sysParam.getValue();	
+		} else {
+
+		}
+		return certTypeMap;
+	}	
 }

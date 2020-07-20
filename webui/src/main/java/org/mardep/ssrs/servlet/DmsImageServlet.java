@@ -97,11 +97,49 @@ public class DmsImageServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// String imo = req.getParameter("imo");
+		// String type = req.getParameter("type");
+		String issueDept = req.getParameter("issueDept");
+		if ("SSRS".equals(issueDept)){
+			retrieveForSSRS(req, resp);
+		} else if ("FSQC".equals(issueDept)){
+			retrieveForFSQC(req, resp);
+		} else {
+			retrieveForSSRS(req, resp);
+		}
+		// WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+		// IVitalDocClient client = context.getBean(IVitalDocClient.class);
+		// byte[] bytes = client.downloadCsr(type, imo);
+		// if (bytes != null && bytes.length > 0) {
+		// 	resp.setContentType("application/pdf");
+		// 	resp.getOutputStream().write(bytes);
+		// } else {
+		// 	resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		// }
+	}
+
+	private void retrieveForSSRS(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String imo = req.getParameter("imo");
 		String type = req.getParameter("type");
+	
 		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
 		IVitalDocClient client = context.getBean(IVitalDocClient.class);
 		byte[] bytes = client.downloadCsr(type, imo);
+		if (bytes != null && bytes.length > 0) {
+			resp.setContentType("application/pdf");
+			resp.getOutputStream().write(bytes);
+		} else {
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		}
+	}
+
+	private void retrieveForFSQC(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String imo = req.getParameter("imo");
+		String type = req.getParameter("type");
+	
+		WebApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
+		IVitalDocClient client = context.getBean(IVitalDocClient.class);
+		byte[] bytes = client.downloadFsqcCert(imo, type);
 		if (bytes != null && bytes.length > 0) {
 			resp.setContentType("application/pdf");
 			resp.getOutputStream().write(bytes);

@@ -208,5 +208,4 @@ public interface IShipRegService extends IBaseService{
 	void uploadCoRToVitalDoc(String applNo, byte[] corPdf) throws Exception;
 	void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception;
 	void uploadTranscriptToVitalDoc(String applNo, byte[] transcriptPdf) throws Exception;
-	void downloadFsqcCertFromVitalDoc(String imo, String certType) throws Exception;
 }
