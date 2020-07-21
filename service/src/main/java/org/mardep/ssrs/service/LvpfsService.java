@@ -181,4 +181,14 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 		return new SimpleDateFormat(timeFormat).format(updatedDate);
 	}
 
+	@Override
+	public void vmssLog(String jsonStr, String vmssReply)
+	{
+		try {
+			rmDao.logLvpfs(jsonStr, vmssReply);		
+		} catch ( Exception ex) {
+			logger.error(ex.getMessage());
+		}
+	}
+
 }

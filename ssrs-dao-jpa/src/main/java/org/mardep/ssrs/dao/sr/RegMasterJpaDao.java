@@ -1756,7 +1756,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 
 	@Override
 	public void logLvpfs(String jsonInputString, String string) {
-		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT, REPLY, SUCCESS) values (?,?,?,?)");
+		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT_MSG, REPLY_MSG, SUCCESS) values (?,?,?,?)");
 		query.setParameter(1, new Date());
 		query.setParameter(2, jsonInputString);
 		query.setParameter(3, string);

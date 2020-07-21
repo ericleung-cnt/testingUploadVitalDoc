@@ -11,6 +11,7 @@ import org.mardep.ssrs.dao.sr.IRegMasterDao;
 import org.mardep.ssrs.domain.codetable.ShipSubType;
 import org.mardep.ssrs.domain.codetable.ShipType;
 import org.mardep.ssrs.domain.sr.RegMaster;
+import org.mardep.ssrs.service.ILvpfsService;
 import org.mardep.ssrs.service.LvpfsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class VmssController {
@@ -33,6 +36,9 @@ public class VmssController {
 	
 	@Autowired
 	IRegMasterDao rmDao;
+	
+	@Autowired
+	ILvpfsService lvpfsSvc;
 	
 	@RequestMapping("/getCodeDescription/{type}/{code}")
 	public ResponseEntity<Map<String, String>> getCode(@PathVariable String type, @PathVariable String code) {
@@ -81,6 +87,7 @@ public class VmssController {
 		} else {
 			map.put("Message", "ERROR");
 		}
+		vmssLogMapStr(map);
 		ResponseEntity<Map<String, String>> re = new ResponseEntity<Map<String, String>>(map, HttpStatus.OK);
 		return re;
 	}
@@ -144,6 +151,7 @@ public class VmssController {
 				}
 			}
 		}
+		vmssLogMapObj(map);
 		ResponseEntity<Map<String, Object>> re = new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
 		return re;
 	}
@@ -162,6 +170,24 @@ public class VmssController {
 		});
 	}
 
+	private void vmssLogMapStr(Map<String, String> map){
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonStr = mapper.writeValueAsString(map);
+			lvpfsSvc.vmssLog(jsonStr, "--");	
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+		}
+	}
 
+	private void vmssLogMapObj(Map<String, Object> map){
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonStr = mapper.writeValueAsString(map);
+			lvpfsSvc.vmssLog(jsonStr, "--");	
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+		}
+	}
 
 }
