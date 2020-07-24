@@ -13,10 +13,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.math.BigDecimal;
 
 import javax.transaction.Transactional;
 
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
+import org.mardep.ssrs.domain.lvpfs.VmssUpdateVesselParticularReply;
 import org.mardep.ssrs.domain.sr.RegMaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,7 +91,10 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 		map.put("breadthFt", bft);
 		
 		if (rm.getGrossTon() != null) {
-			map.put("gt", decimal.format(rm.getGrossTon())); // decimal 4 1
+			//map.put("gt", decimal.format(rm.getGrossTon())); // decimal 4 1
+			//BigDecimal gt = rm.getGrossTon();
+			String gtStr = Integer.toString(rm.getGrossTon().intValue());
+			map.put("gt", gtStr);
 		} else {
 			map.put("gt", null); 
 		}
@@ -128,14 +133,18 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 		boolean sent = false;
 		while (!sent && retry <= maxRetry) {
 			try {
+				//logger.info("lvpfs open connection start");
 				URLConnection _conn = url.openConnection();
+				//logger.info("lvpfs open connection end");
 				HttpURLConnection con = (HttpURLConnection) _conn;
 				con.setRequestMethod("POST");
 				con.setRequestProperty("Content-Type", "application/json;charset=utf8");
 				con.setRequestProperty("Accept", "application/json");
 				con.setDoOutput(true);
+				//logger.info("lvpfs ready to get output stream");
 				try(OutputStream os = con.getOutputStream()) {
 					byte[] input = jsonInputString.getBytes("utf-8");
+					//logger.info("lvpfs ready to write output stream");
 					os.write(input, 0, input.length);
 				}
 				try(BufferedReader br = new BufferedReader(
@@ -146,22 +155,30 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 						response.append(responseLine.trim());
 					}
 					sent = true;
-					String string = response.toString();
-					Boolean success = (Boolean) mapper.readValue(string, Map.class).get("success");
-					if (!success) {
-						String failMsg = System.getProperty("LvpfsService.FailMsg");
-						logger.info("Send LVPFS failure {} {} ", failMsg, jsonInputString + "<br> " + string);
+					String respStr = response.toString();
+					//logger.info("lvpfs response process {}", respStr);
+					VmssUpdateVesselParticularReply webReply = mapper.readValue(respStr, VmssUpdateVesselParticularReply.class);
+					//logger.info("lvpf got shipId {}", webReply.getShipId());
+					if (respStr.isEmpty()) {
+						String failMsg = System.getProperty("LvpfsService.FailMsg", "lvpfs fail msg not in system property");
+						logger.info("Send LVPFS failure {} {} ", failMsg, jsonInputString + "<br> " + respStr);
 						if (failMsg != null) {
-							mail.send(failMsg, "Send LVPFS failure", jsonInputString + "<br> " + string);
+							logger.info("lvpfs going to send mail");
+							mail.send(failMsg, "Send LVPFS failure", jsonInputString + "<br> " + respStr);
 						}
 					}
-					rmDao.logLvpfs(jsonInputString, string);
+					//rmDao.logLvpfs(jsonInputString, string);
+					logger.info("lvpfs going to vmsslog");
+					vmssLog(jsonInputString, respStr);
+					logger.error("LVPFS send {} - {}", jsonInputString, respStr);
 				}
 			} catch (JsonParseException e) {
-				rmDao.logLvpfs(jsonInputString, e);
+				vmssLog(jsonInputString, e.getMessage());
+				logger.error("LVPFS send {} - {}", jsonInputString, e.getMessage());
 			} catch (IOException ex) {
 				if (retry == maxRetry) {
-					rmDao.logLvpfs(jsonInputString, ex);
+					//rmDao.logLvpfs(jsonInputString, ex);
+					vmssLog(jsonInputString, ex.getMessage());
 					String failMsg = System.getProperty("LvpfsService.FailMsg");
 					logger.info("Send LVPFS IO failure {} {} {} {}", url, ex.getMessage(), failMsg, jsonInputString);
 					if (failMsg != null) {
@@ -172,6 +189,8 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 					retry++;
 					logger.info("retry " + retry + " " + jsonInputString);
 				}
+			} catch (Exception ex) {
+				logger.error("Send LVPFS IO failure {} {} {}", url, ex, jsonInputString);
 			}
 		}
 	}
