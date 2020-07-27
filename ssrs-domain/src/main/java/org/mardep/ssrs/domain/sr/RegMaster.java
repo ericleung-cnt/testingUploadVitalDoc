@@ -50,6 +50,7 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 	public static final String REG_STATUS_APPLICATION = "A";
 	public static final String REG_STATUS_REGISTERED = "R";
 	public static final String REG_STATUS_WITHDRAW = "W";
+	public static final String REG_STATUS_REJECT = "F";
 
 	public static final String REG_STATUS_DEREGISTERED = "D";
 
@@ -351,6 +352,11 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 	@Setter
 	@Column(name = "RC_REASON_TYPE", length=1)
 	private String rcReasonType; // TODO
+
+	@Getter
+	@Setter
+	@Column(name = "RC_ACTION_DATE")
+	private Date rcActionDate;
 
 	@Getter
 	@Setter

@@ -1979,7 +1979,7 @@ var openRegMaster = function(record, task, mode
 	var btnSrResetApplication = isc.Button.create({title:"Reset<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){ proceedTask("RegMasterDS_updateData_reset"); },});
 	var btnSrRequestCertFSQC = isc.Button.create({
-		title: "Request<br>FSQC Cert",
+		title: "Request<br>FSQCMIS Cert",
 		height: thickBtnHeight,
 		width: thickBtnWidth,
 		click: function(){

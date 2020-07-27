@@ -611,10 +611,23 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	}
 
 	@Override
-	public RegMaster withdraw(RegMaster entity, Long taskId, boolean byApplicant) {
+	public RegMaster withdrawApplication(RegMaster entity, Long taskId) {
 		IRegMasterDao rmDao = (IRegMasterDao) getDao(RegMaster.class);
 		entity.setRegStatus(RegMaster.REG_STATUS_WITHDRAW);
-		inbox.proceed(taskId, byApplicant ? "withdraw" : "reject", "");
+		entity.setRcReasonType(RegMaster.REG_STATUS_WITHDRAW);
+		entity.setRcActionDate(new Date());
+		//inbox.proceed(taskId, byApplicant ? "withdraw" : "reject", "");
+		inbox.proceed(taskId, "withdraw", "");
+		return rmDao.save(entity);
+	}
+
+	@Override
+	public RegMaster rejectApplication(RegMaster entity, Long taskId) {
+		IRegMasterDao rmDao = (IRegMasterDao) getDao(RegMaster.class);
+		entity.setRegStatus(RegMaster.REG_STATUS_REJECT);
+		entity.setRcReasonType(RegMaster.REG_STATUS_REJECT);
+		entity.setRcActionDate(new Date());
+		inbox.proceed(taskId, "reject", "");
 		return rmDao.save(entity);
 	}
 

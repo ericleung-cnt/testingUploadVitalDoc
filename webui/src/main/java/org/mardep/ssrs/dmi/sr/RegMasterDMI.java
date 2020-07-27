@@ -233,9 +233,13 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			//getTx(clientValues)//
 			RegMaster result = srService.complete(entity, taskId);
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
-		} else if ("RegMasterDS_updateData_withdraw".equals(operationId) || "RegMasterDS_updateData_reject".equals(operationId)) {
-			boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
-			RegMaster result = srService.withdraw(entity, taskId, byApplicant);
+		} else if ("RegMasterDS_updateData_withdraw".equals(operationId)) {// || "RegMasterDS_updateData_reject".equals(operationId)) {
+			//boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
+			RegMaster result = srService.withdrawApplication(entity, taskId);
+			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+		} else if ("RegMasterDS_updateData_reject".equals(operationId)){
+			//boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
+			RegMaster result = srService.rejectApplication(entity, taskId);
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_reset".equals(operationId)) {
 			RegMaster result = srService.reset(entity, taskId);

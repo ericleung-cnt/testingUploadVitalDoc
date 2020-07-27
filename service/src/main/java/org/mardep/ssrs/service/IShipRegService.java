@@ -118,7 +118,7 @@ public interface IShipRegService extends IBaseService{
 	 * @param byApplicant true if it is withdraw by applicant, otherwise it is reject by user
 	 * @return
 	 */
-	RegMaster withdraw(RegMaster entity, Long taskId, boolean byApplicant);
+	//RegMaster withdraw(RegMaster entity, Long taskId, boolean byApplicant);
 
 	/**
 	 * Reset application
@@ -208,4 +208,7 @@ public interface IShipRegService extends IBaseService{
 	void uploadCoRToVitalDoc(String applNo, byte[] corPdf) throws Exception;
 	void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception;
 	void uploadTranscriptToVitalDoc(String applNo, byte[] transcriptPdf) throws Exception;
+
+	RegMaster withdrawApplication(RegMaster entity, Long taskId);
+	RegMaster rejectApplication(RegMaster entity, Long taskId);
 }
