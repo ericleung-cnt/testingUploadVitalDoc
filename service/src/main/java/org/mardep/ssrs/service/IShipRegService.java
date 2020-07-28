@@ -209,6 +209,6 @@ public interface IShipRegService extends IBaseService{
 	void uploadCoRToVitalDoc(Map clientSuppliedValues) throws Exception;
 	void uploadTranscriptToVitalDoc(String applNo, byte[] transcriptPdf) throws Exception;
 
-	RegMaster withdrawApplication(RegMaster entity, Long taskId);
-	RegMaster rejectApplication(RegMaster entity, Long taskId);
+	RegMaster withdrawRegistration(RegMaster entity, Long taskId, String reasonCode);
+	RegMaster rejectRegistration(RegMaster entity, Long taskId, String reasonCode);
 }

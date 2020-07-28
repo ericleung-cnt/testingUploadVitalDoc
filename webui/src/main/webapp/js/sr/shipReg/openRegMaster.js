@@ -201,6 +201,170 @@ var openLockTranscriptForm = function(record){
 	return lockTranscriptWindow;
 };
 
+var openWithdrawRegistrationForm = function(record, callback){
+	var withdrawRegistrationForm = isc.DynamicForm.create({
+		height: 80,
+		fields:[
+			{ name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
+			{ name: "reasonCode", title: "Withdraw Reason", type: "select", required: true, width: 200,
+				optionDataSource: "reasonCodeDS",
+				dataFetchMode: "local",
+				optionCriteria: { "reasonType": "W" },
+				displayField: "engDesc",
+				valueField: "reasonCode",
+				allowEmptyValue: false
+			}
+		]
+	});
+	var withdrawRegistrationForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "withdrawRegistrationForm_BtnToolbar",
+		buttons:[
+			{ name: "confirm", title: "Confirm", width: 80, height: 30,
+				click: function() {
+
+				}
+			},
+			{ name: "cancel", title: "Cancel", width: 80, height: 30,
+				click: function() {
+					withdrawRegistrationWindow.close();
+				}
+			}
+		]
+	});
+
+	var withdrawRegistrationFormVLayout = isc.VLayout.create({
+		ID: "withdrawRegistrationFormVLayout",
+		layoutMargin: 15,
+		membersMargin: 5,
+		members:[
+			withdrawRegistrationForm,
+			withdrawRegistrationForm_BtnToolbar
+		]
+	});
+
+	var withdrawRegistrationWindow = isc.Window.create({
+		ID: "withdrawRegistrationWindow",
+		title: "Withdraw Registration",
+		width: 400,
+		height: 180,
+		items:[
+			withdrawRegistrationFormVLayout
+		],
+		close: function() { withdrawRegistrationWindow.markForDestroy(); }
+	});
+	withdrawRegistrationWindow.show();
+	return withdrawRegistrationWindow;
+};
+var openWithdrawRegistrationForm = function(record, callback){
+	var withdrawRegistrationForm = isc.DynamicForm.create({
+		height: 80,
+		fields:[
+			{ name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
+			{ name: "reasonCode", title: "Withdraw Reason", type: "select", required: true, width: 200,
+				optionDataSource: "reasonCodeDS",
+				dataFetchMode: "local",
+				optionCriteria: { "reasonType": "W" },
+				displayField: "engDesc",
+				valueField: "reasonCode",
+				allowEmptyValue: false
+			}
+		]
+	});
+	var withdrawRegistrationForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "withdrawRegistrationForm_BtnToolbar",
+		buttons:[
+			{ name: "confirm", title: "Confirm", width: 80, height: 30,
+				click: function() {
+
+				}
+			},
+			{ name: "cancel", title: "Cancel", width: 80, height: 30,
+				click: function() {
+					withdrawRegistrationWindow.close();
+				}
+			}
+		]
+	});
+
+	var withdrawRegistrationFormVLayout = isc.VLayout.create({
+		ID: "withdrawRegistrationFormVLayout",
+		layoutMargin: 15,
+		membersMargin: 5,
+		members:[
+			withdrawRegistrationForm,
+			withdrawRegistrationForm_BtnToolbar
+		]
+	});
+
+	var withdrawRegistrationWindow = isc.Window.create({
+		ID: "withdrawRegistrationWindow",
+		title: "Withdraw Registration",
+		width: 400,
+		height: 180,
+		items:[
+			withdrawRegistrationFormVLayout
+		],
+		close: function() { withdrawRegistrationWindow.markForDestroy(); }
+	});
+	withdrawRegistrationWindow.show();
+	return withdrawRegistrationWindow;
+};
+
+var openRejectRegistrationForm = function(record, callback){
+	var rejectRegistrationForm = isc.DynamicForm.create({
+		height: 80,
+		fields:[
+			{ name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
+			{ name: "reasonCode", title: "Withdraw Reason", type: "select", required: true, width: 200,
+				optionDataSource: "reasonCodeDS",
+				dataFetchMode: "local",
+				optionCriteria: { "reasonType": "F" },
+				displayField: "engDesc",
+				valueField: "reasonCode",
+				allowEmptyValue: false
+			}
+		]
+	});
+	var rejectRegistrationForm_BtnToolbar = isc.ButtonToolbar.create({
+		ID: "rejectRegistrationForm_BtnToolbar",
+		buttons:[
+			{ name: "confirm", title: "Confirm", width: 80, height: 30,
+				click: function() {
+
+				}
+			},
+			{ name: "cancel", title: "Cancel", width: 80, height: 30,
+				click: function() {
+					rejectRegistrationWindow.close();
+				}
+			}
+		]
+	});
+
+	var rejectRegistrationFormVLayout = isc.VLayout.create({
+		ID: "rejectRegistrationFormVLayout",
+		layoutMargin: 15,
+		membersMargin: 5,
+		members:[
+			rejectRegistrationForm,
+			rejectRegistrationForm_BtnToolbar
+		]
+	});
+
+	var rejectRegistrationWindow = isc.Window.create({
+		ID: "rejectRegistrationWindow",
+		title: "Reject Registration",
+		width: 400,
+		height: 180,
+		items:[
+			rejectRegistrationFormVLayout
+		],
+		close: function() { rejectRegistrationWindow.markForDestroy(); }
+	});
+	rejectRegistrationWindow.show();
+	return rejectRegistrationWindow;
+};
+
 var openAssignEtoCorForm = function(applNo, callback){
 	var assignEtoCorList = isc.ListGrid.create({
 		ID: "assignEtoCorList",
@@ -1967,13 +2131,45 @@ var openRegMaster = function(record, task, mode
 			height:thickBtnHeight,
 			width:thickBtnWidth,
 			//onControl:"SR_WITHDRAW",
-			click:function(){ proceedTask("RegMasterDS_updateData_withdraw"); },
+			click:function(){ 
+				//proceedTask("RegMasterDS_updateData_withdraw"); 
+				openWithdrawRegistrationForm(
+					record,
+					function(reasonCode) { 
+						proceedTask("RegMasterDS_updateData_withdraw", null, null, null, reasonCode); 
+						// var formData = form.getData();
+						// regMasterDS.updateData(
+						// 	{applNo: formData.applNo, reasconCode: reasonCode},
+						// 	function(resp, rm, req){
+						// 		form.setData(rm);
+						// 		proceedTask("RegMasterDS_updateData_withdraw"); 
+						// 	},
+						// 	{operationId: "SR_WITHDRAW_REGISTRATION"}
+						// );
+					}
+				);
+			},
 		});
 	var btnSrRejectApplication = isc.IButton.create({
 			title:"Reject<br>ShipReg<br>Application",
 			height:thickBtnHeight, width:thickBtnWidth,
 			//onControl:"SR_REJECT",
-			click:function(){ proceedTask("RegMasterDS_updateData_reject"); },
+			click:function(){ 
+				//proceedTask("RegMasterDS_updateData_reject"); 
+				openRejectRegistrationForm(
+					record,
+					function(reasonCode) {
+						var formData = form.getData();
+						regMasterDS.updateData(
+							{applNo: formData.applNo, reasconCode: reasonCode},
+							function(resp, rm, req){
+								form.setData(rm);
+								proceedTask("RegMasterDS_updateData_reject");
+							},
+							{operationId: "SR_REJECT_REGISTRATION"}						
+						);
+					});
+			},
 		});
 	var btnSrAcceptApplication = isc.Button.create({title:"Accept<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth, click:function(){ proceedTask("RegMasterDS_updateData_accept"); },});
 	var btnSrResetApplication = isc.Button.create({title:"Reset<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth,
@@ -3209,7 +3405,9 @@ var openRegMaster = function(record, task, mode
                 {name:"operationTypeCode",  title:"Operation Type", length:3, optionDataSource:"operationTypeDS",displayField:"otDesc",valueField:"id", colSpan:1, required:true, },
                 {name:"rcReasonType",  title:"Reason Type", length:1, type:"hidden", defaultValue:"D"},
                 {name:"rcReasonCode",  title:"De-Reg Reason", length:2, optionDataSource:"reasonCodeDS",
-                	optionFilterContext:{data:{reasonType:"D"}},
+					//optionFilterContext:{data:{reasonType:"D"}},
+					dataFetchMode: "local",
+					optionCriteria: {"reasonType":"D"},
                 	displayField:"engDesc",valueField:"reasonCode", changed:function(form,item,value){
                 }},
                 {name:"shipTypeCode",  visible:false},
@@ -4472,7 +4670,7 @@ var openRegMaster = function(record, task, mode
         form.getItem("applDetails.clientDeregRemark").setValue(applDetails.clientDeregRemark);
 	};
 	form.setData(record);
-	var proceedTask = function(operationId, mode, tx, postAction) {
+	var proceedTask = function(operationId, mode, tx, postAction, reasonCode) {
 		if (form.validate()) {
 			var data = form.getData();
 			copyVer(form.applDetails, data.applDetails);
@@ -4481,6 +4679,9 @@ var openRegMaster = function(record, task, mode
 			data.builderMakers = form.builderGrid.getData();
 			data.tx = tx;
 			data.reReg = (mode == 1);
+			if (reasonCode!==undefined){
+				data.reasonCode = reasonCode;
+			}
 			regMasterDS.updateData(data, function(resp, data, req) {
 				if (!deferDestroyWin(operationId)) {
 					win.markForDestroy();

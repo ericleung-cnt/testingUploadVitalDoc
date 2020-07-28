@@ -76,7 +76,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private final String OPERATION_REQUEST_FSQC_PRQC = "REQUEST_FSQC_PRQC";
 	private final String OPERATION_SIMULATE_FSQC_CERT_REPLY = "SIMULATE_FSQC_CERT_REPLY";
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
-	
+	private final String OPERATION_SR_WITHDRAW_REGISTRATION = "SR_WITHDRAW_REGISTRATION";
+	private final String OPERATION_SR_REJECT_REGISTRATION = "SR_REJECT_REGISTRATION";
+
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
 		IShipRegService srService = (IShipRegService) getBaseService();
@@ -235,11 +237,13 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_withdraw".equals(operationId)) {// || "RegMasterDS_updateData_reject".equals(operationId)) {
 			//boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
-			RegMaster result = srService.withdrawApplication(entity, taskId);
+			String reasonCode = clientValues.get("reasonCode").toString();
+			RegMaster result = srService.withdrawRegistration(entity, taskId, reasonCode);
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_reject".equals(operationId)){
 			//boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
-			RegMaster result = srService.rejectApplication(entity, taskId);
+			String reasonCode = clientValues.get("reasonCode").toString();
+			RegMaster result = srService.rejectRegistration(entity, taskId, reasonCode);
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_reset".equals(operationId)) {
 			RegMaster result = srService.reset(entity, taskId);
@@ -357,7 +361,14 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 				dsResponse.setFailure(ex.getMessage());
 				return dsResponse;
 			}
-		} 
+		// } else if (OPERATION_SR_WITHDRAW_REGISTRATION.equals(operationId)){
+		// 	Map suppliedValues = dsRequest.getClientSuppliedValues();
+		//  	RegMaster result = srService.withdrawRegistration(entity, taskId);
+		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+		// } else if (OPERATION_SR_REJECT_REGISTRATION.equals(operationId)){
+		//  	RegMaster result = srService.rejectRegistration(entity, taskId);
+		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+		}
 		return super.update(entity, dsRequest);
 	}
 	
