@@ -221,61 +221,11 @@ var openWithdrawRegistrationForm = function(record, callback){
 		buttons:[
 			{ name: "confirm", title: "Confirm", width: 80, height: 30,
 				click: function() {
-
-				}
-			},
-			{ name: "cancel", title: "Cancel", width: 80, height: 30,
-				click: function() {
-					withdrawRegistrationWindow.close();
-				}
-			}
-		]
-	});
-
-	var withdrawRegistrationFormVLayout = isc.VLayout.create({
-		ID: "withdrawRegistrationFormVLayout",
-		layoutMargin: 15,
-		membersMargin: 5,
-		members:[
-			withdrawRegistrationForm,
-			withdrawRegistrationForm_BtnToolbar
-		]
-	});
-
-	var withdrawRegistrationWindow = isc.Window.create({
-		ID: "withdrawRegistrationWindow",
-		title: "Withdraw Registration",
-		width: 400,
-		height: 180,
-		items:[
-			withdrawRegistrationFormVLayout
-		],
-		close: function() { withdrawRegistrationWindow.markForDestroy(); }
-	});
-	withdrawRegistrationWindow.show();
-	return withdrawRegistrationWindow;
-};
-var openWithdrawRegistrationForm = function(record, callback){
-	var withdrawRegistrationForm = isc.DynamicForm.create({
-		height: 80,
-		fields:[
-			{ name:"applNo", title:"Appl No.", value:record.applNo, type:"staticText"},
-			{ name: "reasonCode", title: "Withdraw Reason", type: "select", required: true, width: 200,
-				optionDataSource: "reasonCodeDS",
-				dataFetchMode: "local",
-				optionCriteria: { "reasonType": "W" },
-				displayField: "engDesc",
-				valueField: "reasonCode",
-				allowEmptyValue: false
-			}
-		]
-	});
-	var withdrawRegistrationForm_BtnToolbar = isc.ButtonToolbar.create({
-		ID: "withdrawRegistrationForm_BtnToolbar",
-		buttons:[
-			{ name: "confirm", title: "Confirm", width: 80, height: 30,
-				click: function() {
-
+					if (callback!=null) {
+						var data = withdrawRegistrationForm.getData();
+						callback(data.reasonCode);
+						withdrawRegistrationWindow.close();
+					}
 				}
 			},
 			{ name: "cancel", title: "Cancel", width: 80, height: 30,
@@ -330,7 +280,11 @@ var openRejectRegistrationForm = function(record, callback){
 		buttons:[
 			{ name: "confirm", title: "Confirm", width: 80, height: 30,
 				click: function() {
-
+					if (callback!=null) {
+						var data = rejectRegistrationForm.getData();
+						callback(data.reasonCode);
+						rejectRegistrationWindow.close();
+					}
 				}
 			},
 			{ name: "cancel", title: "Cancel", width: 80, height: 30,
@@ -2159,15 +2113,16 @@ var openRegMaster = function(record, task, mode
 				openRejectRegistrationForm(
 					record,
 					function(reasonCode) {
-						var formData = form.getData();
-						regMasterDS.updateData(
-							{applNo: formData.applNo, reasconCode: reasonCode},
-							function(resp, rm, req){
-								form.setData(rm);
-								proceedTask("RegMasterDS_updateData_reject");
-							},
-							{operationId: "SR_REJECT_REGISTRATION"}						
-						);
+						proceedTask("RegMasterDS_updateData_reject", null, null, null, reasonCode);
+//						var formData = form.getData();
+//						regMasterDS.updateData(
+//							{applNo: formData.applNo, reasconCode: reasonCode},
+//							function(resp, rm, req){
+//								form.setData(rm);
+//								proceedTask("RegMasterDS_updateData_reject");
+//							},
+//							{operationId: "SR_REJECT_REGISTRATION"}						
+//						);
 					});
 			},
 		});
