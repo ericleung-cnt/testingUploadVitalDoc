@@ -231,6 +231,7 @@ var openWithdrawRegistrationForm = function(record, callback){
 			{ name: "cancel", title: "Cancel", width: 80, height: 30,
 				click: function() {
 					withdrawRegistrationWindow.close();
+					callback(null);
 				}
 			}
 		]
@@ -290,6 +291,7 @@ var openRejectRegistrationForm = function(record, callback){
 			{ name: "cancel", title: "Cancel", width: 80, height: 30,
 				click: function() {
 					rejectRegistrationWindow.close();
+					callback(null);
 				}
 			}
 		]
@@ -2087,10 +2089,17 @@ var openRegMaster = function(record, task, mode
 			//onControl:"SR_WITHDRAW",
 			click:function(){ 
 				//proceedTask("RegMasterDS_updateData_withdraw"); 
+				var regDateRequired = form.getField("regDate").required;
+				form.getField("regDate").setRequired(false);
 				openWithdrawRegistrationForm(
 					record,
 					function(reasonCode) { 
-						proceedTask("RegMasterDS_updateData_withdraw", null, null, null, reasonCode); 
+						if (reasonCode!=null){
+							proceedTask("RegMasterDS_updateData_withdraw", null, null, null, reasonCode);
+						}
+						if (regDateRequired){
+							form.getField("regDate").setRequired(true);
+						}
 						// var formData = form.getData();
 						// regMasterDS.updateData(
 						// 	{applNo: formData.applNo, reasconCode: reasonCode},
@@ -2110,10 +2119,17 @@ var openRegMaster = function(record, task, mode
 			//onControl:"SR_REJECT",
 			click:function(){ 
 				//proceedTask("RegMasterDS_updateData_reject"); 
+				var regDateRequired = form.getField("regDate").required;
+				form.getField("regDate").setRequired(false);
 				openRejectRegistrationForm(
 					record,
 					function(reasonCode) {
-						proceedTask("RegMasterDS_updateData_reject", null, null, null, reasonCode);
+						if (reasonCode!=null) {
+							proceedTask("RegMasterDS_updateData_reject", null, null, null, reasonCode);
+						}
+						if (regDateRequired){
+							form.getField("regDate").setRequired(true);
+						}
 //						var formData = form.getData();
 //						regMasterDS.updateData(
 //							{applNo: formData.applNo, reasconCode: reasonCode},
