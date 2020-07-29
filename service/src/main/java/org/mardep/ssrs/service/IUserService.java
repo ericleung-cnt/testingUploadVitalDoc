@@ -19,7 +19,8 @@ public interface IUserService extends IBaseService{
 
 	Map<String, Object> login(String userId, String password, boolean isExternal, String remoteAddress);
 	void logout(String userId, Date signOnTime, Date signOffTime, String remoteAddress);
-
+	Map<String, Object> tokenLogin(String token, String remoteAddress);
+	
 	ChangePasswordResult changePassword(String userId, String oldPassword, String newPassword, String newPasswordConfirm);
 	
 	List<UserRole> findUserRoleByUserId(String userId);

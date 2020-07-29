@@ -10,22 +10,27 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.isomorphic.datasource.DSResponse;
 import org.apache.commons.lang.StringUtils;
+import org.mardep.fsqc.dmi.TokenLoginSupport;
 import org.mardep.ssrs.constant.Key;
 import org.mardep.ssrs.constant.UserLoginResult;
 import org.mardep.ssrs.domain.user.SystemFunc;
 import org.mardep.ssrs.domain.user.SystemFuncKey;
+import org.mardep.ssrs.domain.user.User;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.domain.user.UserRole;
 import org.mardep.ssrs.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.isomorphic.datasource.DSResponse;
+
 
 @Component
 public class SecurityDMI {
@@ -36,6 +41,11 @@ public class SecurityDMI {
 	@Autowired
 	private IUserService userService;
 
+	@Autowired
+	TokenLoginSupport tokenLoginSupport;
+
+	@Value("${fsqc.sso.isSsoEnable:false}")
+	private boolean isSsoEnabled;
 	final EnumSet<SystemFuncKey> srSet = EnumSet.of(SystemFuncKey.SR_CREATE, SystemFuncKey.SR_VIEW, SystemFuncKey.SR_UPDATE, SystemFuncKey.SR_APPROVE, SystemFuncKey.SR_REJECT, SystemFuncKey.SR_WITHDRAW);
 	final EnumSet<SystemFuncKey> mmoSet = EnumSet.of(SystemFuncKey.RENEW_SEAFARER_REGISTRATION, SystemFuncKey.MMO_VIEW, SystemFuncKey.MMO_UPDATE);
 	final EnumSet<SystemFuncKey> financeSet = EnumSet.of(SystemFuncKey.FINANCE_CREATE, SystemFuncKey.FINANCE_VIEW, SystemFuncKey.FINANCE_UPDATE);
@@ -54,18 +64,32 @@ public class SecurityDMI {
 
 	public Map<String, Object> checkLogin(HttpServletRequest req) {
 		Map<String, Object> map = new HashMap<>();
-		String userId = (String) req.getSession().getAttribute(Key.USER_ID);
-		String officeCode = (String) req.getSession().getAttribute(Key.OFFICE_CODE);
-		if (userId != null) {
-			//loginOk(userId, map, req);
-			loginOk(userId,officeCode, map, req);
+		if(isSsoEnabled){
+			User user = tokenLoginSupport.tokenLogin(req, map);
+			if(user!=null){
+				String officeCode = null;
+				if(user.getUserGroupIds()!=null) {
+					officeCode = user.getUserGroup().getOffice().getCode();
+				}
+				loginOk(user.getId(), officeCode, map, req);
+			} else {
+				req.getSession().invalidate();
+				map.put("status", DSResponse.STATUS_LOGIN_REQUIRED);
+			}
 		} else {
-			map.put("status", DSResponse.STATUS_LOGIN_REQUIRED);
+			String userId = (String) req.getSession().getAttribute(Key.USER_ID);
+			String officeCode = (String) req.getSession().getAttribute(Key.OFFICE_CODE);
+			if (userId != null) {
+				//loginOk(userId, map, req);
+				loginOk(userId,officeCode, map, req);
+			} else {
+				map.put("status", DSResponse.STATUS_LOGIN_REQUIRED);
+			}
 		}
 		return map;
 	}
-
-	public Map<String, Object> login(HttpServletRequest httpServletRequest, String userId, String password, boolean isExternal){
+	
+	public Map<String, Object> login(HttpServletRequest httpServletRequest, HttpServletResponse resp, String userId, String password, boolean isExternal){
 		Map<String, Object> map = new HashMap<>();
 		HttpSession httpSession = httpServletRequest.getSession();
 		String remoteAddress = httpServletRequest.getRemoteAddr();
@@ -84,6 +108,9 @@ public class SecurityDMI {
 			loginOk(userId,officeCode, map, httpServletRequest);
 			//loginOk(userId, map, httpServletRequest);
 			logResult = "success";
+			if(isSsoEnabled){
+				tokenLoginSupport.addSecTokenFromCookie(userId, resp);
+			}
 		}else{
 			map.put(Key.MESSAGE, ((UserLoginResult)loginMap.get(Key.LOGIN_RESULT)).getMessage());
 		}
@@ -180,13 +207,18 @@ public class SecurityDMI {
 	}
 
 
-	public void logout(HttpServletRequest req){
+	public void logout(HttpServletRequest req, HttpServletResponse resp){
 		HttpSession httpSession = req.getSession();
 //		httpSession.setAttribute(Key.USER_ID, userId);
 //		httpSession.setAttribute(Key.CURRENT_USER, loginMap.get(Key.CURRENT_USER));
 //		httpSession.setAttribute(Key.LOGIN_TIME, new Date());
 		String userId = (String) req.getSession().getAttribute(Key.USER_ID);
 		Date loginTime = (Date) req.getSession().getAttribute(Key.LOGIN_TIME);
+
+		if(isSsoEnabled){
+			tokenLoginSupport.removeSecTokenToCookie(req, resp);
+		}
+
 		userService.logout( userId,
 				loginTime,
 				new Date(),

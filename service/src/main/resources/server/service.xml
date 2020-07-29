@@ -6,6 +6,7 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
 
+	<context:component-scan base-package="org.mardep.fsqc.sso" />												
 	<context:component-scan base-package="org.mardep.ssrs.report" />
 	<context:component-scan base-package="org.mardep.ssrs.service" />
 	<context:component-scan base-package="org.mardep.ssrs.fsqcService" />	
@@ -20,6 +21,7 @@
     <context:component-scan base-package="org.mardep.ssrs.dms.ocr.dbService" />
     <context:component-scan base-package="org.mardep.ssrs.dms.ocr.action" />
 
+	<import resource="classpath:/fsqc-sso.xml" />											  
 <!-- 	need assign DS -->
 	<import resource="classpath:/server/dns.xml" />
 	<import resource="classpath:/server/ebs.xml" />
@@ -31,6 +33,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:/server/ssrs-default.properties</value>
+				<value>file:${user.home}/ssrs/config/ssrs-env.properties</value>	
 			</list>
 		</property>
 	</bean>

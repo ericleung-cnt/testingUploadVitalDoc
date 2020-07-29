@@ -7,6 +7,9 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import org.jose4j.jwt.JwtClaims;
+import org.mardep.fsqc.sso.ISecurityTokenProvider;
+import org.mardep.fsqc.sso.TokenExpiredException;
 import org.mardep.ssrs.constant.ChangePasswordResult;
 import org.mardep.ssrs.constant.Key;
 import org.mardep.ssrs.constant.UserLoginResult;
@@ -26,6 +29,7 @@ import org.mardep.ssrs.domain.user.UserRole;
 import org.mardep.ssrs.domain.user.UserStatus;
 import org.mardep.ssrs.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -57,8 +61,63 @@ public class UserService extends AbstractService implements IUserService{
 	
 	@Autowired
 	IOfficeDao officeDao;
-	
+	@Autowired
+	@Qualifier("fsqc-sso-jwtProvider")
+	ISecurityTokenProvider securityTokenProvider;
 
+	@Override
+	public Map<String, Object> tokenLogin(String token, String remoteAddress) {
+
+		logger.info("token login");
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		UserLoginResult loginResult = UserLoginResult.SUCCESSFUL;
+		int status = 0;
+
+		try {
+			JwtClaims claims = securityTokenProvider.getClaims(token);
+			String userId = claims.getSubject();
+			User user = userDao.findById(userId);
+			if (user == null) {
+				logger.info("#login result:{}", UserLoginResult.USER_NOT_EXIST.getMessage());
+				loginResult = UserLoginResult.USER_NOT_EXIST;
+				status = -2;
+			} else {
+				if (!UserStatus.ACTIVE.getId().equals(user.getUserStatus())) {
+					logger.info("#login result:{}", UserLoginResult.USER_DISABLED.getMessage());
+					loginResult = UserLoginResult.USER_DISABLED;
+					status = -3;
+				} else {
+					resultMap.put(Key.CURRENT_USER, user);
+				}
+			}
+			Date loginTime = new Date();
+			if(user.getUserGroupIds()!=null) {
+				resultMap.put(Key.OFFICE_CODE,user.getUserGroup().getOffice().getCode());
+			}
+			resultMap.put(Key.CURRENT_USER, user);
+			resultMap.put(Key.LOGIN_TIME, loginTime);
+			UserContextThreadLocalHolder.setCurrentUser(user);
+			userAccessLogDao.signOn(userId, loginTime, status == 0 ? LogStatus.S : LogStatus.F, remoteAddress);
+		} catch (TokenExpiredException ex) {
+			logger.info("token expired");
+			// TODO: added a token expired result
+			loginResult = UserLoginResult.USER_NOT_EXIST;
+			status = -1;
+		} catch (Throwable t) {
+			logger.warn("failure logging in with token", t);
+			// TODO: added a token expired result
+			loginResult = UserLoginResult.USER_NOT_EXIST;
+			status = -1;
+		}
+
+		resultMap.put(Key.LOGIN_RESULT, loginResult);
+		resultMap.put(Key.STATUS, status);
+		logger.info("LoginResult:{}", loginResult);
+
+		// System.out.println("current user: " +
+		// UserContextThreadLocalHolder.getCurrentUserId());
+		return resultMap;
+	}
 	@Override
 	public Map<String, Object> login(String userId, String password, boolean isExternal, String remoteAddress) {
 		logger.info("[{}] | isExternal-[{}] try to login.", new Object[]{userId, isExternal});
