@@ -38,6 +38,26 @@ function fsqcLinked(imo){
 	}
 };
 
+function prqcRequired(regStatus, shipType){
+	if (regStatus == 'A'){
+		if (shipType=="TUG" || shipType=="YHT"){
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+};
+
+function fsqcCertRequired(regStatus){
+	if (regStatus == 'A'){
+		return true;
+	} else {
+		return false;
+	}
+};
+
 Date.prototype.ddMMyyyy = function() {
 	var mm = this.getMonth() + 1;
 	var dd = this.getDate();
@@ -3496,7 +3516,7 @@ var openRegMaster = function(record, task, mode
                  {name:"applDetails.clientDeregRemark", title:"Client De-registraion Remark", length:100, enforceLength:true, type:"textArea", colSpan:2,
                 	 changed:upperTA},
                  {name:"applDetails.actions", type:"canvas", layoutAlign :"right", colSpan:6 , showTitle:false,height:22},
- 		        {name:"sectionFSQC", type:"section", defaultValue:"FSQC Certs", 
+ 		        {name:"sectionFSQC", type:"section", defaultValue:"FSQC Certs", //hidden:true,
                 	 itemIds:[
                 		 //"fsqc.prqcResult", "fsqc.prqcResultDate", "fsqc.prqcExpiryDate", "fsqc.prqcDocLinkId", "fsqc.prqcDownload"
                 		 "fsqcCerts",
@@ -4838,9 +4858,13 @@ var openRegMaster = function(record, task, mode
 //		 }
 //		}}));
 		if (fsqcLinked(record.imoNo)){
-			addButtons2("fsqc.actions", [btnSrRequestCertFSQC]);
-			addButtons2("fsqc.actions", [btnSrRequestFsqcPrqc]);
-			//addButtons2("fsqc.actions", [btnSrSimulateFsqcCertReply]);
+			if (fsqcCertRequired(form.getField("regStatus").getValue())){
+				addButtons2("fsqc.actions", [btnSrRequestCertFSQC]);
+			}
+			if (prqcRequired(form.getField("regStatus").getValue(), form.getField("shipTypeCode").getValue()) == true){
+				addButtons2("fsqc.actions", [btnSrRequestFsqcPrqc]);
+			}
+			//addButtons2("fsqc.actions", [btnSrSimulateFsqcCertReply]);			
 			addButtons2("fsqc.actions", [btnFsqcCertDownload]);
 		}
 		// 20190813 actions.addMember(btnSrCheckShipName);
