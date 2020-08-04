@@ -626,7 +626,8 @@ public abstract class AbstractJpaDao<T extends AbstractPersistentEntity<K>, K ex
 				for (T t : list) {
 					historyInsert.setParameter(1, tx.getId());
 					for (int i = 0; i < historyGetter.size(); i++) {
-						logger.trace("{} {}", i+2, historyGetter.get(i));
+						logger.debug("save history {} {}", i+2, historyGetter.get(i));
+						System.out.println("history param: (" + i + ") " + historyGetter.get(i).invoke(t));
 						historyInsert.setParameter(i + 2, historyGetter.get(i).invoke(t));
 					}
 					historyInsert.executeUpdate();

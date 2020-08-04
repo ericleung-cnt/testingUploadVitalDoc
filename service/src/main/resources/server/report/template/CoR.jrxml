@@ -22,6 +22,8 @@
 	<parameter name="pProRegDate" class="java.util.Date"/>
 	<parameter name="pFullRegDate" class="java.util.Date"/>
 	<parameter name="pTrackCode" class="java.lang.String"/>
+	<parameter name="pPlaceOfIncorpLabelEng" class="java.lang.String"/>
+	<parameter name="pPlaceOfIncorpLabelChi" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -971,6 +973,12 @@ $P{pFullRegDate} != null ) || ("P".equals($P{pApplNoSuf}))
 				</subreportParameter>
 				<subreportParameter name="pInterestHeldChi">
 					<subreportParameterExpression><![CDATA[$P{pInterestHeldChi}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pPlaceOfIncorpLabelEng">
+					<subreportParameterExpression><![CDATA[$P{pPlaceOfIncorpLabelEng}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pPlaceOfIncorpLabelChi">
+					<subreportParameterExpression><![CDATA[$P{pPlaceOfIncorpLabelChi}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{owners})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_1}]]></subreportExpression>

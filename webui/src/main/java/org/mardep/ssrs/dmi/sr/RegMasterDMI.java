@@ -393,11 +393,12 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		try {
 			if (clientSuppliedValues.containsKey("imo")) {
 				String imo = clientSuppliedValues.get("imo").toString();
+				String applNo = clientSuppliedValues.get("applNo").toString();
 //				FsqcCertResult entity = new FsqcCertResult();
 //				entity.setImo(imo);
 //				entity.setApplNo("2020/611");
 //				fsqcCertResultSvc.save(entity);
-				fsqcSvc.sendRequestFsqcPrqc(imo);
+				fsqcSvc.sendRequestFsqcPrqc(imo, applNo);
 			} else {
 				throw new Exception("Missing IMO");
 			}

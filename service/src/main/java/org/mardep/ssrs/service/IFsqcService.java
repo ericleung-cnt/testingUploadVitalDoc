@@ -23,7 +23,7 @@ public interface IFsqcService extends IBaseService{
 	
 	public void sendRequestFsqcCert(String imo) throws Exception;
 
-	public void sendRequestFsqcPrqc(String imo) throws Exception;
+	public void sendRequestFsqcPrqc(String imo, String applNo) throws Exception;
 
 	void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate) throws Exception;
 

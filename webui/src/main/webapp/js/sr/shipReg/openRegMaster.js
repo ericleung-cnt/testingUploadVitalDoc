@@ -2190,7 +2190,7 @@ var openRegMaster = function(record, task, mode
 			console.log("request PRQC");
 			var formData = form.getData();
 			regMasterDS.updateData(
-				{imo: formData.imoNo},
+				{imo: formData.imoNo, applNo: formData.applNo},
 				function(resp, data, req){
 					console.log(resp);
 					isc.say("send succeed");

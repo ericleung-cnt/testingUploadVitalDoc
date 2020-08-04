@@ -355,11 +355,6 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 
 	@Getter
 	@Setter
-	@Column(name = "RC_ACTION_DATE")
-	private Date rcActionDate;
-
-	@Getter
-	@Setter
 	@Column(name = "SS_ST_SHIP_TYPE_CODE", length=50)
 	private String shipTypeCode;
 
@@ -443,6 +438,11 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 	@Temporal(TemporalType.DATE)
 	private Date provRegDate;
 
+	@Getter
+	@Setter
+	@Column(name = "RC_ACTION_DATE")
+	@Temporal(TemporalType.DATE)
+	private Date rcActionDate;
 
 	@Getter
 	@Setter

@@ -121,9 +121,10 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	}
 	
 	@Override
-	public void sendRequestFsqcPrqc(String imo) throws Exception {
+	public void sendRequestFsqcPrqc(String imo, String applNo) throws Exception {
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
+		srMap.put("applNo", applNo);
 		srMap.put("requestType", CERT_REQUEST_PRQC);
 		try {
 			String jsonInputString = mapper.writeValueAsString(srMap);

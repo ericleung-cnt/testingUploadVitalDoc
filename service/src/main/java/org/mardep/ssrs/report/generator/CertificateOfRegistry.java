@@ -209,11 +209,11 @@ public class CertificateOfRegistry extends AbstractSrReport {
 
 	private byte[] getPdf(Date reportDate, Map<String, Object> params, String applNo, boolean crosscheck, RegMaster regM)
 			throws JRException {
-		HashMap<Object, Object> reportContent = getReportContent(applNo, reportDate, crosscheck, regM);
+		HashMap<Object, Object> reportContent = getReportContent(applNo, reportDate, crosscheck, regM, params);
 		return jasperReportService.generateReport(getReportFileName(), Arrays.asList(reportContent), params);
 	}
 
-	private HashMap<Object, Object> getReportContent(String applNo, Date reportDate, boolean crosscheck, RegMaster regM) {
+	private HashMap<Object, Object> getReportContent(String applNo, Date reportDate, boolean crosscheck, RegMaster regM, Map<String, Object> params) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 		Date now = new Date();
 		if (dateFormat.format(reportDate).equals(dateFormat.format(now))) {
@@ -363,15 +363,27 @@ public class CertificateOfRegistry extends AbstractSrReport {
 					(owner.getIntDenominator() != null ? owner.getIntDenominator() : "-") :
 						owner.getIntMixed().toString());
 
-			String placeOfIncorp=null;
-			if ((owner.getOverseaCert()==null || owner.getOverseaCert().isEmpty()) &&
-					(owner.getIncortCert()==null || owner.getIncortCert().isEmpty())) {
-				placeOfIncorp = owner.getIncorpPlace();
-			} else {
-				placeOfIncorp = "HONG KONG";
+			if ("I".equals(owner.getStatus())) {
+				//params.put("pPlaceOfIncorpLabelEng", "Occupation  職業 :    ");
+				params.put("pPlaceOfIncorpLabelChi", "");
+				String occupation = "";
+				if (owner.getOccupation()!=null) {
+					occupation = owner.getOccupation();
+					params.put("pPlaceOfIncorpLabelEng", "Occupation  職業 :    " + occupation);
+				} else {
+					params.put("pPlaceOfIncorpLabelEng", "Occupation  職業 :    ");
+				}
+				subreportRow.put("placeOfIncorp", "");
+			} else {			
+				String placeOfIncorp=null;
+				if ((owner.getOverseaCert()==null || owner.getOverseaCert().isEmpty()) &&
+						(owner.getIncortCert()==null || owner.getIncortCert().isEmpty())) {
+					placeOfIncorp = owner.getIncorpPlace();
+				} else {
+					placeOfIncorp = "HONG KONG";
+				}
+				subreportRow.put("placeOfIncorp", placeOfIncorp);
 			}
-			subreportRow.put("placeOfIncorp", placeOfIncorp);
-
 			String ownerStr = "";
 			if (owner.getName() != null) {
 				ownerStr = owner.getName() + "\n" +
