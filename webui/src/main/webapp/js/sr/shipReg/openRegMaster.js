@@ -3516,7 +3516,11 @@ var openRegMaster = function(record, task, mode
                  {name:"applDetails.clientDeregRemark", title:"Client De-registraion Remark", length:100, enforceLength:true, type:"textArea", colSpan:2,
                 	 changed:upperTA},
                  {name:"applDetails.actions", type:"canvas", layoutAlign :"right", colSpan:6 , showTitle:false,height:22},
- 		        {name:"sectionFSQC", type:"section", defaultValue:"FSQC Certs", //hidden:true,
+ 		        {name:"sectionFSQC", type:"section", defaultValue:"FSQCMIS Certs", 
+                	 showIf: function(item, value, form, values){
+                		 //return form.getValue("regStatus")=="A";
+                		 return fsqcCertRequired(form.getValue("regStatus"));
+                	 },
                 	 itemIds:[
                 		 //"fsqc.prqcResult", "fsqc.prqcResultDate", "fsqc.prqcExpiryDate", "fsqc.prqcDocLinkId", "fsqc.prqcDownload"
                 		 "fsqcCerts",
@@ -3578,7 +3582,7 @@ var openRegMaster = function(record, task, mode
 		//cellBorder:"solid",
 		getData: function() {
 			var data = this.getValues();
-			if (data.rcReasonCode != null) {
+			if (data.rcReasonCode != null && data.rcReasonType == null) {
 				data.rcReasonType = 'D';
 			}
 			if (data.regDate && data.regTime) {
@@ -5208,8 +5212,7 @@ var openRegMaster = function(record, task, mode
 		height:680,
 		items:[form],
 	});
-	win.form =
-
+	//win.form =
 
 	win.show();
 	form.win = win;
