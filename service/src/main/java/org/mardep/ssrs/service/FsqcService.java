@@ -121,10 +121,24 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	}
 	
 	@Override
-	public void sendRequestFsqcPrqc(String imo, String applNo) throws Exception {
+	public void sendRequestFsqcPrqc(String imo, String applNo, String groupOwner, String country, Date applicationDate, Date proposedRegDate, String remarks) throws Exception {
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
 		srMap.put("applNo", applNo);
+		srMap.put("groupOwner", groupOwner);
+		srMap.put("country", country);
+		if (applicationDate==null) {
+			srMap.put("applicationDate", null);
+		} else {
+			srMap.put("applicationDate", df.format(applicationDate));
+		}
+		if (proposedRegDate==null) {
+			srMap.put("proposedRegDate", null);
+		} else {
+			srMap.put("proposedRegDate", df.format(proposedRegDate));
+		}
+		srMap.put("remarks", remarks);
 		srMap.put("requestType", CERT_REQUEST_PRQC);
 		try {
 			String jsonInputString = mapper.writeValueAsString(srMap);

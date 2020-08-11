@@ -9,11 +9,15 @@ import java.util.Map;
 
 import org.mardep.ssrs.certService.ICertIssueLogService;
 import org.mardep.ssrs.dao.cert.ICertIssueLogDao;
+import org.mardep.ssrs.dao.codetable.IAgentDao;
 import org.mardep.ssrs.dao.codetable.IClassSocietyDao;
+import org.mardep.ssrs.dao.codetable.ICountryDao;
 import org.mardep.ssrs.dao.codetable.ISystemParamDao;
 import org.mardep.ssrs.dao.sr.IApplDetailDao;
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
+import org.mardep.ssrs.domain.codetable.Agent;
 import org.mardep.ssrs.domain.codetable.ClassSociety;
+import org.mardep.ssrs.domain.codetable.Country;
 import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.constant.CertificateTypeEnum;
 import org.mardep.ssrs.domain.entity.cert.EntityCertIssueLog;
@@ -64,6 +68,12 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	
 	@Autowired
 	IApplDetailDao applDetailDao;
+	
+	@Autowired
+	IAgentDao agentDao;
+	
+	@Autowired
+	ICountryDao countryDao;
 	
 	@Autowired
 	IFsqcService fsqcSvc;
@@ -394,11 +404,42 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			if (clientSuppliedValues.containsKey("imo")) {
 				String imo = clientSuppliedValues.get("imo").toString();
 				String applNo = clientSuppliedValues.get("applNo").toString();
+				if (applNo==null || "".equals(applNo)) {
+					throw new Exception("Missing applNo");
+				}
+				String groupOwner = "";
+				String country = "";
+				Date applDate = null;
+				Date proposedRegDate = null;
+				String remark = "";
+				
+				RegMaster entityRM = regMasterDao.findById(applNo);
+				if (entityRM!=null) {
+					if (entityRM.getAgtAgentCode()!=null) {
+						Agent entityAgent = agentDao.findById(entityRM.getAgtAgentCode());
+						if (entityAgent!=null) {
+							groupOwner = entityAgent.getName();
+						}
+					}
+					if (entityRM.getCcCountryCode()!=null)
+					{
+						Country entityCountry = countryDao.findById(entityRM.getCcCountryCode());
+						if (entityCountry!=null) {
+							country = entityCountry.getName();
+						}
+					}
+					remark = entityRM.getRemark();
+				}
+				ApplDetail entityApplDetail = applDetailDao.findById(applNo);
+				if (entityApplDetail!=null) {
+					applDate = entityApplDetail.getApplDate();
+					proposedRegDate = entityApplDetail.getProposeRegDate();
+				}
 //				FsqcCertResult entity = new FsqcCertResult();
 //				entity.setImo(imo);
 //				entity.setApplNo("2020/611");
 //				fsqcCertResultSvc.save(entity);
-				fsqcSvc.sendRequestFsqcPrqc(imo, applNo);
+				fsqcSvc.sendRequestFsqcPrqc(imo, applNo, groupOwner, country, applDate, proposedRegDate, remark);
 			} else {
 				throw new Exception("Missing IMO");
 			}
