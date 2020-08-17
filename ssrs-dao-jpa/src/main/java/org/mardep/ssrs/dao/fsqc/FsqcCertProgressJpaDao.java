@@ -74,6 +74,13 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 				} else {
 					entity.setCertCompleteDate(null);
 				}
+				if (CERT_TYPE_PRQC.equals(certType)) {
+					if (obj[5]!=null) {
+						entity.setCertExpiryDate(sdf.parse(obj[5].toString()));
+					} else {
+						entity.setCertExpiryDate(null);
+					}
+				}
 				return entity;				
 			} else {
 				return null;

@@ -50,6 +50,19 @@ function prqcRequired(regStatus, shipType){
 	}
 };
 
+function prqcCanRequest(expiryDate){
+	if (expiryDate==null){
+		return true;
+	} else {
+		var currentDate = new Date();
+		if (currentDate <= expiryDate){
+			return false;
+		} else {
+			return true;
+		}
+	}
+};
+
 function fsqcCertRequired(regStatus){
 	if (regStatus == 'A'){
 		return true;
@@ -3633,6 +3646,22 @@ var openRegMaster = function(record, task, mode
 					fsqcCertProgressDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertProgressData, req){
 						form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
 						loaded();
+						var i;
+						for (i=0; i<fsqcCertProgressData.length; i++){
+							if (fsqcCertProgressData[i].certType=="PRQC"){
+								var currentDate = new Date();
+								if (fsqcCertProgressData[i].certExpiryDate==null){
+									btnSrRequestFsqcPrqc.setDisabled(true);
+								} else {
+									var expiryDate = new Date(fsqcCertProgressData[i].certExpiryDate);
+									if (expiryDate.getTime() > currentDate.getTime()){
+										btnSrRequestFsqcPrqc.setDisabled(true);
+									} else {
+										btnSrRequestFsqcPrqc.setDisabled(false);
+									}									
+								} 			
+							}
+						}							
 					});
 				}
 				if (record.shipTypeCode) {
@@ -4372,8 +4401,8 @@ var openRegMaster = function(record, task, mode
 			fields: [
 				{name: "certType", title: "Cert Type"},
 				{name: "certStatus", title: "Cert Status"},
-				{name: "certCompleteDate", title: "Complete Date"},
-				{name: "certExpiryDate", title: "Expiry Date"},
+				{name: "certCompleteDate", title: "Complete Date", dateFormatter:"dd/MM/yyyy"},
+				{name: "certExpiryDate", title: "Expiry Date", dateFormatter:"dd/MM/yyyy"},
 				{name: "docLinkId", title: "Vital Doc"}
 			],		
 		});

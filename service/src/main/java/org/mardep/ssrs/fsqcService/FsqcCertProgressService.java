@@ -1,6 +1,7 @@
 package org.mardep.ssrs.fsqcService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -76,6 +77,14 @@ public class FsqcCertProgressService implements IFsqcCertProgressService {
 	private FsqcCertProgress getPRQC(String imo) throws Exception{
 		try {
 			FsqcCertProgress entity = certProgressDao.get(certProgressDao.getCertTypeNamePrqc(), imo);
+//			if (entity!=null) {
+//				if (entity.getCertCompleteDate()!=null  && "PASSED".equals(entity.getCertStatus())) {
+//					Calendar cal = Calendar.getInstance();
+//					cal.setTime(entity.getCertCompleteDate());
+//					cal.add(Calendar.MONTH, 3);
+//					entity.setCertExpiryDate(cal.getTime());
+//				}				
+//			}
 			return entity;
 		} catch (Exception ex) {
 			logger.error("Fail to fetch PRQC IMO: {}, Exception: {}", imo, ex);
