@@ -58,7 +58,15 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
 	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
 	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
-	
+	private static final String VITALDOC_PATH_FSQC_BCC_CERT = "FSQC\\Ship"; //\\0000018";
+	private static final String VITALDOC_PATH_FSQC_ROOT = "FSQC\\Ship\\"; //\\0000018";
+	private static final String VITALDOC_PATH_FSQC_TEMPLATE = "FSQC Template\\"; //\\0000018";
+	private static final String VITALDOC_PATH_FSQC_TEMPLATE_DETAIL = "0000014";
+
+	private static final String VITALDOC_CLONE_RESULT_ALREADY_EXIST = "VITALDOC_CLONE_RESULT_ALREADY_EXIST";
+	private static final String VITALDOC_CLONE_RESULT_SUCCESS = "VITALDOC_CLONE_RESULT_SUCCESS";
+	private static final String VITALDOC_CLONE_RESULT_FAIL = "VITALDOC_CLONE_RESULT_FAIL";
+
 	private static final String SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR = "VITALDOC_COR_FSQC_DIR";
 	private static final String SYSTEM_PARAM_VITALDOC_COS_FSQC_DIR = "VITALDOC_COS_FSQC_DIR";
 	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE = "VITALDOC_FSQC_SUPPORTING_TYPE";
@@ -204,6 +212,119 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		systemLogin.setLanguage(0);
 		systemLogin.setUserName(username);
 		systemLogin.setPassword(password);
+	}
+
+	private long getFsqcDirId(String sessionId, String path){
+		DirectoryLoadSingleByPath dir = new DirectoryLoadSingleByPath();
+		dir.setFullPath(path);
+		dir.setSessionIDIn(sessionId);
+		DirectoryLoadSingleByPathResponse resp = (DirectoryLoadSingleByPathResponse) send(dir);
+		return resp.getDirectoryLoadSingleByPathResult().isSuccess() ? resp.getDirectoryLoadSingleByPathResult().getDirectoryResult().getID() : -1;
+	}
+
+	private String updateFsqcClonedDir(String sessionId, long clonedDir, String dirName, String dirTypeName, String fieldData) throws IOException {
+		String sResult = "";
+		DirectoryUpdateByData dirUpdate = new DirectoryUpdateByData();
+		dirUpdate.setSessionIDIn(sessionId);
+		dirUpdate.setDirID(clonedDir);
+		if (!"".equals(dirName)){
+			dirUpdate.setDirectoryName(dirName);
+		}
+		dirUpdate.setDirectoryDescription("");
+		dirUpdate.setDirectoryTypeName(dirTypeName);
+		dirUpdate.setDirectoryFieldData(fieldData);
+		DirectoryUpdateByDataResponse dirUpdateResp = (DirectoryUpdateByDataResponse) send(dirUpdate);
+		if (dirUpdateResp.getDirectoryUpdateByDataResult().isSuccess()) {
+			sResult = VITALDOC_CLONE_RESULT_SUCCESS;
+		} else {
+			sResult = VITALDOC_CLONE_RESULT_FAIL;
+		}
+		return sResult;
+	}
+
+	private String updateFsqcClonedSubDir(String sessionId, long clonedSubDirId, String dirName, String imoNo, long docTypeId, String dirTypeName, String supportingType) throws IOException {
+		String sResult = "";
+		String fieldData = "";
+		if ("".equals(supportingType)){
+			fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo;
+		} else {
+			fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo + "|Supporting Type:" + supportingType;
+		}
+		sResult = updateFsqcClonedDir(sessionId, clonedSubDirId, dirName, dirTypeName, fieldData);
+		return sResult;
+	}
+
+	private String updateFsqcClonedRootDir(String sessionId, String imoNo, long docTypeId, String dirTypeName) throws IOException {
+		String sResult = "";
+		long clonedRootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		if (clonedRootDirId != -1){
+			String fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo;
+			sResult = updateFsqcClonedDir(sessionId, clonedRootDirId, imoNo, dirTypeName, fieldData);
+		}
+		return sResult;
+	}
+
+	private List<DirectoryInfo> retrieveDirectoryInfoList(String sessionId, long queryDirId){
+		List<DirectoryInfo> dirInfoList = null;
+		DirectoryLoadBatch dirLoad = new DirectoryLoadBatch();
+		dirLoad.setSessionIDIn(sessionId);
+		dirLoad.setStartDirID(queryDirId);
+		dirLoad.setIsSingleLevel(false);
+		dirLoad.setIncludeShare(true);
+		DirectoryLoadBatchResponse dirLoadResp = (DirectoryLoadBatchResponse) send(dirLoad);
+		
+		VDWSDirectoriesResult dirResults = dirLoadResp.getDirectoryLoadBatchResult();
+		if (dirResults.isSuccess()){
+			ArrayOfDirectoryInfo directories = (ArrayOfDirectoryInfo) dirResults.getDirectoriesResult().getDirectories();
+			dirInfoList = (List<DirectoryInfo>) directories.getDirectoryInfo();
+		}
+		return dirInfoList;
+	}
+
+	public String cloneFsqcTemplate(String imoNo) throws IOException {
+		String sResult = "";
+		String sessionId = getSessionId();
+		long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
+		long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		String targetPath = VITALDOC_PATH_FSQC_ROOT + imoNo;
+
+		long destDirId = getFsqcDirId(sessionId, targetPath);
+		if (destDirId==-1){
+			DirectoryClone dirClone = new DirectoryClone();
+			dirClone.setSessionIDIn(sessionId);
+			dirClone.setDirID(templateDirId);
+			dirClone.setDestDirID(rootDirId);
+			DirectoryCloneResponse dirCloneResp = (DirectoryCloneResponse) send(dirClone);
+			if (dirCloneResp.getDirectoryCloneResult().isSuccess()) {
+				long rootDocTypeId = 0;
+				String rootDirTypeName = "";
+			 	long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+				List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
+				for (DirectoryInfo dirInfo : dirInfoList){
+					long dirUpdateId = dirInfo.getID();
+					long dirUpdateDocTypeId = dirInfo.getDocTypeID();
+					if (rootDocTypeId == 0) rootDocTypeId = dirUpdateDocTypeId;
+					DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
+					String dirUpdateDirTypeName = docTypeInfo.getName();
+					if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
+					ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
+					List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
+					String supportingType = "";
+					for (FieldInfo fieldInfo : fieldsList){
+						if ("Supporting Type".equals(fieldInfo.getFieldName())){
+							supportingType = fieldInfo.getContent().toString();
+						}
+					}
+					updateFsqcClonedSubDir(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
+				}
+				updateFsqcClonedRootDir(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
+			} else {
+				sResult = VITALDOC_CLONE_RESULT_FAIL;
+			}
+		} else {
+			sResult = VITALDOC_CLONE_RESULT_ALREADY_EXIST;
+		}
+		return sResult;
 	}
 
 	public long sendToVitalDoc(String path, String attachmentName, String docType, Map<String, String> properties, byte[] content) throws IOException {
