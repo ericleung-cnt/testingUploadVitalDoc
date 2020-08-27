@@ -55,24 +55,39 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String DOCTYPE_MMO_SEAFARER_IMAGE = "MMO-Seafarer Image";
 	private static final String DOC_TYPE_SR_CSR_FORM = "SR-CSR Form";
 
-	private static final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
-	private static final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
-	private static final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
-	private static final String VITALDOC_PATH_FSQC_BCC_CERT = "FSQC\\Ship"; //\\0000018";
-	private static final String VITALDOC_PATH_FSQC_ROOT = "FSQC\\Ship\\"; //\\0000018";
-	private static final String VITALDOC_PATH_FSQC_TEMPLATE = "FSQC Template\\"; //\\0000018";
-	private static final String VITALDOC_PATH_FSQC_TEMPLATE_DETAIL = "0000014";
+	private final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
+	private final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
+	private final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
+	private final String VITALDOC_PATH_FSQC_BCC_CERT = "FSQC\\Ship"; //\\0000018";
+	private final String VITALDOC_PATH_FSQC_ROOT = "FSQC\\Ship\\"; //\\0000018";
+	private final String VITALDOC_PATH_FSQC_TEMPLATE = "FSQC Template\\"; //\\0000018";
+	private final String VITALDOC_PATH_FSQC_TEMPLATE_DETAIL = "0000014";
+	private final String VITALDOC_PATH_FSQC_COR_SHORTCUT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
+	private final String VITALDOC_PATH_FSQC_COS_SHORTCUT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
 
-	private static final String VITALDOC_CLONE_RESULT_ALREADY_EXIST = "VITALDOC_CLONE_RESULT_ALREADY_EXIST";
-	private static final String VITALDOC_CLONE_RESULT_SUCCESS = "VITALDOC_CLONE_RESULT_SUCCESS";
-	private static final String VITALDOC_CLONE_RESULT_FAIL = "VITALDOC_CLONE_RESULT_FAIL";
+	private final String VITALDOC_CLONE_RESULT_ALREADY_EXIST = "VITALDOC_CLONE_RESULT_ALREADY_EXIST";
+	private final String VITALDOC_CLONE_RESULT_SUCCESS = "VITALDOC_CLONE_RESULT_SUCCESS";
+	private final String VITALDOC_CLONE_RESULT_FAIL = "VITALDOC_CLONE_RESULT_FAIL";
 
-	private static final String SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR = "VITALDOC_COR_FSQC_DIR";
-	private static final String SYSTEM_PARAM_VITALDOC_COS_FSQC_DIR = "VITALDOC_COS_FSQC_DIR";
-	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE = "VITALDOC_FSQC_SUPPORTING_TYPE";
-	private static final String SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE = "VITALDOC_FSQC_DOCUMENT_TYPE";
-	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP";
-	private static final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP";
+	//private final String SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR = "VITALDOC_COR_FSQC_DIR";
+	//private final String SYSTEM_PARAM_VITALDOC_COS_FSQC_DIR = "VITALDOC_COS_FSQC_DIR";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE = "VITALDOC_FSQC_SUPPORTING_TYPE";
+	//private final String SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE = "VITALDOC_FSQC_DOCUMENT_TYPE";
+
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_CLC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_CLC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_DMLCI_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_DMLC-I_MAP";
+
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT = "VITALDOC_FSQC_SR_APPLICATION_SHORTCUT";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT = "VITALDOC_FSQC_COR_SHORTCUT";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT = "VITALDOC_FSQC_COS_SHORTCUT";
+
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_BCC_MAP = "VITALDOC_FSQC_DOC_TYPE_BCC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_CLC_MAP = "VITALDOC_FSQC_DOC_TYPE_CLC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_MSMC_MAP = "VITALDOC_FSQC_DOC_TYPE_MSMC_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_DMLCI_MAP = "VITALDOC_FSQC_DOC_TYPE_DMLC-I_MAP";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_PRQC_MAP = "VITALDOC_FSQC_DOC_TYPE_PRQC_MAP";
 
 	@Autowired
 	ISystemParamDao systemParamDao;
@@ -258,7 +273,8 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		String sResult = "";
 		long clonedRootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 		if (clonedRootDirId != -1){
-			String fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo;
+			//String fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo;
+			String fieldData = "IMO Number:" + imoNo;
 			sResult = updateFsqcClonedDir(sessionId, clonedRootDirId, imoNo, dirTypeName, fieldData);
 		}
 		return sResult;
@@ -303,7 +319,8 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 				for (DirectoryInfo dirInfo : dirInfoList){
 					long dirUpdateId = dirInfo.getID();
 					long dirUpdateDocTypeId = dirInfo.getDocTypeID();
-					if (rootDocTypeId == 0) rootDocTypeId = dirUpdateDocTypeId;
+					//if (rootDocTypeId == 0) 
+					rootDocTypeId = dirUpdateDocTypeId;
 					DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
 					String dirUpdateDirTypeName = docTypeInfo.getName();
 					if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
@@ -672,10 +689,13 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		long docId = sendToVitalDoc("SR\\COS", docName,
 				"SR-Certificate of Survery", properties, pdf, false);
 
-		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR);
-		Long destDirId = new Long(sysParam.getValue());		
-		createShortcutInFsqcVitalDoc(docId, destDirId);
-
+		String sessionId = getSessionId();
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT);
+		Long destDirId= getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imo + "\\" + sysParam.getValue());
+		if (destDirId != -1){
+			createShortcutInFsqcVitalDoc(docId, destDirId);
+		}
+		//Long destDirId = new Long(sysParam.getValue());		
 		return docId;
 	}
 
@@ -754,8 +774,18 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		properties.put("Name of Owner", owner);
 		properties.put("Name of Demise", demise);
 		properties.put("Name of RP", rp);
-		return sendToVitalDoc("SR\\Ship Registration", docName,
+		Long docId = sendToVitalDoc("SR\\Ship Registration", docName,
 				"SR-Registration of a ship", properties, pdf, false);
+
+		if (imo!=null && !imo.isEmpty()){
+			String sessionId = getSessionId();
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT);
+			Long destDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imo + "\\" + sysParam.getValue());
+			if (destDirId!=-1){
+				createShortcutInFsqcVitalDoc(docId, destDirId);
+			}
+		}
+		return docId;
 	}
 
 	@Override
@@ -853,13 +883,18 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	} 
 
 	@Override
-	public long uploadIssuedCoR(Map<String, String> vitalDocProperties, String docName, byte[] pdf)  throws IOException {
+	public long uploadIssuedCoR(Map<String, String> vitalDocProperties, String imoNo, String docName, byte[] pdf)  throws IOException {
+		String sessionId = getSessionId();
 		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COR, docName, vitalDocProperties, pdf);
 		
-		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_COR_FSQC_DIR);
-		Long destDirId = new Long(sysParam.getValue());
-		createShortcutInFsqcVitalDoc(docId, destDirId);
-		
+		if (imoNo!=null && !imoNo.isEmpty()){
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT);
+			Long destDirId= getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + sysParam.getValue());
+			//Long destDirId = new Long(sysParam.getValue());
+			if (destDirId != -1){
+				createShortcutInFsqcVitalDoc(docId, destDirId);
+			}
+		}
 		return docId;
 	}
 	
@@ -875,50 +910,122 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return docId;		
 	}
 
+	private byte[] getVitaldocAttachmentBytes(String sessionId, String docType, String certType, Map<String, String> properties) throws IOException  {
+		byte[] attachContent = new byte[0];
+		String imoNo = properties.get("IMO Number");
+		
+		DocumentQueryBatchByData docQuery = new DocumentQueryBatchByData();
+		docQuery.setIncludeACL(false);
+		docQuery.setIncludeHistory(false);
+		docQuery.setNumRecShow(10);
+		String cmd = buildQueryCmd(docType, properties);
+		cmd = "DirId="
+		+ getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + certType + "\\" + getVitalDocFsqcSupportingTypeCertTypeMappedName(certType)) // "FSQC\\SHIP\\9341287\\BCC\\Issued BCC Cert")
+		+ ":"+cmd;
+		docQuery.setQueryCommand(cmd);
+		docQuery.sessionIDIn = getSessionId();
+		docQuery.setStartPoint(0);
+
+		DocumentQueryBatchByDataResponse docQueryResp = (DocumentQueryBatchByDataResponse) send(docQuery);
+		VDWSDocumentsResult docQueryResult = (VDWSDocumentsResult) docQueryResp.getDocumentQueryBatchByDataResult();
+		if (docQueryResult.isSuccess() && docQueryResult.getTotalResult()>0){
+			ArrayOfDocumentInfo docArray = (ArrayOfDocumentInfo) docQueryResult.getDocumentArray();
+			if (docArray!=null){
+				List<DocumentInfo> docInfoList = docArray.getDocumentInfo();
+				if (docInfoList!=null && docInfoList.size()>0){
+					DocumentLoadSingle docLoad = new DocumentLoadSingle();
+					docLoad.setDocID(docInfoList.get(0).getID());
+					docLoad.setIncludeACL(false);
+					docLoad.setIncludeAlias(false);
+					docLoad.setIncludeHistory(false);
+					docLoad.setSessionIDIn(sessionId);
+
+					DocumentLoadSingleResponse docLoadResp = (DocumentLoadSingleResponse) send(docLoad);
+					VDWSDocumentResult docLoadResult = (VDWSDocumentResult) docLoadResp.getDocumentLoadSingleResult();
+					if (docLoadResult.isSuccess()){
+						ArrayOfAttachmentInfo attachArray = (ArrayOfAttachmentInfo) docLoadResp.getDocumentLoadSingleResult().getDocumentResult().getCurrentAttachments();
+						if (attachArray!=null){
+							List<AttachmentInfo> attachInfo = attachArray.getAttachmentInfo();
+							AttachmentDownloadFile attachFile = new AttachmentDownloadFile();
+							attachFile.setAttachmentID(attachInfo.get(0).getID());
+							attachFile.setSessionIDIn(sessionId);
+							
+							AttachmentDownloadFileResponse attachFileResp = (AttachmentDownloadFileResponse) send(attachFile);
+							attachContent = attachFileResp.getAttachmentDownloadFileResult();
+						}
+					}
+				}
+			}
+		}
+		return attachContent;
+	}
+
 	@Override
 	public byte[] downloadFsqcCert(String imo, String certType) throws IOException {
 		String sessionId = getSessionId();
 		Map<String, String> properties = new HashMap<>();
 		properties.put("IMO Number", imo);
 		//properties.put("Supporting Type", "Issued BCC Cert");
-		properties.put(getVitalDocFsqcSupportingType(), getVitalDocFsqcSupportingTypeCertTypeMap(certType));
-		//long attId = findAttachment(sessionId, "FSQCMIS-BCC Cert", properties, null);
-		long attId = findAttachment(sessionId, getVitalDocFsqcDocumentType(), properties, null);
-		byte[] content;
-		if (attId != -1) {
-			AttachmentDownloadFile adf = new AttachmentDownloadFile();
-			adf.setAttachmentID(attId);
-			adf.setSessionIDIn(sessionId);
-			AttachmentDownloadFileResponse resp = (AttachmentDownloadFileResponse) send(adf);
-			content = resp.getAttachmentDownloadFileResult();
-		} else {
-			content = new byte[0];
-		}
-		logger.debug("download docType:{} prop:{} length:{} ", certType, properties, content != null ? content.length : -1);
+		properties.put(getVitalDocFsqcSupportingTypeName(), getVitalDocFsqcSupportingTypeCertTypeMappedName(certType));
+		byte[] content = getVitaldocAttachmentBytes(sessionId, getVitalDocFsqcDocTypeCertTypeMappedName(certType), certType, properties);
 		return content;
+		//long attId = findAttachment(sessionId, "FSQCMIS-BCC Cert", properties, null);
+		// long attId = findAttachment(sessionId, getVitalDocFsqcDocTypeCertTypeMappedName(certType), properties, null);
+		// byte[] content;
+		// if (attId != -1) {
+		// 	AttachmentDownloadFile adf = new AttachmentDownloadFile();
+		// 	adf.setAttachmentID(attId);
+		// 	adf.setSessionIDIn(sessionId);
+		// 	AttachmentDownloadFileResponse resp = (AttachmentDownloadFileResponse) send(adf);
+		// 	content = resp.getAttachmentDownloadFileResult();
+		// } else {
+		// 	content = new byte[0];
+		// }
+		// logger.debug("download docType:{} prop:{} length:{} ", certType, properties, content != null ? content.length : -1);
+		// return content;
 	}
 
-	private String getVitalDocFsqcSupportingType(){
+	private String getVitalDocFsqcSupportingTypeName(){
 		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE);
 		return sysParam.getValue();
 	}
 
-	private String getVitalDocFsqcDocumentType(){
-		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE);
-		return sysParam.getValue();
-	}
-
-	private String getVitalDocFsqcSupportingTypeCertTypeMap(String certType){
-		String certTypeMap = "";
+	private String getVitalDocFsqcDocTypeCertTypeMappedName(String certType){
+		//String certTypeMap = "";
+		SystemParam sysParam = new SystemParam();
 		if (certType.equals("BCC")){
-			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP);
-			certTypeMap = sysParam.getValue();	
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_BCC_MAP);
+		} else if (certType.equals("CLC")) {
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_CLC_MAP);
 		} else if (certType.equals("MSMC")) {
-			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP);
-			certTypeMap = sysParam.getValue();	
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_MSMC_MAP);
+		} else if (certType.equals("DMLC-I")) {
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_DMLCI_MAP);
+		} else if (certType.equals("PRQC")){
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_PRQC_MAP);
 		} else {
 
 		}
-		return certTypeMap;
+		//SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_DOCUMENT_TYPE);
+		return sysParam.getValue();
+	}
+
+	private String getVitalDocFsqcSupportingTypeCertTypeMappedName(String certType){
+		//String certTypeMap = "";
+		SystemParam sysParam  = new SystemParam();
+		if (certType.equals("BCC")){
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_BCC_MAP);
+			//certTypeMap = sysParam.getValue();	
+		} else if (certType.equals("CLC")) {
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_CLC_MAP);
+		} else if (certType.equals("MSMC")) {
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP);
+			//certTypeMap = sysParam.getValue();	
+		} else if (certType.equals("DMLC-I")) {
+			sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_DMLCI_MAP);
+		} else {
+
+		}
+		return sysParam.getValue(); //certTypeMap;
 	}	
 }

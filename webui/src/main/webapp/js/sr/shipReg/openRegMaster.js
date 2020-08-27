@@ -3309,7 +3309,11 @@ var openRegMaster = function(record, task, mode
 				click: function() {
 					var record = form.fsqcCertProgressGrid.getSelectedRecord();
 					if (record==null){
-						isc.warn("No FSQC cert being selected...");
+						isc.warn("No FSQC cert being selected ...");
+						return;
+					}
+					if (record.Status!="Complete"){
+						isc.warn("Cert not ready ...");
 						return;
 					}
 					downloadFsqcCert(form.getData().imoNo, record.certType);
@@ -3530,10 +3534,10 @@ var openRegMaster = function(record, task, mode
                 	 changed:upperTA},
                  {name:"applDetails.actions", type:"canvas", layoutAlign :"right", colSpan:6 , showTitle:false,height:22},
  		        {name:"sectionFSQC", type:"section", defaultValue:"FSQCMIS Certs", 
-                	 showIf: function(item, value, form, values){
-                		 //return form.getValue("regStatus")=="A";
-                		 return fsqcCertRequired(form.getValue("regStatus"));
-                	 },
+                	//  showIf: function(item, value, form, values){
+                	// 	 //return form.getValue("regStatus")=="A";
+                	// 	 return fsqcCertRequired(form.getValue("regStatus"));
+                	 //},
                 	 itemIds:[
                 		 //"fsqc.prqcResult", "fsqc.prqcResultDate", "fsqc.prqcExpiryDate", "fsqc.prqcDocLinkId", "fsqc.prqcDownload"
                 		 "fsqcCerts",

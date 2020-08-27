@@ -128,7 +128,7 @@ public interface IVitalDocClient {
 	long uploadTransferDecl(String docName, String name, String offNo, String owner, byte[] pdf) throws IOException;
 	void uploadCsrDoc(String imoNo, String type, byte[] content) throws IOException;
 	byte[] downloadCsr(String type, String imoNo) throws IOException;
-	long uploadIssuedCoR(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
+	long uploadIssuedCoR(Map<String, String> vitalDocProperties, String imoNo, String docName, byte[] pdf) throws IOException;
 	long uploadIssuedCoD(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	long uploadIssuedTranscript(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	byte[] downloadFsqcCert(String imo, String certType) throws IOException;

@@ -1269,6 +1269,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 //		os.close();
 			String applNo = mapHelperSvc.extractStrFromMap(clientSuppliedValues, "applNo");
 			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String imoNo = rmEntity.getImoNo();
 			String docName = rmEntity.getImoNo()==null ? rmEntity.getOffNo() : rmEntity.getImoNo();
 			docName = createSrIssuedDocName(docName);
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
@@ -1276,7 +1277,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			//Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
 			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
 			if ("1".equals(sysParam.getValue())) {
-				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, cor);
+				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, imoNo, docName, cor);
 			} else {
 				File file = new File("c:\\temp\\" + docName);
 				OutputStream os = new FileOutputStream(file);
@@ -1292,13 +1293,14 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	public void uploadCoRToVitalDoc(String applNo, byte[] corPdf) throws Exception {
 		try {
 			RegMaster rmEntity = this.findById(RegMaster.class, applNo);
+			String imoNo = rmEntity.getImoNo();
 			String docName = rmEntity.getImoNo()==null ? rmEntity.getOffNo() : rmEntity.getImoNo();
 			docName = createSrIssuedDocName(docName);
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
 			vitalDocProperties.put("Issue type", "CoR");
 			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
 			if ("1".equals(sysParam.getValue())) {
-				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, corPdf);
+				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, imoNo, docName, corPdf);
 			} else {
 				File file = new File("c:\\temp\\" + docName);
 				OutputStream os = new FileOutputStream(file);
