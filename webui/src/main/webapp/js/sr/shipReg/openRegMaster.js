@@ -2178,6 +2178,15 @@ var openRegMaster = function(record, task, mode
 	var btnSrAcceptApplication = isc.Button.create({title:"Accept<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth, click:function(){ proceedTask("RegMasterDS_updateData_accept"); },});
 	var btnSrResetApplication = isc.Button.create({title:"Reset<br>ShipReg<br>Application", height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){ proceedTask("RegMasterDS_updateData_reset"); },});
+	var btnSrRefreshFsqcStatus = isc.Button.create({
+		title: "REFRESH<br>FSQCMIS Cert<br>Status",
+		height: thickBtnHeight,
+		width: thickBtnWidth,
+		click: function(){
+			var data = form.getData();
+			refreshFsqcCertProgress(data.imoNo);
+		},
+	});
 	var btnSrRequestCertFSQC = isc.Button.create({
 		title: "Request<br>FSQCMIS Cert",
 		height: thickBtnHeight,
@@ -2212,6 +2221,28 @@ var openRegMaster = function(record, task, mode
 			);
 		},
 	});
+	var refreshFsqcCertProgress = function(imoNo){
+		fsqcCertProgressDS.fetchData({imoNo:imoNo}, function(resp, fsqcCertProgressData, req){
+			form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
+			//loaded();
+			var i;
+			for (i=0; i<fsqcCertProgressData.length; i++){
+				if (fsqcCertProgressData[i].certType=="PRQC"){
+					var currentDate = new Date();
+					if (fsqcCertProgressData[i].certExpiryDate==null){
+						btnSrRequestFsqcPrqc.setDisabled(true);
+					} else {
+						var expiryDate = new Date(fsqcCertProgressData[i].certExpiryDate);
+						if (expiryDate.getTime() > currentDate.getTime()){
+							btnSrRequestFsqcPrqc.setDisabled(true);
+						} else {
+							btnSrRequestFsqcPrqc.setDisabled(false);
+						}									
+					} 			
+				}
+			}							
+		});
+	};
 	var btnSrSimulateFsqcCertReply = isc.Button.create({
 		title: "Simulate<br>FSQC Cert<br>Reply",
 		height: thickBtnHeight,
@@ -3312,7 +3343,7 @@ var openRegMaster = function(record, task, mode
 						isc.warn("No FSQC cert being selected ...");
 						return;
 					}
-					if (record.Status!="Complete"){
+					if (record.certStatus!="Complete"){
 						isc.warn("Cert not ready ...");
 						return;
 					}
@@ -3618,30 +3649,36 @@ var openRegMaster = function(record, task, mode
 				var applNo =form.getItem("applNo").getValue();
 				latch += 6;
 				ownerDS.fetchData({applNo:applNo},function(resp,data,req){
+					console.log("ownerDS latch -" + latch);
 					form.ownerGrid.setData(data);
 					loaded();
 				});
 				repDS.fetchData({applNo:applNo}, function(resp,data,req){
+					console.log("repDS latch -" + latch);
 					if (data.length > 0) {
 						setRep(data[0]);
 					}
 					loaded();
 				});
 				applDetailDS.fetchData({applNo:applNo}, function(resp,data,req){
+					console.log("applDetailDS latch -" + latch);
 					if (data.length > 0) {
 						setAd(data[0]);
 					}
 					loaded();
 				});
 				mortgageDS.fetchData({applNo:applNo}, function(resp,data,req){
+					console.log("mortgageDS latch -" + latch);
 					form.mortgageGrid.setData(data);
 					loaded();
 				});
 				builderDS.fetchData({applNo:applNo}, function(resp,data,req){
+					console.log("builderDS latch -" + latch);
 					form.builderGrid.setData(data);
 					loaded();
 				});
 				injuctionDS.fetchData({applNo:applNo}, function(resp,data,req){
+					console.log("injuctionDS latch -" + latch);
 					form.injuctionGrid.setData(data);
 					loaded();
 				});
@@ -3649,7 +3686,7 @@ var openRegMaster = function(record, task, mode
 				if (fsqcLinked(data.imoNo)){
 					fsqcCertProgressDS.fetchData({imoNo:data.imoNo}, function(resp, fsqcCertProgressData, req){
 						form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
-						loaded();
+						//loaded();
 						var i;
 						for (i=0; i<fsqcCertProgressData.length; i++){
 							if (fsqcCertProgressData[i].certType=="PRQC"){
@@ -3667,10 +3704,12 @@ var openRegMaster = function(record, task, mode
 							}
 						}							
 					});
+					//refreshFsqcCertProgress(data.imoNo);
 				}
 				if (record.shipTypeCode) {
 					latch += 1;
 					shipTypeDS.fetchData({id:record.shipTypeCode}, function(resp,data,req){
+						console.log("shipTypeDS lattch -" + latch);
 						if (data.length > 0) {
 							form.getItem("shipType").setValue(data[0].stDesc);
 						}
@@ -4651,6 +4690,7 @@ var openRegMaster = function(record, task, mode
 	};
 
 	classSocietyDS.fetchData({}, function(resp, data, req){
+		console.log("classSociety latch -" + latch);
 		var map = {"":""};
 		data.forEach(function (d) { map[d.id] = d.id + " " + d.name;});
 		form.getItem("applDetails.cs1ClassSocCode").setValueMap(map);
@@ -4895,6 +4935,7 @@ var openRegMaster = function(record, task, mode
 //		 }
 //		}}));
 		if (fsqcLinked(record.imoNo)){
+			addButtons2("fsqc.actions", [btnSrRefreshFsqcStatus]);
 			if (fsqcCertRequired(form.getField("regStatus").getValue())){
 				addButtons2("fsqc.actions", [btnSrRequestCertFSQC]);
 			}

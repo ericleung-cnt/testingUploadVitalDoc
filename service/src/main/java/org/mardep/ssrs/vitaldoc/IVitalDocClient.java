@@ -132,4 +132,5 @@ public interface IVitalDocClient {
 	long uploadIssuedCoD(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	long uploadIssuedTranscript(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	byte[] downloadFsqcCert(String imo, String certType) throws IOException;
+	public String cloneFsqcTemplate(String imoNo) throws IOException;
 }

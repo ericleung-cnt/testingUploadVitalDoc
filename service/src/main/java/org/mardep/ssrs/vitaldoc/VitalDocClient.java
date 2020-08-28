@@ -237,7 +237,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return resp.getDirectoryLoadSingleByPathResult().isSuccess() ? resp.getDirectoryLoadSingleByPathResult().getDirectoryResult().getID() : -1;
 	}
 
-	private String updateFsqcClonedDir(String sessionId, long clonedDir, String dirName, String dirTypeName, String fieldData) throws IOException {
+	private String updateFsqcClonedDirAttribute(String sessionId, long clonedDir, String dirName, String dirTypeName, String fieldData) throws IOException {
 		String sResult = "";
 		DirectoryUpdateByData dirUpdate = new DirectoryUpdateByData();
 		dirUpdate.setSessionIDIn(sessionId);
@@ -257,7 +257,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return sResult;
 	}
 
-	private String updateFsqcClonedSubDir(String sessionId, long clonedSubDirId, String dirName, String imoNo, long docTypeId, String dirTypeName, String supportingType) throws IOException {
+	private String updateFsqcClonedSubDirAttribute(String sessionId, long clonedSubDirId, String dirName, String imoNo, long docTypeId, String dirTypeName, String supportingType) throws IOException {
 		String sResult = "";
 		String fieldData = "";
 		if ("".equals(supportingType)){
@@ -265,18 +265,46 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		} else {
 			fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo + "|Supporting Type:" + supportingType;
 		}
-		sResult = updateFsqcClonedDir(sessionId, clonedSubDirId, dirName, dirTypeName, fieldData);
+		sResult = updateFsqcClonedDirAttribute(sessionId, clonedSubDirId, dirName, dirTypeName, fieldData);
 		return sResult;
 	}
 
-	private String updateFsqcClonedRootDir(String sessionId, String imoNo, long docTypeId, String dirTypeName) throws IOException {
+	private String updateFsqcClonedRootDirAttribute(String sessionId, String imoNo, long docTypeId, String dirTypeName) throws IOException {
 		String sResult = "";
 		long clonedRootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 		if (clonedRootDirId != -1){
 			//String fieldData = "<DefaultDocTypeID>:" + String.valueOf(docTypeId) + "|IMO Number:" + imoNo;
 			String fieldData = "IMO Number:" + imoNo;
-			sResult = updateFsqcClonedDir(sessionId, clonedRootDirId, imoNo, dirTypeName, fieldData);
+			sResult = updateFsqcClonedDirAttribute(sessionId, clonedRootDirId, imoNo, dirTypeName, fieldData);
 		}
+		return sResult;
+	}
+
+	private String updateFsqcClonedDir(String sessionId, String imoNo) throws IOException {
+		String sResult = "";
+		long rootDocTypeId = 0;
+		String rootDirTypeName = "";
+		long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
+		for (DirectoryInfo dirInfo : dirInfoList){
+			long dirUpdateId = dirInfo.getID();
+			long dirUpdateDocTypeId = dirInfo.getDocTypeID();
+			//if (rootDocTypeId == 0) 
+			rootDocTypeId = dirUpdateDocTypeId;
+			DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
+			String dirUpdateDirTypeName = docTypeInfo.getName();
+			if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
+			ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
+			List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
+			String supportingType = "";
+			for (FieldInfo fieldInfo : fieldsList){
+				if ("Supporting Type".equals(fieldInfo.getFieldName())){
+					supportingType = fieldInfo.getContent().toString();
+				}
+			}
+			updateFsqcClonedSubDirAttribute(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
+		}
+		sResult = updateFsqcClonedRootDirAttribute(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
 		return sResult;
 	}
 
@@ -297,6 +325,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return dirInfoList;
 	}
 
+	@Override
 	public String cloneFsqcTemplate(String imoNo) throws IOException {
 		String sResult = "";
 		String sessionId = getSessionId();
@@ -312,34 +341,42 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 			dirClone.setDestDirID(rootDirId);
 			DirectoryCloneResponse dirCloneResp = (DirectoryCloneResponse) send(dirClone);
 			if (dirCloneResp.getDirectoryCloneResult().isSuccess()) {
-				long rootDocTypeId = 0;
-				String rootDirTypeName = "";
-			 	long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
-				List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
-				for (DirectoryInfo dirInfo : dirInfoList){
-					long dirUpdateId = dirInfo.getID();
-					long dirUpdateDocTypeId = dirInfo.getDocTypeID();
-					//if (rootDocTypeId == 0) 
-					rootDocTypeId = dirUpdateDocTypeId;
-					DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
-					String dirUpdateDirTypeName = docTypeInfo.getName();
-					if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
-					ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
-					List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
-					String supportingType = "";
-					for (FieldInfo fieldInfo : fieldsList){
-						if ("Supporting Type".equals(fieldInfo.getFieldName())){
-							supportingType = fieldInfo.getContent().toString();
-						}
-					}
-					updateFsqcClonedSubDir(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
-				}
-				updateFsqcClonedRootDir(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
+				sResult = updateFsqcClonedDir(sessionId, imoNo);
+				// long rootDocTypeId = 0;
+				// String rootDirTypeName = "";
+			 	// long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+				// List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
+				// for (DirectoryInfo dirInfo : dirInfoList){
+				// 	long dirUpdateId = dirInfo.getID();
+				// 	long dirUpdateDocTypeId = dirInfo.getDocTypeID();
+				// 	//if (rootDocTypeId == 0) 
+				// 	rootDocTypeId = dirUpdateDocTypeId;
+				// 	DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
+				// 	String dirUpdateDirTypeName = docTypeInfo.getName();
+				// 	if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
+				// 	ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
+				// 	List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
+				// 	String supportingType = "";
+				// 	for (FieldInfo fieldInfo : fieldsList){
+				// 		if ("Supporting Type".equals(fieldInfo.getFieldName())){
+				// 			supportingType = fieldInfo.getContent().toString();
+				// 		}
+				// 	}
+				// 	updateFsqcClonedSubDirAttribute(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
+				// }
+				// updateFsqcClonedRootDirAttribute(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
 			} else {
-				sResult = VITALDOC_CLONE_RESULT_FAIL;
+				//sResult = VITALDOC_CLONE_RESULT_FAIL;
+				long clonedDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+				if (clonedDirId!=-1){
+					sResult = updateFsqcClonedDir(sessionId, imoNo);
+				} else {
+					sResult = VITALDOC_CLONE_RESULT_FAIL;
+				}
 			}
 		} else {
 			sResult = VITALDOC_CLONE_RESULT_ALREADY_EXIST;
+			//sResult = updateFsqcClonedDir(sessionId, imoNo);
 		}
 		return sResult;
 	}

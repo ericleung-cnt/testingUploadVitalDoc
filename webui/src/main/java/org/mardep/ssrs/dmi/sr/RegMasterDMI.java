@@ -37,6 +37,7 @@ import org.mardep.ssrs.service.IFsqcService;
 import org.mardep.ssrs.service.IInboxService;
 import org.mardep.ssrs.service.IShipRegService;
 import org.mardep.ssrs.service.MailService;
+import org.mardep.ssrs.vitaldoc.IVitalDocClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -80,6 +81,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	
 	@Autowired
 	IFsqcCertResultService fsqcCertResultSvc;
+
+	@Autowired
+	IVitalDocClient vitaldocClient;
 	
 	//private final String OPERATION_UPDATE_MULTI_TRACK_CODE = "UPDATE_MULTI_TRACK_CODE";
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
@@ -231,6 +235,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_accept".equals(operationId)) {
 			RegMaster result = srService.accept(entity, taskId);
+			if (result.getImoNo()!=null && !result.getImoNo().isEmpty()){
+				vitaldocClient.cloneFsqcTemplate(result.getImoNo());
+			}
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_approveReady".equals(operationId)) {
 			RegMaster result = srService.approveReady(entity, taskId);
