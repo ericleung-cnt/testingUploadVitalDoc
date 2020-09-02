@@ -79,9 +79,13 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_MSMC_MAP";
 	private final String SYSTEM_PARAM_VITALDOC_FSQC_SUPPORTING_TYPE_DMLCI_MAP = "VITALDOC_FSQC_SUPPORTING_TYPE_DMLC-I_MAP";
 
-	private final String SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT = "VITALDOC_FSQC_SR_APPLICATION_SHORTCUT";
-	private final String SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT = "VITALDOC_FSQC_COR_SHORTCUT";
-	private final String SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT = "VITALDOC_FSQC_COS_SHORTCUT";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT_NAME = "VITALDOC_FSQC_SR_APPLICATION_SHORTCUT_NAME";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_NAME = "VITALDOC_FSQC_COR_SHORTCUT_NAME";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT_NAME = "VITALDOC_FSQC_COS_SHORTCUT_NAME";
+
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT_PATH = "VITALDOC_FSQC_SR_APPLICATION_SHORTCUT_PATH";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_PATH = "VITALDOC_FSQC_COR_SHORTCUT_PATH";
+	private final String SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT_PATH = "VITALDOC_FSQC_COS_SHORTCUT_PATH";
 
 	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_BCC_MAP = "VITALDOC_FSQC_DOC_TYPE_BCC_MAP";
 	private final String SYSTEM_PARAM_VITALDOC_FSQC_DOC_TYPE_CLC_MAP = "VITALDOC_FSQC_DOC_TYPE_CLC_MAP";
@@ -727,7 +731,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 				"SR-Certificate of Survery", properties, pdf, false);
 
 		String sessionId = getSessionId();
-		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT);
+		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT_NAME);
 		Long destDirId= getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imo + "\\" + sysParam.getValue());
 		if (destDirId != -1){
 			createShortcutInFsqcVitalDoc(docId, destDirId);
@@ -816,7 +820,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 
 		if (imo!=null && !imo.isEmpty()){
 			String sessionId = getSessionId();
-			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT);
+			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_SR_APPLICATION_SHORTCUT_NAME);
 			Long destDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imo + "\\" + sysParam.getValue());
 			if (destDirId!=-1){
 				createShortcutInFsqcVitalDoc(docId, destDirId);
@@ -925,11 +929,18 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_ISSUED_COR, docName, vitalDocProperties, pdf);
 		
 		if (imoNo!=null && !imoNo.isEmpty()){
-			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT);
-			Long destDirId= getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + sysParam.getValue());
-			//Long destDirId = new Long(sysParam.getValue());
-			if (destDirId != -1){
-				createShortcutInFsqcVitalDoc(docId, destDirId);
+			SystemParam shortcutPath = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_PATH);
+			if (shortcutPath!=null && shortcutPath.getValue()!=null){
+				SystemParam shortcutName = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_NAME);
+				String[] paths = shortcutPath.getValue().split(",");
+				for (String path : paths){
+					String destDirPath = VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + path + "\\" + shortcutName.getValue();
+					Long destDirId= getFsqcDirId(sessionId, destDirPath);
+					//Long destDirId = new Long(sysParam.getValue());
+					if (destDirId != -1){
+						createShortcutInFsqcVitalDoc(docId, destDirId);
+					}		
+				}
 			}
 		}
 		return docId;

@@ -16,7 +16,7 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 
 	private final String CERT_TYPE_BCC = "BCC";
 	private final String CERT_TYPE_MSMC = "MSMC";
-	private final String CERT_TYPE_DMLC_I = "DMLC-I";
+	private final String CERT_TYPE_DMLC_I = "MLC";
 	private final String CERT_TYPE_PRQC = "PRQC";
 
 	@PersistenceContext

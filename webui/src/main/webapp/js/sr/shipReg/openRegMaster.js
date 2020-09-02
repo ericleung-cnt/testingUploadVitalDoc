@@ -4445,8 +4445,8 @@ var openRegMaster = function(record, task, mode
 				{name: "certType", title: "Cert Type"},
 				{name: "certStatus", title: "Cert Status"},
 				{name: "certCompleteDate", title: "Complete Date", dateFormatter:"dd/MM/yyyy"},
-				{name: "certExpiryDate", title: "Expiry Date", dateFormatter:"dd/MM/yyyy"},
-				{name: "docLinkId", title: "Vital Doc"}
+				{name: "certExpiryDate", title: "Expiry Date", dateFormatter:"dd/MM/yyyy"}
+				//{name: "docLinkId", title: "Vital Doc"}
 			],		
 		});
 		form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertProgressGrid]}));
