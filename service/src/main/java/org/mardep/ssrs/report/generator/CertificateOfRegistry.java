@@ -375,6 +375,8 @@ public class CertificateOfRegistry extends AbstractSrReport {
 				}
 				subreportRow.put("placeOfIncorp", "");
 			} else {			
+				params.put("pPlaceOfIncorpLabelEng", "Place of Incorporation/Registration");
+				params.put("pPlaceOfIncorpLabelChi", "公司成立/註冊地點 :");																				
 				String placeOfIncorp=null;
 				if ((owner.getOverseaCert()==null || owner.getOverseaCert().isEmpty()) &&
 						(owner.getIncortCert()==null || owner.getIncortCert().isEmpty())) {

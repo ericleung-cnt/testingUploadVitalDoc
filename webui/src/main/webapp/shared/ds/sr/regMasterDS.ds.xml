@@ -9,7 +9,8 @@
 			<valueMap>
 			   	<value ID="E">Expired</value>
 			   	<value ID="F">Rejected</value>
-			   	<value ID="W">Withdrawn</value>
+			   	<value ID="C">Withdrawn</value>
+				<value ID="W">Withdrawn</value>
 			   	<value ID="A">Under Appl.</value>
 			   	<value ID="D">De-registered</value>
 			   	<value ID="R">Registered</value>

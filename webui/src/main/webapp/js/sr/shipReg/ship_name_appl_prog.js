@@ -17,7 +17,7 @@ var regMasterSearchFields =
 			{ name:"regName", title:"Ship Name", width:180 },
 			{ name:"regChiName", title:"Chi Ship Name", width:180 },
 			{ name:"applNoSuf", title:"P/F", width:50, align:"center" },
-			{ name:"regStatus", title:"R/A/D/W", width:80, align:"center" },
+			{ name:"regStatus", title:"R/A/D/W/F", width:85, align:"center" },
 			//{ name:"regRegnType", width:120 },
 			{ name:"regDate", format:"dd/MM/yyyy", type:"date", width:80, align:"center" },
 			{ name:"deRegTime", format:"dd/MM/yyyy", width:80, align:"center" },
