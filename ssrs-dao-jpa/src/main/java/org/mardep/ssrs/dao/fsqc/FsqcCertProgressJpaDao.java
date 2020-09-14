@@ -19,6 +19,11 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 	private final String CERT_TYPE_DMLC_I = "MLC";
 	private final String CERT_TYPE_PRQC = "PRQC";
 
+	private final String PRQC_ASSESSMENT = "ASSESSMENT";
+	private final String PRQC_PASSED = "PASSED";
+	private final String PRQC_FAILED = "FAILED";
+	private final String PRQC_PROGRESS = "PROGRESS";
+
 	@PersistenceContext
 	protected EntityManager em;
 
@@ -68,17 +73,42 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 				Object[] obj = rawList.get(0);
 				entity.setCertType(obj[0].toString());
 				entity.setImono(obj[1].toString());
-				entity.setCertStatus(obj[2].toString());
+
+				// if (obj[2]!=null){
+				// 	entity.setCertStatus(obj[2].toString());
+				// } else {
+				// 	entity.setCertStatus(null);
+				// }
+				
 				if (obj[3]!=null) {
 					entity.setCertCompleteDate(sdf.parse(obj[3].toString()));
 				} else {
 					entity.setCertCompleteDate(null);
 				}
+
 				if (CERT_TYPE_PRQC.equals(certType)) {
+					if (obj[6]!=null) {
+						String workflowState = obj[6].toString().toUpperCase();
+						if (PRQC_ASSESSMENT.equals(workflowState)){
+							if (obj[2]!=null){
+								entity.setCertStatus(obj[2].toString().toUpperCase());
+							} else {
+								entity.setCertStatus(workflowState);
+							}
+						}
+					} else {
+						entity.setCertStatus(PRQC_PROGRESS);
+					}
 					if (obj[5]!=null) {
 						entity.setCertExpiryDate(sdf.parse(obj[5].toString()));
 					} else {
 						entity.setCertExpiryDate(null);
+					}
+				} else {
+					if (obj[2]!=null){
+						entity.setCertStatus(obj[2].toString().toUpperCase());
+					} else {
+						entity.setCertStatus(null);
 					}
 				}
 				return entity;				

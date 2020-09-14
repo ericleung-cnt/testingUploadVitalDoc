@@ -3543,7 +3543,7 @@ var openRegMaster = function(record, task, mode
                  {name:"applDetails.ccCountryCodePrevReg", title:"Previous Register Country", length:3, colSpan:2, characterCasing: "upper"},
                  {name:"applDetails.applDate", title:"Application Date", type:"date", dateFormatter:"dd/MM/yyyy", colSpan:2},
 
-                 {name:"applDetails.hullNo", title:"Hull No", length:8, colSpan:2, characterCasing: "upper"},
+                 {name:"applDetails.hullNo", title:"Hull No", length:20, colSpan:2, characterCasing: "upper"},
                  {name:"applDetails.cfTime", title:"Cf Time", type:"date", dateFormatter:"dd/MM/yyyy", colSpan:2},
 
                  {name:"applDetails.prevRegYear", title:"Prev Reg Year", colSpan:2}, // characterCasing: "upper"},

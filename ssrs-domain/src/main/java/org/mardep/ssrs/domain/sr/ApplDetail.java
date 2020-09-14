@@ -61,7 +61,7 @@ public class ApplDetail extends AbstractPersistentEntity<String> {
 
 	@Getter
 	@Setter
-	@Column(name = "HULL_NO",length=8)
+	@Column(name = "HULL_NO",length=20)
 	private String hullNo;
 
 	@Getter

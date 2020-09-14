@@ -4,7 +4,7 @@
 	<fields>
 		<field name="applNo" required="true" length="9" />
 		<field name="applDate" type="date" displayFormat="dd/MM/yyyy" />
-		<field name="hullNo" length="8" />
+		<field name="hullNo" length="20" />
 		<field name="prevName" length="40" />
 		<field name="prevChiName" length="30" />
 		<field name="builderCert" length="1" />

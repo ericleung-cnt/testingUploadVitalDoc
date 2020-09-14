@@ -19,7 +19,8 @@ public class OcrRegMasterJpaDao implements IOcrRegMasterDao {
 	public RegMaster getByShipNameAndIMO(String shipName, String imo) {
 		// TODO Auto-generated method stub
 		try {
-			Query query = em.createQuery("select r from RegMaster r where r.regName = :shipName and r.imoNo = :imo order by r.regDate desc")
+			//Query query = em.createQuery("select r from RegMaster r where r.regName = :shipName and r.imoNo = :imo order by r.regDate desc")
+			Query query = em.createQuery("select r from RegMaster r where r.regName = :shipName and r.imoNo = :imo and r.regStatus in ('R', 'A') order by r.regDate desc")
 					.setParameter("shipName", shipName)
 					.setParameter("imo", imo);
 			//RegMaster rm = (RegMaster) query.getSingleResult();
