@@ -881,6 +881,7 @@ public class EbsInboundService {
 	}
 	@Transactional
 	public OutstandingAtcListResponse outstandingAtcList(OutstandingAtcListRequest req) {
+		logger.info("eBS: outstandingAtcList");
 		OutstandingAtcListResponse resp = new OutstandingAtcListResponse();
 		List<Object[]> items = dnItemDao.getOutstandingDn(null);
 		for (Object[] row : items) {
@@ -893,7 +894,11 @@ public class EbsInboundService {
 	}
 	@Transactional
 	public OutstandingDnListResponse outstandingDnList(OutstandingDnListRequest req) {
+		logger.info("eBS: outstandingDnList");
+		logger.info("eBS: outstandingDnList imoList {}", String.join(",", req.imoList));
 		List<Object[]> items =  dnItemDao.getOutstandingDn(req.imoList);
+		logger.info("eBS: outstandingDnList result count {}", items.size());
+		
 		OutstandingDnListResponse resp = new OutstandingDnListResponse();
 		for (Object[] row : items) {
 			OutstandingDnListResponseDemandNote item = new OutstandingDnListResponseDemandNote();

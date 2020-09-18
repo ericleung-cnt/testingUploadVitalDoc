@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -492,9 +493,18 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 
 			Date generationTime = new Date();
 			DemandNoteItem entity = new DemandNoteItem();
+
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(generationTime);
+			int year = cal.get(Calendar.YEAR);	
+
 			entity.setActive(true);
 			// proreg, 35% initial full reg based on GT
-			entity.setAmount(new BigDecimal("0.35").multiply(rmDao.calculateRegFee(regMaster.getGrossTon())));
+			BigDecimal gt = regMaster.getGrossTon();
+			BigDecimal regFee = rmDao.calculateRegFee(gt);
+			//entity.setAmount(new BigDecimal("0.35").multiply(rmDao.calculateRegFee(regMaster.getGrossTon())));
+			entity.setAmount(new BigDecimal("0.35").multiply(regFee));
+			entity.setAdhocDemandNoteText("35% (Year " + year + "-" + (year + 1) + ")");
 			entity.setApplNo(regMaster.getApplNo());
 			entity.setChargedUnits(1);
 			entity.setFcFeeCode(fc05.getId());
@@ -504,7 +514,12 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			if (calculateAtc != null) {
 				DemandNoteItem atc = new DemandNoteItem();
 				atc.setActive(true);
-				atc.setAmount(calculateAtc.multiply(new BigDecimal("0.0833")));
+				//atc.setAmount(calculateAtc.multiply(new BigDecimal("0.0833")));
+				BigDecimal proRegATC_833 = calculateAtc.multiply(new BigDecimal("0.0833"));
+				BigDecimal proRegATC_12 = calculateAtc;
+				proRegATC_12 = proRegATC_12.divide(new BigDecimal(12), 1, RoundingMode.UP);
+				atc.setAmount(proRegATC_12);	
+				atc.setAdhocDemandNoteText("1/12 (Year " + year + "-" + (year + 1) + ")");
 				atc.setApplNo(regMaster.getApplNo());
 				atc.setChargedUnits(1);
 				atc.setFcFeeCode("07");

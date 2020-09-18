@@ -23,6 +23,7 @@ import java.util.Map;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang.time.DateUtils;
+import org.mardep.ssrs.dao.codetable.IAgentDao;
 import org.mardep.ssrs.dao.codetable.IOperationTypeDao;
 import org.mardep.ssrs.dao.codetable.IShipSubTypeDao;
 import org.mardep.ssrs.dao.codetable.IShipTypeDao;
@@ -32,6 +33,7 @@ import org.mardep.ssrs.dao.sr.IBuilderMakerDao;
 import org.mardep.ssrs.dao.sr.IOwnerDao;
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
 import org.mardep.ssrs.dao.sr.IRepresentativeDao;
+import org.mardep.ssrs.domain.codetable.Agent;
 import org.mardep.ssrs.domain.codetable.OperationType;
 import org.mardep.ssrs.domain.codetable.ShipSubType;
 import org.mardep.ssrs.domain.codetable.ShipSubTypePK;
@@ -79,6 +81,9 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	@Autowired 
 	ISystemParamDao systemParamDao;
 	
+	@Autowired
+	IAgentDao agentDao;
+
 	protected final Logger logger = LoggerFactory.getLogger(FsqcService.class);
 
 	URL urlForUpdateShipParticulars;
@@ -230,6 +235,17 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		}		
 	}
 	
+	private String getGroupOwner(String groupOwnerCode){
+		String groupOwnerName = "";
+		if (groupOwnerCode!=null && !groupOwnerCode.isEmpty()){
+			Agent foundEntity = agentDao.findById(groupOwnerCode);
+			if (foundEntity!=null){
+				groupOwnerName = foundEntity.getName();
+			}
+		} 
+		return groupOwnerName;
+	}
+
 	@Override
 	public void sendShipParticulars(int operation, String applNo)
 			throws JsonProcessingException {
@@ -336,6 +352,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		srMap.put("imoNo", rm.getImoNo());
 		srMap.put("offNo", rm.getOffNo());
 		srMap.put("callSign", rm.getCallSign());
+		srMap.put("groupOwner", getGroupOwner(rm.getAgtAgentCode()));
 		String regStatus = rm.getRegStatus();
 		if (regStatus == null) {
 			regStatus = "A";
