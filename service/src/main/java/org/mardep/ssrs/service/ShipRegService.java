@@ -516,9 +516,13 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				atc.setActive(true);
 				//atc.setAmount(calculateAtc.multiply(new BigDecimal("0.0833")));
 				BigDecimal proRegATC_833 = calculateAtc.multiply(new BigDecimal("0.0833"));
-				BigDecimal proRegATC_12 = calculateAtc;
-				proRegATC_12 = proRegATC_12.divide(new BigDecimal(12), 1, RoundingMode.UP);
-				atc.setAmount(proRegATC_12);	
+				BigDecimal proRegATC_12_RoundUp = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.UP);
+				BigDecimal proRegATC_12_Ceiling = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.CEILING);
+				BigDecimal proRegATC_12_Floor = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.FLOOR);
+				BigDecimal proRegATC_12_HalfEven = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.HALF_EVEN);
+				BigDecimal proRegATC_12_HalfUp = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.HALF_UP);
+				//proRegATC_12_RoundUp = proRegATC_12_RoundUp.divide(new BigDecimal(12), 1, RoundingMode.UP);
+				atc.setAmount(proRegATC_12_HalfUp);	
 				atc.setAdhocDemandNoteText("1/12 (Year " + year + "-" + (year + 1) + ")");
 				atc.setApplNo(regMaster.getApplNo());
 				atc.setChargedUnits(1);

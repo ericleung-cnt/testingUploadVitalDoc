@@ -131,7 +131,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
 		srMap.put("applNo", applNo);
-		srMap.put("groupOwner", groupOwner);
+		srMap.put("groupOwner", groupOwner); 
 		srMap.put("country", country);
 		if (applicationDate==null) {
 			srMap.put("applicationDate", null);
