@@ -81,11 +81,11 @@ public class VmssController {
 				}
 				break;
 			default:
-				map.put("Message", "ERROR");
+				map.put("Message", "Unknown type: " + type);
 				break;
 			}
 		} else {
-			map.put("Message", "ERROR");
+			map.put("Message", "Missing parameter 'type'");
 		}
 		vmssLogMapStr(map);
 		ResponseEntity<Map<String, String>> re = new ResponseEntity<Map<String, String>>(map, HttpStatus.OK);
@@ -97,7 +97,7 @@ public class VmssController {
 		logger.info("type=" + type + ",code=" + code);
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		if (code == null || type == null) {
-			map.put("Message", "ERROR");
+			map.put("Message", "Missing parameter 'code' or 'type'");
 		} else {
 			RegMaster criteria = new RegMaster();
 			switch (type) {
@@ -110,7 +110,7 @@ public class VmssController {
 			case "FILENO":
 				break;
 			default:
-				map.put("Message", "ERROR");
+				map.put("Message", "Unknown type: " + type);
 				break;
 			}
 			if (map.isEmpty()) {
