@@ -2226,7 +2226,11 @@ var openRegMaster = function(record, task, mode
 			form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
 			//loaded();
 			var i;
+			btnSrRequestCertFSQC.setDisabled(false);
 			for (i=0; i<fsqcCertProgressData.length; i++){
+				if (fsqcCertProgressData[i].certType=="BCC"){
+					btnSrRequestCertFSQC.setDisabled(true);
+				}
 				if (fsqcCertProgressData[i].certType=="PRQC"){
 					var currentDate = new Date();
 					if (fsqcCertProgressData[i].certExpiryDate==null){
@@ -3688,7 +3692,11 @@ var openRegMaster = function(record, task, mode
 						form.fsqcCertProgressGrid.setData(fsqcCertProgressData);
 						//loaded();
 						var i;
+						btnSrRequestCertFSQC.setDisabled(false);
 						for (i=0; i<fsqcCertProgressData.length; i++){
+							if (fsqcCertProgressData[i].certType=="BCC"){
+								btnSrRequestCertFSQC.setDisabled(true);
+							}
 							if (fsqcCertProgressData[i].certType=="PRQC"){
 								var currentDate = new Date();
 								if (fsqcCertProgressData[i].certExpiryDate==null){
@@ -4439,7 +4447,7 @@ var openRegMaster = function(record, task, mode
 
 		form.fsqcCertProgressGrid = isc.ListGrid.create({
 			width: 1000,
-			height: 120,
+			height: 160,
 			selectionType:"single",
 			fields: [
 				{name: "certType", title: "Cert Type"},
@@ -4451,7 +4459,6 @@ var openRegMaster = function(record, task, mode
 		});
 		form.getItem("fsqcCerts").canvas.addChild(isc.VLayout.create({members:[form.fsqcCertProgressGrid]}));
 		form.getItem("fsqcCerts").canvas.children[0].setWidth(1000);
-
 	
 	var docFields = [];
 

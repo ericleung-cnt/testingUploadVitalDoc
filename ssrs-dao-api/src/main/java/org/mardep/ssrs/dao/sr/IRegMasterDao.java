@@ -190,13 +190,13 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	RegMaster checkTrackCode(String trackCode);
 
-	void logFsqc(String jsonInputString, String string);
+	void logFsqcResponse(String jsonInputString, String string);
 
-	void logFsqc(String jsonInputString, Exception e);
+	void logFsqcResponse(String jsonInputString, Exception e);
 
-	void logLvpfs(String jsonInputString, String string);
+	void logLvpfsResponse(String jsonInputString, String string);
 
-	void logLvpfs(String jsonInputString, Exception e);
+	void logLvpfsResponse(String jsonInputString, Exception e);
 
 	BigDecimal calculateRegFee(BigDecimal grossTon);
 	
@@ -214,5 +214,6 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	RegMaster findRegMasterHistory(Long txId) throws Exception;
 
+	void logFsqcRequest(String jsonRcvRequest, String jsonReplyResult);
 
 }

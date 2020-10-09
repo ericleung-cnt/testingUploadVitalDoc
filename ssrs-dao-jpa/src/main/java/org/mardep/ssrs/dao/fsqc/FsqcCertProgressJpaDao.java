@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 
 	private final String CERT_TYPE_BCC = "BCC";
+	private final String CERT_TYPE_CLC = "CLC";
 	private final String CERT_TYPE_MSMC = "MSMC";
 	private final String CERT_TYPE_DMLC_I = "MLC";
 	private final String CERT_TYPE_PRQC = "PRQC";
@@ -30,6 +31,11 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 	@Override
 	public String getCertTypeNameBcc(){
 		return CERT_TYPE_BCC;
+	}
+
+	@Override
+	public String getCertTypeNameClc(){
+		return CERT_TYPE_CLC;
 	}
 
 	@Override

@@ -1735,7 +1735,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		return null;
 	}
 	@Override
-	public void logFsqc(String jsonInputString, String string) {
+	public void logFsqcResponse(String jsonInputString, String string) {
 		Query query = em.createNativeQuery("insert into FSQC_RESPONSE (SENT_DATE, SENT, REPLY, SUCCESS) values (?,?,?,?)");
 		query.setParameter(1, new Date());
 		query.setParameter(2, jsonInputString);
@@ -1744,7 +1744,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		query.executeUpdate();
 	}
 	@Override
-	public void logFsqc(String jsonInputString, Exception e) {
+	public void logFsqcResponse(String jsonInputString, Exception e) {
 		Query query = em.createNativeQuery("insert into FSQC_RESPONSE (SENT_DATE, SENT, REPLY, SUCCESS) values (?,?,?,?)");
 		query.setParameter(1, new Date());
 		query.setParameter(2, jsonInputString);
@@ -1755,7 +1755,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	}
 
 	@Override
-	public void logLvpfs(String jsonInputString, String string) {
+	public void logLvpfsResponse(String jsonInputString, String string) {
 		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT_MSG, REPLY_MSG, SUCCESS) values (?,?,?,?)");
 		query.setParameter(1, new Date());
 		query.setParameter(2, jsonInputString);
@@ -1765,7 +1765,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	}
 	
 	@Override
-	public void logLvpfs(String jsonInputString, Exception e) {
+	public void logLvpfsResponse(String jsonInputString, Exception e) {
 		Query query = em.createNativeQuery("insert into LVPFS_RESPONSE (SENT_DATE, SENT_MSG, REPLY_MSG, SUCCESS) values (?,?,?,?)");
 		query.setParameter(1, new Date());
 		query.setParameter(2, jsonInputString);
@@ -1878,6 +1878,16 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 			logger.error("Fail to fetch RegMaster History-{}, Exception-{}", new Object[]{txId, ex}, ex);
 			throw ex;
 		}
+	}
+
+
+	@Override
+	public void logFsqcRequest(String jsonRcvRequest, String jsonReplyResult) {
+		Query query = em.createNativeQuery("insert into FSQC_REQUEST (RCV_DATE, REQUEST, REPLY_TO_FSQC) values (?,?,?)");
+		query.setParameter(1, new Date());
+		query.setParameter(2, jsonRcvRequest);
+		query.setParameter(3, jsonReplyResult);
+		query.executeUpdate();
 	}
 
 }

@@ -204,7 +204,7 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 	public void vmssLog(String jsonStr, String vmssReply)
 	{
 		try {
-			rmDao.logLvpfs(jsonStr, vmssReply);		
+			rmDao.logLvpfsResponse(jsonStr, vmssReply);		
 		} catch ( Exception ex) {
 			logger.error(ex.getMessage());
 		}

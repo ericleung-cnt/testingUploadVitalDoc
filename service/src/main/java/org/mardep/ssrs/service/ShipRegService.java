@@ -504,7 +504,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			BigDecimal regFee = rmDao.calculateRegFee(gt);
 			//entity.setAmount(new BigDecimal("0.35").multiply(rmDao.calculateRegFee(regMaster.getGrossTon())));
 			entity.setAmount(new BigDecimal("0.35").multiply(regFee));
-			entity.setAdhocDemandNoteText("35% (Year " + year + "-" + (year + 1) + ")");
+			//entity.setAdhocDemandNoteText("35% (Year " + year + "-" + (year + 1) + ")");
 			entity.setApplNo(regMaster.getApplNo());
 			entity.setChargedUnits(1);
 			entity.setFcFeeCode(fc05.getId());
@@ -523,7 +523,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				BigDecimal proRegATC_12_HalfUp = calculateAtc.divide(new BigDecimal(12), 1, RoundingMode.HALF_UP);
 				//proRegATC_12_RoundUp = proRegATC_12_RoundUp.divide(new BigDecimal(12), 1, RoundingMode.UP);
 				atc.setAmount(proRegATC_12_HalfUp);	
-				atc.setAdhocDemandNoteText("1/12 (Year " + year + "-" + (year + 1) + ")");
+				//atc.setAdhocDemandNoteText("1/12 (Year " + year + "-" + (year + 1) + ")");
 				atc.setApplNo(regMaster.getApplNo());
 				atc.setChargedUnits(1);
 				atc.setFcFeeCode("07");
@@ -1007,6 +1007,8 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 						atc.setChargedUnits(1);
 						atc.setFcFeeCode("39");
 						atc.setGenerationTime(generationTime);
+						int year = Calendar.getInstance().get(Calendar.YEAR);
+						atc.setAdhocDemandNoteText("100% (Year " + year + "-" + (year + 1)+ ")");		
 						demandNoteService.addItem(atc);
 					}
 

@@ -32,11 +32,13 @@ public class FsqcCertProgressService implements IFsqcCertProgressService {
 		// TODO Auto-generated method stub
 		List<FsqcCertProgress> progressList = new ArrayList<FsqcCertProgress>();
 		FsqcCertProgress certBCC = getBCC(imo);
+		FsqcCertProgress certCLC = getCLC(imo);
 		FsqcCertProgress certMSMC = getMSMC(imo);
 		FsqcCertProgress certDMLC = getDMLC_I(imo);
 		FsqcCertProgress certPRQC = getPRQC(imo);
 		
 		if (certBCC != null) progressList.add(certBCC);
+		if (certCLC != null) progressList.add(certCLC);
 		if (certMSMC != null) progressList.add(certMSMC);
 		if (certDMLC != null) progressList.add(certDMLC);
 		if (certPRQC != null) progressList.add(certPRQC);
@@ -54,6 +56,16 @@ public class FsqcCertProgressService implements IFsqcCertProgressService {
 		}
 	}
 	
+	private FsqcCertProgress getCLC(String imo) throws Exception {
+		try {
+			FsqcCertProgress entity = certProgressDao.get(certProgressDao.getCertTypeNameClc(), imo);
+			return entity;
+		} catch (Exception ex) {
+			logger.error("Fail to fetch BCC IMO: {}, Exception: {}", imo, ex);
+			throw ex;
+		}
+	}
+
 	private FsqcCertProgress getMSMC(String imo) throws Exception {
 		try {
 			FsqcCertProgress entity = certProgressDao.get(certProgressDao.getCertTypeNameMsmc(), imo);

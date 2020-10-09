@@ -215,11 +215,11 @@ public class FsqcService extends AbstractService implements IFsqcService {
 							mail.send(failMsg, "Send FSQC failure", jsonStr + "<br> " + string);
 						}
 					} 
-					rmDao.logFsqc(jsonStr, string);
+					rmDao.logFsqcResponse(jsonStr, string);
 				}
 			} catch (IOException ex) {
 				if (retry == maxRetry) {
-					rmDao.logFsqc(jsonStr, ex);
+					rmDao.logFsqcResponse(jsonStr, ex);
 					String failMsg = System.getProperty("FsqcService.FailMsg");
 					logger.info("Send FSQC IO failure {} {} {} {}", urlToPush, ex.getMessage(), failMsg, jsonStr);
 					if (failMsg != null) {
@@ -467,11 +467,11 @@ public class FsqcService extends AbstractService implements IFsqcService {
 							mail.send(failMsg, "Send FSQC failure", jsonInputString + "<br> " + string);
 						}
 					}
-					rmDao.logFsqc(jsonInputString, string);
+					rmDao.logFsqcResponse(jsonInputString, string);
 				}
 			} catch (IOException ex) {
 				if (retry == maxRetry) {
-					rmDao.logFsqc(jsonInputString, ex);
+					rmDao.logFsqcResponse(jsonInputString, ex);
 					String failMsg = System.getProperty("FsqcService.FailMsg");
 					logger.info("Send FSQC IO failure {} {} {} {}", urlForUpdateShipParticulars, ex.getMessage(), failMsg, jsonInputString);
 					if (failMsg != null) {
@@ -490,9 +490,11 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	@Transactional
 	public void updateShipDetainFromFSQC(FsqcShipDetainData recvdata, FsqcShipResultData result) {
 		logger.debug("recv_data" + recvdata.toString());
+		
 		if (recvdata.getDetainDate() == null || recvdata.getImoNo() == null) {
 			result.setSuccess(false);
 			result.setMessage("missing necessary information");
+			logFsqcRequest(recvdata, result);
 			return;
 		}
 
@@ -522,6 +524,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 						} else {
 							result.setMessage("current ship detain record is newer or same, update abort");
 							result.setSuccess(false);
+							logFsqcRequest(recvdata, result);
 							return;
 						}
 					} else {
@@ -544,6 +547,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 					}else {
 						result.setMessage("current ship detain record is newer or same, update abort");
 						result.setSuccess(false);
+						logFsqcRequest(recvdata, result);
 						return;	
 					}
 				}
@@ -566,7 +570,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 				result.setSuccess(false);
 
 			}
-
+			logFsqcRequest(recvdata, result);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMessage(e.getMessage());
@@ -630,4 +634,19 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	}
 	
+	private void logFsqcRequest(FsqcShipDetainData recvdata, FsqcShipResultData result) {
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+			ObjectMapper om = new ObjectMapper();
+			om.setDateFormat(sdf);
+			String jsonRcvRequest = om.writeValueAsString(recvdata);
+			String jsonReplyResult = om.writeValueAsString(result);
+			rmDao.logFsqcRequest(jsonRcvRequest, jsonReplyResult);
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			logger.error("Process FSQC Request Fail {} {} ", e.getMessage(), recvdata);
+		}
+
+	}
 }
