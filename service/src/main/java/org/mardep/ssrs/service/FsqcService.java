@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.transaction.Transactional;
@@ -486,11 +488,26 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		}
 	}
 
+	private void debugShowDate(String label, Date date){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		System.out.println(label + ":" + sdf.format(date));
+	}
+
+	private Date getDatePart(Date date){
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date datePart = sdf.parse(sdf.format(date));
+			return datePart;	
+		} catch (ParseException pex){
+			pex.printStackTrace();
+			return null;
+		}
+	}
     @Override
 	@Transactional
 	public void updateShipDetainFromFSQC(FsqcShipDetainData recvdata, FsqcShipResultData result) {
 		logger.debug("recv_data" + recvdata.toString());
-		
+
 		if (recvdata.getDetainDate() == null || recvdata.getImoNo() == null) {
 			result.setSuccess(false);
 			result.setMessage("missing necessary information");
@@ -498,52 +515,46 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			return;
 		}
 
-		RegMaster lastest_appl = getLastestApplByImoNo(recvdata.getImoNo());
+		RegMaster latestAppl = getLatestApplByImoNo(recvdata.getImoNo());
 		int maxLen = 160;
 
 		try {
-			if (lastest_appl != null) {
-				Date currDetainDate = lastest_appl.getDetainDate();
-				Date newDetainDate = lastest_appl.getDetainDate();
-//				logger.debug("currDetainDate " + currDetainDate);
-//				logger.debug("recvdata DetainDate " + recvdata.getDetainDate());
+			if (latestAppl != null) {
+				Date currDetainDate = getDatePart(latestAppl.getDetainDate());
+				Date newDetainDate = getDatePart(latestAppl.getDetainDate());
+				Date rcvDetainDate = getDatePart(recvdata.getDetainDate());
 
 				if (recvdata.getPrevDetainDate() == null) {
-//					logger.debug("recvdata.getPrevDetainDate()==null");
-					// compare exist&detainDate and store lastest one
-					// exist is not null
 					if (currDetainDate != null) {
-//						logger.debug("currDetainDate!=null");
-						// receive date is newer,need to update&move
-						if (!DateUtils.isSameDay(currDetainDate, recvdata.getDetainDate())
-								&& recvdata.getDetainDate().after(currDetainDate)) {
-//							logger.debug("compareTo>0");
-							newDetainDate = recvdata.getDetainDate();
-							lastest_appl.setDetainDesc(getNewDetainDesc(lastest_appl, maxLen));
-							logger.info("update ship: " + lastest_appl.getImoNo() +"to "+ newDetainDate+ " successful!"  );
+						debugShowDate("rcv detain date", rcvDetainDate); // recvdata.getDetainDate());
+						debugShowDate("curr detain date", currDetainDate);
+						if (!DateUtils.isSameDay(currDetainDate, rcvDetainDate)) { // recvdata.getDetainDate())
+								//&& recvdata.getDetainDate().after(currDetainDate)) {
+								//&& rcvDetainDate.after(currDetainDate)) { if not same day, proceed to set new detin date
+							newDetainDate = rcvDetainDate; // recvdata.getDetainDate();
+							//lastest_appl.setDetainDesc(getNewDetainDesc(lastest_appl, maxLen));
+							logger.info("update ship: " + latestAppl.getImoNo() +"to "+ newDetainDate+ " successful!"  );
 						} else {
-							result.setMessage("current ship detain record is newer or same, update abort");
+							result.setMessage("current ship detain record and receive detain same, update abort");
 							result.setSuccess(false);
 							logFsqcRequest(recvdata, result);
 							return;
 						}
 					} else {
-//						logger.debug("currDetainDate==null");
-						newDetainDate = recvdata.getDetainDate();
+						newDetainDate = rcvDetainDate; // recvdata.getDetainDate();
 					}
 				} else {
-//					logger.debug("recvdata.getPrevDetainDate()!=null");
-					// if prevdate == currentdate , then update
+					Date rcvPrevDetainDate = getDatePart(recvdata.getPrevDetainDate());
+
 					if (currDetainDate == null) {
-//						logger.info("currDetainDate==null");
-						newDetainDate = recvdata.getDetainDate();
-					} else if (DateUtils.isSameDay(recvdata.getPrevDetainDate(), currDetainDate)
-							|| (!DateUtils.isSameDay(currDetainDate, recvdata.getDetainDate())
-									&& recvdata.getDetainDate().after(currDetainDate))) {
-//						logger.info("recvdata.getPrevDetainDate()==currDetainDate");
-						newDetainDate = recvdata.getDetainDate();
-						lastest_appl.setDetainDesc(getNewDetainDesc(lastest_appl, maxLen));
-						logger.info("update ship: " + lastest_appl.getImoNo() +"to "+ newDetainDate+ " successful!"  );
+						newDetainDate = rcvDetainDate; // recvdata.getDetainDate();
+					} else if (DateUtils.isSameDay(currDetainDate, rcvPrevDetainDate) //recvdata.getPrevDetainDate(), currDetainDate)
+							|| (!DateUtils.isSameDay(currDetainDate, rcvDetainDate))){ // recvdata.getDetainDate())
+									//&& recvdata.getDetainDate().after(currDetainDate))) {
+										//&& rcvDetainDate.after(currDetainDate))) { if not same day, proceed to set new detain date
+						newDetainDate = rcvDetainDate; // recvdata.getDetainDate();
+						//lastest_appl.setDetainDesc(getNewDetainDesc(lastest_appl, maxLen));
+						logger.info("update ship: " + latestAppl.getImoNo() +"to "+ newDetainDate+ " successful!"  );
 					}else {
 						result.setMessage("current ship detain record is newer or same, update abort");
 						result.setSuccess(false);
@@ -559,12 +570,13 @@ public class FsqcService extends AbstractService implements IFsqcService {
 					detainStatus = (recvdata.getDetained().intValue()) == 1 ? "Y" : "N";
 				}
 
-				lastest_appl.setDetainStatus(detainStatus);
-				lastest_appl.setDetainDate(newDetainDate);
+				//latest.setDetainStatus(detainStatus);
+				latestAppl.setDetainDate(newDetainDate);
+				latestAppl.setDetainDesc(addDetainDateToDetainDesc(latestAppl, rcvDetainDate, maxLen));
 
-				rmDao.save(lastest_appl);
+				rmDao.save(latestAppl);
 				result.setSuccess(true);
-				result.setMessage("update ship: " + lastest_appl.getImoNo() + " successful!");
+				result.setMessage("update ship: " + latestAppl.getImoNo() + " successful!");
 			} else {
 				result.setMessage("ship_don't_exist");
 				result.setSuccess(false);
@@ -603,7 +615,31 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	}
 
 
-	private RegMaster getLastestApplByImoNo(String imoNo) {
+	private String addDetainDateToDetainDesc(RegMaster latestAppl, Date detainDate, int maxLen){
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+		String detainDesc = latestAppl.getDetainDesc() == null ? "" : latestAppl.getDetainDesc();
+		if ((maxLen-detainDesc.length())<15){	// no room for new detain date
+			String[] descriptions = detainDesc.split(",");
+			if (descriptions.length>1){
+				detainDesc = "";
+				for (int i=1; i<descriptions.length; i++){
+					if (detainDesc.length()>0){
+						detainDesc = detainDesc + ", ";
+					}
+					detainDesc = detainDesc + descriptions[i];
+				}
+			}
+		} 
+		if (detainDesc.length()>0){
+			detainDesc = detainDesc + ", " + sdf.format(detainDate);
+		} else {
+			detainDesc = sdf.format(detainDate);
+		}
+
+		return detainDesc;
+	}
+
+	private RegMaster getLatestApplByImoNo(String imoNo) {
 		List<RegMaster> ships_list = rmDao.findByImo(imoNo);
 		if (ships_list == null) {
 			return null;
