@@ -67,7 +67,7 @@ public class DemandNoteItemJpaDao extends AbstractJpaDao<DemandNoteItem, Long> i
 	public List<Object[]> getOutstandingDn(List<String> imoNoList) {
 		String jpel = "select rm.applNo, rm.regName, rm.regChiName, dni.generationTime, rm.atfDueDate, dni.amount, dni.itemId, rm.regNetTon, rm.imoNo "
 				+ " from DemandNoteItem dni , RegMaster rm "
-				+ "where dni.applNo = rm.applNo and dni.fcFeeCode = '01' and dni.dnDemandNoteNo is null "
+				+ "where dni.applNo = rm.applNo and dni.active=1 and dni.fcFeeCode = '01' and dni.dnDemandNoteNo is null "
 				+ "and rm.atfDueDate between :todayNextYear and :tmrNextYear ";
 
 		if (imoNoList == null) {
