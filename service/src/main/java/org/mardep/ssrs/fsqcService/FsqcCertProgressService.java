@@ -36,13 +36,15 @@ public class FsqcCertProgressService implements IFsqcCertProgressService {
 		FsqcCertProgress certMSMC = getMSMC(imo);
 		FsqcCertProgress certDMLC = getDMLC_I(imo);
 		FsqcCertProgress certPRQC = getPRQC(imo);
-		
+		FsqcCertProgress certWRC = getWRC(imo);
+
 		if (certBCC != null) progressList.add(certBCC);
 		if (certCLC != null) progressList.add(certCLC);
 		if (certMSMC != null) progressList.add(certMSMC);
 		if (certDMLC != null) progressList.add(certDMLC);
 		if (certPRQC != null) progressList.add(certPRQC);
-		
+		if (certWRC != null) progressList.add(certWRC);
+
 		return progressList;
 	}
 
@@ -103,4 +105,15 @@ public class FsqcCertProgressService implements IFsqcCertProgressService {
 			throw ex;
 		}
 	}
+
+	private FsqcCertProgress getWRC(String imo) throws Exception {
+		try {
+			FsqcCertProgress entity = certProgressDao.get(certProgressDao.getCertTypeNameWrc(), imo);
+			return entity;
+		} catch (Exception ex) {
+			logger.error("Fail to fetch WRC IMO: {}, Exception: {}", imo, ex);
+			throw ex;
+		}
+	}
+
 }

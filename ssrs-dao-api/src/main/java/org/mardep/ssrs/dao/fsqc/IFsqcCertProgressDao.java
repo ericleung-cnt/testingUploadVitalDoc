@@ -13,5 +13,6 @@ public interface IFsqcCertProgressDao {
 	String getCertTypeNameMsmc();
 	String getCertTypeNameDmlcI();
 	String getCertTypeNamePrqc();
-
+	String getCertTypeNameWrc();
+	
 }

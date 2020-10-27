@@ -19,11 +19,15 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 	private final String CERT_TYPE_MSMC = "MSMC";
 	private final String CERT_TYPE_DMLC_I = "MLC";
 	private final String CERT_TYPE_PRQC = "PRQC";
+	private final String CERT_TYPE_WRC = "WRC";
 
 	private final String PRQC_ASSESSMENT = "ASSESSMENT";
 	private final String PRQC_PASSED = "PASSED";
 	private final String PRQC_FAILED = "FAILED";
 	private final String PRQC_PROGRESS = "PROGRESS";
+
+	private final String WRC_PROGRESS = "PROGRESS";
+	private final String WRC_COMPLETED = "COMPLETED";
 
 	@PersistenceContext
 	protected EntityManager em;
@@ -54,6 +58,11 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 	}
 
 	@Override
+	public String getCertTypeNameWrc(){
+		return CERT_TYPE_WRC;
+	}
+
+	@Override
 	public FsqcCertProgress get(String certType, String imo)  throws Exception {
 		// TODO Auto-generated method stub
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -63,6 +72,10 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 			if (CERT_TYPE_PRQC.equals(certType)){
 				sql = "select Top 1 * from [dbo].[vPrqcListForSSRS]\r\n" + 
 						"where imo_no = :imo and cert_type = :certType\r\n" + 
+						"order by begin_date desc";
+			} else if (CERT_TYPE_WRC.equals(certType)){
+				sql = "select Top 1 * from [dbo].[vWrcForSSRS]\r\n" +
+						"where imo_no = :imo and cert_type = :certType\r\n" +
 						"order by begin_date desc";
 			} else {
 			//String sql = "select Top 1 * from [hkcert].[dbo].[vWorkListForSSRS]\r\n" + 
@@ -109,6 +122,12 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 						entity.setCertExpiryDate(sdf.parse(obj[5].toString()));
 					} else {
 						entity.setCertExpiryDate(null);
+					}
+				} else if (CERT_TYPE_WRC.equals(certType)){
+					if (obj[3]!=null){
+						entity.setCertStatus(WRC_COMPLETED);
+					} else {
+						entity.setCertStatus(WRC_PROGRESS);
 					}
 				} else {
 					if (obj[2]!=null){
