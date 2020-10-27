@@ -4950,7 +4950,7 @@ var openRegMaster = function(record, task, mode
 				addButtons2("fsqc.actions", [btnSrRequestFsqcPrqc]);
 			}
 			//addButtons2("fsqc.actions", [btnSrSimulateFsqcCertReply]);			
-			addButtons2("fsqc.actions", [btnFsqcCertDownload]);
+			//addButtons2("fsqc.actions", [btnFsqcCertDownload]);
 		}
 		// 20190813 actions.addMember(btnSrCheckShipName);
 		if (mode==0) {	// ship registration
