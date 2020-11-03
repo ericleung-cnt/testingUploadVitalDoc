@@ -86,7 +86,7 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 			} 
 		}
 		map.put("loa", loa);
-		map.put("LoaFt", loaft);
+		map.put("loaFt", loaft);
 		map.put("breadth", b);
 		map.put("breadthFt", bft);
 		
