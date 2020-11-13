@@ -124,7 +124,7 @@ public class LvpfsService extends AbstractService implements ILvpfsService {
 		logger.info("sending {} to lvpfs url {} {} {} {}", applNo, url.getProtocol(), url.getHost(), url.getFile(), url.getPort());
 		RegMaster rm = rmDao.findById(applNo);
 		LinkedHashMap<String,Object> linkedHashMap = new LinkedHashMap<String, Object>();
-		linkedHashMap.put("shipID", applNo);
+		linkedHashMap.put("shipId", applNo);
 		write(rm, linkedHashMap);
 		
 		String jsonInputString = mapper.writeValueAsString(linkedHashMap);
