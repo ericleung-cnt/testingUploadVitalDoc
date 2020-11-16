@@ -62,10 +62,15 @@ public class OcrDbServiceShipRegistration implements IOcrDbServiceShipRegistrati
 			owners.add(owner);
 		}
 		if (xml.getDemiseName()!=null && !xml.getDemiseName().isEmpty()) {
-			Owner demise = new Owner();
-			demise.setName(xml.getDemiseName());
-			demise.setType(Owner.TYPE_DEMISE);
-			owners.add(demise);
+			String demiseName = xml.getDemiseName();
+			demiseName = demiseName.trim();
+			if (!demiseName.isEmpty()){
+				Owner demise = new Owner();
+				//demise.setName(xml.getDemiseName());
+				demise.setName(demiseName);
+				demise.setType(Owner.TYPE_DEMISE);
+				owners.add(demise);	
+			}
 		}
 
 		Representative rp = new Representative();
