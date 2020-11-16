@@ -38,13 +38,14 @@ function fsqcLinked(imo){
 	}
 };
 
-function prqcRequired(regStatus, shipType){
-	if (regStatus == 'A'){
-		if (shipType=="TUG" || shipType=="YHT"){
+function prqcRequired(regStatus, shipType, operationType, gt){
+	if (regStatus == 'A' && operationType=="OGV" && gt>=500){
+		//if (shipType=="TUG" || shipType=="YHT"){
+		if (shipType=="PAX") {
 			return false;
-		} else {
+		} else {			
 			return true;
-		}
+		}	
 	} else {
 		return false;
 	}
@@ -4946,7 +4947,10 @@ var openRegMaster = function(record, task, mode
 			if (fsqcCertRequired(form.getField("regStatus").getValue())){
 				addButtons2("fsqc.actions", [btnSrRequestCertFSQC]);
 			}
-			if (prqcRequired(form.getField("regStatus").getValue(), form.getField("shipTypeCode").getValue()) == true){
+			if ( prqcRequired(form.getField("regStatus").getValue(), 
+				form.getField("shipTypeCode").getValue(),
+				form.getField("operationTypeCode").getValue(),
+				form.getField("grossTon").getValue() ) == true){
 				addButtons2("fsqc.actions", [btnSrRequestFsqcPrqc]);
 			}
 			//addButtons2("fsqc.actions", [btnSrSimulateFsqcCertReply]);			
