@@ -82,16 +82,60 @@ public class RpShipOwnerJpaDao implements IRpShipOwnerDao {
 		// [16] owner addr2
 		// [17] owner addr3
 		try {
-			String sql = "select " +
-						"r.REP_NAME1 as rpName, r.ADDRESS1 as rpAddr1, r.ADDRESS2 as rpAddr2, r.ADDRESS3 as rpAddr3, " + 
-						"r.TEL_NO as rpTel, r.FAX_NO as rpFax, r.TELEX_NO as rpTelex, " +
-						"rm.REG_NAME, rm.REG_CNAME, rm.OFF_NO, rm.CALL_SIGN, rm.GROSS_TON, rm.REG_NET_TON, rm.SURVEY_SHIP_TYPE, " +
-						" o.OWNER_NAME as oName, o.ADDRESS1 as oAddr1, o.ADDRESS2 as oAddr2, o.ADDRESS3 as oAddr3 " +
-						"from REPRESENTATIVES r " +
-						"inner join REG_MASTERS rm on r.RM_APPL_NO = rm.APPL_NO " +
-						"inner join OWNERS o on o.RM_APPL_NO = rm.APPL_NO " +
-						"where len(r.REP_NAME1)>0 and ((rm.REG_STATUS='R' and rm.REG_DATE<=:forDate) or (rm.REG_STATUS='D' and rm.REG_DATE>:forDate)) " +
-						"order by r.REP_NAME1";
+//			String sql = "select " +
+//						"r.REP_NAME1 as rpName, r.ADDRESS1 as rpAddr1, r.ADDRESS2 as rpAddr2, r.ADDRESS3 as rpAddr3, " + 
+//						"r.TEL_NO as rpTel, r.FAX_NO as rpFax, r.TELEX_NO as rpTelex, " +
+//						"rm.REG_NAME, rm.REG_CNAME, rm.OFF_NO, rm.CALL_SIGN, rm.GROSS_TON, rm.REG_NET_TON, rm.SURVEY_SHIP_TYPE, " +
+//						" o.OWNER_NAME as oName, o.ADDRESS1 as oAddr1, o.ADDRESS2 as oAddr2, o.ADDRESS3 as oAddr3, " + 
+//						" o.OWNER_TYPE as oType, o.INT_MIXED as oShare " +
+//						"from REPRESENTATIVES r " +
+//						"inner join REG_MASTERS rm on r.RM_APPL_NO = rm.APPL_NO " + 
+//						"inner join OWNERS o on o.RM_APPL_NO = rm.APPL_NO " +
+//						"where len(r.REP_NAME1)>0 and ((rm.REG_STATUS='R' and rm.REG_DATE<=:forDate) or (rm.REG_STATUS='D' and rm.REG_DATE>:forDate)) " +
+//						" and o.OWNER_TYPE<>'D' and o.INT_MIXED>0  " + 
+//						"order by r.REP_NAME1";
+			String sql =  
+					"select \r\n" + 
+					"        rph.REP_NAME1 as rpName, \r\n" + 
+					"        rph.ADDRESS1 as rpAddr1, \r\n" + 
+					"        rph.ADDRESS2 as rpAddr2, \r\n" + 
+					"        rph.ADDRESS3 as rpAddr3, \r\n" + 
+					"        rph.TEL_NO as rpTel, \r\n" + 
+					"        rph.FAX_NO as rpFax, \r\n" + 
+					"        rph.TELEX_NO as rpTelex, \r\n" + 
+					"        rmh.REG_NAME, \r\n" + 
+					"        rmh.REG_CNAME, \r\n" + 
+					"        rmh.OFF_NO, \r\n" + 
+					"        rmh.CALL_SIGN, \r\n" + 
+					"        rmh.GROSS_TON, \r\n" + 
+					"        rmh.REG_NET_TON, \r\n" + 
+					"        rmh.SURVEY_SHIP_TYPE,\r\n" + 
+					//"		rmh.REG_DATE,\r\n14" + 
+					"        owh.OWNER_NAME as oName, \r\n" + 
+					"        owh.ADDRESS1 as oAddr1, \r\n" + 
+					"        owh.ADDRESS2 as oAddr2, \r\n" + 
+					"        owh.ADDRESS3 as oAddr3,\r\n" + 
+					"		owh.OWNER_TYPE as oType,\r\n" + 
+					"		owh.INT_MIXED as oShare  \r\n" + 
+					"from \r\n" + 
+					"	(select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, RM_APPL_NO, AT_SER_NUM from TRANSACTIONS \r\n" + 
+					"		where DATE_CHANGE <= :forDate) lr\r\n" + 
+					"inner join REPRESENTATIVES_HIST rph on rph.TX_ID = lr.AT_SER_NUM\r\n" + 
+					"inner join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM\r\n" + 
+					"inner join OWNERS_HIST owh on owh.tx_id = lr.AT_SER_NUM\r\n" + 
+					"where lr.rowNum = 1\r\n" + 
+					"	and  len(rph.REP_NAME1)>0  \r\n" + 
+					"	and ( \r\n" + 
+					"			( \r\n" + 
+					"		        rmh.REG_STATUS='R' and rmh.REG_DATE<=:forDate \r\n" + 
+					"			)  \r\n" + 
+					"            or \r\n" + 
+					"			( \r\n" + 
+					"                rmh.REG_STATUS='D' and rmh.DEREG_TIME>:forDate \r\n" + 
+					"            ) \r\n" + 
+					"        )\r\n" + 
+					"	and owh.Owner_type<>'D' and owh.INT_MIXED>0  \r\n" + 
+					"order by rph.REP_NAME1\r\n";
 			Query query = em.createNativeQuery(sql)
 					.setParameter("forDate", forDate);
 			List<Object[]> rawList = query.getResultList();
@@ -115,6 +159,8 @@ public class RpShipOwnerJpaDao implements IRpShipOwnerDao {
 				rp.setOwnerAddr1(arr[15]==null ? "" : arr[15].toString());
 				rp.setOwnerAddr2(arr[16]==null ? "" : arr[16].toString());
 				rp.setOwnerAddr3(arr[17]==null ? "" : arr[17].toString());
+				//rp.setOwnerType(arr[18]==null ? "" : arr[18].toString());
+				//rp.setOwnerShare(new BigDecimal(arr[19]==null ? "0" : arr[19].toString()));
 				resultList.add(rp);
 			}
 			return resultList;

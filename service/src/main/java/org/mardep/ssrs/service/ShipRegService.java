@@ -178,7 +178,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 					es.submit(()-> {
 						try {
 							logger.info("ready to send lvpfs");
-							lvpfs.send(operation, applNo_);
+							if (false) lvpfs.send(operation, applNo_);	// resume when lvpfs ready
 						} catch (JsonProcessingException e) {
 							logger.warn("failed to write {}", e);
 						}

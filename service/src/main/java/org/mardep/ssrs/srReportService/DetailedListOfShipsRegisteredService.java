@@ -35,7 +35,7 @@ public class DetailedListOfShipsRegisteredService implements IDetailedListOfShip
 
 		List<RegisteredShipOwner> shipOwners = regMasterDao.getRegisteredShipOwnersCurrent(applNoList);
 		shipOwners = shipOwners.parallelStream()
-				.filter(item->"C".equals(item.getOwnerType()))
+				.filter(item->!"D".equals(item.getOwnerType()))
 				.collect(Collectors.toList());
 		
 		for (RegisteredShip ship : ships) {
@@ -47,7 +47,7 @@ public class DetailedListOfShipsRegisteredService implements IDetailedListOfShip
 
 		List<RegisteredShipOwner> shipOwnersHistory = regMasterDao.getRegisteredShipOwnersHistory(txIdList);
 		shipOwnersHistory = shipOwnersHistory.parallelStream()
-				.filter(item->"C".equals(item.getOwnerType()))
+				.filter(item->!"D".equals(item.getOwnerType()))
 				.collect(Collectors.toList());
 
 		for (RegisteredShip ship : ships) {

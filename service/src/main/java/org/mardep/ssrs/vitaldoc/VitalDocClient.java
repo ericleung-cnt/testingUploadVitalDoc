@@ -956,12 +956,12 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	}
 	
 	private void createShortcutInFsqcVitalDoc(Long docId, Long destDirId) throws IOException{
-		String sessionId = getSessionId();
-		DocumentCreateShortCut shortcut = new DocumentCreateShortCut();
-		shortcut.setSessionIDIn(sessionId);
-		shortcut.setDocID(docId);
-		shortcut.setDestDirID(destDirId);
-		DocumentCreateShortCutResponse resp = (DocumentCreateShortCutResponse) send(shortcut);
+		// String sessionId = getSessionId();
+		// DocumentCreateShortCut shortcut = new DocumentCreateShortCut();
+		// shortcut.setSessionIDIn(sessionId);
+		// shortcut.setDocID(docId);
+		// shortcut.setDestDirID(destDirId);
+		// DocumentCreateShortCutResponse resp = (DocumentCreateShortCutResponse) send(shortcut);
 		return;
 	} 
 

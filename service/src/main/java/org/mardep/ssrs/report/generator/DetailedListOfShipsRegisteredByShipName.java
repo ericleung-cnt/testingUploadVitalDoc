@@ -53,6 +53,9 @@ public class DetailedListOfShipsRegisteredByShipName extends AbstractReportGener
 		List<RegisteredShip> ships = getReportContent(toDate);
 		List<Map<String, Object>> rows = new ArrayList<>();
 		for (RegisteredShip ship:ships) {
+			if ("2014/200".equals(ship.getApplNo())) {
+				System.out.println("2014/200 reached");
+			}
 			Map<String, Object> row = new HashMap<>();
 			row.put(FIELD_SHIP_NAME_AND_TYPE, ship.getShipNameEng() + "\n" + "(" + ship.getSurveyShipType() + ")");
 			//row.put(FIELD_SHIP_TYPE, ship.getSurveyShipType());
@@ -92,7 +95,9 @@ public class DetailedListOfShipsRegisteredByShipName extends AbstractReportGener
 			ownerInfo = ownerInfo + owner.getOwnerName() + "\n";
 			ownerInfo = ownerInfo + owner.address();
 		}
-
+		if (owners.size()>1) {
+			System.out.println("owner info: " + ownerInfo);			
+		}
 		return ownerInfo;
 	}
 }

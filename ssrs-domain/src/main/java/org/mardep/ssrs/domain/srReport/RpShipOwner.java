@@ -41,6 +41,14 @@ public class RpShipOwner {
 	
 	@Getter
 	@Setter
+	private String ownerType;
+	
+	@Getter
+	@Setter
+	private BigDecimal ownerShare;
+	
+	@Getter
+	@Setter
 	private String shipNameEng;
 	
 	@Getter
