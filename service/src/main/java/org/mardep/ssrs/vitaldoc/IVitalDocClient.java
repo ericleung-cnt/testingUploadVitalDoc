@@ -132,5 +132,13 @@ public interface IVitalDocClient {
 	long uploadIssuedCoD(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	long uploadIssuedTranscript(Map<String, String> vitalDocProperties, String docName, byte[] pdf) throws IOException;
 	byte[] downloadFsqcCert(String imo, String certType) throws IOException;
+	
 	public String cloneFsqcTemplate(String imoNo) throws IOException;
+	public String cloneFsqcTemplate(String sessionId, String imoNo) throws IOException;
+
+	public String getVitaldocSessionId() throws IOException;
+	public long uploadSignedCoR(String vitaldocSessionId, Map<String, String> vitalDocProperties, String imoNo, String docName, byte[] pdf)  throws IOException;
+	public void createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException;
+
+	public String getShortcutPathForSignedCoR(String imo);
 }

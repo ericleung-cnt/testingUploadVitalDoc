@@ -43,7 +43,9 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	public RegMasterJpaDao() {
 		criteriaList.add(new PredicateCriteria("representativeName", PredicateType.LIKE_IGNORE_CASE));
 		criteriaList.add(new PredicateCriteria("regName", PredicateType.STARTSWITH));
+		criteriaList.add(new PredicateCriteria("offNo", PredicateType.EQUAL));
 	}
+	
 	@Override
 	public List<RegMaster> searchUsedName(String field, List<String> values) {
 		Query query = em.createQuery("select r from RegMaster r where r."

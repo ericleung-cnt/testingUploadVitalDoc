@@ -56,14 +56,17 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private static final String DOC_TYPE_SR_CSR_FORM = "SR-CSR Form";
 
 	private final String VITALDOC_PATH_SR_ISSUED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
+	private final String VITALDOC_PATH_SR_SIGNED_COR = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\SignedCoR";
 	private final String VITALDOC_PATH_SR_ISSUED_COD = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
 	private final String VITALDOC_PATH_SR_ISSUED_TRANSCRIPT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\Transcript";
 	private final String VITALDOC_PATH_FSQC_BCC_CERT = "FSQC\\Ship"; //\\0000018";
 	private final String VITALDOC_PATH_FSQC_ROOT = "FSQC\\Ship\\"; //\\0000018";
 	private final String VITALDOC_PATH_FSQC_TEMPLATE = "FSQC Template\\"; //\\0000018";
-	private final String VITALDOC_PATH_FSQC_TEMPLATE_DETAIL = "0000014";
+	private final String VITALDOC_PATH_FSQC_TEMPLATE_DETAIL = "SSRS_CLONE";
 	private final String VITALDOC_PATH_FSQC_COR_SHORTCUT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoR";
 	private final String VITALDOC_PATH_FSQC_COS_SHORTCUT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
+
+	private final String VITALDOC_PATH_FSQC_SIGNED_COR_SHORTCUT = "Certificate of Registry (CoR)";
 
 	private final String VITALDOC_CLONE_RESULT_ALREADY_EXIST = "VITALDOC_CLONE_RESULT_ALREADY_EXIST";
 	private final String VITALDOC_CLONE_RESULT_SUCCESS = "VITALDOC_CLONE_RESULT_SUCCESS";
@@ -329,10 +332,73 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return dirInfoList;
 	}
 
+	
 	@Override
 	public String cloneFsqcTemplate(String imoNo) throws IOException {
 		String sResult = "";
 		String sessionId = getSessionId();
+		sResult = doCloneFsqcTemplate(sessionId, imoNo);
+		// long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
+		// long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		// String targetPath = VITALDOC_PATH_FSQC_ROOT + imoNo;
+
+		// long destDirId = getFsqcDirId(sessionId, targetPath);
+		// if (destDirId==-1){
+		// 	DirectoryClone dirClone = new DirectoryClone();
+		// 	dirClone.setSessionIDIn(sessionId);
+		// 	dirClone.setDirID(templateDirId);
+		// 	dirClone.setDestDirID(rootDirId);
+		// 	DirectoryCloneResponse dirCloneResp = (DirectoryCloneResponse) send(dirClone);
+		// 	if (dirCloneResp.getDirectoryCloneResult().isSuccess()) {
+		// 		sResult = updateFsqcClonedDir(sessionId, imoNo);
+		// 		// long rootDocTypeId = 0;
+		// 		// String rootDirTypeName = "";
+		// 	 	// long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		// 		// List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
+		// 		// for (DirectoryInfo dirInfo : dirInfoList){
+		// 		// 	long dirUpdateId = dirInfo.getID();
+		// 		// 	long dirUpdateDocTypeId = dirInfo.getDocTypeID();
+		// 		// 	//if (rootDocTypeId == 0) 
+		// 		// 	rootDocTypeId = dirUpdateDocTypeId;
+		// 		// 	DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
+		// 		// 	String dirUpdateDirTypeName = docTypeInfo.getName();
+		// 		// 	if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
+		// 		// 	ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
+		// 		// 	List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
+		// 		// 	String supportingType = "";
+		// 		// 	for (FieldInfo fieldInfo : fieldsList){
+		// 		// 		if ("Supporting Type".equals(fieldInfo.getFieldName())){
+		// 		// 			supportingType = fieldInfo.getContent().toString();
+		// 		// 		}
+		// 		// 	}
+		// 		// 	updateFsqcClonedSubDirAttribute(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
+		// 		// }
+		// 		// updateFsqcClonedRootDirAttribute(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
+		// 	} else {
+		// 		//sResult = VITALDOC_CLONE_RESULT_FAIL;
+		// 		long clonedDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+		// 		if (clonedDirId!=-1){
+		// 			sResult = updateFsqcClonedDir(sessionId, imoNo);
+		// 		} else {
+		// 			sResult = VITALDOC_CLONE_RESULT_FAIL;
+		// 		}
+		// 	}
+		// } else {
+		// 	sResult = VITALDOC_CLONE_RESULT_ALREADY_EXIST;
+		// 	//sResult = updateFsqcClonedDir(sessionId, imoNo);
+		// }
+		return sResult;
+	}
+
+	@Override
+	public String cloneFsqcTemplate(String sessionId, String imoNo) throws IOException {
+		String sResult = "";
+		sResult = doCloneFsqcTemplate(sessionId, imoNo);
+		return sResult;
+	}
+
+	private String doCloneFsqcTemplate(String sessionId, String imoNo) throws IOException {
+		String sResult = "";
 		long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
 		long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 		String targetPath = VITALDOC_PATH_FSQC_ROOT + imoNo;
@@ -346,31 +412,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 			DirectoryCloneResponse dirCloneResp = (DirectoryCloneResponse) send(dirClone);
 			if (dirCloneResp.getDirectoryCloneResult().isSuccess()) {
 				sResult = updateFsqcClonedDir(sessionId, imoNo);
-				// long rootDocTypeId = 0;
-				// String rootDirTypeName = "";
-			 	// long targetDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
-				// List<DirectoryInfo> dirInfoList = retrieveDirectoryInfoList(sessionId, targetDirId);
-				// for (DirectoryInfo dirInfo : dirInfoList){
-				// 	long dirUpdateId = dirInfo.getID();
-				// 	long dirUpdateDocTypeId = dirInfo.getDocTypeID();
-				// 	//if (rootDocTypeId == 0) 
-				// 	rootDocTypeId = dirUpdateDocTypeId;
-				// 	DocumentTypeInfo docTypeInfo = dirInfo.getDocumentType();
-				// 	String dirUpdateDirTypeName = docTypeInfo.getName();
-				// 	if ("".equals(rootDirTypeName)) rootDirTypeName = dirUpdateDirTypeName;
-				// 	ArrayOfFieldInfo fieldsInfo = (ArrayOfFieldInfo) dirInfo.getFields().getFields();
-				// 	List<FieldInfo> fieldsList = (List<FieldInfo>) fieldsInfo.getFieldInfo();
-				// 	String supportingType = "";
-				// 	for (FieldInfo fieldInfo : fieldsList){
-				// 		if ("Supporting Type".equals(fieldInfo.getFieldName())){
-				// 			supportingType = fieldInfo.getContent().toString();
-				// 		}
-				// 	}
-				// 	updateFsqcClonedSubDirAttribute(sessionId, dirUpdateId, "", imoNo, dirUpdateDocTypeId, dirUpdateDirTypeName, supportingType);					
-				// }
-				// updateFsqcClonedRootDirAttribute(sessionId, imoNo, rootDocTypeId, rootDirTypeName);
 			} else {
-				//sResult = VITALDOC_CLONE_RESULT_FAIL;
 				long clonedDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 				if (clonedDirId!=-1){
 					sResult = updateFsqcClonedDir(sessionId, imoNo);
@@ -1076,4 +1118,60 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		}
 		return sysParam.getValue(); //certTypeMap;
 	}	
+
+	@Override 
+	public String getVitaldocSessionId() throws IOException{
+		return getSessionId();
+	}
+
+	@Override
+	public long uploadSignedCoR(String sessionId, Map<String, String> vitalDocProperties, String imoNo, String docName, byte[] pdf)  throws IOException {
+		//String sessionId = getSessionId();
+		Long docId = uploadIssuedDocToVitalDoc(VITALDOC_PATH_SR_SIGNED_COR, docName, vitalDocProperties, pdf);
+		
+		// if (imoNo!=null && !imoNo.isEmpty()){
+		// 	SystemParam shortcutPath = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_PATH);
+		// 	if (shortcutPath!=null && shortcutPath.getValue()!=null){
+		// 		SystemParam shortcutName = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COR_SHORTCUT_NAME);
+		// 		String[] paths = shortcutPath.getValue().split(",");
+		// 		for (String path : paths){
+		// 			String destDirPath = VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + path + "\\" + shortcutName.getValue();
+		// 			Long destDirId= getFsqcDirId(sessionId, destDirPath);
+		// 			//Long destDirId = new Long(sysParam.getValue());
+		// 			if (destDirId != -1){
+		// 				createShortcutInFsqcVitalDoc(docId, destDirId);
+		// 			}		
+		// 		}
+		// 	}
+		// }
+		return docId;
+	}
+
+	@Override
+	public String getShortcutPathForSignedCoR(String imoNo){
+		String shortcutPath = VITALDOC_PATH_FSQC_ROOT + imoNo + "\\" + VITALDOC_PATH_FSQC_SIGNED_COR_SHORTCUT;
+		return shortcutPath;
+	}
+
+	@Override
+	public void createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException{
+		//String sessionId = getSessionId();
+		Long destDirId = getFsqcDirId(sessionId, destPath);
+		if (destDirId==-1){
+			String cloneResult = cloneFsqcTemplate(sessionId, imoNo);
+			if (cloneResult.equals(VITALDOC_CLONE_RESULT_FAIL)){
+				throw new IOException("clone result fail");
+			}
+		}
+		destDirId = getFsqcDirId(sessionId, destPath);
+		DocumentCreateShortCut shortcut = new DocumentCreateShortCut();
+		shortcut.setSessionIDIn(sessionId);
+		shortcut.setDocID(docId);
+		shortcut.setDestDirID(destDirId);
+		DocumentCreateShortCutResponse resp = (DocumentCreateShortCutResponse) send(shortcut);
+		if (!resp.getDocumentCreateShortCutResult().isSuccess()){
+			throw new IOException("fail create shortcut");
+		}					
+	} 
+
 }
