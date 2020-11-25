@@ -51,7 +51,7 @@ public class OcrServiceEng2 implements IOcrServiceEng2 {
 			for (int i=0; i<parent.getLength(); i++) {
 				Node node = parent.item(i);
 				if (node.getNodeType()==Node.ELEMENT_NODE) {
-					System.out.println("Node: " + node.getNodeName());
+					//System.out.println("Node: " + node.getNodeName());
 					String value = extractXmlStringValue(node);
 					if ("_A".equals(node.getNodeName())){
 						entity.setCellA(value);

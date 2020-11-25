@@ -17,17 +17,20 @@ public class BatchUploadDmsServiceSignedCoR implements IBatchUploadDmsServiceSig
     IBatchUploadBaseService baseSvc;
 
     @Override
-    public void uploadDMS(String imo, String shipName, String officialNum, String docName, byte[] fileContent) throws Exception {
+    public boolean uploadDMS(String imo, String shipName, String officialNum, String docName, byte[] fileContent) throws Exception {
         // TODO Auto-generated method stub
+        boolean success = true;
         try {
             Map<String, String> vitalDocProperties = baseSvc.createVitalDocPropertiesForSrIssuedDoc(imo, shipName, officialNum);
             vitalDocProperties.put("Issue type", "CoR");
             String vitaldocSessionId = vdClient.getVitaldocSessionId();
             Long docId = vdClient.uploadSignedCoR(vitaldocSessionId, vitalDocProperties, imo, docName, fileContent);    
             String shortcutPath = vdClient.getShortcutPathForSignedCoR(imo);
-            vdClient.createShortcutInFsqcVitalDoc(vitaldocSessionId, imo, docId, shortcutPath);
+            success = vdClient.createShortcutInFsqcVitalDoc(vitaldocSessionId, imo, docId, shortcutPath);
+            return success;
         } catch (Exception ex){
-            throw ex;
+            //throw ex;
+            return false;
         }
     }
     

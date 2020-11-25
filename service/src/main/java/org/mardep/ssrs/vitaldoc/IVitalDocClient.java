@@ -138,7 +138,7 @@ public interface IVitalDocClient {
 
 	public String getVitaldocSessionId() throws IOException;
 	public long uploadSignedCoR(String vitaldocSessionId, Map<String, String> vitalDocProperties, String imoNo, String docName, byte[] pdf)  throws IOException;
-	public void createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException;
+	public boolean createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException;
 
 	public String getShortcutPathForSignedCoR(String imo);
 }

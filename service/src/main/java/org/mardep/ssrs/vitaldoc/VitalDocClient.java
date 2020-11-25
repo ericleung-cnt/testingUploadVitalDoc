@@ -260,6 +260,13 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 			sResult = VITALDOC_CLONE_RESULT_SUCCESS;
 		} else {
 			sResult = VITALDOC_CLONE_RESULT_FAIL;
+			ErrorsInfo errors = dirUpdateResp.directoryUpdateByDataResult.errors;
+			if (errors.errorInfos!=null && !errors.errorInfos.errorInfo.isEmpty()){
+				ErrorInfo errorInfo = errors.errorInfos.errorInfo.get(0);
+				logger.warn("vitaldoc error {}, desc:{}, p1:{}, p2:{}, p3:{}, p4:{}",
+						"create shortcut", errorInfo.description, errorInfo.parameter1,
+						errorInfo.parameter2,errorInfo.parameter3,errorInfo.parameter4);
+			}
 		}
 		return sResult;
 	}
@@ -1154,13 +1161,14 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	}
 
 	@Override
-	public void createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException{
+	public boolean createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException{
 		//String sessionId = getSessionId();
 		Long destDirId = getFsqcDirId(sessionId, destPath);
 		if (destDirId==-1){
 			String cloneResult = cloneFsqcTemplate(sessionId, imoNo);
 			if (cloneResult.equals(VITALDOC_CLONE_RESULT_FAIL)){
-				throw new IOException("clone result fail");
+				//throw new IOException("clone result fail");
+				return false;
 			}
 		}
 		destDirId = getFsqcDirId(sessionId, destPath);
@@ -1170,8 +1178,16 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		shortcut.setDestDirID(destDirId);
 		DocumentCreateShortCutResponse resp = (DocumentCreateShortCutResponse) send(shortcut);
 		if (!resp.getDocumentCreateShortCutResult().isSuccess()){
-			throw new IOException("fail create shortcut");
-		}					
+			//throw new IOException("fail create shortcut");
+			ErrorsInfo errors = resp.documentCreateShortCutResult.errors;
+			if (errors.errorInfos!=null && !errors.errorInfos.errorInfo.isEmpty()){
+				ErrorInfo errorInfo = errors.errorInfos.errorInfo.get(0);
+				logger.warn("vitaldoc error {}, desc:{}, p1:{}, p2:{}, p3:{}, p4:{}",
+						"create shortcut", errorInfo.description, errorInfo.parameter1,
+						errorInfo.parameter2,errorInfo.parameter3,errorInfo.parameter4);
+			}
+		}		
+		return true;			
 	} 
 
 }

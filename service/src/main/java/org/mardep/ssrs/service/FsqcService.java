@@ -30,6 +30,7 @@ import org.mardep.ssrs.dao.codetable.IOperationTypeDao;
 import org.mardep.ssrs.dao.codetable.IShipSubTypeDao;
 import org.mardep.ssrs.dao.codetable.IShipTypeDao;
 import org.mardep.ssrs.dao.codetable.ISystemParamDao;
+import org.mardep.ssrs.dao.codetable.SystemParamJpaDao;
 import org.mardep.ssrs.dao.sr.IApplDetailDao;
 import org.mardep.ssrs.dao.sr.IBuilderMakerDao;
 import org.mardep.ssrs.dao.sr.IOwnerDao;
@@ -104,12 +105,19 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	public FsqcService() throws MalformedURLException {
 		urlForUpdateShipParticulars = new URL(System.getProperty("ShipRegService.pushUrl.update", "http://localhost:8080/ssrs/"));
-		urlForCertRequest = new URL(System.getProperty("FsqcService.certRequest", "http://localhost:8080/ssrs/simulateFsqcCertReply/"));
+		//urlForCertRequest = new URL(System.getProperty("FsqcService.certRequest", "http://localhost:8080/ssrs/simulateFsqcCertReply/"));
+		//urlForCertRequest = new URL(getUrlForCertRequest());
 		urlForSimulateCertReply = new URL(System.getProperty("FsqcService.certReply", "http://localhost:8080/ssrs/fsqcCertReply/"));
+	}
+
+	private URL getUrlForCertRequest() throws Exception{
+		SystemParam sysParam = systemParamDao.findById("URL_FSQC_CERT_REQUEST");
+		return new URL(sysParam.getValue());
 	}
 
 	@Override
 	public void sendRequestFsqcCert(String imo) throws Exception {
+		urlForCertRequest = getUrlForCertRequest();
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
 		srMap.put("requestType", CERT_REQUEST_NEW_SHIP_REG);
@@ -129,6 +137,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 	
 	@Override
 	public void sendRequestFsqcPrqc(String imo, String applNo, String groupOwner, String country, Date applicationDate, Date proposedRegDate, String remarks) throws Exception {
+		urlForCertRequest = getUrlForCertRequest();
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Map<String, Object> srMap = new LinkedHashMap<>();
 		srMap.put("imoNo", imo);
@@ -163,6 +172,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	@Override
 	public void simulateCertReply(String imo, String applNo, String certType, String certResult, Date resultDate)  throws Exception {
+		urlForCertRequest = getUrlForCertRequest();
 		Map<String, Object> jsonMap = new LinkedHashMap<>();
 		jsonMap.put("imo", imo);
 		jsonMap.put("applNo", applNo);
@@ -246,6 +256,14 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			}
 		} 
 		return groupOwnerName;
+	}
+
+	private String mapRoInFsqc(String classCode){
+		if (classCode==null) return null;
+		if ("D_G".equals(classCode)) return "DNV GL";
+		if ("KRS".equals(classCode)) return "KR";
+		if ("RSA".equals(classCode)) return "RINA"; 
+		return null;
 	}
 
 	@Override
@@ -419,7 +437,9 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			ad = adDao.findById(applNo);
 		}
 		if (ad != null) {
-			srMap.put("cs", ad.getCs1ClassSocCode());
+			//srMap.put("cs", ad.getCs1ClassSocCode());
+			String classCode = mapRoInFsqc(ad.getCs1ClassSocCode());
+			srMap.put("cs", classCode);
 		} else {
 			srMap.put("cs", null);
 		}

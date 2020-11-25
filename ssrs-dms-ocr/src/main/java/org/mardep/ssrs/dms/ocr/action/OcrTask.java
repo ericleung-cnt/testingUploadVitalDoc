@@ -31,7 +31,7 @@ public class OcrTask implements Runnable {
 	
 	@Autowired IOcrActionServiceTranscript transcript;
 
-	//@Autowired IBatchUploadActionServiceSignedCoR actionSignedCoR;
+	@Autowired IBatchUploadActionServiceSignedCoR actionSignedCoR;
 
 	Logger logger = LoggerFactory.getLogger(OcrTask.class);
 
@@ -65,7 +65,7 @@ public class OcrTask implements Runnable {
 		
 		transcript.getEntityFromOcrAndSave();
 
-		//actionSignedCoR.doBatchUpload();
+		actionSignedCoR.doBatchUpload();
 	}
 
 }

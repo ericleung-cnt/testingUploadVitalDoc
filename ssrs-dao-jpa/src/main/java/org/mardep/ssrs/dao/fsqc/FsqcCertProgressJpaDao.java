@@ -8,11 +8,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.mardep.ssrs.dao.codetable.ISystemParamDao;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.fsqc.FsqcCertProgress;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
+
+	@Autowired
+	ISystemParamDao systemParamDao;
 
 	private final String CERT_TYPE_BCC = "BCC";
 	private final String CERT_TYPE_CLC = "CLC";
@@ -69,6 +75,11 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 		List<Object[]> rawList = new ArrayList<Object []>();
 		String sql;
 		try {
+			SystemParam sp = systemParamDao.findById("FSQC_WORKLIST_READY");
+			if ("0".equals(sp.getValue())) {
+				return null;
+			}
+
 			if (CERT_TYPE_PRQC.equals(certType)){
 				sql = "select Top 1 * from [dbo].[vPrqcListForSSRS]\r\n" + 
 						"where imo_no = :imo and cert_type = :certType\r\n" + 

@@ -7,4 +7,7 @@ public interface IBatchUploadBaseService {
     public List<String> getFileList(String propertyName) ;
     public Map<String, String> createVitalDocPropertiesForSrIssuedDoc(String imo, String shipName, String officialNum);
     public String getFilenameFromFullPath(String fullPath);
+
+    public void postActionProcessedEntity(String pathname);
+    public void postActionExceptionEntity(String pathname);
 }
