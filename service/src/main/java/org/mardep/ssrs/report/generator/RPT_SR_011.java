@@ -463,6 +463,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 		List<Owner> owners = getOwners(applNo, reportDate);
 		regMaster.put("demiseDetails", "");
 		regMaster.put("ownerDetails", "");
+		String ownerInfoForCoD = "";
 		for (int i = 0; i < owners.size(); i++) {
 			Owner owner = owners.get(i);
 			boolean demise = Owner.TYPE_DEMISE.equals(owner.getType());
@@ -518,8 +519,19 @@ public class RPT_SR_011 extends AbstractSrReport {
 				regMaster.put("ownerDetails", ownerStr);
 				regMaster.put("ownerAddrConc", ownerAddrConc);
 				regMaster.put("ownerName", owner.getName());
+				
+				if (!ownerInfoForCoD.isEmpty()) {
+					ownerInfoForCoD = ownerInfoForCoD + "\n\n";
+				}
+				ownerInfoForCoD = ownerInfoForCoD + owner.getName() + "\n" + ownerAddrConc;
 			}
 		}
+//		if ("D".equals(regM.getRegStatus())) {
+//			regMaster.put("owners", ownerInfoForCoD);
+//		} else {
+//			regMaster.put("owners", dataList);
+//		}
+		regMaster.put("ownersCoD", ownerInfoForCoD);	// for CoD only
 		regMaster.put("owners", dataList);
 		processMortgages(applNo, reportDate, printMortgage, regMaster, owners, isPercentage);
 
@@ -547,6 +559,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 		signatureDs.add(signatureSection);
 		regMaster.put("subreportDataSource", signatureDs);
 
+		String ownersCoD = (String)regMaster.get("ownersCoD");
+		System.out.println(ownersCoD);
+		
 		return regMaster;
 	}
 
@@ -726,7 +741,6 @@ public class RPT_SR_011 extends AbstractSrReport {
 				subreportRow.put("transferRegDate", "");
 				subreportRow.put("transferDetail", "");
 					for (Transaction t : transactionList) {
-						System.out.println("transaction code: " + t.getCode());
 						if ("34".equals(t.getCode())) { // transfer
 							String priorityCode = StringUtils.substring(t.getDetails(), 22, 23);
 							//if (StringUtils.substring(t.getDetails(), 22, 23)==mortgageCode) {

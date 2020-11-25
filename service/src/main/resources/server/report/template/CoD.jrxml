@@ -21,6 +21,7 @@
 	<field name="ownerName" class="java.lang.String"/>
 	<field name="ownerAddrConc" class="java.lang.String"/>
 	<field name="reasonChi" class="java.lang.String"/>
+	<field name="ownersCoD" class="java.lang.String"/>
 	<variable name="ddMMyyyy" class="java.text.SimpleDateFormat">
 		<variableExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.ENGLISH)]]></variableExpression>
 	</variable>
@@ -256,9 +257,11 @@ new java.text.DecimalFormat("#,###.##").format(
 			<line>
 				<reportElement x="1" y="206" width="555" height="1" uuid="ee2b609d-4e07-4fd3-9a41-55392a5a0f00"/>
 			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement x="26" y="210" width="528" height="18" uuid="9685c59a-0499-4f2f-bad8-58115dc648ea"/>
-				<textFieldExpression><![CDATA[$F{ownerName}]]></textFieldExpression>
+			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
+				<reportElement x="26" y="210" width="528" height="40" uuid="9685c59a-0499-4f2f-bad8-58115dc648ea">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{ownersCoD}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="87" y="187" width="174" height="18" uuid="4238ea8f-004c-4157-9f24-89734ac2f306"/>
@@ -266,11 +269,10 @@ new java.text.DecimalFormat("#,###.##").format(
 				<text><![CDATA[Name and Address of Owner]]></text>
 			</staticText>
 			<line>
-				<reportElement x="1" y="257" width="555" height="1" uuid="825fbf5f-cacc-4b3d-8b01-62cded591dca"/>
+				<reportElement positionType="Float" x="1" y="257" width="555" height="1" uuid="825fbf5f-cacc-4b3d-8b01-62cded591dca"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="26" y="226" width="528" height="30" uuid="464219d8-2b96-41f5-8052-6f5d46855e60"/>
-				<textFieldExpression><![CDATA[$F{ownerAddrConc}]]></textFieldExpression>
+				<reportElement x="26" y="240" width="528" height="16" uuid="464219d8-2b96-41f5-8052-6f5d46855e60"/>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="26" y="170" width="528" height="18" uuid="439883c4-6263-4d52-945a-5bd1015f23c2"/>
@@ -283,12 +285,12 @@ new java.text.DecimalFormat("#,###.##").format(
 		<band height="65">
 			<printWhenExpression><![CDATA[$F{demiseDetails} != null && !$F{demiseDetails}.isEmpty()]]></printWhenExpression>
 			<staticText>
-				<reportElement x="291" y="-36" width="200" height="18" uuid="bdcaeb50-b3f4-4673-99c1-700fdb8f253d"/>
+				<reportElement positionType="Float" x="291" y="-36" width="200" height="18" uuid="bdcaeb50-b3f4-4673-99c1-700fdb8f253d"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[轉管租約承租人名稱及地址]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="11" y="-36" width="250" height="18" uuid="1279b791-105a-472e-8141-5b6fbf015697"/>
+				<reportElement positionType="Float" x="11" y="-36" width="250" height="18" uuid="1279b791-105a-472e-8141-5b6fbf015697"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<text><![CDATA[Name and Address of Demise Charterer]]></text>
 			</staticText>
@@ -296,13 +298,13 @@ new java.text.DecimalFormat("#,###.##").format(
 				<reportElement x="0" y="26" width="555" height="1" uuid="515bfd7c-819d-48a6-ab40-0ffea96358ce"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="25" y="-16" width="528" height="42" uuid="96f54ce6-3056-4a8b-8417-092da4be535c">
+				<reportElement positionType="Float" x="25" y="-16" width="528" height="42" uuid="96f54ce6-3056-4a8b-8417-092da4be535c">
 					<printWhenExpression><![CDATA[!$F{demiseDetails}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{demiseDetails}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="-17" width="555" height="1" uuid="0aef3dc0-59c7-45c3-a8cb-be93a299f2a3"/>
+				<reportElement positionType="Float" x="0" y="-17" width="555" height="1" uuid="0aef3dc0-59c7-45c3-a8cb-be93a299f2a3"/>
 			</line>
 		</band>
 		<band height="89">
