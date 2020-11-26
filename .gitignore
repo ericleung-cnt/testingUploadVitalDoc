@@ -6,3 +6,5 @@
 /.vscode/
 /**/.factorypath
 /webui/pom.xml
+/service/src/main/java/org/mardep/ssrs/report/generator/*.orig
+/service/src/main/resources/server/report/template/*.orig
