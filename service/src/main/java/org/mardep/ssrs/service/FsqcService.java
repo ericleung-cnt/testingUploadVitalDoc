@@ -126,7 +126,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			pushToFSQC(urlForCertRequest, jsonInputString);			
 		} catch (Exception ex) {
 			if (ex instanceof IOException) {
-				throw new Exception("FSQC Connection timeout or interface fail");
+				//throw new Exception("FSQC Connection timeout or interface fail");
+				throw ex;
 			}
 			if (ex instanceof JsonProcessingException) {
 				throw new Exception("Web Interface JSON error");
@@ -161,7 +162,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			pushToFSQC(urlForCertRequest, jsonInputString);			
 		} catch (Exception ex) {
 			if (ex instanceof IOException) {
-				throw new Exception("FSQC Connection timeout or interface fail");
+				//throw new Exception("FSQC Connection timeout or interface fail");
+				throw ex;
 			}
 			if (ex instanceof JsonProcessingException) {
 				throw new Exception("Web Interface JSON error");
