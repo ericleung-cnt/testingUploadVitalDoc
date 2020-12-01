@@ -1320,6 +1320,9 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
 			vitalDocProperties.put("Issue type", "CoR");
 			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("-1".equals(sysParam.getValue())) {
+				return;		// don't upload to vitaldoc if -1
+			}
 			if ("1".equals(sysParam.getValue())) {
 				Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, imoNo, docName, corPdf);
 			} else {
@@ -1342,6 +1345,9 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			Map<String, String> vitalDocProperties = createVitalDocPropertiesForSrIssuedDoc(rmEntity);
 			vitalDocProperties.put("Issue type", "CoD");
 			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("-1".equals(sysParam.getValue())) {
+				return;		// don't upload to vitaldoc if -1
+			}
 			if ("1".equals(sysParam.getValue())) {
 				Long docId = vdClient.uploadIssuedCoD(vitalDocProperties, docName, codPdf);
 			} else {
@@ -1394,6 +1400,9 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			vitalDocProperties.put("Issue type", "Transcript");
 			//Long docId = vdClient.uploadIssuedCoR(vitalDocProperties, docName, transcriptPdf);
 			SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_USE);
+			if ("-1".equals(sysParam.getValue())) {
+				return;		// don't upload to vitaldoc if -1
+			}
 			if ("1".equals(sysParam.getValue())) {
 				Long docId = vdClient.uploadIssuedTranscript(vitalDocProperties, docName, transcriptPdf);
 			} else {
