@@ -1752,24 +1752,53 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	}
 
 	@Override
+//	public List<Map<String, Object>> getShipRegAnnualReport(Date reportDate) {
+//		String sqlString = "select '1', count(*) cnt, sum(reg_net_ton) nt, sum(gross_ton) gt from REG_MASTERS_HIST rm inner join ( " +
+//				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+//				"where rm.REG_STATUS = 'R' and year(rm.REG_DATE) <= :before " +
+//				"union " +
+//				"select '2', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
+//				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+//				"where year(rm.REG_DATE) = :before " +
+//				"union " +
+//				"select '3', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
+//				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+//				"where year(rm.DEREG_TIME) = :before " +
+//				"union " +
+//				"select '4', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
+//				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+//				"where rm.REG_STATUS = 'R' ";
+//		Query query = em.createNativeQuery(sqlString);
+//		query.setParameter("before", Integer.parseInt(new SimpleDateFormat("yyyy").format(reportDate)));
+//		List<Object[]> rows = query.getResultList();
+//		Map<String, Object> annualReport = new HashMap<>();
+//		for (Object[] row:rows) {
+//			annualReport.put("noOfShips" + row[0], row[1]);
+//			annualReport.put("netTonnage" + row[0], row[2]);
+//			annualReport.put("grossTonnage" + row[0], row[3]);
+//		}
+//		return Arrays.asList(annualReport);
+//	}
 	public List<Map<String, Object>> getShipRegAnnualReport(Date reportDate) {
 		String sqlString = "select '1', count(*) cnt, sum(reg_net_ton) nt, sum(gross_ton) gt from REG_MASTERS_HIST rm inner join ( " +
 				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
 				"where rm.REG_STATUS = 'R' and year(rm.REG_DATE) <= :before " +
 				"union " +
 				"select '2', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
-				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
-				"where year(rm.REG_DATE) = :before " +
+				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 and DATE_CHANGE<=:asAt group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+				"where year(rm.REG_DATE) = :before and rm.REG_DATE>=:yearBegin and rm.REG_DATE<=:asAt " +
 				"union " +
 				"select '3', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
-				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
-				"where year(rm.DEREG_TIME) = :before " +
+				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 and DATE_CHANGE<=:asAt group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+				"where year(rm.DEREG_TIME) = :before and rm.DEREG_TIME>=:yearBegin and rm.DEREG_TIME<=:asAt " +
 				"union " +
 				"select '4', count(*), sum(reg_net_ton), sum(gross_ton) from REG_MASTERS_HIST rm inner join ( " +
-				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
+				"select max(at_ser_num) tx_id, rm_appl_no appl_no from TRANSACTIONS T where year(DATE_CHANGE) < :before + 1 and DATE_CHANGE<=:asAt group by RM_APPL_NO) tx on rm.appl_no = tx.appl_no and rm.tx_id = tx.tx_id " +
 				"where rm.REG_STATUS = 'R' ";
 		Query query = em.createNativeQuery(sqlString);
 		query.setParameter("before", Integer.parseInt(new SimpleDateFormat("yyyy").format(reportDate)));
+		query.setParameter("asAt", reportDate);
+		query.setParameter("yearBegin", new SimpleDateFormat("yyyy-01-01").format(reportDate));
 		List<Object[]> rows = query.getResultList();
 		Map<String, Object> annualReport = new HashMap<>();
 		for (Object[] row:rows) {
