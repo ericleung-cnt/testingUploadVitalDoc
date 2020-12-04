@@ -27,7 +27,7 @@
 				<entry key="hibernate.dialect" 							value="${ssrs.hibernate.dialect:org.hibernate.dialects.SQLServer2012Dialect}" />
 				<entry key="hibernate.hbm2ddl.auto" 					value="${ssrs.hibernate.hbm2ddl.auto:none}" />
 				<entry key="hibernate.format_sql" 						value="${ssrs.hibernate.format_sql:true}" />
-				<entry key="hibernate.show_sql" 						value="${ssrs.hibernate.showSql:false}" />
+				<entry key="hibernate.show_sql" 						value="${ssrs.hibernate.showSql:true}" />
 				<entry key="hibernate.connection.useUnicode" 			value="true" />
 				<entry key="hibernate.connection.charSet" 				value="UTF8" />
 				<entry key="org.hibernate.integration.envers.enabled" 	value="false" />

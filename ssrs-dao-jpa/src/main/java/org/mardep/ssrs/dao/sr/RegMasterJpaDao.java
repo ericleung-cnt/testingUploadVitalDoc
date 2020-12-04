@@ -2040,28 +2040,39 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		// [12] sub type
 		// [13] sub subtype
 		try {
-			String sql = "select rm.APPL_NO, rm.OFF_NO, rm.REG_DATE, rm.reg_status, rm.DEREG_TIME, rm.CALL_SIGN, rm.SURVEY_SHIP_TYPE, \n" +
-				"	( case when rmh.GROSS_TON is null then rm.GROSS_TON else rmh.GROSS_TON end ) as gross_ton, \n" +
-				"	( case when rmh.REG_NET_TON is null then rm.REG_NET_TON else rmh.REG_NET_TON end ) as net_ton, \n" +
-				"	( case when rmh.reg_name is null then rm.reg_name else rmh.reg_name end ) as reg_name, \n" +
-				"	( case when rmh.reg_cname is null then rm.reg_cname else rmh.reg_cname end ) as reg_cname, \n" +
-				"	lr.AT_SER_NUM, st.ST_DESC, ss.SS_DESC \n" +
-				"from reg_masters rm \n" +
-				"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE \n" +				
-				"inner join SHIP_SUBTYPES ss on ss.SHIP_SUBTYPE_CODE = rm.SS_SHIP_SUBTYPE_CODE \n" +				
-				"left join ( \n" +
-				"	select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, RM_APPL_NO, AT_SER_NUM from TRANSACTIONS\r\n" +
-				"		where DATE_CHANGE <= :toDate \n" +
-				"	) lr on lr.RM_APPL_NO = rm.appl_no and lr.rowNum = 1 \n" +
-				"left join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM \n" +
-				"where (rm.reg_status = 'R' or rm.reg_status = 'D') \n" +
-				//"	and rm.reg_date > :fromDate \n" +
-				"	and rm.reg_date <= :toDate \n" +
-				"	and (rm.dereg_time is null or rm.DEREG_TIME > :toDate) \n" +
-				"order by rm.REG_NAME";
+//			String sql = "select rm.APPL_NO, rm.OFF_NO, rm.REG_DATE, rm.reg_status, rm.DEREG_TIME, rm.CALL_SIGN, rm.SURVEY_SHIP_TYPE, \n" +
+//				"	( case when rmh.GROSS_TON is null then rm.GROSS_TON else rmh.GROSS_TON end ) as gross_ton, \n" +
+//				"	( case when rmh.REG_NET_TON is null then rm.REG_NET_TON else rmh.REG_NET_TON end ) as net_ton, \n" +
+//				"	( case when rmh.reg_name is null then rm.reg_name else rmh.reg_name end ) as reg_name, \n" +
+//				"	( case when rmh.reg_cname is null then rm.reg_cname else rmh.reg_cname end ) as reg_cname, \n" +
+//				"	lr.AT_SER_NUM, st.ST_DESC, ss.SS_DESC \n" +
+//				"from reg_masters rm \n" +
+//				"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE \n" +				
+//				"inner join SHIP_SUBTYPES ss on ss.SHIP_SUBTYPE_CODE = rm.SS_SHIP_SUBTYPE_CODE \n" +				
+//				"left join ( \n" +
+//				"	select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, RM_APPL_NO, AT_SER_NUM from TRANSACTIONS\r\n" +
+//				"		where DATE_CHANGE <= :toDate \n" +
+//				"	) lr on lr.RM_APPL_NO = rm.appl_no and lr.rowNum = 1 \n" +
+//				"left join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM \n" +
+//				"where (rm.reg_status = 'R' or rm.reg_status = 'D') \n" +
+//				//"	and rm.reg_date > :fromDate \n" +
+//				"	and rm.reg_date <= :toDate \n" +
+//				"	and (rm.dereg_time is null or rm.DEREG_TIME > :toDate) \n" +
+//				"order by rm.REG_NAME";
+			String sql = "select rmh.APPL_NO, rmh.OFF_NO, rmh.REG_DATE, rmh.REG_STATUS, rmh.DEREG_TIME, rmh.CALL_SIGN, rmh.SURVEY_SHIP_TYPE \n" +
+				", rmh.GROSS_TON, rmh.REG_NET_TON, rmh.REG_NAME, rmh.REG_CNAME, tx.AT_SER_NUM, st.ST_DESC, ss.SS_DESC from ( \n" +
+				"select at_ser_num, rm_appl_no, row_number() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum from Transactions \n" +
+				"where DATE_CHANGE <= :asAt \n" +
+				") tx \n" +
+				"inner join reg_masters_hist rmh on rmh.APPL_NO = tx.RM_APPL_NO and rmh.tx_id=AT_SER_NUM \n" +
+				"inner join ship_types st on st.SHIP_TYPE_CODE = rmh.SS_ST_SHIP_TYPE_CODE \n" +
+				"inner join SHIP_SUBTYPES ss on ss.SHIP_SUBTYPE_CODE = rmh.SS_SHIP_SUBTYPE_CODE \n" +
+				"where rmh.REG_STATUS = 'R' and tx.rowNum = 1 \n" +
+				"order by rmh.REG_NAME ";
+			
 			Query query = em.createNativeQuery(sql);
 			//query.setParameter("fromDate", fromDate);
-			query.setParameter("toDate", toDate);
+			query.setParameter("asAt", toDate);
 			List<Object[]> rawList = query.getResultList();
 			for (Object[] arr : rawList) {
 				RegisteredShip ship = new RegisteredShip();
