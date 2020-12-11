@@ -517,6 +517,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 
 	private Date getDatePart(Date date){
 		try {
+			if (date==null) return null;
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Date datePart = sdf.parse(sdf.format(date));
 			return datePart;	
