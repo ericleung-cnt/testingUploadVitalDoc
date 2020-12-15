@@ -72,4 +72,11 @@ public class DemandNoteScheduleService extends DemandNoteService implements IDem
 		super.createAtcItem();
 	}
 	
+	@Override
+	@Scheduled(cron="${DemandNoteService.createAtcItem.cron}")
+	public void createFollowAtcItem() {
+		logger.info("#createFollowAtcItem");
+		super.createFollowAtcItem();
+	}
+	
 }

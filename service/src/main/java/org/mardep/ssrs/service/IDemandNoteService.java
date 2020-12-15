@@ -60,6 +60,7 @@ public interface IDemandNoteService extends IBaseService{
 	public long countSrDn(Map criteria);
 	public List<DemandNoteItem> findUnusedByAppl(String applNo);
 	public void createAtcItem();
+	public void createFollowAtcItem();
 
 	/**
 	 * Reserved Internal testing use only
