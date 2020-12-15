@@ -3486,7 +3486,7 @@ var openRegMaster = function(record, task, mode
                 {name:"cos",type:"section", defaultValue:"Certificate of Survey",
                 	itemIds:[
                 		"buildYear", "howProp",
-                		"buildDate", "surveyShipType","material","grossTon",
+                		"buildDate", "buildDate_", "surveyShipType","material","grossTon",
                 		"regNetTon","length","breadth",
                 		"depth", "dimUnit", "engSetNum","engSetNum","noOfShafts",
                 		"engPower","engDesc1","estSpeed","engModel1","engModel2",
@@ -3495,8 +3495,9 @@ var openRegMaster = function(record, task, mode
                 		{name:"howProp",  title:"How Propelled", characterCasing: "upper" },
                         {name:"buildDate",  title:"Date Keel Laid", startRow:true, characterCasing: "upper"  }, // TODO date or nvarchar
                         {name:"surveyShipType",  title:"Type of Ship", characterCasing: "upper" },
-                		{name:"material",  title:"Material of Hull", characterCasing: "upper" },
-                		{name:"grossTon", title:"Gross Tonnage", titleColSpan:3},
+						{name:"material",  title:"Material of Hull", characterCasing: "upper" },
+						{name:"buildDate_",  title:"Date Keel Laid",   },
+                		{name:"grossTon", title:"Gross Tonnage", },
                 		{name:"regNetTon", title:"Net Tonnage", colSpan:1},
                 		{name:"length",  title:"Length", type:"decimal", colSpan:1, },
                 		{name:"breadth",  title:"Breadth", type:"decimal", colSpan:1, },
