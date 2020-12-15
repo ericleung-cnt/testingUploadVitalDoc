@@ -51,7 +51,6 @@ public class DemandNoteAtcService {
 		}
 		
 	}
-	
 	private BigDecimal noDetainATC(BigDecimal fullATC, BigDecimal lastATC) {
 		BigDecimal noDetainATC = null;
 		BigDecimal atcCompareFactor = fullATC.multiply(new BigDecimal("0.7"));
@@ -63,6 +62,53 @@ public class DemandNoteAtcService {
 			noDetainATC = fullATC;
 		}
 		return noDetainATC;
+	}
+	
+	public BigDecimal calcAtcAmt2(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
+		BigDecimal calcATC = null;
+		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
+		int compareResult = 0;
+		Date regDate2Yrs = addYrsToDate(regDate, 2);
+		compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
+		if (compareResult>=0) {  // within first 2 years, must be full ,( > 1st year, = 2nd year)
+//			calcATC = fullATC;
+			return fullATC;
+		} 
+		if(detainDate!=null) {
+			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
+			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore);  
+			if (compareResult >= 0) {  //detained within 2 years (including dueDate2YrsBefore)
+				return fullATC;
+			}else {
+				//not detained in last 2 years
+				Calendar c1 = Calendar.getInstance();
+				c1.setTime(detainDate);
+				Calendar c2 = Calendar.getInstance();
+				c2.setTime(dueDate);
+				compareResult = c1.get(Calendar.YEAR)-c2.get(Calendar.YEAR);  
+				
+				if (compareResult %2 == 1) {  
+					//detained equal or after anniversary date 
+					return halfATC;   
+				}else {
+					return fullATC;
+				}
+				
+			}
+			
+		}else {
+			Calendar c1 = Calendar.getInstance();
+			c1.setTime(regDate);
+			Calendar c2 = Calendar.getInstance();
+			c2.setTime(dueDate);
+			compareResult = c1.get(Calendar.YEAR)-c2.get(Calendar.YEAR);  
+			
+			if (compareResult %2 == 1) {  
+				return halfATC;   
+			}else {
+				return fullATC;
+			}
+		}
 	}
 	
 	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
@@ -133,4 +179,5 @@ public class DemandNoteAtcService {
 		}
 		return calcATC;
 	}
+
 }
