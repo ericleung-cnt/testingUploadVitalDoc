@@ -129,6 +129,11 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 
 	@Getter
 	@Setter
+	@Column(name = "buildDate_")
+	private Date buildDate_; 
+
+	@Getter
+	@Setter
 	@Column(name = "BUILD_YEAR")
 	private Integer buildYear;
 
