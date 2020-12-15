@@ -2247,5 +2247,27 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		query.setParameter(3, jsonReplyResult);
 		query.executeUpdate();
 	}
+	
+	@Override
+	public Date getLaestDetention(String Imono) {
+		Query query = em.createNativeQuery("select detention_date from detentionForSSRS where Imono =:Imono "
+				+ "order by detention_date desc");
+		query.setParameter("Imono", Imono);
+		List resultList = query.getResultList();
+		if(!resultList.isEmpty()) {
+			return  (Date) (resultList.get(0));
+		}
+		return null;
+	}
+	
+//	@Override
+//	public VdetentionForSSRS getLaestDetention(String Imono) {
+//		Query query = em.createNativeQuery(" from VdetentionForSSRS rm where rm.Imono =:Imono "
+//				+ "order by rm.detention_date desc");
+//		query.setParameter("Imono", Imono);
+//		List<VdetentionForSSRS> resultList = query.getResultList();
+//		return resultList.isEmpty() ? null : resultList.get(0);
+//	}
+	
 
 }
