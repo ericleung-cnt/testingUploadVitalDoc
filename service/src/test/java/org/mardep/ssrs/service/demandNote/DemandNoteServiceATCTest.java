@@ -37,8 +37,8 @@ public class DemandNoteServiceATCTest {
 //	@Autowired
 //	IDemandNoteService dnSvc;
 	
-	@Autowired
-	IDemandNoteService  dns;
+//	@Autowired
+//	IDemandNoteService  dns;
 	
 	
 
@@ -112,7 +112,7 @@ public class DemandNoteServiceATCTest {
 	
 	
 
-
+	//2017 full, full,half
 	@Test
 	public void testATC_RegDate_NoDetain_3rdYrs_ReturnFullATC() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
@@ -128,7 +128,7 @@ public class DemandNoteServiceATCTest {
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertEquals(expectATC, halfATC);
 	}
-	
+	//2017 full, full,half ,full
 	@Test
 	public void testATC_RegDate_NoDetain_4thYrs_ReturnFullATC() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
@@ -145,59 +145,12 @@ public class DemandNoteServiceATCTest {
 		assertEquals(expectATC, fullATC);
 	}
 	
+
 	
+	
+	//2017 full, full,full
 	@Test
-	public void testATC_RegDate_detainedWithin2year_inAnnivDay_ReturnFullATC() throws ParseException {
-		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date dueDate = sdf.parse("13/06/2019");
-		Date regDate = sdf.parse("13/06/2016");
-		Date detainDate = sdf.parse("13/06/2019");
-		//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
-		BigDecimal fullATC = new BigDecimal(77500.00);
-		BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
-		BigDecimal lastATC = fullATC;
-		
-		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
-		assertEquals(expectATC, halfATC);
-	}
-	
-	@Test
-	public void testATC_RegDate_detainedWithin2year_inAnnivDay2_ReturnFullATC() throws ParseException {
-		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date dueDate = sdf.parse("13/06/2020");
-		Date regDate = sdf.parse("13/06/2016");
-		Date detainDate = sdf.parse("13/06/2019");
-		//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
-		BigDecimal fullATC = new BigDecimal(77500.00);
-		BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
-		BigDecimal lastATC = halfATC;
-		
-		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
-		assertEquals(expectATC, fullATC);
-	}
-	
-	@Test
-	public void testATC_RegDate_detainedWithin2year_inAnnivDay3_ReturnFullATC() throws ParseException {
-		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		Date dueDate = sdf.parse("13/06/2021");
-		Date regDate = sdf.parse("13/06/2016");
-		Date detainDate = sdf.parse("13/06/2019");
-		//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
-		BigDecimal fullATC = new BigDecimal(77500.00);
-		BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
-		BigDecimal lastATC = fullATC;
-		
-		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
-		assertEquals(expectATC, fullATC);
-	}
-	
-	
-	
-	@Test
-	public void testATC_RegDate_detainedWithin2year_beforeAnnivDay_ReturnFullATC() throws ParseException {
+	public void testATC_RegDate_detained_beforeAnnivDay() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2019");
@@ -211,9 +164,9 @@ public class DemandNoteServiceATCTest {
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertEquals(expectATC, fullATC);
 	}
-	
+	//2017 full, full,full,full
 	@Test
-	public void testATC_RegDate_detainedWithin2year_beforeAnnivDay2_ReturnFullATC() throws ParseException {
+	public void testATC_RegDate_detained_beforeAnnivDay2() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2020");
@@ -227,9 +180,9 @@ public class DemandNoteServiceATCTest {
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertEquals(expectATC, fullATC);
 	}
-	
+	//2017 full, full,full,full,half
 	@Test
-	public void testATC_RegDate_detainedWithin2year_beforeAnnivDay3_ReturnFullATC() throws ParseException {
+	public void testATC_RegDate_detained_beforeAnnivDay3() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2021");
@@ -242,13 +195,48 @@ public class DemandNoteServiceATCTest {
 		
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertEquals(expectATC, halfATC);
+	}
+	
+	//2017 full, full,full,full,half,full
+	@Test
+	public void testATC_RegDate_detaine_beforeAnnivDay4() throws ParseException {
+		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date dueDate = sdf.parse("13/06/2022");
+		Date regDate = sdf.parse("13/06/2016");
+		Date detainDate = sdf.parse("13/05/2019");
+		//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+		BigDecimal fullATC = new BigDecimal(77500.00);
+		BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+		BigDecimal lastATC = fullATC;
+		
+		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+		assertEquals(expectATC, fullATC);
 	}
 	
 	
 
 	
+	//2017 full, full,half,
 	@Test
-	public void testATC_RegDate_detained_after_AnnivDay() throws ParseException {
+	public void testATC_RegDate_detained_after_AnnivDay1() throws ParseException {
+		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date dueDate = sdf.parse("13/06/2019");
+		Date regDate = sdf.parse("13/06/2016");
+		Date detainDate = sdf.parse("13/07/2019");
+		//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+		BigDecimal fullATC = new BigDecimal(77500.00);
+		BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+		BigDecimal lastATC = halfATC;
+		
+		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+		assertEquals(expectATC, halfATC);
+	}
+	
+	//2017 full, full,half,full,
+	@Test
+	public void testATC_RegDate_detained_after_AnnivDay2() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2020");
@@ -262,9 +250,9 @@ public class DemandNoteServiceATCTest {
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertEquals(expectATC, fullATC);
 	}
-	
+	//2017 full, full,half,full,full
 	@Test
-	public void testATC_RegDate_detained_after_AnnivDay2() throws ParseException {
+	public void testATC_RegDate_detained_after_AnnivDay3() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2021");
@@ -279,8 +267,9 @@ public class DemandNoteServiceATCTest {
 		assertEquals(expectATC, fullATC);
 	}
 	
+	//2017 full , 2018 full, 2019 half, 2020,full, 2021 full, 2022 half
 	@Test
-	public void testATC_RegDate_detained_after_AnnivDay3() throws ParseException {
+	public void testATC_RegDate_detained_after_AnnivDay4() throws ParseException {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dueDate = sdf.parse("13/06/2022");
@@ -292,8 +281,76 @@ public class DemandNoteServiceATCTest {
 		BigDecimal lastATC = halfATC;
 		
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
-		assertEquals(expectATC, fullATC);
+		assertEquals(expectATC, halfATC);
 	}
+	
+	
+	//2017 full, full,half,
+		@Test
+		public void testATC_RegDate_detained_in_AnnivDay1() throws ParseException {
+			DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date dueDate = sdf.parse("13/06/2019");
+			Date regDate = sdf.parse("13/06/2016");
+			Date detainDate = null;
+			//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+			BigDecimal fullATC = new BigDecimal(77500.00);
+			BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+			BigDecimal lastATC = halfATC;
+			
+			BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+			assertEquals(expectATC, halfATC);
+		}
+		
+		//2017 full, full,half,full,
+		@Test
+		public void testATC_RegDate_detained_in_AnnivDay2() throws ParseException {
+			DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date dueDate = sdf.parse("13/06/2020");
+			Date regDate = sdf.parse("13/06/2016");
+			Date detainDate = sdf.parse("13/06/2019");
+			//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+			BigDecimal fullATC = new BigDecimal(77500.00);
+			BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+			BigDecimal lastATC = halfATC;
+			
+			BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+			assertEquals(expectATC, fullATC);
+		}
+		//2017 full, full,half,full,full
+		@Test
+		public void testATC_RegDate_detained_in_AnnivDay3() throws ParseException {
+			DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date dueDate = sdf.parse("13/06/2021");
+			Date regDate = sdf.parse("13/06/2016");
+			Date detainDate = sdf.parse("13/06/2019");
+			//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+			BigDecimal fullATC = new BigDecimal(77500.00);
+			BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+			BigDecimal lastATC = fullATC;
+			
+			BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+			assertEquals(expectATC, fullATC);
+		}
+		
+		//2017 full , 2018 full, 2019 half, 2020,full, 2021 full, 2022 half
+		@Test
+		public void testATC_RegDate_detained_in_AnnivDay4() throws ParseException {
+			DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+			Date dueDate = sdf.parse("13/06/2022");
+			Date regDate = sdf.parse("13/06/2016");
+			Date detainDate = sdf.parse("13/06/2019");
+			//RegMaster rm = prepare_RegMaster_RegDate_NoDetain_Passed2Yrs();
+			BigDecimal fullATC = new BigDecimal(77500.00);
+			BigDecimal halfATC = fullATC.multiply(new BigDecimal(0.5));
+			BigDecimal lastATC = halfATC;
+			
+			BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
+			assertEquals(expectATC, halfATC);
+		}
 	
 	
 //	@Test

@@ -436,7 +436,7 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 		cal.setTime(today0000);
 		cal.add(Calendar.DAY_OF_MONTH, dayCountDownForAtcDnItem);
 		Date from = cal.getTime();
-		cal.add(Calendar.DAY_OF_MONTH,  1);
+		cal.add(Calendar.DAY_OF_MONTH, 1);
 		cal.add(Calendar.MILLISECOND, - 1);
 		Date to = cal.getTime();
 		cal.setTime(from);
@@ -445,7 +445,7 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 	
 
 		map.put("atfDueDateFrom", new Criteria("atfDueDate", from, Operator.GREATER_OR_EQUAL));
-		map.put("atfDueDateTo", new Criteria("atfDueDate", to, Operator.LESS_OR_EQUAL));  // 2 days ?
+		map.put("atfDueDateTo", new Criteria("atfDueDate", to, Operator.LESS_OR_EQUAL));  
 		map.put("regStatus", new Criteria("regStatus", "R"));
 		rmDao.findByPaging(map, null, null, resultList);
 		createAtcDni(resultList, newDue);
@@ -471,16 +471,20 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(today0000);
+		cal.add(Calendar.MILLISECOND, - 1);
+		Date to = cal.getTime();
+		
+		cal.setTime(today0000);
 		cal.add(Calendar.DAY_OF_MONTH, -dayCountDownForAtcDnItem);
 		Date from = cal.getTime();
 	
 		map.put("createdDateFrom", new Criteria("createdDate", from, Operator.GREATER_OR_EQUAL));
-		map.put("createdDateTo", new Criteria("createdDate", today0000, Operator.LESS_OR_EQUAL));  // 2 days ?
-		map.put("fcFeeCode", new Criteria("fcFeeCode", "01", Operator.EQUALS));  // 2 days ?
+		map.put("createdDateTo", new Criteria("createdDate", to, Operator.LESS_OR_EQUAL));  
+		map.put("fcFeeCode", new Criteria("fcFeeCode", "01", Operator.EQUALS));  
 		
 		// find all ATC(A) in last 30 days 
 		demandNoteItemDao.findByPaging(map, null, null, resultList);
-		createaFollowAtcDni(resultList,today0000);
+		createaFollowAtcDni(resultList);
 	}
 	
 
@@ -531,12 +535,15 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 	}
 
 	@Override
-	public void createAtcDni(List<RegMaster> resultList, Date dueDate) {
+	public void createAtcDni(List<RegMaster> resultList, Date newDueDate) {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		Date generationTime = new Date();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(dueDate);
+		cal.setTime(newDueDate);
 		int year = cal.get(Calendar.YEAR);
+		cal.add(Calendar.YEAR, -1);
+		Date dueDate = cal.getTime();
+		
 		Map<String, BigDecimal> calculated = rmDao.calculateAtc(resultList.stream().map(rm -> { return rm.getApplNo(); } ).toArray(String[]::new));
 		for (RegMaster rm : resultList) {
 			DemandNoteItem item = new DemandNoteItem();
@@ -553,10 +560,10 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 //				amount = amount.multiply(new BigDecimal("0.5"));
 //			}
 			BigDecimal calcATC;
-			BigDecimal lastATC = getLastATC(rm.getApplNo());
+//			BigDecimal lastATC = getLastATC(rm.getApplNo());
 			Date laestDetention =  rmDao.getLaestDetention(rm.getImoNo());
 			//calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), rm.getDetainDate(), generationTime, amount, lastATC);
-			calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), laestDetention, dueDate, amount, lastATC); //TODO:ACL
+			calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), laestDetention, dueDate, amount,null); //TODO:ACL
 			boolean discounted = !calcATC.equals(amount);
 
 			item.setAmount(calcATC);
@@ -569,21 +576,17 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 			item.setUserId("SYSTEM");
 			item.setAdhocDemandNoteText((discounted ? "50" : "100" ) + "% (Year " + (year - 1) + "-" + year + ")");
 			demandNoteItemDao.save(item);
-			if (dueDate != null) {
+			if (newDueDate != null) {
 				RegMaster update = rmDao.findById(rm.getApplNo());
-				update.setAtfDueDate(dueDate);
+				update.setAtfDueDate(newDueDate);
 				rmDao.save(update);
 			}
-			logger.info("ATC demand note item appl no {}, discount {}, amount {}, new Due Date {}",  rm.getApplNo(), discounted, calcATC, dueDate);
+			logger.info("ATC demand note item appl no {}, discount {}, amount {}, new Due Date {}",  rm.getApplNo(), discounted, calcATC, newDueDate);
 		}
 	}
 	
-	private void createaFollowAtcDni(List<DemandNoteItem> resultList, Date today) {
-		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
+	private void createaFollowAtcDni(List<DemandNoteItem> resultList) {
 		Date generationTime = new Date();
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(today);
-		int year = cal.get(Calendar.YEAR);
 		for (DemandNoteItem dni : resultList) {
 			
 			boolean discount = dni.getAdhocDemandNoteText().startsWith("50%");

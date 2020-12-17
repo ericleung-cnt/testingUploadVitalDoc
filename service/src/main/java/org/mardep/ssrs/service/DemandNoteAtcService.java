@@ -72,16 +72,13 @@ public class DemandNoteAtcService {
 	}
 	
 	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
-		logger.info("regDate "+ regDate);
-		logger.info("detainDate "+detainDate);
-		logger.info("dueDate "+dueDate);
+
 		BigDecimal calcATC = null;
 		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
 		int compareResult = 0;
 		Date regDate2Yrs = addYrsToDate(regDate, 2);
 		compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
 		if (compareResult>=0) {  // within first 2 years, must be full ,( > 1st year, = 2nd year)
-			System.out.println(" within first 2 years, must be full");
 //			calcATC = fullATC;
 			return fullATC;
 		} 
@@ -89,58 +86,73 @@ public class DemandNoteAtcService {
 			logger.info("detainDate!=null");
 			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
 			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore); 
-			
-			logger.info("detainDate "+ detainDate);
-			logger.info("dueDate2YrsBefore "+dueDate2YrsBefore);
-			logger.info("compareResult "+ compareResult);
 			if (compareResult >= 0 &&detainDate.before(dueDate) ) {  //detained within 2 years (including dueDate2YrsBefore)
-				System.out.println("detained within 2 years return full");
 				return fullATC;
 			}else {
-				logger.info("not detained within 2 years");
-				if(lastATC.equals(fullATC)) {
-					return halfATC;
-				}else{
-					return fullATC;					
-				}
-				//not detained in last 2 years
-//				Calendar c1 = Calendar.getInstance();
-//				c1.setTime(detainDate);
-//				Calendar c2 = Calendar.getInstance();
-//				c2.setTime(dueDate);
-//				compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
-//				System.out.println("compareResult "+detainDate+dueDate+ compareResult);
-//				if (compareResult %2 == 1) {  
-//					//detained equal or after anniversary date 
-//					System.out.println("old return half");
-//					return halfATC;   
-//				}else {
-//					System.out.println("even return full");
-//					return fullATC;
+					
+				
+//				if(lastATC.equals(fullATC)) {
+//					return halfATC;
+//				}else{
+//					return fullATC;					
 //				}
+				//not detained in last 2 years
+				Calendar c1 = Calendar.getInstance();
+				c1.setTime(detainDate);
+				Calendar c2 = Calendar.getInstance();
+				c2.setTime(dueDate);
+				compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+				
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+				Date aniDay ;
+				Date detainDateNoyear;
+				try {
+					aniDay = sdf.parse(sdf.format(dueDate));
+					detainDateNoyear = sdf.parse(sdf.format(detainDate));
+					//detained equal or after anniversary day 
+					if(detainDateNoyear.equals(aniDay)||detainDateNoyear.after(aniDay)) {
+						if (compareResult %2 == 1) {  
+							//detained equal or after anniversary date 
+							return halfATC;   
+						}else {
+							return fullATC;
+						}
+					}else {
+						if (compareResult %2 == 0) {  
+							//detained equal or after anniversary date 
+							return halfATC;   
+						}else {
+							return fullATC;
+						}
+					}
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+
+				return fullATC;
 				
 			}
 			
 		}else {
-			logger.info("detainDate==null");
-			if(lastATC.equals(fullATC)) {
-				return halfATC;
-			}else{
-				return fullATC;					
-			}
-//			Calendar c1 = Calendar.getInstance();
-//			c1.setTime(regDate);
-//			Calendar c2 = Calendar.getInstance();
-//			c2.setTime(dueDate);
-//			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
-//			System.out.println("compareResult "+ compareResult);
-//			if (compareResult %2 == 1) {  
-//				System.out.println("old return half");
-//				return halfATC;   
-//			}else {
-//				System.out.println("even return full");
-//				return fullATC;
+//			if(lastATC.equals(fullATC)) {
+//				return halfATC;
+//			}else{
+//				return fullATC;					
 //			}
+			Calendar c1 = Calendar.getInstance();
+			c1.setTime(regDate);
+			Calendar c2 = Calendar.getInstance();
+			c2.setTime(dueDate);
+			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+			System.out.println("compareResult "+ compareResult);
+			if (compareResult %2 == 1) {  
+				return halfATC;   
+			}else {
+				return fullATC;
+			}
 		}
 	}
 	
