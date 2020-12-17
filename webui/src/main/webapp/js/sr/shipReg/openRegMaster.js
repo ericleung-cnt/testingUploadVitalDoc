@@ -3496,7 +3496,7 @@ var openRegMaster = function(record, task, mode
                         {name:"buildDate",  title:"Date Keel Laid", startRow:true, characterCasing: "upper"  }, // TODO date or nvarchar
                         {name:"surveyShipType",  title:"Type of Ship", characterCasing: "upper" },
 						{name:"material",  title:"Material of Hull", characterCasing: "upper" },
-						{name:"buildDate_",  title:"Date Keel Laid",   },
+						{name:"buildDate_",  title:"Date Keel Laid(dd/MM/yyyy)",   },
                 		{name:"grossTon", title:"Gross Tonnage", },
                 		{name:"regNetTon", title:"Net Tonnage", colSpan:1},
                 		{name:"length",  title:"Length", type:"decimal", colSpan:1, },

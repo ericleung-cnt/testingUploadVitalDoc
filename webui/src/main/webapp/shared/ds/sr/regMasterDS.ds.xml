@@ -32,7 +32,7 @@
 		<field name="deRegTime"		type="datetime" displayFormat="dd/MM/yyyy" 	title="De Reg Time"/>
 		<field name="atfDueDate"	type="date" displayFormat="dd/MM/yyyy" 	title="ATF Due Date"/>
 		<field name="buildDate" 	type="text" 	title="Build Date" 		length="35"/>
-		<field name="buildDate_" 	type="date" 	title="Build Date" 	/>
+		<field name="buildDate_" 	type="date" displayFormat="dd/MM/yyyy" 	title="Build Date" 	/>
 		<field name="buildYear" 	type="integer" 	title="Build Year"/>
 		<field name="offNo" 		type="text" 	title="Official No." 		length="9"/>
 		<field name="callSign" 		type="text" 	title="Call Sign" 		length="7"/>
