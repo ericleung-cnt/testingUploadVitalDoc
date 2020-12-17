@@ -306,19 +306,21 @@ public class FsqcService extends AbstractService implements IFsqcService {
 				}
 			} else {
 				Map<String, Object> ownerMap = new LinkedHashMap<>();
-				ownerList.add(ownerMap);
-				ownerMap.put("ownerName", owner.getName());
-				ownerMap.put("ownerCR", owner.getOverseaCert() != null ? owner.getOverseaCert() : owner.getIncortCert());
-				ownerMap.put("ownerAddr1", owner.getAddress1());
-				ownerMap.put("ownerAddr2", owner.getAddress2());
-				ownerMap.put("ownerAddr3", owner.getAddress3());
-				ownerMap.put("ownerEmail", owner.getEmail());
-				BigDecimal mixed = owner.getIntMixed();
-				if (mixed != null) {
-					ownerMap.put("ownerShare", mixed.setScale(2));
-				} else {
-					ownerMap.put("ownerShare", null);
-				}
+				if(owner.getIntMixed()!=null &&owner.getIntMixed().compareTo(BigDecimal.ZERO)>0) {
+					ownerList.add(ownerMap);
+					ownerMap.put("ownerName", owner.getName());
+					ownerMap.put("ownerCR", owner.getOverseaCert() != null ? owner.getOverseaCert() : owner.getIncortCert());
+					ownerMap.put("ownerAddr1", owner.getAddress1());
+					ownerMap.put("ownerAddr2", owner.getAddress2());
+					ownerMap.put("ownerAddr3", owner.getAddress3());
+					ownerMap.put("ownerEmail", owner.getEmail());
+					BigDecimal mixed = owner.getIntMixed();
+					if (mixed != null) {
+						ownerMap.put("ownerShare", mixed.setScale(2));
+					} else {
+						ownerMap.put("ownerShare", null);
+					}
+			    }
 			}
 		}
 		if (dc.isEmpty()) {
