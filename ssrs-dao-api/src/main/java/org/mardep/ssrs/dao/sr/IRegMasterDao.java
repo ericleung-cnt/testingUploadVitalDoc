@@ -216,4 +216,6 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	void logFsqcRequest(String jsonRcvRequest, String jsonReplyResult);
 
+	Date getLaestDetention(String imoNo);
+
 }

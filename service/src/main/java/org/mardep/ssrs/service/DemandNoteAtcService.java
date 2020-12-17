@@ -8,8 +8,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+
+
+
 public class DemandNoteAtcService {
-	
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Date addYrsToDate(Date requestDate, int years) {
 		Calendar requestDateC = Calendar.getInstance();
 		requestDateC.setTime(requestDate);
@@ -64,120 +71,146 @@ public class DemandNoteAtcService {
 		return noDetainATC;
 	}
 	
-	public BigDecimal calcAtcAmt2(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
+	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
+		logger.info("regDate "+ regDate);
+		logger.info("detainDate "+detainDate);
+		logger.info("dueDate "+dueDate);
 		BigDecimal calcATC = null;
 		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
 		int compareResult = 0;
 		Date regDate2Yrs = addYrsToDate(regDate, 2);
 		compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
 		if (compareResult>=0) {  // within first 2 years, must be full ,( > 1st year, = 2nd year)
+			System.out.println(" within first 2 years, must be full");
 //			calcATC = fullATC;
 			return fullATC;
 		} 
 		if(detainDate!=null) {
+			logger.info("detainDate!=null");
 			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
-			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore);  
-			if (compareResult >= 0) {  //detained within 2 years (including dueDate2YrsBefore)
+			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore); 
+			
+			logger.info("detainDate "+ detainDate);
+			logger.info("dueDate2YrsBefore "+dueDate2YrsBefore);
+			logger.info("compareResult "+ compareResult);
+			if (compareResult >= 0 &&detainDate.before(dueDate) ) {  //detained within 2 years (including dueDate2YrsBefore)
+				System.out.println("detained within 2 years return full");
 				return fullATC;
 			}else {
-				//not detained in last 2 years
-				Calendar c1 = Calendar.getInstance();
-				c1.setTime(detainDate);
-				Calendar c2 = Calendar.getInstance();
-				c2.setTime(dueDate);
-				compareResult = c1.get(Calendar.YEAR)-c2.get(Calendar.YEAR);  
-				
-				if (compareResult %2 == 1) {  
-					//detained equal or after anniversary date 
-					return halfATC;   
-				}else {
-					return fullATC;
+				logger.info("not detained within 2 years");
+				if(lastATC.equals(fullATC)) {
+					return halfATC;
+				}else{
+					return fullATC;					
 				}
+				//not detained in last 2 years
+//				Calendar c1 = Calendar.getInstance();
+//				c1.setTime(detainDate);
+//				Calendar c2 = Calendar.getInstance();
+//				c2.setTime(dueDate);
+//				compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+//				System.out.println("compareResult "+detainDate+dueDate+ compareResult);
+//				if (compareResult %2 == 1) {  
+//					//detained equal or after anniversary date 
+//					System.out.println("old return half");
+//					return halfATC;   
+//				}else {
+//					System.out.println("even return full");
+//					return fullATC;
+//				}
 				
 			}
 			
 		}else {
-			Calendar c1 = Calendar.getInstance();
-			c1.setTime(regDate);
-			Calendar c2 = Calendar.getInstance();
-			c2.setTime(dueDate);
-			compareResult = c1.get(Calendar.YEAR)-c2.get(Calendar.YEAR);  
-			
-			if (compareResult %2 == 1) {  
-				return halfATC;   
-			}else {
-				return fullATC;
+			logger.info("detainDate==null");
+			if(lastATC.equals(fullATC)) {
+				return halfATC;
+			}else{
+				return fullATC;					
 			}
+//			Calendar c1 = Calendar.getInstance();
+//			c1.setTime(regDate);
+//			Calendar c2 = Calendar.getInstance();
+//			c2.setTime(dueDate);
+//			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+//			System.out.println("compareResult "+ compareResult);
+//			if (compareResult %2 == 1) {  
+//				System.out.println("old return half");
+//				return halfATC;   
+//			}else {
+//				System.out.println("even return full");
+//				return fullATC;
+//			}
 		}
 	}
 	
-	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
-		BigDecimal calcATC = null;
-		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
-		int compareResult = 0;
-
-		if (detainDate != null) {
-			Date detainDate3Yrs = addYrsToDate(detainDate, 3);
-		
-			//compareResult = detainDate3Yrs.compareTo(dueDate);	// detain date should have no impact ATC after 3 yrs 
-			compareResult = compareOnlyDayBetweenDates(detainDate3Yrs, dueDate);
-			if (compareResult<=0) {
-				detainDate = null;
-			} 
-		}
-		if (detainDate==null) {
-			Date regDate2Yrs = addYrsToDate(regDate, 2);
-			compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
-			//if (regDate2Yrs.compareTo(dueDate) > 0 ) {
-			if (compareResult>=0) {
-				calcATC = fullATC;
-			} else {
-				calcATC = noDetainATC(fullATC, lastATC);
-			}
-		} else {
-			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
-			//int compareResult = compareMonthDayBetweenDates(detainDate, dueDate2YrsBefore);
-			//compareResult = detainDate.compareTo(dueDate2YrsBefore);
-			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore);
-			if (compareResult <= 0) {
-				calcATC = halfATC;
-			} else if (compareResult > 0) {
-				calcATC = fullATC;
-			}
-//			Date detainDate2Yrs = addYrsToDate(detainDate, 2);
-//			int compareResult = compareMonthDayBetweenDates(detainDate2Yrs, currentDate);
-//			if (compareResult < 0) {
-//				calcATC = fullATC;
-//			} else if (compareResult >= 0) {
-//				calcATC = halfATC;				
+//	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
+//		BigDecimal calcATC = null;
+//		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
+//		int compareResult = 0;
+//
+//		if (detainDate != null) {
+//			Date detainDate3Yrs = addYrsToDate(detainDate, 3);
+//		
+//			//compareResult = detainDate3Yrs.compareTo(dueDate);	// detain date should have no impact ATC after 3 yrs 
+//			compareResult = compareOnlyDayBetweenDates(detainDate3Yrs, dueDate);
+//			if (compareResult<=0) {
+//				detainDate = null;
 //			} 
-//			int compareResult = compareMonthDayBetweenDates(detainDate, regDate);
-//			if (compareResult < 0) {
-//				if (detainDate2Yrs.compareTo(currentDate) > 0) {
-//					calcATC = fullATC;
-//				} else {
-//					calcATC = noDetainATC(fullATC, lastATC);
-//				}
-//			} else if (compareResult == 0) {
-//				if (detainDate2Yrs.compareTo(currentDate)>0) {
-//					calcATC = fullATC;
-//				} else {
-//					calcATC = noDetainATC(fullATC, lastATC);
-//				}
-//			} else if (compareResult > 0) {
-//				if (detainDate2Yrs.compareTo(currentDate)>0) {
-//					calcATC = fullATC;
-//				} else {
-//					Date detainDate3Yrs = addYrsToDate(detainDate, 3);
-//					if (detainDate3Yrs.compareTo(currentDate) > 0) {
-//						calcATC = halfATC; // fullATC;
-//					} else {
-//						calcATC = noDetainATC(fullATC, lastATC);
-//					}
-//				}
+//		}
+//		if (detainDate==null) {
+//			Date regDate2Yrs = addYrsToDate(regDate, 2);
+//			compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
+//			//if (regDate2Yrs.compareTo(dueDate) > 0 ) {
+//			if (compareResult>=0) {
+//				calcATC = fullATC;
+//			} else {
+//				calcATC = noDetainATC(fullATC, lastATC);
 //			}
-		}
-		return calcATC;
-	}
+//		} else {
+//			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
+//			//int compareResult = compareMonthDayBetweenDates(detainDate, dueDate2YrsBefore);
+//			//compareResult = detainDate.compareTo(dueDate2YrsBefore);
+//			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore);
+//			if (compareResult <= 0) {
+//				calcATC = halfATC;
+//			} else if (compareResult > 0) {
+//				calcATC = fullATC;
+//			}
+////			Date detainDate2Yrs = addYrsToDate(detainDate, 2);
+////			int compareResult = compareMonthDayBetweenDates(detainDate2Yrs, currentDate);
+////			if (compareResult < 0) {
+////				calcATC = fullATC;
+////			} else if (compareResult >= 0) {
+////				calcATC = halfATC;				
+////			} 
+////			int compareResult = compareMonthDayBetweenDates(detainDate, regDate);
+////			if (compareResult < 0) {
+////				if (detainDate2Yrs.compareTo(currentDate) > 0) {
+////					calcATC = fullATC;
+////				} else {
+////					calcATC = noDetainATC(fullATC, lastATC);
+////				}
+////			} else if (compareResult == 0) {
+////				if (detainDate2Yrs.compareTo(currentDate)>0) {
+////					calcATC = fullATC;
+////				} else {
+////					calcATC = noDetainATC(fullATC, lastATC);
+////				}
+////			} else if (compareResult > 0) {
+////				if (detainDate2Yrs.compareTo(currentDate)>0) {
+////					calcATC = fullATC;
+////				} else {
+////					Date detainDate3Yrs = addYrsToDate(detainDate, 3);
+////					if (detainDate3Yrs.compareTo(currentDate) > 0) {
+////						calcATC = halfATC; // fullATC;
+////					} else {
+////						calcATC = noDetainATC(fullATC, lastATC);
+////					}
+////				}
+////			}
+//		}
+//		return calcATC;
+//	}
 
 }
