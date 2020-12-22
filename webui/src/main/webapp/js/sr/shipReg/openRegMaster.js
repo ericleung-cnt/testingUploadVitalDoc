@@ -3519,7 +3519,8 @@ var openRegMaster = function(record, task, mode
                       "applDetails.ccCountryCodePrevReg", "applDetails.cfTime",
                       "applDetails.hullNo", "applDetails.placeUponRegister","applDetails.prevChiName",
                       "applDetails.prevRegYear", "applDetails.undertaking","applDetails.cosInfoState",
-                      "applDetails.actions","applDetails.clientDeregReason","applDetails.clientDeregRemark"
+					  "applDetails.actions","applDetails.clientDeregReason","applDetails.clientDeregRemark",
+					  "applDetails.prevFlag","applDetails.nextFlag"
 		                                 ] ,sectionExpanded:false},
 	             //{name:"applDetails.applNo", title:"applNo", type:"staticText" },
 		         {name:"applDetails.cs1ClassSocCode", title:"Class Society", editorType:"comboBox", colSpan:2},
@@ -3557,7 +3558,8 @@ var openRegMaster = function(record, task, mode
 
                  {name:"applDetails.cosInfoState", title:"Ship Particulars Status", valueMap:{"APP":"Application","COS":"Certificate of Survey","ITC":"International Tonnage Certificate"}, required:true, width:300, defaultValue:"COS"},
                  {name:"applDetails.undertaking", title:"Undertaking", length:1, colSpan:2, characterCasing: "upper"},
-
+				 {name:"applDetails.prevFlag", title:"Previous Flag", colSpan:2, characterCasing: "upper"},
+				 {name:"applDetails.nextFlag", title:"Next Flag", colSpan:2, characterCasing: "upper"},
                  {name:"applDetails.clientDeregReason", title:"Client De-registraion Reason", valueMap:{
       			   	"":"",
      			   	"0":"No Return",
@@ -3806,6 +3808,8 @@ var openRegMaster = function(record, task, mode
 						 applDetails.cosInfoState = formData.cosInfoState;
 						 applDetails.clientDeregReason = formData.clientDeregReason;
 						 applDetails.clientDeregRemark = formData.clientDeregRemark;
+						 applDetails.nextFlag = formData.nextFlag;
+						 applDetails.prevFlag = formData.prevFlag;
 						 copyVer(form.applDetails, applDetails);
 						 applDetailDS.updateData(applDetails, function(resp,data,req) {
 							 setAd(data);
@@ -4744,7 +4748,9 @@ var openRegMaster = function(record, task, mode
         form.getItem("applDetails.undertaking").setValue(applDetails.undertaking);
         form.getItem("applDetails.cosInfoState").setValue(applDetails.cosInfoState);
         form.getItem("applDetails.clientDeregReason").setValue(applDetails.clientDeregReason);
-        form.getItem("applDetails.clientDeregRemark").setValue(applDetails.clientDeregRemark);
+		form.getItem("applDetails.clientDeregRemark").setValue(applDetails.clientDeregRemark);
+        form.getItem("applDetails.nextFlag").setValue(applDetails.nextFlag);
+		form.getItem("applDetails.prevFlag").setValue(applDetails.prevFlag);
 	};
 	form.setData(record);
 	var proceedTask = function(operationId, mode, tx, postAction, reasonCode) {

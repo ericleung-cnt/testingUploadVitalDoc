@@ -403,6 +403,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		} else {
 			srMap.put("deregTime", null);
 		}
+		
 		srMap.put("regNetTon", rm.getRegNetTon());
 		srMap.put("grossTon", rm.getGrossTon());
 		srMap.put("length", rm.getLength());
@@ -444,6 +445,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			//srMap.put("cs", ad.getCs1ClassSocCode());
 			String classCode = mapRoInFsqc(ad.getCs1ClassSocCode());
 			srMap.put("cs", classCode);
+			srMap.put("prevFlag", ad.getPrevFlag());
+			srMap.put("nextFlag", ad.getNextFlag());
 		} else {
 			srMap.put("cs", null);
 		}

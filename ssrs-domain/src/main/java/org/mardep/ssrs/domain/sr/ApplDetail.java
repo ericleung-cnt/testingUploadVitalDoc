@@ -621,13 +621,14 @@ public class ApplDetail extends AbstractPersistentEntity<String> {
 	
 	@Getter
 	@Setter
-	@Column(name="OWNER_ENCUM_DOC")
-	private String ownerEncumDoc;
+	@Column(name="PREV_FLAG")
+	private String prevFlag;
 	
 	@Getter
 	@Setter
-	@Column(name="MORTGAGEE_CONSENT_DOC")
-	private String mortgageeConsentDoc;
+	@Column(name="NEXT_FLAG")
+	private String nextFlag;
+	
 	
 	@Override
 	public String getId() {
