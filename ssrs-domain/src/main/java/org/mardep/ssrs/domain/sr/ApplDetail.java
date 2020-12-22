@@ -621,11 +621,12 @@ public class ApplDetail extends AbstractPersistentEntity<String> {
 	
 	@Getter
 	@Setter
-	@Column(name="OWNER_ENCUM_DOC")
-	private String ownerEncumDoc;
+	@Column(name="PREV_FLAG")
+	private String prevFlag;
 	
 	@Getter
 	@Setter
+<<<<<<< HEAD
 	@Column(name="MORTGAGEE_CONSENT_DOC")
 	private String mortgageeConsentDoc;
 
@@ -638,6 +639,10 @@ public class ApplDetail extends AbstractPersistentEntity<String> {
 //	@Setter
 //	@Column(name="MORTGAGEE_CONSENT_DOC")
 //	private String mortgageeConsentDoc;
+=======
+	@Column(name="NEXT_FLAG")
+	private String nextFlag;
+>>>>>>> ab31086... add previous flag and next flag
 	
 	
 	@Override

@@ -137,5 +137,7 @@
 		<field name="ownerDeclarationNosealDoc" length="255"/>		
 		<field name="ownerEncumDoc" length="255"/>	
 		<field name="mortgageeConsentDoc" length="255"/>
+		<field name="nextFlag" length="50"/>
+		<field name="prevFlag" length="50"/>
 	</fields>
 </DataSource>
