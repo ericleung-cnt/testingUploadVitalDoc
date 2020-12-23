@@ -110,6 +110,18 @@ public class TransactionJpaDao extends AbstractJpaDao<Transaction, Long> impleme
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Transaction> findForMortgage(String applNo, Date reportDate){
+		String sql = "select t from Transaction t where t.applNo =:applNo and (t.code='33' or t.code='34') ";
+		sql += "and date_change<=:reportDate ";
+		sql += "order by t.dateChange desc, t.hourChange desc"; 
+		Query query = em.createQuery(sql);
+		query.setParameter("applNo", applNo);
+		query.setParameter("reportDate", reportDate);
+		return query.getResultList();
+	}
+
 	@Override
 	public List<Map<String, Object>> mortgageTransactionsReport(Date start, Date end) {
 		Query query = em.createNativeQuery("select t.at_ser_num, r.appl_no, "
