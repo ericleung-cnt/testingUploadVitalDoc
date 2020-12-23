@@ -357,10 +357,11 @@ public class DnSsrsGenerator extends AbstractReportGenerator implements IDemandN
 		//params.put("logoSmall300", DnSrGenerator.class.getResource("/images/LOGO_MD_small_300dpi.png"));
 		//String prefix = demandNoteNo.substring(0,3);
 		//String prefix1 = demandNoteNo.substring(0, 4);
-		if (demandNoteNo.startsWith(SR_DN_PREFIX)){
-			params.put(PARAM_DNSR, "Y");
-		} else {
+		//if (demandNoteNo.startsWith(SR_DN_PREFIX)){
+		if (demandNoteNo.startsWith(MMO_DN_PREFIX)){
 			params.put(PARAM_DNSR, "N");
+		} else {
+			params.put(PARAM_DNSR, "Y");
 		}
 
 	    if (Boolean.TRUE.equals(inputParam.get("printCopyCaption"))) {
