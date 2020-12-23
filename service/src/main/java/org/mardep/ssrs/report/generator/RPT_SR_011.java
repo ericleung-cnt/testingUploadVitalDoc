@@ -621,8 +621,9 @@ public class RPT_SR_011 extends AbstractSrReport {
 			List<Map<String, ?>> dataList2 = new ArrayList<Map<String, ?>>();
 			List<Mortgage> mortgages = getMortgage(applNo, reportDate);
 
-			List<Transaction> transactionList = transactionDao.findForMortgage(applNo);
-
+			//List<Transaction> transactionList = transactionDao.findForMortgage(applNo);
+			List<Transaction> transactionList = transactionDao.findForMortgage(applNo, reportDate);
+			
 			Map<String, String> transactionMap = getTransactionMap(transactionList);
 //			Map<String, String> natures = mortgageSrv.findMortgageRegDateNatures(applNo);
 //			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-ddHHmm");
