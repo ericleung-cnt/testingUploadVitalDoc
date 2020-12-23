@@ -587,6 +587,7 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 	
 	private void createaFollowAtcDni(List<DemandNoteItem> resultList) {
 		Date generationTime = new Date();
+		Calendar cal = Calendar.getInstance();
 		for (DemandNoteItem dni : resultList) {
 			
 			boolean discount = dni.getAdhocDemandNoteText().startsWith("50%");
@@ -594,8 +595,13 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 			RegMaster rm = rmDao.findById(dni.getApplNo());
 			
 			Date detainDate= rmDao.getLaestDetention(rm.getImoNo());
+			cal.setTime(rm.getAtfDueDate());
+			cal.add(Calendar.YEAR, -1);		
+			Date cutOff_date =cal.getTime();
+			
 		
-			if(detainDate!=null&&detainDate.after(dni.getCreatedDate())) {
+			if(detainDate!=null&&detainDate.after(dni.getCreatedDate())&&detainDate.before(cutOff_date)) {
+				
 				
 				DemandNoteItem item = new DemandNoteItem();		
 				
