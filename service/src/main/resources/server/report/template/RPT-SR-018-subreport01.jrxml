@@ -96,7 +96,7 @@
 	<detail>
 		<band height="60" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="3" y="0" width="240" height="16" uuid="f301a9d7-606d-4ab4-a35f-552aa46d70be">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -105,7 +105,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipNameEng}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="255" y="0" width="55" height="50" uuid="32c80d28-c336-4e21-b81d-ef69e060fdea"/>
 				<textElement textAlignment="Left">
 					<font size="10"/>
@@ -123,7 +123,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipNameChi}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="3" y="32" width="240" height="18" uuid="1cf1200f-4eda-4ca4-9fb4-79a3e4d98a44">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
@@ -131,16 +131,16 @@
 				<textElement textAlignment="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["(" + $F{shipType} + ")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{shipType}==null ? "" : "(" + $F{shipType} + ")"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="321" y="0" width="66" height="50" uuid="e22d6f73-197b-460f-b1ae-733c966adaab"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grt}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd">
+			<textField pattern="yyyy-MM-dd" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="400" y="0" width="72" height="50" uuid="bc8d82bd-af1d-4a60-84aa-5c0ea1ce921c"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>

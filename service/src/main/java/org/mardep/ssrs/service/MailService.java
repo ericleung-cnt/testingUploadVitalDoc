@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -39,6 +40,7 @@ import org.mardep.ssrs.dao.sr.IOwnerDao;
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
 import org.mardep.ssrs.dao.sr.IRepresentativeDao;
 import org.mardep.ssrs.domain.codetable.ClassSociety;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.dn.DemandNoteHeader;
 import org.mardep.ssrs.domain.dn.DemandNoteRefund;
 import org.mardep.ssrs.domain.sr.ApplDetail;
@@ -66,6 +68,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.sf.jasperreports.engine.JRException;
+
+import org.mardep.ssrs.dao.codetable.ISystemParamDao;
 
 @Service
 @EnableScheduling
@@ -102,6 +106,9 @@ public class MailService {
 	IDnsService dnsService;
 	@Autowired
 	IVitalDocClient vitalDocClient;
+
+	@Autowired 
+	ISystemParamDao systemParamDao;
 
 	@Autowired
 	@Qualifier("AIP")
@@ -538,7 +545,17 @@ public class MailService {
 		remind(dnDao.listForReminder(IDemandNoteHeaderDao.DEMAND_NOTE_REMINDER_2ND), 2);
 	}
 
+	private String getSysParamDnReminder() {
+		SystemParam sysParam = systemParamDao.findById("SP_SEND_DN_REMINDER");
+		return sysParam.getValue();
+	}
+
 	private void remind(List<DemandNoteHeader> reminders, int suffix) throws Exception {
+		String paramValue = getSysParamDnReminder();
+		if ("0".equals(paramValue)) {
+			logger.info("dn reminder function disabled");
+			return;			
+		}
 		Date today = new Date();
 		String finance = mailProps.get("mail.finance.email");
 		for (DemandNoteHeader h : reminders) {
