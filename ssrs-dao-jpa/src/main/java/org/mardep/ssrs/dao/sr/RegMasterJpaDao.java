@@ -1323,6 +1323,32 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		return lst;
 	}
 
+//	private List<?> ownerOpenCloseReport(String txCode, Date reportDate) {
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+//		String dateStr = sdf.format(reportDate);
+//		Query query = em.createNativeQuery("select tx.AT_SER_NUM, tx.rm_appl_no, rm.reg_name, "
+//				+ "rm.reg_cname cname , rm.off_no, rm.gross_ton, tx.date_change, " +
+//				"ow.owner_name, isnull(ow.address1 + ' ', '') + isnull(ow.address2 + ' ', '') + isnull(ow.address3, '')  ow_addr, " +
+//				"SS.SS_DESC " +
+//				"from Transactions  tx " +
+//				"inner join REG_MASTERS_HIST rm on rm.appl_no = tx.rm_appl_no and tx.at_ser_num = rm.tx_id " +
+//				"left outer join SHIP_SUBTYPES ss on ss.ST_SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE and ss.SHIP_SUBTYPE_CODE = rm.SS_SHIP_SUBTYPE_CODE " +
+//				"inner join OWNERS_HIST ow on ow.rm_appl_no = tx.rm_appl_no and tx.at_ser_num = ow.tx_id " +
+//				"where tc_txn_code in :txCode " +
+//				"and substring(convert(varchar, date_change, 23), 1, 7) = substring(convert(varchar, :reportDate, 23), 1, 7) " +
+//				"and ow.owner_type<>'D' and ow.int_mixed>0" +
+//				//"and substring(convert(varchar, date_change, 23), 1, 7) = :reportDate "
+//				//"and left(convert(varchar, tx.date_change),7) = :reportDate " +
+//				"order by tx.date_change asc ");
+//		query.setParameter("txCode", Arrays.asList(txCode.split("\\,")));
+//		query.setParameter("reportDate", dateStr);
+//		//List<?> lst = query.getResultList();
+//		List<Object[]> lst = query.getResultList();
+//		System.out.println("txCode:" + txCode);
+//		System.out.println("reportDate:" + dateStr);
+//		System.out.println("lst size:" + lst.size());
+//		return lst;
+//	}
 	private List<?> ownerOpenCloseReport(String txCode, Date reportDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		String dateStr = sdf.format(reportDate);
@@ -1347,9 +1373,33 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		System.out.println("txCode:" + txCode);
 		System.out.println("reportDate:" + dateStr);
 		System.out.println("lst size:" + lst.size());
+		for(int i=0;i<lst.size();i++){
+			if(i==0){
+			}else{
+				if(//lst.get(i)[0]==lst.get(i-1)[0]&&
+				(((lst.get(i)[1]!=null&&lst.get(i-1)[1]!=null)&&(lst.get(i)[1].equals(lst.get(i-1)[1])))||(lst.get(i)[1]==null&&lst.get(i-1)[1]==null))
+				&&(((lst.get(i)[2]!=null&&lst.get(i-1)[2]!=null)&&(lst.get(i)[2].equals(lst.get(i-1)[2])))||(lst.get(i)[2]==null&&lst.get(i-1)[2]==null))
+				&&(((lst.get(i)[3]!=null&&lst.get(i-1)[3]!=null)&&(lst.get(i)[3].equals(lst.get(i-1)[3])))||(lst.get(i)[3]==null&&lst.get(i-1)[3]==null))
+				&&(((lst.get(i)[4]!=null&&lst.get(i-1)[4]!=null)&&(lst.get(i)[4].equals(lst.get(i-1)[4])))||(lst.get(i)[4]==null&&lst.get(i-1)[4]==null))
+				&&(((lst.get(i)[5]!=null&&lst.get(i-1)[5]!=null)&&(lst.get(i)[5].equals(lst.get(i-1)[5])))||(lst.get(i)[5]==null&&lst.get(i-1)[5]==null))
+				&&(((lst.get(i)[6]!=null&&lst.get(i-1)[6]!=null)&&(lst.get(i)[6].equals(lst.get(i-1)[6])))||(lst.get(i)[6]==null&&lst.get(i-1)[6]==null))
+				&&(((lst.get(i)[9]!=null&&lst.get(i-1)[9]!=null)&&(lst.get(i)[9].equals(lst.get(i-1)[9])))||(lst.get(i)[9]==null&&lst.get(i-1)[9]==null))){
+				
+					lst.get(i)[0]="";
+					lst.get(i)[1]="";
+					lst.get(i)[2]="";
+					lst.get(i)[3]="";
+					lst.get(i)[4]="";
+					lst.get(i)[5]="";
+					lst.get(i)[6]=null;
+					lst.get(i)[9]=null;
+				}
+			}
+
+		}
 		return lst;
 	}
-
+	
 	private List<?> transferOwnershipReport(String txCode, Date reportDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		String dateStr = sdf.format(reportDate);
