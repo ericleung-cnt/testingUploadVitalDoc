@@ -262,19 +262,29 @@
 				<reportElement x="5" y="281" width="154" height="15" uuid="b387204a-aaf2-44eb-b6ee-30b0a9020f5e">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<text><![CDATA[Name and Address of Builder]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="5" y="292" width="154" height="15" uuid="f3f52dad-40e1-4e00-80b5-16b4a8f32a8a">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
-				<textElement verticalAlignment="Top"/>
+				<textElement verticalAlignment="Top">
+					<font size="9"/>
+				</textElement>
 				<text><![CDATA[造船廠名稱､ 地址]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="161" y="295" width="339" height="18" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28">
+				<reportElement positionType="Float" x="140" y="295" width="380" height="18" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{builder} == null ? "-" :
 				(($F{builder}.getAddress1() != null ? $F{builder}.getAddress1() :"") +
 				($F{builder}.getAddress2() != null ? " " + $F{builder}.getAddress2() : "") +
@@ -282,11 +292,15 @@
 				 )]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="161" y="281" width="339" height="15" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7">
+				<reportElement x="140" y="281" width="380" height="15" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
+				<textElement>
+					<font size="9"/>
+				</textElement>
 				<textFieldExpression><![CDATA[($F{builder} == null || $F{builder}.getName() == null ? "-" : $F{builder}.getName())]]></textFieldExpression>
 			</textField>
 			<staticText>
@@ -576,8 +590,7 @@ $F{regMaster}.getRegChiName() :
 $F{regMaster}.getProvRegDate() != null &&
 $F{regMaster}.getRegDate() != null )
 ?
-new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getProvRegDate()).toUpperCase() : ($F{regMaster}.getRegDate() == null ? "-" : new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getRegDate()).toUpperCase())
-]]></textFieldExpression>
+new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getProvRegDate()).toUpperCase() : ($F{regMaster}.getRegDate() == null ? "-" : new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getRegDate()).toUpperCase())]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="388" y="242" width="137" height="31" uuid="13d5fb99-0a01-4803-9cd3-aa5b21ba021c">
