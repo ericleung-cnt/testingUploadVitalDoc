@@ -33,6 +33,8 @@ public class OcrTask implements Runnable {
 
 	@Autowired IBatchUploadActionServiceSignedCoR actionSignedCoR;
 
+	@Autowired IBatchActionServiceCreateImoFolder actionCreateImoFolder;
+	
 	Logger logger = LoggerFactory.getLogger(OcrTask.class);
 
 	@Override
@@ -65,7 +67,9 @@ public class OcrTask implements Runnable {
 		
 		transcript.getEntityFromOcrAndSave();
 
-		actionSignedCoR.doBatchUpload();
+		//actionSignedCoR.doBatchUpload();
+		
+		//actionCreateImoFolder.doBatchCreateImoFolder();
 	}
 
 }

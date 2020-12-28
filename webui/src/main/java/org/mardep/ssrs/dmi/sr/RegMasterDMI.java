@@ -30,12 +30,14 @@ import org.mardep.ssrs.domain.sr.Owner;
 import org.mardep.ssrs.domain.sr.RegMaster;
 import org.mardep.ssrs.domain.sr.Representative;
 import org.mardep.ssrs.domain.sr.Transaction;
+import org.mardep.ssrs.domain.sr.VitaldocCreateImoFolder;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.service.IDeRegService;
 import org.mardep.ssrs.service.IFsqcCertResultService;
 import org.mardep.ssrs.service.IFsqcService;
 import org.mardep.ssrs.service.IInboxService;
 import org.mardep.ssrs.service.IShipRegService;
+import org.mardep.ssrs.service.IVitaldocCreateImoFolderService;
 import org.mardep.ssrs.service.MailService;
 import org.mardep.ssrs.vitaldoc.IVitalDocClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +86,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 
 	@Autowired
 	IVitalDocClient vitaldocClient;
+	
+	@Autowired
+	IVitaldocCreateImoFolderService createImoFolderSvc;
 	
 	//private final String OPERATION_UPDATE_MULTI_TRACK_CODE = "UPDATE_MULTI_TRACK_CODE";
 	private final String OPERATION_REQUEST_FSQC_CERT = "REQUEST_FSQC_CERT";
@@ -349,6 +354,7 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			Map clientSuppliedValues = dsRequest.getClientSuppliedValues();
 			try {
 				sendRequestFsqcCert(clientSuppliedValues);
+				//createImoFolder();
 				dsResponse.setSuccess();
 				//dsResponse.setFailure("failed");
 				return dsResponse;
@@ -387,6 +393,32 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		}
 		return super.update(entity, dsRequest);
+	}
+	
+	private void createImoFolder() {
+		try {
+			List<VitaldocCreateImoFolder> entities = createImoFolderSvc.findNotProcessed();
+			if (entities!=null && entities.size()>0) {
+				for (VitaldocCreateImoFolder entity:entities) {
+					String imo = entity.getImo();
+		            String vitaldocSessionId = vitaldocClient.getVitaldocSessionId();				
+					if (imo!=null && !imo.isEmpty()){
+						String result = vitaldocClient.cloneFsqcTemplate(vitaldocSessionId, imo);
+						entity.setImo(imo);					
+						if (result.equals("VITALDOC_CLONE_RESULT_SUCCESS")) {
+							entity.setImoFolderCreated("Y");
+							entity.setVitaldocReturn("");
+						} else {
+							entity.setImoFolderCreated("N");
+							entity.setVitaldocReturn(result);
+						}
+						createImoFolderSvc.save(entity);
+					}
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {

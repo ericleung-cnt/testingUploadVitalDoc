@@ -141,4 +141,10 @@ public interface IVitalDocClient {
 	public boolean createShortcutInFsqcVitalDoc(String sessionId, String imoNo, Long docId, String destPath) throws IOException;
 
 	public String getShortcutPathForSignedCoR(String imo);
+	
+	public void setDmsUrl(String url);
+	public void setUsername(String user);
+	public void setPassword(String pwd);
+	public void afterPropertiesSet() throws Exception;
+
 }

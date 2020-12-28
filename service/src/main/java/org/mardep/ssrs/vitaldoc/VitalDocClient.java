@@ -109,6 +109,21 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	@Value("${vitaldoc.password:password}")
 	String password;
 
+	@Override
+	public void setDmsUrl(String url) {
+		dmsUrl = url;
+	}
+	
+	@Override
+	public void setUsername(String user) {
+		username = user;
+	}
+	
+	@Override 
+	public void setPassword(String pwd) {
+		password = pwd;
+	}
+	
 	private SystemLogin systemLogin;
 
 	private String sessionId;
@@ -406,12 +421,14 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 
 	private String doCloneFsqcTemplate(String sessionId, String imoNo) throws IOException {
 		String sResult = "";
-		long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
-		long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
+//		long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
+//		long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 		String targetPath = VITALDOC_PATH_FSQC_ROOT + imoNo;
 
 		long destDirId = getFsqcDirId(sessionId, targetPath);
 		if (destDirId==-1){
+			long rootDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT);
+			long templateDirId = getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + VITALDOC_PATH_FSQC_TEMPLATE + VITALDOC_PATH_FSQC_TEMPLATE_DETAIL);
 			DirectoryClone dirClone = new DirectoryClone();
 			dirClone.setSessionIDIn(sessionId);
 			dirClone.setDirID(templateDirId);
