@@ -55,16 +55,16 @@ public class FsqcCertProgressDMI {
 		try {
 			List<VitaldocCreateImoFolder> entities = createImoFolderSvc.findNotProcessed();
 			if (entities!=null && entities.size()>0) {
-//				vitaldocClient.setDmsUrl("https://10.37.115.146/vdws/VD_WS_Server.asmx");
-//				vitaldocClient.setUsername("administrator");
-//				vitaldocClient.setPassword("AES:Y53NB7qhKcrwrPJgq6HsMQ==");
-//				vitaldocClient.afterPropertiesSet();
-//	            String vitaldocSessionId = vitaldocClient.getVitaldocSessionId();				
+				vitaldocClient.setDmsUrl("https://10.37.115.146/vdws/VD_WS_Server.asmx");
+				vitaldocClient.setUsername("administrator");
+				vitaldocClient.setPassword("AES:Y53NB7qhKcrwrPJgq6HsMQ==");
+				vitaldocClient.afterPropertiesSet();
+	            String vitaldocSessionId = vitaldocClient.getVitaldocSessionId();				
 				for (VitaldocCreateImoFolder entity:entities) {
 					String imo = entity.getImo();
 					if (imo!=null && !imo.isEmpty()){
-						//String result = vitaldocClient.cloneFsqcTemplate(vitaldocSessionId, imo);
-						String result = "";
+						String result = vitaldocClient.cloneFsqcTemplate(vitaldocSessionId, imo);
+						//String result = "";
 						entity.setImo(imo);					
 						if (result.equals("VITALDOC_CLONE_RESULT_SUCCESS")) {
 							entity.setImoFolderCreated("Y");
