@@ -57,6 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ldap.transaction.compensating.TempEntryRenamingStrategy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -534,15 +535,20 @@ public class MailService {
 	 * @param count 1 or 2 for 1st or 2nd
 	 * @throws s
 	 */
+	@Value("${sendDnReminder.enable:false}")
+	private boolean sendDnReminderEnable;
+	
 	@Scheduled(cron="${MailService.sendDnReminder.cron}")
 	@Transactional
 	public void sendDnReminder() throws Exception {
-		User user = new User();
-		user.setId("MailService");
-		UserContextThreadLocalHolder.setCurrentUser(user);
-		logger.info("sendDnReminder");
-		remind(dnDao.listForReminder(IDemandNoteHeaderDao.DEMAND_NOTE_REMINDER_1ST), 1);
-		remind(dnDao.listForReminder(IDemandNoteHeaderDao.DEMAND_NOTE_REMINDER_2ND), 2);
+		if (sendDnReminderEnable) {
+			User user = new User();
+			user.setId("MailService");
+			UserContextThreadLocalHolder.setCurrentUser(user);
+			logger.info("sendDnReminder");
+			remind(dnDao.listForReminder(IDemandNoteHeaderDao.DEMAND_NOTE_REMINDER_1ST), 1);
+			remind(dnDao.listForReminder(IDemandNoteHeaderDao.DEMAND_NOTE_REMINDER_2ND), 2);			
+		}
 	}
 
 	private String getSysParamDnReminder() {
