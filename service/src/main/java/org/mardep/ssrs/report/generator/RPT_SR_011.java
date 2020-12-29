@@ -513,6 +513,11 @@ public class RPT_SR_011 extends AbstractSrReport {
 						(owner.getIntNumberator() != null ? owner.getIntNumberator() : "-") + "/" +
 						(owner.getIntDenominator() != null ? owner.getIntDenominator() : "-") :
 							owner.getIntMixed().toString());
+				if (!owner.getType().equals("C") && !owner.getType().contentEquals("D")) {
+					subreportRow.put("jointlyOwned", "(JOINTLY-OWNED)");
+				} else {
+					subreportRow.put("jointlyOwned", "");
+				}
 				subreportRow.put("placeOfIncorp", evaluatePlaceOfIncorp(owner));
 				dataList.add(subreportRow);
 				String ownerStr = owner.getName() != null?  (owner.getName() + "\n" + ownerAddr) : "";
@@ -659,23 +664,31 @@ public class RPT_SR_011 extends AbstractSrReport {
 				StringBuilder name = new StringBuilder();
 				StringBuilder place = new StringBuilder();
 				DecimalFormat intFormat = new DecimalFormat("#");
-				mortgagors.forEach(m -> {
+				int totalInterest=0;
+				//mortgagors.forEach(m -> {
+				for (Mortgagor m:mortgagors) {
 					for (Owner owner : owners) {
 						if (owner.getOwnerSeqNo().equals(m.getSeq())) {
 							name.append(owner.getName()).append(", ");
 							//place.append(owner.getRegPlace() != null ? owner.getRegPlace() : owner.getIncorpPlace()).append(", ");
 							String placeOfIncorp = evaluatePlaceOfIncorp(owner);
 							place.append(placeOfIncorp).append(", ");
-							if (isPercentage) {
-							subreportRow.put("propertyOfShip", intFormat.format(owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO) + " Percentage");
-							} else {
-								subreportRow.put("propertyOfShip", intFormat.format(owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO) + " Shares");								
-							}
+//							if (isPercentage) {
+//							subreportRow.put("propertyOfShip", intFormat.format(owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO) + " Percentage");
+//							} else {
+//								subreportRow.put("propertyOfShip", intFormat.format(owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO) + " Shares");								
+//							}
+							BigDecimal interest = (owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO);;
+							totalInterest = totalInterest + interest.intValue();
 							break;
 						}
 					}
-				});
-
+				};
+				if (isPercentage) {
+					subreportRow.put("propertyOfShip", intFormat.format(totalInterest) + " Percentage");
+				} else {
+					subreportRow.put("propertyOfShip", intFormat.format(totalInterest) + " Shares");								
+				}
 				if (name.length() >= 2) {
 					name.delete(name.length() - 2, name.length());
 				}

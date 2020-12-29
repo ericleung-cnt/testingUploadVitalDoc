@@ -13,6 +13,7 @@
 	<field name="ownerAddress" class="java.lang.String"/>
 	<field name="percentage" class="java.lang.String"/>
 	<field name="placeOfIncorp" class="java.lang.String"/>
+	<field name="jointlyOwned" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -68,7 +69,7 @@
 				<textFieldExpression><![CDATA[$F{ownerName}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="13" y="18" width="420" height="18" uuid="3ecb54d3-0db4-4e93-82b9-90c99ca72574">
+				<reportElement positionType="Float" x="13" y="18" width="400" height="18" uuid="3ecb54d3-0db4-4e93-82b9-90c99ca72574">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -79,7 +80,9 @@
 				<textFieldExpression><![CDATA[$F{ownerAddress}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="465" y="3" width="55" height="18" uuid="31cc7b07-4be5-434e-9b36-490d537a690a"/>
+				<reportElement x="465" y="1" width="55" height="18" uuid="31cc7b07-4be5-434e-9b36-490d537a690a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
 				<textElement>
 					<font size="10"/>
 				</textElement>
@@ -105,6 +108,15 @@
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{placeOfIncorp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="420" y="18" width="100" height="18" uuid="1d32e40d-25dc-4b87-858e-cb3879c78cb0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{jointlyOwned}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
