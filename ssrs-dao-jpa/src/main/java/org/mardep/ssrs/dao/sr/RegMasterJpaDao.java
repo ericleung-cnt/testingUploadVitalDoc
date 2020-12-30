@@ -263,53 +263,63 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 //						"left join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM \n" +
 //						"where (rm.REG_STATUS = 'R' and rm.reg_date <= :asAtDate) or (rm.REG_STATUS = 'D' and rm.DEREG_TIME > :asAtDate) \n" +
 //						"order by rm.APPL_NO";
-			String sql = "select rm.APPL_NO, rm.gton1, rm.nton1, rm.history_gross_ton, rm.history_net_ton, \n" +
-						 "rm.gross_ton, rm.net_ton, \n" +
-						 "rm.OT_OPER_TYPE_CODE, rm.OT_DESC, \n" +
-						 "rm.SS_ST_SHIP_TYPE_CODE, st.ST_DESC, \n" +
-						 "ss.SHIP_SUBTYPE_CODE, ss.SS_DESC from SHIP_SUBTYPES ss \n" +
-						 "inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = ss.ST_SHIP_TYPE_CODE \n" +
-						 "left join ( \n" +
-							"select rm.APPL_NO, rm.GROSS_TON as gton1, rm.REG_NET_TON as nton1, \n"+
-							"rmh.GROSS_TON as history_gross_ton, rmh.REG_NET_TON as history_net_ton, \n" +
-								"(case when rmh.GROSS_TON is null then rm.GROSS_TON else rmh.GROSS_TON end) as gross_ton, \n" +
-								"(case when rmh.REG_NET_TON is null then rm.REG_NET_TON else rmh.REG_NET_TON end) as net_ton, \n" +
-								"rm.OT_OPER_TYPE_CODE, op.OT_DESC, rm.SS_ST_SHIP_TYPE_CODE, rm.SS_SHIP_SUBTYPE_CODE from REG_MASTERS rm \n" +
-							"inner join OPERATION_TYPES op on op.OPER_TYPE_CODE = rm.OT_OPER_TYPE_CODE \n" +
-							//"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE \n" +
-							"left join (select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, RM_APPL_NO, AT_SER_NUM from TRANSACTIONS \n" +
-								"where DATE_CHANGE <= :asAtDate) lr on lr.RM_APPL_NO = rm.appl_no and lr.rowNum=1 \n" +
-							"left join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM \n" +
-							"where (rm.REG_STATUS = 'R' and (rm.reg_date <= :asAtDate or rm.prov_reg_date <= :asAtDate)) " +
-							"or (rm.REG_STATUS = 'D' and rm.DEREG_TIME > :asAtDate) \n" +
-						") rm on rm.SS_SHIP_SUBTYPE_CODE = ss.SHIP_SUBTYPE_CODE \n" +
-						"order by rm.appl_no" ;
+			
+//			String sql = "select rm.APPL_NO, rm.gton1, rm.nton1, rm.history_gross_ton, rm.history_net_ton, \n" +
+//						 "rm.gross_ton, rm.net_ton, \n" +
+//						 "rm.OT_OPER_TYPE_CODE, rm.OT_DESC, \n" +
+//						 "rm.SS_ST_SHIP_TYPE_CODE, st.ST_DESC, \n" +
+//						 "ss.SHIP_SUBTYPE_CODE, ss.SS_DESC from SHIP_SUBTYPES ss \n" +
+//						 "inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = ss.ST_SHIP_TYPE_CODE \n" +
+//						 "left join ( \n" +
+//							"select rm.APPL_NO, rm.GROSS_TON as gton1, rm.REG_NET_TON as nton1, \n"+
+//							"rmh.GROSS_TON as history_gross_ton, rmh.REG_NET_TON as history_net_ton, \n" +
+//								"(case when rmh.GROSS_TON is null then rm.GROSS_TON else rmh.GROSS_TON end) as gross_ton, \n" +
+//								"(case when rmh.REG_NET_TON is null then rm.REG_NET_TON else rmh.REG_NET_TON end) as net_ton, \n" +
+//								"rm.OT_OPER_TYPE_CODE, op.OT_DESC, rm.SS_ST_SHIP_TYPE_CODE, rm.SS_SHIP_SUBTYPE_CODE from REG_MASTERS rm \n" +
+//							"inner join OPERATION_TYPES op on op.OPER_TYPE_CODE = rm.OT_OPER_TYPE_CODE \n" +
+//							//"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE \n" +
+//							"left join (select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, RM_APPL_NO, AT_SER_NUM from TRANSACTIONS \n" +
+//								"where DATE_CHANGE <= :asAtDate) lr on lr.RM_APPL_NO = rm.appl_no and lr.rowNum=1 \n" +
+//							"left join REG_MASTERS_HIST rmh on rmh.TX_ID = lr.AT_SER_NUM \n" +
+//							"where (rm.REG_STATUS = 'R' and (rm.reg_date <= :asAtDate or rm.prov_reg_date <= :asAtDate)) " +
+//							"or (rm.REG_STATUS = 'D' and rm.DEREG_TIME > :asAtDate) \n" +
+//						") rm on rm.SS_SHIP_SUBTYPE_CODE = ss.SHIP_SUBTYPE_CODE \n" +
+//						"order by rm.appl_no" ;
+			
+			String sql = "select rmh.appl_no, rmh.GROSS_TON, rmh.REG_NET_TON, rmh.OT_OPER_TYPE_CODE, st.ST_DESC, ss.SS_DESC from REG_MASTERS_HIST rmh \n" +
+							"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE=rmh.SS_ST_SHIP_TYPE_CODE \n" +
+							"inner join SHIP_SUBTYPES ss on ss.SHIP_SUBTYPE_CODE=rmh.SS_SHIP_SUBTYPE_CODE \n" +
+							"inner join ( \n" +
+							"select ROW_NUMBER() over (partition by rm_appl_no order by rm_appl_no, at_ser_num desc) as rowNum, rm_appl_no, at_ser_num, DATE_CHANGE from transactions \n" +
+								"where DATE_CHANGE<=:asAtDate) lr on lr.RM_APPL_NO=rmh.APPL_NO and lr.rowNum=1 and lr.at_ser_num=rmh.TX_ID \n" +
+							"where rmh.REG_STATUS='R' and (rmh.reg_date <= :asAtDate or rmh.prov_reg_date <= :asAtDate) or (rmh.REG_STATUS = 'D' and rmh.DEREG_TIME > :asAtDate)"; 
+
 			Query query = em.createNativeQuery(sql);
 			query.setParameter("asAtDate", asAtDate);
 			List<Object[]> rawList = query.getResultList();
 			List<SummaryOfShipsByShipType> summaryList = new ArrayList<SummaryOfShipsByShipType>();
 
 			for (Object[] arr : rawList) {
-				SummaryOfShipsByShipType entity = findSummaryByShipCode(summaryList, arr[10].toString(), arr[12].toString());
+				SummaryOfShipsByShipType entity = findSummaryByShipCode(summaryList, arr[4].toString(), arr[5].toString());
 				String opTypeCode = "";
-				if (arr[7]!=null) {
-					opTypeCode = arr[7].toString();
+				if (arr[3]!=null) {
+					opTypeCode = arr[3].toString();
 				}
 				switch (opTypeCode) {
 					case "OGV":
 						entity.setOnos(entity.getOnos()+1);
-						entity.setOgross(entity.getOgross().add(new BigDecimal(arr[5].toString())));
-						entity.setOnet(entity.getOnet().add(new BigDecimal(arr[6].toString())));
+						entity.setOgross(entity.getOgross().add(new BigDecimal(arr[1].toString())));
+						entity.setOnet(entity.getOnet().add(new BigDecimal(arr[2].toString())));
 						break;
 					case "LCS":
 						entity.setLnos(entity.getLnos()+1);
-						entity.setLgross(entity.getLgross().add(new BigDecimal(arr[5].toString())));
-						entity.setLnet(entity.getLnet().add(new BigDecimal(arr[6].toString())));
+						entity.setLgross(entity.getLgross().add(new BigDecimal(arr[1].toString())));
+						entity.setLnet(entity.getLnet().add(new BigDecimal(arr[2].toString())));
 						break;
 					case "RTV":
 						entity.setRnos(entity.getRnos()+1);
-						entity.setRgross(entity.getRgross().add(new BigDecimal(arr[5].toString())));
-						entity.setRnet(entity.getRnet().add(new BigDecimal(arr[6].toString())));
+						entity.setRgross(entity.getRgross().add(new BigDecimal(arr[1].toString())));
+						entity.setRnet(entity.getRnet().add(new BigDecimal(arr[2].toString())));
 						break;
 				}
 			}
