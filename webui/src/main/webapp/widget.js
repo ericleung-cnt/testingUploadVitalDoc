@@ -710,7 +710,10 @@ var openReserveApp=function(record, taskId, hide) {
    						  message = "Offensive word " + data[field][1];
    						  break;
    					  case "RESERVED":
-   						  message = "Name reserved by " + data[field][1] + " until " + DateUtil.format(new Date(Number.parseInt(data[field][2])), "dd/MM/yyyy");
+   						  //message = "Name reserved by " + data[field][1] + " until " + DateUtil.format(new Date(Number.parseInt(data[field][2])), "dd/MM/yyyy");
+                          var index = data[field][2].indexOf("20");
+                          var datee = data[field][2].substring(index);
+                           message = "Name reserved by " + data[field][1] + " until " + DateUtil.format(new Date(datee), "dd/MM/yyyy");
    						  break;
    					  case "REGISTERED":
    						  message = "Name is registered " + data[field][1];
