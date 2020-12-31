@@ -634,10 +634,10 @@ public class ApplDetail extends AbstractPersistentEntity<String> {
 	@Column(name="PREV_FLAG")
 	private String prevFlag;
 	
-	@Getter
-	@Setter
-	@Column(name="MORTGAGEE_CONSENT_DOC")
-	private String mortgageeConsentDoc;
+//	@Getter
+//	@Setter
+//	@Column(name="MORTGAGEE_CONSENT_DOC")
+//	private String mortgageeConsentDoc;
 	
 	
 	@Override
