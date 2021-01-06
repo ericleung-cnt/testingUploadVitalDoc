@@ -250,7 +250,8 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_complete".equals(operationId)) {
 			//getTx(clientValues)//
-			RegMaster result = srService.complete(entity, taskId);
+			//RegMaster result = srService.complete(entity, taskId);
+			RegMaster result = completeNewShipRegistration(clientValues, srService, entity, taskId);
 			return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		} else if ("RegMasterDS_updateData_withdraw".equals(operationId)) {// || "RegMasterDS_updateData_reject".equals(operationId)) {
 			//boolean byApplicant = "RegMasterDS_updateData_withdraw".equals(operationId);
@@ -387,6 +388,12 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
 		}
 		return super.update(entity, dsRequest);
+	}
+	
+	private RegMaster completeNewShipRegistration(Map clientValues, IShipRegService srService, RegMaster entity, Long taskId) {
+		Transaction tx = getTx(clientValues);
+		RegMaster result = srService.complete(entity, taskId, tx.getDetails());
+		return result;
 	}
 	
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {

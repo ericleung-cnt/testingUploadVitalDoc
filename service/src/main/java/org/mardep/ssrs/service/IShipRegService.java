@@ -91,8 +91,8 @@ public interface IShipRegService extends IBaseService{
 	 * @param taskId
 	 * @return
 	 */
-	RegMaster complete(RegMaster entity, Long taskId);
-
+	//RegMaster complete(RegMaster entity, Long taskId);
+	RegMaster complete(RegMaster entity, Long taskId, String txnDetails);
 	/**
 	 * Check restricted IMO, Names availability
 	 * @param entity
