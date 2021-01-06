@@ -46,6 +46,10 @@ public abstract class AbstractSrDMI<T extends AbstractPersistentEntity<?>> exten
 			if (number == null) {
 				throw new NullPointerException("change hour is missing");
 			}
+			if(txMap.containsKey("code")){
+				String txcode = (String)txMap.get("code");
+				tx.setCode(txcode);
+			}
 			number = (10000 + number.intValue());
 			String hourChange = number.toString().substring(number.toString().length() - 4);
 			tx.setDateChange(dateChange);

@@ -19,6 +19,7 @@ public class TransactionCodeJpaDao extends AbstractJpaDao<TransactionCode, Strin
 	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<TransactionCode> listRoot) {
 		List<PredicateCriteria> list = new ArrayList<PredicateCriteria>();
 		list.add(new PredicateCriteria("id", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("id", PredicateType.IN));
 		list.add(new PredicateCriteria("tcDesc", PredicateType.LIKE_IGNORE_CASE));
 
 		return list;
