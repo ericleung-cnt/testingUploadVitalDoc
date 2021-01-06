@@ -1196,7 +1196,7 @@ var addBtnOwnerDetailCompleteChange = function(item, win, recordNum, ownerGrid, 
 						win.markForDestroy();
 						refreshInbox();
 					}, {data:formData, operationId:"ownerDS_change_complete"});
-				});
+				},{ctype:"Owner_Change"});
 			}
 		}), position)};
 
@@ -2369,7 +2369,17 @@ var openRegMaster = function(record, task, mode
 		}
 	});
 	var btnSrReadyCrossCheckCoR = isc.Button.create({title:"Cross Check<br>CoR Ready", height:thickBtnHeight, width:thickBtnWidth, click:function(){ proceedTask("RegMasterDS_updateData_crossCheckReady_changeDetails", mode); },});
-	var btnSrCompleteChange = isc.Button.create({title:"Complete<br>Registration<br>Change", height:thickBtnHeight, width:thickBtnWidth, click:function(){ getTransaction(function(tx) { proceedTask("RegMasterDS_updateData_complete_changeDetails", mode, tx); } ) } });
+	var btnSrCompleteChange = 
+		isc.Button.create({
+			title:"Complete<br>Registration<br>Change", 
+			height:thickBtnHeight, 
+			width:thickBtnWidth, 
+			click:function(){ 
+				getTransaction(function(tx) { 
+					proceedTask("RegMasterDS_updateData_complete_changeDetails", mode, tx); 
+				}, {ctype:"Registration_Change"}  ) 
+			} });
+	
 	var btnSrWithdrawChange = isc.IButton.create({
 			title:"Withdraw<br>Registration<br>Change",
 			height:thickBtnHeight, width:thickBtnWidth,
@@ -2884,7 +2894,7 @@ var openRegMaster = function(record, task, mode
 					win.markForDestroy();
 					refreshInbox();
 				}, {operationId:"repDS_change_complete"});
-			});
+			},{ctype:"RP_Change"});
 		}
 	});
 	var btnRpWithdrawChange = isc.IButton.create({
@@ -3022,7 +3032,7 @@ var openRegMaster = function(record, task, mode
 					win.markForDestroy();
 					refreshInbox();
 				}, {operationId:"ownerDS_Tran_complete"});
-			});
+			},{ctype:"Ownership_Change"});
 		}
 	});
 	var btnOwnerListWithdrawTransferTransmit = isc.IButton.create({
