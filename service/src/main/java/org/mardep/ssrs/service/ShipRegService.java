@@ -436,7 +436,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	}
 
 	@Override
-	public RegMaster complete(RegMaster regMaster, Long taskId) {
+	public RegMaster complete(RegMaster regMaster, Long taskId, String txDetails) {
 		// TODO Email Memo to CO/SD
 		// TODO Print demand note state to be Application Completed
 		// 20190918 comment this line so that Pro-Reg can proceed
@@ -551,7 +551,8 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		tx.setApplNo(result.getApplNo());
 		tx.setCode(Transaction.CODE_REGISTRATION);
 		tx.setDateChange(regdate);
-		tx.setDetails("");
+		//tx.setDetails("");
+		tx.setDetails(txDetails);
 		SimpleDateFormat format = new SimpleDateFormat("HHmm");
 		tx.setHourChange(format.format(tx.getDateChange()));
 		tx.setRegMaster(result);
@@ -969,7 +970,10 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	@Override
 	public RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx) throws Exception {
 		RegMaster saved = rmDao.save(entity);
-		tx.setCode(Transaction.CODE_CHG_SHIP_PARTICULARS);
+		if(tx.getCode()==null){
+			tx.setCode(Transaction.CODE_CHG_SHIP_PARTICULARS);
+		}
+		//tx.setCode(entity.getTC_TXN_CODE());
 		if ("F".equals(saved.getApplNoSuf())) {
 			List<RegMaster> history = rmDao.findHistory(entity.getApplNo(), new Date());
 			if (!history.isEmpty()) {
@@ -1217,7 +1221,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	}
 	@Override
 	public Owner completeTransfer(Owner entity, Long taskId, Transaction tx) {
-		tx.setCode(Transaction.CODE_TRANSMISSION_OWNERSHIP);
+		//tx.setCode(Transaction.CODE_TRANSMISSION_OWNERSHIP);	// commented 2021-1-6 retain original txn_code
 		Owner owner = updateOwner(entity, tx);
 		inbox.proceed(taskId, "complete", "");
 		return owner;

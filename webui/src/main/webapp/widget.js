@@ -782,7 +782,21 @@ function refreshInbox() {
 function getTransaction(callback, properties) {
 	console.log("get transaction");
 	var isMortgage = function() { return properties && properties.mortgage; };
-
+	var isShowTxnSelection = function() { return properties && properties.ctype!=null; };
+	var set = [];
+	var isPro = false;
+	if(properties.ctype){
+		var isPro = true;
+		if(properties.ctype=="Owner_Change"){
+			set = ["17","18","19"];
+		}else if(properties.ctype=="Registration_Change"){
+			set = ["50","51","52","53","54","55","56","57","58","59","60"];
+		}else if(properties.ctype=="RP_Change"){
+			set = ["21","25","26","27"];
+		} else if (properties.ctype=="Ownership_Change"){
+			set = ["12","13","14","15"];
+		} 
+	}
 	var txForm = isc.DynamicForm.create({
 		numCols:3,
 		fields:[
@@ -797,6 +811,30 @@ function getTransaction(callback, properties) {
 //		            errorMessage:"only accept numeric"}
 //		    ],
 				required:true},
+				//{name:"TC_TXN_CODE", type:"text", title:"TC TXN CODE", required:true},
+			{ name: "code", title:"TC TXN CODE:",startRow: true,required:true, showIf:isShowTxnSelection, width:400,
+				optionDataSource:"transactionCodeDS",
+				type:"ComboBoxItem",
+				displayField:"tcDesc",
+				valueField:"id",
+				sortField:"id",
+				autoFetchData:true,
+				useClientFiltering:true,
+				filterLocally:true,
+				filterEditorType:"text",
+				pickListWidth:450,
+				pickListFields:[
+					{name:"id",width:30},
+					{name:"tcDesc",width:400}
+				],
+				pickListCriteria:{
+					_constructor:"AdvancedCriteria",
+					operator:"and",
+					criteria:[
+						{fieldName:"id", operator:"inSet", value:set},
+					]
+				}
+			},
 			{name:"handledBy", title:"Handled By", valueMap:["", "OWNER", "RP", "AGENT"], changed:function(form,item,value){
 				if (value != "AGENT") {
 					this.form.getItem("handlingAgent").setValue("");
