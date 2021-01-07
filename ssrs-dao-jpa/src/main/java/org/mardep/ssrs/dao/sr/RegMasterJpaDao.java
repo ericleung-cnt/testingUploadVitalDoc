@@ -2062,7 +2062,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	public RegMaster findForCsr(String imoNo){
 		try{
 			StringBuffer sb = new StringBuffer();
-			sb.append("select rm from RegMaster rm where rm.imoNo =:imoNo and (rm.regStatus='A' or rm.regStatus='R') order by rm.applNo desc");
+			sb.append("select rm from RegMaster rm where rm.imoNo =:imoNo and (rm.regStatus<>'C') order by rm.applNo desc");
 			Query query = em.createQuery(sb.toString());
 			query.setParameter("imoNo", imoNo);
 			query.setMaxResults(1);
