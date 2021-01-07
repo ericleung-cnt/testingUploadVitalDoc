@@ -78,6 +78,7 @@ public class RPT_FIN_006 extends AbstractFinReport {
 		List<ReceiptCollected01> list7 = new ArrayList<ReceiptCollected01>();
 		
 		String lastDemandNoteNo = null;
+		String lastPaymentMethod = null;
 		int count1 = 0; // NON-eBS
 		int count2 = 0; // eBS AUTOPAY
 		int count3 = 0; // eBS NON-AUTOPAY
@@ -118,12 +119,21 @@ public class RPT_FIN_006 extends AbstractFinReport {
 			}
 			ReceiptCollected01 rc01 = new ReceiptCollected01();
 			String demandNoteNo = (String) r[0];
+			String paymentMethod = r[15]!=null ? r[15].toString() : "unknown";
 			if(!demandNoteNo.equalsIgnoreCase(lastDemandNoteNo)){
 				lastDemandNoteNo = demandNoteNo;
 				//make it blank if same demandNoteNo
 				rc01.setDemandNoteNo(demandNoteNo);
 				rc01.setAmount((BigDecimal) r[7]);
 				rc01.setBillName((String) r[6]);
+			} else {
+				if (!paymentMethod.equalsIgnoreCase(lastPaymentMethod)) {
+					lastPaymentMethod = paymentMethod;
+					//make it blank if same demandNoteNo
+					rc01.setDemandNoteNo(demandNoteNo);
+					rc01.setAmount((BigDecimal) r[7]);
+					rc01.setBillName((String) r[6]);					
+				}
 			}
 			Date issueDate=(Date) r[1];
 			if(issueDate!=null){
