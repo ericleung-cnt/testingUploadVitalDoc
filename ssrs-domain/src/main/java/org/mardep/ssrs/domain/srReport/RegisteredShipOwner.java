@@ -36,7 +36,7 @@ public class RegisteredShipOwner {
 	private String address3;
 	
 	public String address() {
-		String s = address1 + " " + address2 + " " + address3;
+		String s = address1.trim() + " " + address2.trim() + " " + address3.trim();
 		return s;
 	}
 }
