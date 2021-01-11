@@ -152,8 +152,8 @@ public class TransactionJpaDao extends AbstractJpaDao<Transaction, Long> impleme
 				row.put("shipNameChi", array[3]);
 				row.put("code", array[4]);
 				row.put("mortgagees", array[5]);
-				row.put("handledBy", array[6]);
-				row.put("handlingAgent", array[7]);
+				row.put("handledBy", array[6]==null ? "" : array[6]);
+				row.put("handlingAgent", array[7]==null ? "" : array[7]);
 				row.put("description", array[8]);
 				row.put("time", array[9] + "\n" + array[10]);
 				list.add(row);
