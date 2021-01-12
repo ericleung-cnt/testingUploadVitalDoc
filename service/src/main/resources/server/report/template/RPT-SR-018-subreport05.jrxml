@@ -131,7 +131,7 @@
 				<textElement textAlignment="Left">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["(" + $F{shipType} + ")"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{shipType}==null ? "" : "(" + $F{shipType} + ")"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement stretchType="RelativeToTallestObject" x="326" y="0" width="67" height="50" uuid="e22d6f73-197b-460f-b1ae-733c966adaab"/>
@@ -140,7 +140,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grt}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd">
+			<textField pattern="yyyy-MM-dd" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="403" y="0" width="73" height="50" uuid="bc8d82bd-af1d-4a60-84aa-5c0ea1ce921c"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>

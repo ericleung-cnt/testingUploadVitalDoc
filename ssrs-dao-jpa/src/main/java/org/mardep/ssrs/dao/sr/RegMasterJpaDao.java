@@ -1093,27 +1093,48 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		//ownerShipReport3(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
 		//ownerShipReport2(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
 		//ownerShipReport1(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
+		BigInteger latestTxId = new BigInteger("0");
 		List<?> changeOwnerAddrs = ownerShipReport(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < changeOwnerAddrs.size(); i++) {
-			Object[] array = (Object[]) changeOwnerAddrs.get(i);
-			List<?> list = ownersHist((BigInteger) array[0]);
-			for (Object item : list) {
-				Object[] owner = (Object[]) item;
-				if (!Owner.TYPE_DEMISE.equals(owner[3])) {
-					String ownerAddr = owner[1] + "\n" + owner[2];
-					addRow.apply(rpt, new Object[]{
-							"shipNameEng", array[2],
-							"shipNameChi", array[3],
-							"shipType", array[9],
-							"on", array[4],
-							"grt", (array[5] != null ? array[5].toString() : ""),
-							"date", array[6],
-							"owner", ownerAddr
-							//"owner", owner[1],
-							//"address", owner[2],
-					});
+			Object[] array = (Object[]) changeOwnerAddrs.get(i);			
+			BigInteger currentTxId = (BigInteger)array[0];
+			if (latestTxId.compareTo(currentTxId)!=0) {
+				List<?> list = ownersHist((BigInteger) array[0]);
+				int itemIndex = 0;
+				for (Object item : list) {
+					Object[] owner = (Object[]) item;					
+					if (!Owner.TYPE_DEMISE.equals(owner[3])) {
+						String ownerAddr = owner[1] + "\n" + owner[2];
+						if (itemIndex==0) {
+							addRow.apply(rpt, new Object[]{
+									"shipNameEng", array[2],
+									"shipNameChi", array[3],
+									"shipType", array[9],
+									"on", array[4],
+									"grt", (array[5] != null ? array[5].toString() : ""),
+									"date", array[6],
+									"owner", ownerAddr
+									//"owner", owner[1],
+									//"address", owner[2],
+							});
+						} else {
+							addRow.apply(rpt, new Object[]{
+									"shipNameEng", "",
+									"shipNameChi", "",
+									"shipType", null,
+									"on", "",
+									"grt", "",
+									"date", null,
+									"owner", ownerAddr
+									//"owner", owner[1],
+									//"address", owner[2],
+							});							
+						}
+						itemIndex ++;
+					}						
 				}
+				latestTxId = currentTxId;
 			}
 		}
 		reports.add(rpt);
@@ -1142,27 +1163,32 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		}
 		reports.add(rpt);
 		// 07 demise addr
+		latestTxId = new BigInteger("0");
 		List<?> demiseAddrs = ownerShipReport(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < demiseAddrs.size(); i++) {
 			Object[] array = (Object[]) demiseAddrs.get(i);
-			List<?> list = ownersHist((BigInteger) array[0]);
-			for (Object item : list) {
-				Object[] owner = (Object[]) item;
-				if (Owner.TYPE_DEMISE.equals(owner[3])) {
-					String chartererAddr = owner[1] + "\n" + owner[2];
-					addRow.apply(rpt, new Object[]{
-							"shipNameEng", array[2],
-							"shipNameChi", array[3],
-							"shipType", array[9],
-							"on", array[4],
-							"grt", (array[5] != null ? array[5].toString() : ""),
-							"date", array[6],
-							"charterer", chartererAddr
-							//"charterer", owner[1],
-							//"address", owner[2],
-					});
+			BigInteger currentTxId = (BigInteger)array[0];
+			if (latestTxId.compareTo(currentTxId)!=0) {
+				List<?> list = ownersHist((BigInteger) array[0]);
+				for (Object item : list) {
+					Object[] owner = (Object[]) item;
+					if (Owner.TYPE_DEMISE.equals(owner[3])) {
+						String chartererAddr = owner[1] + "\n" + owner[2];
+						addRow.apply(rpt, new Object[]{
+								"shipNameEng", array[2],
+								"shipNameChi", array[3],
+								"shipType", array[9],
+								"on", array[4],
+								"grt", (array[5] != null ? array[5].toString() : ""),
+								"date", array[6],
+								"charterer", chartererAddr
+								//"charterer", owner[1],
+								//"address", owner[2],
+						});
+					}
 				}
+				latestTxId = currentTxId;
 			}
 		}
 		reports.add(rpt);
