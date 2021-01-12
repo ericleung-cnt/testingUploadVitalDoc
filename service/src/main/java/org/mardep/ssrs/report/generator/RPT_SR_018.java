@@ -34,6 +34,13 @@ public class RPT_SR_018 extends AbstractSrReport {
 					+ format.format(i+1)
 					+ ".jrxml");
 			inputParam.put("SUBREPORT_" + (i+1), jasperReport);
+			if (i==9) {
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil10", "false");
+				} else {
+					inputParam.put("showNil10", "true");
+				}
+			}
 			row.put("SUBREPORTDS_" + (i+1), ownershipReports.get(i));
 		}
 
