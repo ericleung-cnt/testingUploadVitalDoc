@@ -450,7 +450,7 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		} else {
 			srMap.put("cs", null);
 		}
-		srMap.put("buildDate", rm.getBuildDate());
+		srMap.put("buildDate", rm.getBuildDate_());
 		String cis = "APP";
 		if (!"A".equals(rm.getRegStatus()) && ad != null && ad.getCosInfoState() != null) {
 			cis = ad.getCosInfoState();
