@@ -1165,7 +1165,8 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		reports.add(rpt);
 		// 07 demise addr
 		latestTxId = new BigInteger("0");
-		List<?> demiseAddrs = ownerShipReport(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
+		//List<?> demiseAddrs = ownerShipReport(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
+		List<?> demiseAddrs = ownerShipReport("74", reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < demiseAddrs.size(); i++) {
 			Object[] array = (Object[]) demiseAddrs.get(i);
