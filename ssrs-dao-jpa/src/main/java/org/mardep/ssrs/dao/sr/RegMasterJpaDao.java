@@ -1058,7 +1058,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		reports.add(rpt);
 		// 03 change of owner
 		//List<?> changeOwner = ownerShipReport(Transaction.CODE_CHG_OWNER_OTHERS, reportDate);
-		List<?> changeOwner = transferOwnershipReport("14,15,19", reportDate);
+		List<?> changeOwner = transferOwnershipReport("14,15", reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < changeOwner.size(); i++) {
 			Object[] array = (Object[]) changeOwner.get(i);
@@ -1103,8 +1103,9 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 				List<?> list = ownersHist((BigInteger) array[0]);
 				int itemIndex = 0;
 				for (Object item : list) {
-					Object[] owner = (Object[]) item;					
-					if (!Owner.TYPE_DEMISE.equals(owner[3])) {
+					Object[] owner = (Object[]) item;			
+					BigDecimal ownerInterest = (BigDecimal)owner[4];
+					if (!Owner.TYPE_DEMISE.equals(owner[3]) && ownerInterest.compareTo(new BigDecimal("0"))>0) {
 						String ownerAddr = owner[1] + "\n" + owner[2];
 						if (itemIndex==0) {
 							addRow.apply(rpt, new Object[]{
@@ -1249,7 +1250,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		}
 		reports.add(rpt);
 		// 11 ship name
-		List<?> shipNames = ownerShipReport("55,56,60", reportDate);
+		List<?> shipNames = changeShipNameReport("55,56,60", reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < shipNames.size(); i++) {
 			Object[] array = (Object[]) shipNames.get(i);
@@ -1425,7 +1426,33 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		}
 		return lst;
 	}
-	
+
+	private List<?> changeShipNameReport(String txCode, Date reportDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+		String dateStr = sdf.format(reportDate);
+		Query query = em.createNativeQuery("select tx.AT_SER_NUM, tx.rm_appl_no, rm.reg_name, "
+				+ "rm.reg_cname cname , rm.off_no, rm.gross_ton, tx.date_change, " +
+				//"ow.owner_name, isnull(ow.address1 + ' ', '') + isnull(ow.address2 + ' ', '') + isnull(ow.address3, '')  ow_addr, " +
+				"SS.SS_DESC " +
+				"from Transactions  tx " +
+				"inner join REG_MASTERS_HIST rm on rm.appl_no = tx.rm_appl_no and tx.at_ser_num = rm.tx_id " +
+				"left outer join SHIP_SUBTYPES ss on ss.ST_SHIP_TYPE_CODE = rm.SS_ST_SHIP_TYPE_CODE and ss.SHIP_SUBTYPE_CODE = rm.SS_SHIP_SUBTYPE_CODE " +
+				//"inner join OWNERS_HIST ow on ow.rm_appl_no = tx.rm_appl_no and tx.at_ser_num = ow.tx_id " +
+				"where tc_txn_code in :txCode " +
+				"and substring(convert(varchar, date_change, 23), 1, 7) = substring(convert(varchar, :reportDate, 23), 1, 7) " +
+				//"and substring(convert(varchar, date_change, 23), 1, 7) = :reportDate "
+				//"and left(convert(varchar, tx.date_change),7) = :reportDate " +
+				"order by tx.date_change asc ");
+		query.setParameter("txCode", Arrays.asList(txCode.split("\\,")));
+		query.setParameter("reportDate", dateStr);
+		//List<?> lst = query.getResultList();
+		List<Object[]> lst = query.getResultList();
+		System.out.println("txCode:" + txCode);
+		System.out.println("reportDate:" + dateStr);
+		System.out.println("lst size:" + lst.size());
+		return lst;
+	}
+
 	private List<?> transferOwnershipReport(String txCode, Date reportDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		String dateStr = sdf.format(reportDate);
@@ -1555,7 +1582,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	 * @return ownerSeq, ownerName, addr, ownerType
 	 */
 	private List<?> ownersHist(BigInteger txid) {
-		Query query = em.createNativeQuery("select OWNER_SEQ_NO, ow.owner_name, isnull(ow.address1 + ' ', '')  + isnull(ow.address2 + ' ', '') + isnull(ow.address3, '')  addr, owner_type "
+		Query query = em.createNativeQuery("select OWNER_SEQ_NO, ow.owner_name, isnull(ow.address1 + ' ', '')  + isnull(ow.address2 + ' ', '') + isnull(ow.address3, '')  addr, owner_type, int_mixed "
 				+ "from owners_hist ow where ow.tx_id = :txId");
 		query.setParameter("txId", txid);
 		return query.getResultList();
