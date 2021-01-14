@@ -34,16 +34,100 @@ public class RPT_SR_018 extends AbstractSrReport {
 					+ format.format(i+1)
 					+ ".jrxml");
 			inputParam.put("SUBREPORT_" + (i+1), jasperReport);
-			if (i==9) {
+//			if (i==9) {
+//				if (ownershipReports.get(i).size()>0) {
+//					inputParam.put("showNil10", "false");
+//				} else {
+//					inputParam.put("showNil10", "true");
+//				}
+//			}
+			setShowNil(i, inputParam, ownershipReports);
+			row.put("SUBREPORTDS_" + (i+1), ownershipReports.get(i));
+		}
+
+		return jasperReportService.generateReport("RPT-SR-018.jrxml", Arrays.asList(row), inputParam);
+	}
+	
+	private void setShowNil(int i, Map<String, Object> inputParam, List<List<Map<String, ?>>> ownershipReports) {
+		switch (i) {
+			case 0:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil01", "false");
+				} else {
+					inputParam.put("showNil01", "true");
+				}
+				break;
+			case 1:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil02", "false");
+				} else {
+					inputParam.put("showNil02", "true");
+				}
+				break;
+			case 2:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil03", "false");
+				} else {
+					inputParam.put("showNil03", "true");
+				}
+				break;
+			case 3:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil04", "false");
+				} else {
+					inputParam.put("showNil04", "true");
+				}
+				break;
+			case 4:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil05", "false");
+				} else {
+					inputParam.put("showNil05", "true");
+				}
+				break;
+			case 5:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil06", "false");
+				} else {
+					inputParam.put("showNil06", "true");
+				}
+				break;
+			case 6:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil07", "false");
+				} else {
+					inputParam.put("showNil07", "true");
+				}
+				break;
+			case 7:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil08", "false");
+				} else {
+					inputParam.put("showNil08", "true");
+				}
+				break;
+			case 8:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil09", "false");
+				} else {
+					inputParam.put("showNil09", "true");
+				}
+				break;
+			case 9:
 				if (ownershipReports.get(i).size()>0) {
 					inputParam.put("showNil10", "false");
 				} else {
 					inputParam.put("showNil10", "true");
 				}
-			}
-			row.put("SUBREPORTDS_" + (i+1), ownershipReports.get(i));
+				break;
+			case 10:
+				if (ownershipReports.get(i).size()>0) {
+					inputParam.put("showNil11", "false");
+				} else {
+					inputParam.put("showNil11", "true");
+				}
+				break;
 		}
-
-		return jasperReportService.generateReport("RPT-SR-018.jrxml", Arrays.asList(row), inputParam);
+			
 	}
 }

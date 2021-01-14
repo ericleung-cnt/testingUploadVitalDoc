@@ -27,7 +27,17 @@
 	<parameter name="SUBREPORT_10" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="SUBREPORT_11" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="userId" class="java.lang.String"/>
+	<parameter name="showNil01" class="java.lang.String"/>
+	<parameter name="showNil02" class="java.lang.String"/>
+	<parameter name="showNil03" class="java.lang.String"/>
+	<parameter name="showNil04" class="java.lang.String"/>
+	<parameter name="showNil05" class="java.lang.String"/>
+	<parameter name="showNil06" class="java.lang.String"/>
+	<parameter name="showNil07" class="java.lang.String"/>
+	<parameter name="showNil08" class="java.lang.String"/>
+	<parameter name="showNil09" class="java.lang.String"/>
 	<parameter name="showNil10" class="java.lang.String"/>
+	<parameter name="showNil11" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -123,6 +133,9 @@
 		<band height="50" splitType="Stretch">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="6207b5eb-00b2-4de1-b256-642183d8f8d6"/>
+				<subreportParameter name="showNil01">
+					<subreportParameterExpression><![CDATA[$P{showNil01}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_1})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_1}]]></subreportExpression>
 			</subreport>
@@ -130,6 +143,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="d6ad0ab0-feeb-43e3-a5fe-e2701f1167de"/>
+				<subreportParameter name="showNil02">
+					<subreportParameterExpression><![CDATA[]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_2})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_2}]]></subreportExpression>
 			</subreport>
@@ -137,6 +153,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="276f13ba-1343-40d1-ade9-6e54f78d79a2"/>
+				<subreportParameter name="showNil03">
+					<subreportParameterExpression><![CDATA[$P{showNil03}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_3})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_3}]]></subreportExpression>
 			</subreport>
@@ -144,6 +163,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="64687177-006c-438d-b741-5888240568fe"/>
+				<subreportParameter name="showNil04">
+					<subreportParameterExpression><![CDATA[$P{showNil04}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_4})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_4}]]></subreportExpression>
 			</subreport>
@@ -151,6 +173,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="8560a108-6d6d-4b50-8386-553f52a54794"/>
+				<subreportParameter name="SUBREPORT_5">
+					<subreportParameterExpression><![CDATA[$P{showNil05}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_5})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_5}]]></subreportExpression>
 			</subreport>
@@ -158,6 +183,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="648d3806-de5e-47e2-91fc-bd8f37d8a987"/>
+				<subreportParameter name="showNil06">
+					<subreportParameterExpression><![CDATA[$P{showNil06}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_6})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_6}]]></subreportExpression>
 			</subreport>
@@ -165,6 +193,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="0a126930-e9c2-4df3-8e10-b8a2107afac4"/>
+				<subreportParameter name="showNil07">
+					<subreportParameterExpression><![CDATA[$P{showNil07}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_7})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_7}]]></subreportExpression>
 			</subreport>
@@ -172,6 +203,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="01a00e1e-6149-401e-ab50-a4c23a407f31"/>
+				<subreportParameter name="showNil08">
+					<subreportParameterExpression><![CDATA[$P{showNil08}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_8})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_8}]]></subreportExpression>
 			</subreport>
@@ -179,6 +213,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="be54e291-8c04-4d6b-86d8-d278ef329027"/>
+				<subreportParameter name="showNil09">
+					<subreportParameterExpression><![CDATA[$P{showNil09}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_9})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_9}]]></subreportExpression>
 			</subreport>
@@ -196,6 +233,9 @@
 		<band height="50">
 			<subreport>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="832" height="50" uuid="8ead7e63-b796-4156-9b1f-83482e07cbba"/>
+				<subreportParameter name="showNil11">
+					<subreportParameterExpression><![CDATA[$P{showNil11}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{SUBREPORTDS_11})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_11}]]></subreportExpression>
 			</subreport>
