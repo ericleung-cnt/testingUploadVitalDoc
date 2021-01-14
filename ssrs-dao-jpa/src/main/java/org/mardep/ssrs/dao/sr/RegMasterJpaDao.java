@@ -1120,7 +1120,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		reports.add(rpt);
 		// 03 change of owner
 		//List<?> changeOwner = ownerShipReport(Transaction.CODE_CHG_OWNER_OTHERS, reportDate);
-		List<?> changeOwner = transferOwnershipReport("14,15", reportDate);
+		List<?> changeOwner = transferOwnershipReport("12,13,14,15", reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < changeOwner.size(); i++) {
 			Object[] array = (Object[]) changeOwner.get(i);
@@ -1145,7 +1145,7 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 							"grt", (array[5] != null ? array[5].toString() : ""),
 							"date", array[6],
 							"oldName", oldOwner.isEmpty() ? "" : ((Object[])oldOwner.get(0))[0],
-							"newName", owner[2],
+							"newName", owner[1],
 					});
 				}
 			}

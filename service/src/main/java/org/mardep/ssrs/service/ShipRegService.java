@@ -1084,21 +1084,22 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	public Representative completeRpChange(Representative rp, Long taskId, Transaction tx) {
 		String applNo = rp.getApplNo();
 		IRepresentativeDao rpDao = (IRepresentativeDao) getDao(Representative.class);
-		Representative existing = rpDao.findById(applNo);
-		String code = Transaction.CODE_CHG_RP_OTHERS;
-		if (existing != null) {
-			if (existing.getName() == null && rp.getName() != null) {
-				code = Transaction.CODE_CHG_RP_NAME;
-			} else if (existing.getName() != null && !existing.getName().equals(rp.getName())) {
-				code = Transaction.CODE_CHG_RP_NAME;
-			} else {
-				String exAddr = existing.getAddress1() + existing.getAddress2() + existing.getAddress3();
-				String newAddr = rp.getAddress1() + rp.getAddress2() + rp.getAddress3();
-				if (!exAddr.equals(newAddr)) {
-					code = Transaction.CODE_CHG_RP_ADDR;
-				}
-			}
-		}
+		//Representative existing = rpDao.findById(applNo);
+		//String code = Transaction.CODE_CHG_RP_OTHERS;
+//		if (existing != null) {
+//			if (existing.getName() == null && rp.getName() != null) {
+//				code = Transaction.CODE_CHG_RP_NAME;
+//			} else if (existing.getName() != null && !existing.getName().equals(rp.getName())) {
+//				code = Transaction.CODE_CHG_RP_NAME;
+//			} else {
+//				String exAddr = existing.getAddress1() + existing.getAddress2() + existing.getAddress3();
+//				String newAddr = rp.getAddress1() + rp.getAddress2() + rp.getAddress3();
+//				if (!exAddr.equals(newAddr)) {
+//					code = Transaction.CODE_CHG_RP_ADDR;
+//				}
+//			}
+//		}
+		String code = tx.getCode();
 		Representative result = rpDao.save(rp);
 		ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);
 		tx = txDao.save(applNo, code, tx); // TODO fix code
