@@ -14,6 +14,7 @@
 	<property name="ireport.zoom" value="1.3310000000000057"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="showNil03" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -96,7 +97,7 @@
 	<detail>
 		<band height="60" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="8" y="0" width="239" height="16" uuid="f301a9d7-606d-4ab4-a35f-552aa46d70be">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -105,7 +106,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipNameEng}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="260" y="0" width="55" height="50" uuid="32c80d28-c336-4e21-b81d-ef69e060fdea"/>
 				<textElement textAlignment="Left">
 					<font size="10"/>
@@ -123,7 +124,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipNameChi}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="8" y="32" width="239" height="18" uuid="1cf1200f-4eda-4ca4-9fb4-79a3e4d98a44">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -133,14 +134,14 @@
 				</textElement>
 				<textFieldExpression><![CDATA["(" + $F{shipType} + ")"]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="326" y="0" width="67" height="50" uuid="e22d6f73-197b-460f-b1ae-733c966adaab"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{grt}]]></textFieldExpression>
 			</textField>
-			<textField pattern="yyyy-MM-dd">
+			<textField pattern="yyyy-MM-dd" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="403" y="0" width="73" height="50" uuid="bc8d82bd-af1d-4a60-84aa-5c0ea1ce921c"/>
 				<textElement textAlignment="Right">
 					<font size="10"/>
@@ -172,7 +173,7 @@
 	</detail>
 	<columnFooter>
 		<band height="17" splitType="Stretch">
-			<printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()==0)]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$P{showNil03}.equals("true")]]></printWhenExpression>
 			<staticText>
 				<reportElement x="26" y="0" width="779" height="17" uuid="8b26cbcb-d238-4340-b43a-952b32563264"/>
 				<textElement textAlignment="Left">

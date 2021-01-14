@@ -14,6 +14,7 @@
 	<property name="ireport.zoom" value="1.3310000000000057"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="showNil02" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -172,7 +173,7 @@
 	</detail>
 	<columnFooter>
 		<band height="17" splitType="Stretch">
-			<printWhenExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()==0)]]></printWhenExpression>
+			<printWhenExpression><![CDATA[$P{showNil02}.equals("true")]]></printWhenExpression>
 			<staticText>
 				<reportElement x="26" y="0" width="779" height="17" uuid="fe00622f-5d16-4c0c-8e6a-b9e2f9490d8d"/>
 				<textElement textAlignment="Left">
