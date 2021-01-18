@@ -405,9 +405,9 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		RegMaster rmEntity = srService.check(entity, owners);
 		DSResponse resp = new DSResponse();
 		if (rmEntity==null || rmEntity.getRegName()==null) {
-			resp.setData("validation ok");
+			resp.setData("S");
 		} else if (!rmEntity.getRegName().equals(entity.getRegName())) {
-			resp.setData("validation nok");			
+			resp.setData("F," + rmEntity.getRegName());			
 		} else {
 			resp.setData("");
 		}
