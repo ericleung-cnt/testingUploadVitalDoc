@@ -3387,8 +3387,27 @@ var openRegMaster = function(record, task, mode
 		        {name:"applNoSuf", valueMap:{"F":"Full-Reg", "P":"Pro-Reg"}, defaultValue:"F"},
 		        {name:"corCollect", optionDataSource:"officeDS",displayField:"name",valueField:"id", required:true},
 		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper"},
-		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", width:300, colSpan:2, endRow:true},
-		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), colSpan:2, endRow:true, characterCasing: "upper" }, /////////
+		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", width:300, colSpan:2, endRow:true,
+		        	blur: function(form, item){
+		        		console.log(item);
+		        		var data = form.getData();
+		        		data.owners = form.ownerGrid.getData();		
+						var ownerNames = [];
+						data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
+		        		regMasterDS.updateData({}, function(resp,data,req){
+		        			if (data=="validation ok") {
+		        				form.getField("regName").setBackgroundColor("#00FF00");
+		        			} else if (data=="validation nok"){
+		        				form.getField("regName").setBackgroundColor("#00FF00");
+		        			}
+		        		},{operationId:"SR_VALIDATE_SHIPNAME_ENG", data:data})
+		        	}},
+		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), colSpan:2, endRow:true, characterCasing: "upper",
+		        	changed:function(form, item, value){
+		        		regMasterDS.updateData({} ,function(resp,data,req){
+		        			console.log(resp);
+		        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", shipName:value})
+		        	}}, /////////
 		        {name:"callSign", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper"},
 		        {name:"csResvDate", disabled:!(allowImoUpdate || !isCompleteRegistered()), type:"staticText"}, /////////
 		        {name:"offNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper"},
