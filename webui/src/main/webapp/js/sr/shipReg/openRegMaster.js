@@ -23,6 +23,16 @@ var workflow = {
 	}
 };
 
+var shipnameValidation = {
+	result: null,
+	setResult: function(result){
+		this.result = result;
+	},
+	getResult: function(){
+		return this.result;
+	}
+};
+
 function etoCor(applNo, regDate, issueDate, registrarId){
 	this.applNo = applNo;
 	this.regDate = regDate;
@@ -3402,28 +3412,94 @@ var openRegMaster = function(record, task, mode
 		        {name:"applNoSuf", valueMap:{"F":"Full-Reg", "P":"Pro-Reg"}, defaultValue:"F"},
 		        {name:"corCollect", optionDataSource:"officeDS",displayField:"name",valueField:"id", required:true},
 		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper"},
-		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", width:300, colSpan:2, endRow:true,
-		        	blur: function(form, item){
+		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", 
+		        	width:300, colSpan:2, //endRow:true,redrawOnChange:true,
+		        	icons: [
+		        		{
+		        			name: "checkedOK",
+		        			src: "../images/checked.png",
+		        			hspace: 5,
+		        			inline: false,
+		        			showIf: false, //shipnameValidation.getResult()==true,
+		        			tabIndex: -1
+		        		},
+		        		{
+		        			name: "checkedNOK",
+		        			src: "../images/remove.png",
+		        			hspace: 5,
+		        			inline: false,
+		        			showIf:false,
+		        			tabIndex: -1
+		        		},
+		        	],
+		        	blur: function(form, item){		        		
 		        		console.log(item);
 		        		var data = form.getData();
 		        		data.owners = form.ownerGrid.getData();		
 						var ownerNames = [];
 						data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
 		        		regMasterDS.updateData({}, function(resp,data,req){
-		        			if (data=="validation ok") {
-		        				form.getField("regName").setBackgroundColor("#00FF00");
-		        			} else if (data=="validation nok"){
-		        				form.getField("regName").setBackgroundColor("#00FF00");
+		        			//if (data=="validation ok") {
+		        			var flag = data.substring(0,1);
+		        			if (flag=='S') {
+		        				form.getItem("regName").showIcon("checkedOK");
+		        				shipnameValidation.setResult(true);
+		        				//form.getItem("regNameFail").hide();
+		        				//form.getField("regName").setBackgroundColor("#00FF00");
+		        			//} else if (data=="validation nok"){
+		        			} else if (flag=='F') {
+				        		form.getItem("regName").showIcon("checkedNOK");
+				        		shipnameValidation.setResult(false);
+				        		//form.getItem("regNameFail").setValue(data.substring(2,data.length));
+				        		//form.getItem("regNameFail").show();
+				        		//form.getField("regName").setBackgroundColor("#00FF00");
 		        			}
 		        		},{operationId:"SR_VALIDATE_SHIPNAME_ENG", data:data})
 		        	}},
-		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), colSpan:2, endRow:true, characterCasing: "upper",
-		        	changed:function(form, item, value){
-		        		regMasterDS.updateData({} ,function(resp,data,req){
-		        			console.log(resp);
-		        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", shipName:value})
-		        	}}, /////////
-		        {name:"callSign", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper"},
+		        //{name:"regNameFail", title:"", width:300, showIf:shipnameValidation.getResult()==false },
+		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), 
+		        		colSpan:2, characterCasing: "upper", startRow:true,
+			        	icons: [
+			        		{
+			        			name: "checkedOK",
+			        			src: "../images/checked.png",
+			        			hspace: 5,
+			        			inline: false,
+			        			showIf: false, //shipnameValidation.getResult()==true,
+			        			tabIndex: -1
+			        		},
+			        		{
+			        			name: "checkedNOK",
+			        			src: "../images/remove.png",
+			        			hspace: 5,
+			        			inline: false,
+			        			showIf:false,
+			        			tabIndex: -1
+			        		},
+			        	],
+			        	blur: function(form, item){		        		
+			        		console.log(item);
+			        		var data = form.getData();
+			        		data.owners = form.ownerGrid.getData();		
+							var ownerNames = [];
+							data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
+			        		regMasterDS.updateData({}, function(resp,data,req){
+			        			//if (data=="validation ok") {
+			        			var flag = data.substring(0,1);
+			        			if (flag=='S') {
+			        				form.getItem("regName").showIcon("checkedOK");
+			        			} else if (flag=='F') {
+					        		form.getItem("regName").showIcon("checkedNOK");
+			        			}
+			        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", data:data})
+			        	}},
+		        		
+//		        	changed:function(form, item, value){
+//		        		regMasterDS.updateData({} ,function(resp,data,req){
+//		        			console.log(resp);
+//		        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", shipName:value})
+//		        	}}, /////////
+		        {name:"callSign", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", startRow:true},
 		        {name:"csResvDate", disabled:!(allowImoUpdate || !isCompleteRegistered()), type:"staticText"}, /////////
 		        {name:"offNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper"},
 		        {name:"offResvDate", disabled:!(allowImoUpdate || !isCompleteRegistered()), type:"staticText"}, /////////
