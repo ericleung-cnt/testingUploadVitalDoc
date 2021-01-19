@@ -92,8 +92,6 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
 	private final String OPERATION_SR_WITHDRAW_REGISTRATION = "SR_WITHDRAW_REGISTRATION";
 	private final String OPERATION_SR_REJECT_REGISTRATION = "SR_REJECT_REGISTRATION";
-//	private final String OPERATION_VALIDATE_SHIPNAME_ENG = "SR_VALIDATE_SHIPNAME_ENG";
-//	private final String OPERATION_VALIDATE_SHIPNAME_CHI = "SR_VALIDATE_SHIPNAME_CHI";
 	
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
@@ -387,45 +385,10 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		// } else if (OPERATION_SR_REJECT_REGISTRATION.equals(operationId)){
 		//  	RegMaster result = srService.rejectRegistration(entity, taskId);
 		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
-//		} else if (OPERATION_VALIDATE_SHIPNAME_ENG.equals(operationId)) {
-//			Map<?,?> values = dsRequest.getClientSuppliedValues();
-//			List<Owner> owners = toOwners(values);
-//			DSResponse dsResp = validateShipnameEng(srService, entity, values, owners);
-//			return dsResp;
-//		} else if (OPERATION_VALIDATE_SHIPNAME_CHI.equals(operationId)) {
-//			Map<?,?> values = dsRequest.getClientSuppliedValues();
-//			List<Owner> owners = toOwners(values);
-//			DSResponse dsResp = validateShipnameChi(srService, entity, values, owners);
-//			return dsResp;
 		}
 		return super.update(entity, dsRequest);
 	}
 	
-//	private DSResponse validateShipnameEng(IShipRegService srService, RegMaster entity, Map<?,?> values, List<Owner> owners) {
-//		RegMaster rmEntity = srService.check(entity, owners);
-//		DSResponse resp = new DSResponse();
-//		if (rmEntity==null || rmEntity.getRegName()==null) {
-//			resp.setData("S");
-//		} else if (!rmEntity.getRegName().equals(entity.getRegName())) {
-//			resp.setData("F," + rmEntity.getRegName());			
-//		} else {
-//			resp.setData("");
-//		}
-//		resp.setSuccess();
-//		return resp;
-//	}
-//	
-//	private DSResponse validateShipnameChi(IShipRegService srService, RegMaster entity, Map<?,?> values, List<Owner> owners) {
-//		RegMaster rmEntity = srService.check(entity, owners);
-//		DSResponse resp = new DSResponse();
-//		if (!rmEntity.getRegName().equals(entity.getRegName())) {
-//			resp.setFailure("duplicated Chinese shipname in appl no. " + entity.getRegName());			
-//		} else {
-//			resp.setSuccess();
-//		}
-//		return resp;
-//	}
-
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {
 		try {
 			if (clientSuppliedValues.containsKey("imo")) {
