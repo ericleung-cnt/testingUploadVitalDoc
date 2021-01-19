@@ -1205,7 +1205,8 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		}
 		reports.add(rpt);
 		// 08 rep
-		List<?> rpOthers = rpReport(Transaction.CODE_CHG_RP_OTHERS, reportDate);
+		//List<?> rpOthers = rpReport(Transaction.CODE_CHG_RP_OTHERS, reportDate);
+		List<?> rpOthers = rpReport("21", reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < rpOthers.size(); i++) {
 			Object[] array = (Object[]) rpOthers.get(i);
