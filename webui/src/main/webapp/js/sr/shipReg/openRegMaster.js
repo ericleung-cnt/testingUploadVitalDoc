@@ -3438,23 +3438,52 @@ var openRegMaster = function(record, task, mode
 		        		data.owners = form.ownerGrid.getData();		
 						var ownerNames = [];
 						data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
-		        		regMasterDS.updateData({}, function(resp,data,req){
-		        			//if (data=="validation ok") {
-		        			var flag = data.substring(0,1);
-		        			if (flag=='S') {
-		        				form.getItem("regName").showIcon("checkedOK");
-		        				shipnameValidation.setResult(true);
-		        				//form.getItem("regNameFail").hide();
-		        				//form.getField("regName").setBackgroundColor("#00FF00");
-		        			//} else if (data=="validation nok"){
-		        			} else if (flag=='F') {
-				        		form.getItem("regName").showIcon("checkedNOK");
-				        		shipnameValidation.setResult(false);
-				        		//form.getItem("regNameFail").setValue(data.substring(2,data.length));
-				        		//form.getItem("regNameFail").show();
-				        		//form.getField("regName").setBackgroundColor("#00FF00");
-		        			}
-		        		},{operationId:"SR_VALIDATE_SHIPNAME_ENG", data:data})
+//		        		regMasterDS.updateData({}, function(resp,data,req){
+//		        			//if (data=="validation ok") {
+//		        			var flag = data.substring(0,1);
+//		        			if (flag=='S') {
+//		        				form.getItem("regName").showIcon("checkedOK");
+//		        				shipnameValidation.setResult(true);
+//		        				//form.getItem("regNameFail").hide();
+//		        				//form.getField("regName").setBackgroundColor("#00FF00");
+//		        			//} else if (data=="validation nok"){
+//		        			} else if (flag=='F') {
+//				        		form.getItem("regName").showIcon("checkedNOK");
+//				        		shipnameValidation.setResult(false);
+//				        		//form.getItem("regNameFail").setValue(data.substring(2,data.length));
+//				        		//form.getItem("regNameFail").show();
+//				        		//form.getField("regName").setBackgroundColor("#00FF00");
+//		        			}
+//		        		},{operationId:"SR_VALIDATE_SHIPNAME_ENG", data:data})
+						  regMasterDS.fetchData(data, function(resp, data, req) {
+							  var checkResultFailed = false;
+							  var showMessages = function(itemKey, message){
+								  if (message) {
+									  var v = {
+											  action:function(){},
+											  condition:"return false",
+											  defaultErrorMessage:message,
+											  requireServer:false,
+											  type:"checkNames"
+											}
+									  form.getItem(itemKey).validators.add(v);
+									  form.getItem(itemKey).validate();
+									  form.getItem(itemKey).validators.remove(v);
+									  checkResultFailed = true;
+								  } else {
+									  form.getItem(itemKey).validate();
+								  }
+							  };
+							  showMessages("regName", data.regName);
+							  showMessages("regChiName", data.regChiName);
+							  showMessages("imoNo", data.imoNo);
+							  if (checkResultFailed){
+								  form.getItem("regName").showIcon("checkedNOK");
+							  } else {
+								  form.getItem("regName").showIcon("checkedOK");
+							  }
+							  form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
+						  }, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
 		        	}},
 		        //{name:"regNameFail", title:"", width:300, showIf:shipnameValidation.getResult()==false },
 		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), 
@@ -3483,15 +3512,39 @@ var openRegMaster = function(record, task, mode
 			        		data.owners = form.ownerGrid.getData();		
 							var ownerNames = [];
 							data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
-			        		regMasterDS.updateData({}, function(resp,data,req){
-			        			//if (data=="validation ok") {
-			        			var flag = data.substring(0,1);
-			        			if (flag=='S') {
-			        				form.getItem("regName").showIcon("checkedOK");
-			        			} else if (flag=='F') {
-					        		form.getItem("regName").showIcon("checkedNOK");
-			        			}
-			        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", data:data})
+//			        		regMasterDS.updateData({}, function(resp,data,req){
+//			        			//if (data=="validation ok") {
+//			        			var flag = data.substring(0,1);
+//			        			if (flag=='S') {
+//			        				form.getItem("regName").showIcon("checkedOK");
+//			        			} else if (flag=='F') {
+//					        		form.getItem("regName").showIcon("checkedNOK");
+//			        			}
+//			        		},{operationId:"SR_VALIDATE_SHIPNAME_CHI", data:data})
+							  regMasterDS.fetchData(data, function(resp, data, req) {
+								  var checkResultFailed = false;
+								  var showMessages = function(itemKey, message){
+									  if (message) {
+										  var v = {
+												  action:function(){},
+												  condition:"return false",
+												  defaultErrorMessage:message,
+												  requireServer:false,
+												  type:"checkNames"
+												}
+										  form.getItem(itemKey).validators.add(v);
+										  form.getItem(itemKey).validate();
+										  form.getItem(itemKey).validators.remove(v);
+										  checkResultFailed = true;
+									  } else {
+										  form.getItem(itemKey).validate();
+									  }
+								  };
+								  showMessages("regName", data.regName);
+								  showMessages("regChiName", data.regChiName);
+								  showMessages("imoNo", data.imoNo);
+								  form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
+							  }, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
 			        	}},
 		        		
 //		        	changed:function(form, item, value){
