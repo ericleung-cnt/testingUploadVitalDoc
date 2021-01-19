@@ -172,6 +172,41 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	}
 
 	@Override
+//	public List<Map<String, Object>> getBreakDownNoAndGrtOfShipsByType(Date reportDate) {
+//		List<Map<String, Object>> rows = new ArrayList<>();
+//		DecimalFormat format = new DecimalFormat("###,###");
+//		for (int i = 0; i < 16; i++) {
+//			Map<String, Object> row = new HashMap<>();
+//			// rangeOfTonnage
+//			String start = "       "+format.format(i * 10000 + 1);
+//			String end = i == 15 ? "  ABOVE":"       "+format.format((i + 1) * 10000);
+//			String rangeOfTonnage = start.substring(start.length() - 7) + " - " + end.substring(end.length() - 7);
+//			row.put("rangeOfTonnage", rangeOfTonnage);
+//			for (int j = 1; j < 7; j++) {
+//				row.put("joined" + j, 0);
+//				row.put("left" + j, 0);
+//			}
+//			rows.add(row);
+//		}
+//		Query query = em.createNativeQuery("select isnull(ton, 0) ton, convert(varchar(50), isnull(SS_ST_SHIP_TYPE_CODE, '-')) shiptype, count(*) joined, count(dereg_time) dereg from (select dereg_time, SS_ST_SHIP_TYPE_CODE, case when REG_NET_TON > 150001 then 16 else  floor((REG_NET_TON + 10000)/ 10000) end ton from REG_MASTERS where REG_DATE <= :reportDate) A group by ton, SS_ST_SHIP_TYPE_CODE ");
+//		query.setParameter("reportDate", reportDate);
+//		List<Object[]> list = query.getResultList();
+//		List<String> types = Arrays.asList(ShipType.CARGO_SHIP, ShipType.TANKER, ShipType.YACHT, ShipType.TUG, ShipType.PASSENGER_SHIP);
+//		for (Object[] row : list) {
+//			int ton = ((BigDecimal) row[0]).intValue() + 1;
+//			int type = types.indexOf(row[1]);
+//			int joined = (Integer) row[2];
+//			int left = (Integer) row[3];
+//			if (type == -1) {
+//				type = 5;
+//			}
+//			type++;
+//			rows.get(ton - 1).put("joined" + type, joined);
+//			rows.get(ton - 1).put("left" + type, left);
+//		}
+//		return rows;
+//	}
+
 	public List<Map<String, Object>> getBreakDownNoAndGrtOfShipsByType(Date reportDate) {
 		List<Map<String, Object>> rows = new ArrayList<>();
 		DecimalFormat format = new DecimalFormat("###,###");
@@ -188,12 +223,29 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 			}
 			rows.add(row);
 		}
-		Query query = em.createNativeQuery("select isnull(ton, 0) ton, convert(varchar(50), isnull(SS_ST_SHIP_TYPE_CODE, '-')) shiptype, count(*) joined, count(dereg_time) dereg from (select dereg_time, SS_ST_SHIP_TYPE_CODE, case when REG_NET_TON > 150001 then 16 else  floor((REG_NET_TON + 10000)/ 10000) end ton from REG_MASTERS where REG_DATE <= :reportDate) A group by ton, SS_ST_SHIP_TYPE_CODE ");
+		String sql = "select \r\n" + 
+				"	ISNULL(gt,0) [grt], isnull(rmh.ss_st_ship_type_code,'-') [shiptype], count(rmh.REG_DATE) [joined], count(rmh.DEREG_TIME) [dereg] \r\n" + 
+				"from ( \r\n" + 
+				"	select reg_date, dereg_time, SS_ST_SHIP_TYPE_CODE, reg_status, TX_ID, --GROSS_TON\r\n" + 
+				"		case when GROSS_TON>150001 then 16 else floor((GROSS_TON+10000)/10000) end gt\r\n" + 
+				"	from REG_MASTERS_HIST\r\n" + 
+				"	) rmh\r\n" + 
+				//"inner join SHIP_TYPES st on st.SHIP_TYPE_CODE=rmh.SS_ST_SHIP_TYPE_CODE\r\n" + 
+				"inner join (\r\n" + 
+				"	select at_ser_num, rm_appl_no, date_change, row_number() over (partition by rm_appl_no order by at_ser_num desc) as rowNum 		\r\n" + 
+				"	from transactions\r\n" + 
+				"	where date_change<=:reportDate\r\n" + 
+				"	) tx on tx.AT_SER_NUM = rmh.TX_ID \r\n" + 
+				"where tx.rowNum = 1 \r\n" + 
+				"and ((rmh.REG_STATUS='R' and rmh.REG_DATE<=:reportDate) or (rmh.REG_STATUS='D' and rmh.DEREG_TIME<=:reportDate))\r\n" + 
+				"group by rmh.SS_ST_SHIP_TYPE_CODE, rmh.gt\r\n" +
+				"order by rmh.SS_ST_SHIP_TYPE_CODE, rmh.gt";
+		Query query = em.createNativeQuery(sql);
 		query.setParameter("reportDate", reportDate);
 		List<Object[]> list = query.getResultList();
 		List<String> types = Arrays.asList(ShipType.CARGO_SHIP, ShipType.TANKER, ShipType.YACHT, ShipType.TUG, ShipType.PASSENGER_SHIP);
 		for (Object[] row : list) {
-			int ton = ((BigDecimal) row[0]).intValue() + 1;
+			int ton = ((BigDecimal) row[0]).intValue(); // + 1;
 			int type = types.indexOf(row[1]);
 			int joined = (Integer) row[2];
 			int left = (Integer) row[3];
