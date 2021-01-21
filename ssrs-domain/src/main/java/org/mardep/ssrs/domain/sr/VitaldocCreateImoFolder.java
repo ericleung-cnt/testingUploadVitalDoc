@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name="VITALDOC_CREATE_IMO_FOLDER")
-public class VitaldocCreateImoFolder  extends AbstractPersistentEntity<Long> {
+public class VitaldocCreateImoFolder  extends AbstractPersistentEntity<Integer> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -26,7 +26,7 @@ public class VitaldocCreateImoFolder  extends AbstractPersistentEntity<Long> {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Setter
 	@Column(name = "LOG_ID", nullable=false)
-	private Long logId;
+	private Integer logId;
 	
 	@Getter
 	@Setter
@@ -44,7 +44,7 @@ public class VitaldocCreateImoFolder  extends AbstractPersistentEntity<Long> {
 	private String vitaldocReturn;
 	
 	@Override
-	public Long getId() {
+	public Integer getId() {
 		return logId;
 	}
 

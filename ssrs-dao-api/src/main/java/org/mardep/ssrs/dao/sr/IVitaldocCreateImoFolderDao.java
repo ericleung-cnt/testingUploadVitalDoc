@@ -6,6 +6,9 @@ import org.mardep.ssrs.dao.IBaseDao;
 import org.mardep.ssrs.domain.sr.Amendment;
 import org.mardep.ssrs.domain.sr.VitaldocCreateImoFolder;
 
-public interface IVitaldocCreateImoFolderDao  extends IBaseDao<VitaldocCreateImoFolder, Long>  {
+public interface IVitaldocCreateImoFolderDao {
+	
 	List<VitaldocCreateImoFolder> get10NotCreatedImoFolder();
+	VitaldocCreateImoFolder findById(int logId);
+	VitaldocCreateImoFolder save(VitaldocCreateImoFolder entity);
 }
