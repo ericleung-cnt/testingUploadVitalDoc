@@ -39,6 +39,7 @@ import org.springframework.ws.soap.saaj.SaajSoapMessageFactory;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender;
 import org.springframework.ws.transport.http.HttpComponentsMessageSender.RemoveSoapHeadersInterceptor;
 
+import lombok.Getter;
 import lombok.Setter;
 
 @Component
@@ -266,6 +267,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 				logger.warn("vitaldoc error {}, desc:{}, p1:{}, p2:{}, p3:{}, p4:{}",
 						"create shortcut", errorInfo.description, errorInfo.parameter1,
 						errorInfo.parameter2,errorInfo.parameter3,errorInfo.parameter4);
+				sResult = errors.errorInfos.errorInfo.get(0).getDescription();
 			}
 		}
 		return sResult;
@@ -1190,4 +1192,18 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 		return true;			
 	} 
 
+	@Override
+	public String getCloneResultAlreadyExist() {
+		return VITALDOC_CLONE_RESULT_ALREADY_EXIST;
+	}
+
+	@Override
+	public String getCloneResultSuccess() {
+		return VITALDOC_CLONE_RESULT_SUCCESS;
+	}
+	
+	@Override
+	public String getCloneResultFail() {
+		return VITALDOC_CLONE_RESULT_FAIL;
+	}
 }

@@ -20,7 +20,8 @@ public class VitaldocCreateImoFolderJpaDao implements IVitaldocCreateImoFolderDa
 	@Override
 	public List<VitaldocCreateImoFolder> get10NotCreatedImoFolder(){
 		try {
-				String sql = "select top 10 * from VITALDOC_CREATE_IMO_FOLDER where IMO_FOLDER_CREATED is null or IMO_FOLDER_CREATED<>'Y'";
+				//String sql = "select top 10 * from VITALDOC_CREATE_IMO_FOLDER where IMO_FOLDER_CREATED is null or IMO_FOLDER_CREATED<>'Y'";
+				String sql = "select top 10 * from VITALDOC_CREATE_IMO_FOLDER where IMO_FOLDER_CREATED is null";
 				Query q = em.createNativeQuery(sql);
 				List<Object[]> objList = q.getResultList();
 				List<VitaldocCreateImoFolder> entities = new ArrayList<VitaldocCreateImoFolder>();
