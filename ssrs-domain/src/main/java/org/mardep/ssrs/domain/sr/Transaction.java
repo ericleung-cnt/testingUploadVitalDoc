@@ -55,13 +55,14 @@ public class Transaction extends AbstractPersistentEntity<Long> {
 	public static final String CODE_TRANSFER_OWNERSHIP_WITHOUT_MORTGAGE = "15";
 	
 	public static final String CODE_CHG_OWNER_NAME = "17";
-
 	public static final String CODE_CHG_OWNER_ADDR = "18";
+	
+	public static final String CODE_CHG_DC_NAME = "75";
+	public static final String CODE_CHG_DC_ADDR = "74";
 
 	public static final String CODE_CHG_RP_OTHERS = "27";
-
+	public static final String CODE_CHG_RP_DETAILS = "21";
 	public static final String CODE_CHG_RP_NAME = "25";
-
 	public static final String CODE_CHG_RP_ADDR = "26";
 
 	public static final String CODE_BUILDER_DETAILS = "22";

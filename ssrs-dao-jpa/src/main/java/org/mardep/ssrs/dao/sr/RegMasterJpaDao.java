@@ -1202,7 +1202,8 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		}
 		reports.add(rpt);
 		// 06 demise name
-		List<?> demiseNames = ownerShipReport(Transaction.CODE_CHG_OWNER_NAME, reportDate);
+		//List<?> demiseNames = ownerShipReport(Transaction.CODE_CHG_OWNER_NAME, reportDate);
+		List<?> demiseNames = ownerShipReport(Transaction.CODE_CHG_DC_NAME, reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < demiseNames.size(); i++) {
 			Object[] array = (Object[]) demiseNames.get(i);
@@ -1228,7 +1229,8 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		// 07 demise addr
 		latestTxId = new BigInteger("0");
 		//List<?> demiseAddrs = ownerShipReport(Transaction.CODE_CHG_OWNER_ADDR, reportDate);
-		List<?> demiseAddrs = ownerShipReport("74", reportDate);
+		//List<?> demiseAddrs = ownerShipReport("74", reportDate);
+		List<?> demiseAddrs = ownerShipReport(Transaction.CODE_CHG_DC_ADDR, reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < demiseAddrs.size(); i++) {
 			Object[] array = (Object[]) demiseAddrs.get(i);
@@ -1258,7 +1260,8 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 		reports.add(rpt);
 		// 08 rep
 		//List<?> rpOthers = rpReport(Transaction.CODE_CHG_RP_OTHERS, reportDate);
-		List<?> rpOthers = rpReport("21", reportDate);
+		//List<?> rpOthers = rpReport("21", reportDate);
+		List<?> rpOthers = rpReport(Transaction.CODE_CHG_RP_DETAILS, reportDate);
 		rpt = new ArrayList<>();
 		for (int i = 0; i < rpOthers.size(); i++) {
 			Object[] array = (Object[]) rpOthers.get(i);
