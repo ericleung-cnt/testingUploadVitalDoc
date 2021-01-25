@@ -797,7 +797,7 @@ function getTransaction(callback, properties) {
 	var isShowTxnSelection = function() { return properties && properties.ctype!=null; };
 	var set = [];
 	var isPro = false;
-	if(properties.ctype){
+	if(properties!=null && properties.ctype){
 		var isPro = true;
 		if(properties.ctype=="Owner_Change"){
 			set = ["17","18"];
