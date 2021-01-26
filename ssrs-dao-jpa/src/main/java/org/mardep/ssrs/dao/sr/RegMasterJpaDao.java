@@ -1980,45 +1980,92 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 	@Override
 	public List<Map<String, Object>> getShipRegAnnualReportDetail(Date reportDate) {
 
-		String sqlString = "select " +
-				"a.tonFrom,a.tonTo,count(b.appl_no) noOfShips " +
-				"from " +
-				"( " +
-				"   select " +
-				"   rowno, " +
-				"   case when rowno < 4 then 175000 - (RowNo * 30000) when rowno < 18 then 90000 - (RowNo * 5000) when rowno < 22 then 22000 - (RowNo * 1000) when rowno < 24 then 11500 - (RowNo * 500) else 0 end tonFrom, " +
-				"   case when rowno < 4 then 175000 - " +
-				"   ( " +
-				"      (RowNo - 1) * 30000 " +
-				"   ) " +
-				"   when rowno = 4 then 85000 when rowno < 19 then 90000 - " +
-				"   ( " +
-				"      (RowNo - 1) * 5000 " +
-				"   ) " +
-				"   when rowno < 23 then 22000 - ((RowNo - 1) * 1000) else 500 end tonTo " +
-				"   from " +
-				"   ( " +
-				"      select " +
-				"      top(23) ROW_NUMBER() OVER(ORDER BY name ASC) AS RowNo " +
-				"      from sys.columns " +
-				"   ) " +
-				"   r " +
-				") " +
-				"a " +
-				"left join " +
-				"( " +
-				"   SELECT " +
-				"   rm.appl_no, " +
-				"   gross_ton " +
-				"   FROM reg_masters_hist RM " +
-				"   where exists (select 1 from (select APPL_NO, max(TX_ID) TX_ID from REG_MASTERS_HIST R inner join TRANSACTIONS T on T.AT_SER_NUM = R.TX_ID where convert(varchar, T.DATE_CHANGE, 112) <= :before group by APPL_NO) summary " +
-				"   where summary.TX_ID = RM.TX_ID and summary.APPL_NO = RM.APPL_NO) " +
-				"   and rm.reg_status = 'R' " +
-				") " +
-				"b on b.gross_ton between a.tonFrom " +
-				"and a.tonTo " +
-				"group by a.tonFrom,a.tonTo " +
-				"order by a.tonFrom desc ";
+//		String sqlString = "select " +
+//				"a.tonFrom,a.tonTo,count(b.appl_no) noOfShips " +
+//				"from " +
+//				"( " +
+//				"   select " +
+//				"   rowno, " +
+//				"   case when rowno < 4 then 175000 - (RowNo * 30000) when rowno < 18 then 90000 - (RowNo * 5000) when rowno < 22 then 22000 - (RowNo * 1000) when rowno < 24 then 11500 - (RowNo * 500) else 0 end tonFrom, " +
+//				"   case when rowno < 4 then 175000 - " +
+//				"   ( " +
+//				"      (RowNo - 1) * 30000 " +
+//				"   ) " +
+//				"   when rowno = 4 then 85000 when rowno < 19 then 90000 - " +
+//				"   ( " +
+//				"      (RowNo - 1) * 5000 " +
+//				"   ) " +
+//				"   when rowno < 23 then 22000 - ((RowNo - 1) * 1000) else 500 end tonTo " +
+//				"   from " +
+//				"   ( " +
+//				"      select " +
+//				"      top(23) ROW_NUMBER() OVER(ORDER BY name ASC) AS RowNo " +
+//				"      from sys.columns " +
+//				"   ) " +
+//				"   r " +
+//				") " +
+//				"a " +
+//				"left join " +
+//				"( " +
+//				"   SELECT " +
+//				"   rm.appl_no, " +
+//				"   gross_ton " +
+//				"   FROM reg_masters_hist RM " +
+//				"   where exists (select 1 from (select APPL_NO, max(TX_ID) TX_ID from REG_MASTERS_HIST R inner join TRANSACTIONS T on T.AT_SER_NUM = R.TX_ID where convert(varchar, T.DATE_CHANGE, 112) <= :before group by APPL_NO) summary " +
+//				"   where summary.TX_ID = RM.TX_ID and summary.APPL_NO = RM.APPL_NO) " +
+//				"   and rm.reg_status = 'R' " +
+//				") " +
+//				"b on b.gross_ton between a.tonFrom " +
+//				"and a.tonTo " +
+//				"group by a.tonFrom,a.tonTo " +
+//				"order by a.tonFrom desc ";
+		String sqlString = "select \r\n" + 
+				"				a.tonFrom,a.tonTo,count(b.appl_no) noOfShips \r\n" + 
+				"				from \r\n" + 
+				"				( \r\n" + 
+				"				   select \r\n" + 
+				"				   rowno, \r\n" + 
+				"				   case \r\n" + 
+				"						when rowno = 1 then 175000\r\n" + 
+				"						when rowno < 5 and rowno>1 then 175000 - ((RowNo-1) * 30000) \r\n" + 
+				"						when rowno < 19 then 90000 - ((RowNo-1) * 5000) \r\n" + 
+				"						when rowno < 23 then 22000 - ((RowNo-1) * 1000) \r\n" + 
+				"						when rowno < 25 then 11500 - ((RowNo-1) * 500) \r\n" + 
+				"						else 0 \r\n" + 
+				"					end tonFrom, \r\n" + 
+				"				   case \r\n" + 
+				"						when rowno=1 then 300000\r\n" + 
+				"						when rowno < 5 and rowno>1 then 175000 - \r\n" + 
+				"						( (RowNo-2) * 30000 ) \r\n" + 
+				"						when rowno = 5 then 85000 when rowno < 20 then 90000 - \r\n" + 
+				"						( (RowNo-2) * 5000 ) \r\n" + 
+				"						when rowno < 24 then 22000 - ((RowNo-2) * 1000) \r\n" + 
+				"						else 500 \r\n" + 
+				"				   end tonTo \r\n" + 
+				"				   from \r\n" + 
+				"				   ( \r\n" + 
+				"				      select \r\n" + 
+				"				      top(24) ROW_NUMBER() OVER(ORDER BY name ASC) AS RowNo \r\n" + 
+				"				      from sys.columns \r\n" + 
+				"				   ) \r\n" + 
+				"				   r \r\n" + 
+				"				) \r\n" + 
+				"				a \r\n" + 
+				"				left join \r\n" + 
+				"				( \r\n" + 
+				"				   SELECT \r\n" + 
+				"				   rm.appl_no, \r\n" + 
+				"				   gross_ton \r\n" + 
+				"				   FROM reg_masters_hist RM \r\n" + 
+				"				   where exists (select 1 from (select APPL_NO, max(TX_ID) TX_ID from REG_MASTERS_HIST R inner join TRANSACTIONS T on T.AT_SER_NUM = R.TX_ID where convert(varchar, T.DATE_CHANGE, 112) <= :before group by APPL_NO) summary \r\n" + 
+				"				   where summary.TX_ID = RM.TX_ID and summary.APPL_NO = RM.APPL_NO) \r\n" + 
+				"				   and rm.reg_status = 'R' \r\n" + 
+				"				) \r\n" + 
+				"				b on b.gross_ton between a.tonFrom \r\n" + 
+				"				and a.tonTo \r\n" + 
+				"				group by a.tonFrom,a.tonTo \r\n" + 
+				"				order by a.tonFrom desc \r\n";
+				
 		Query query = em.createNativeQuery(sqlString);
 		query.setParameter("before", new SimpleDateFormat("yyyyMMdd").format(reportDate));
 		List<Map<String, Object>> annualReport = new ArrayList<>();
