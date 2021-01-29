@@ -344,7 +344,8 @@ new java.text.DecimalFormat("#,###.##").format(
 				<reportElement x="0" y="-56" width="555" height="1" uuid="e25782ed-3cbd-4dbd-a7d9-aea34317ce55"/>
 			</line>
 		</band>
-		<band height="93" splitType="Prevent">
+		<band height="60" splitType="Prevent">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
 				<reportElement x="26" y="-57" width="490" height="96" uuid="f7933fbe-9e44-4158-8299-9acd1395fdbd"/>
 				<textElement>
