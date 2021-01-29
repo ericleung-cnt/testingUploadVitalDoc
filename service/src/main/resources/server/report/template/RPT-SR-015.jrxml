@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report_of_Employment_Situation_of_Hong_Kong_Registered_Seatarer_Example" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="822" leftMargin="10" rightMargin="10" topMargin="20" bottomMargin="20" uuid="bc701297-d69a-4ab2-9ad0-b4bd71b76423">
-	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="ireport.zoom" value="1.2100000000000035"/>
 	<property name="ireport.x" value="249"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="reportDate" class="java.lang.String"/>
-	<parameter name="userId" class="java.lang.String" />
+	<parameter name="userId" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[]]>
 	</queryString>
@@ -105,7 +96,7 @@
 				<textElement textAlignment="Center">
 					<font fontName="Courier New" size="10" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["WHICH HAVE JOINED OR LEFT THE REGISTER SINCE 3-DEC-1990"]]></textFieldExpression>
+				<textFieldExpression><![CDATA["WHICH HAVE JOINED OR LEFT THE REGISTER"]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="41" width="822" height="22" uuid="af82dfed-bc63-4262-a3dc-f3f14053107f"/>
