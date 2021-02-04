@@ -2056,6 +2056,10 @@ var openRegMaster = function(record, task, mode
 	};
 	
 	var disableSrBtns = function(){
+		form.getField(btnSrReceiveApplication).setDisabled(true);
+		form.getField(btnSrAcceptApplication).setDisabled(true);
+		form.getField(btnSrAssignCallSign).setDisabled(true);
+		form.getField(btnSrAssignOfficialNumber).setDisabled(true);
 		form.getField(btnSrRequestAcceptApplication).setDisabled(true);
 		form.getField(btnSrSaveShipDetails).setDisabled(true);
 		form.getField(btnSrReadyApprovalApplication).setDisabled(true);
@@ -2069,6 +2073,10 @@ var openRegMaster = function(record, task, mode
 	};
 	
 	var enableSrBtns = function(){
+		form.getField(btnSrReceiveApplication).setDisabled(false);
+		form.getField(btnSrAcceptApplication).setDisabled(false);
+		form.getField(btnSrAssignCallSign).setDisabled(false);
+		form.getField(btnSrAssignOfficialNumber).setDisabled(false);
 		form.getField(btnSrRequestAcceptApplication).setDisabled(false);
 		form.getField(btnSrSaveShipDetails).setDisabled(false);
 		form.getField(btnSrReadyApprovalApplication).setDisabled(false);
@@ -5190,7 +5198,8 @@ var openRegMaster = function(record, task, mode
 //						if (userRoleInfo!=null){
 //							console.log(userRoleInfo);
 //							if (userRoleInfo.roleListString.contains("SRREAD")){
-//								actions.addMember(btnSrForceUpdateShipToFSQC);								
+//								actions.addMember(btnSrForceUpdateShipToFSQC);	
+//								form.getField(btnSrForceUpdateShipToFSQC).setDisabled(false);
 //							}
 //						}
 //					});

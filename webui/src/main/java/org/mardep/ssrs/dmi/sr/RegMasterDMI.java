@@ -405,6 +405,10 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private void forceUpdateToFSQC(RegMaster entity, DSRequest dsRequest) throws Exception {
 		super.update(entity, dsRequest);
 	}
+	
+	private void forceUpdateToFSQC(RegMaster entity, DSRequest dsRequest) throws Exception {
+		super.update(entity, dsRequest);
+	}
 
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {
 		try {
