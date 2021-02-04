@@ -6,6 +6,7 @@
                 <method name="getPIA"/>
                 <method name="login"/>
                 <method name="logout"/>
+                <method name="getUserRoleInfo"/>
             </visibleMethods>
         </ServerObject>
         <ServerObject ID="reportDMI" lookupStyle="spring" bean="reportDMI">

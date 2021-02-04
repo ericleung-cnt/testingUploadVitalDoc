@@ -2445,7 +2445,22 @@ var openRegMaster = function(record, task, mode
 			}
 		},
 	});
-
+	var btnSrForceUpdateShipToFSQC = isc.Button.create({
+		title: "Force Update<br>Ship Details<br>To iFIS",
+		height:thickBtnHeight,
+		width:thickBtnWidth,
+		//onControl:"SR_VIEW",
+		click:function(){
+			if (form.validate()) {
+				var formData = form.getData()
+				regMasterDS.updateData(formData, function(resp,rm,req) {
+					form.setData(rm);
+					isc.say("Record Updated to iFIS");
+				});
+			}
+		},		
+	});
+	
 	// CoR buttons
 	var btnSrCoRIsReady = isc.Button.create({title:"CoR is Ready", height:thickBtnHeight, width:thickBtnWidth,
 		click:function(){proceedTask("RegMasterDS_updateData_corReady"); },});
@@ -4986,6 +5001,14 @@ var openRegMaster = function(record, task, mode
 					addButtons2("owners.actions",[btnOwnerListAddOwner, btnOwnerListRemoveOwner, btnOwnerListCopyToRP]);
 					//addButtons2("builders.actions",[btnBuilderListAddBuilder]);
 				} else {				// this is have applNo
+					getUserRoleInfo(function(userRoleInfo){
+						if (userRoleInfo!=null){
+							console.log(userRoleInfo);
+							if (userRoleInfo.roleListString.contains("SRREAD")){
+								actions.addMember(btnSrForceUpdateShipToFSQC);								
+							}
+						}
+					});
 					if (form.getField("regStatus").getValue()=="R") {
 						actions.addMember(btnSrPreviewCoR);
 						actions.addMember(btnSrPrintCoR);

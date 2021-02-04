@@ -19,6 +19,18 @@ var upperTA = function(form,item,value) {
 	}
 };
 
+var getUserRoleInfo = function(jsCallback){
+	DMI.call({
+		appID:"ssrsApp",
+		className:"securityDMI",
+		methodName:"getUserRoleInfo",
+		callback: function(dsResponse, data, dsRequest){
+			if (jsCallback!=null){
+				jsCallback(data);
+			}
+		}
+	});	
+}
 
 var partTypeValueMap = {
 	1 : "Part I",
