@@ -669,10 +669,13 @@ public class RPT_SR_011 extends AbstractSrReport {
 				for (Mortgagor m:mortgagors) {
 					for (Owner owner : owners) {
 						if (owner.getOwnerSeqNo().equals(m.getSeq())) {
-							name.append(owner.getName()).append(", ");
+							// 20210203 separate line for each mortgagor: name.append(owner.getName()).append(", ");
+							name.append(owner.getName()).append(" \n");
+
 							//place.append(owner.getRegPlace() != null ? owner.getRegPlace() : owner.getIncorpPlace()).append(", ");
 							String placeOfIncorp = evaluatePlaceOfIncorp(owner);
-							place.append(placeOfIncorp).append(", ");
+							// 20210203 separate line for each mortgagor: place.append(placeOfIncorp).append(", ");
+							place.append(placeOfIncorp).append(" \n");
 //							if (isPercentage) {
 //							subreportRow.put("propertyOfShip", intFormat.format(owner.getIntMixed() != null ? owner.getIntMixed() : BigDecimal.ZERO) + " Percentage");
 //							} else {
