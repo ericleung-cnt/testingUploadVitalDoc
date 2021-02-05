@@ -57,8 +57,8 @@ public class SecurityDMI {
 	public Map<String, Object> getPIA(){
 		Map<String, Object> piaMap = new HashMap<>();
 		piaMap.put(Key.PIA_ENG,"The Marine Department (\"MD\") is concerned to ensure that all personal data submitted through MD website are handled in accordance with the relevant provisions of the Personal Data (Privacy) Ordinance.");
-		piaMap.put(Key.PIA_TCHI,"瘚瑚���Ⅱ靽�����絲鈭�雯蝡�漱���犖鞈������犖鞈��(蝘)璇�����������");
-		piaMap.put(Key.PIA_SCHI,"瘚瑚���＆靽�����絲鈭����漱��葵鈭箄������葵鈭箄���(蝘��)�靘����������");
+		piaMap.put(Key.PIA_TCHI,"海事處會確保所有透過海事處網站遞交的個人資料，均按照《個人資料(私隱)條例》的有關條文處理。");
+		piaMap.put(Key.PIA_SCHI,"海事处会确保所有透过海事处网站递交的个人资料，均按照《个人资料(私隐)条例》的有关条文处理。");
 		return piaMap;
 	}
 

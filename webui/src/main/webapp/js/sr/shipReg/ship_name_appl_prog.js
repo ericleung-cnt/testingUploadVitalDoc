@@ -1,3 +1,5 @@
+console.log("ship info list");
+
 var thickBtnHeight = 50;
 var thickBtnWidth = 110;
 var sectionTitle =
@@ -81,6 +83,7 @@ var regMasterSearchFields =
 				{ name:"provRegDate", format:"dd/MM/yyyy", type:"date" },
 		         ];
 var searchSection = isc.ListGrid.create({
+	ID:"shiplist",
 	dataSource : "regMasterDS",
 	showFilterEditor:true,
 	fields:regMasterSearchFields,
@@ -92,7 +95,34 @@ var searchSection = isc.ListGrid.create({
 searchSection.fetchData();
 forceUpper(searchSection);
 
+var btnSrForceUpdateShipToFSQC = isc.IButton.create({
+	title: "Force Update<br>Ship Details<br>To iFIS",
+	visibility:"hidden",
+	//ID:"btnSrForceUpdateShipToFSQC",
+	height:thickBtnHeight,
+	width:thickBtnWidth,
+	//onControl:"SR_VIEW",
+	click:function(){
+		var selectRecord = shiplist.getSelectedRecord();
+		console.log(selectRecord);
+		if (selectRecord!=undefined && selectRecord!=null){
+			regMasterDS.updateData(selectRecord, function(){
+				isc.say("Record Updated to iFIS");
+			}, {operationId:"FORCE_UPDATE_TO_FSQC"});
+		}
+	},		
+});
+
+//var btnsForIFIS = isc.ButtonsHLayout.create({
+//	//width: 200,	
+//	visibility:"hidden",
+//	members:[
+//		btnSrForceUpdateShipToFSQC
+//	]
+//});
+
 var btns = isc.ButtonsHLayout.create({
+	visibility:"hidden",
 	members : [
 		//isc.IAddButton.create({ height:thickBtnHeight, width:thickBtnWidth, click:"openRegMaster({}, null, 0)"}),
 		isc.IButton.create({ title:"New<br>Ship Reg<br>Applicaiton",
@@ -290,16 +320,38 @@ var btns = isc.ButtonsHLayout.create({
 	]
 });
 setTimeout(overrideApplNoChanged, 0, searchSection);
+
+var btnsForSR = isc.HLayout.create({
+	height:60,
+	width: "100%",
+	members:[
+		btnSrForceUpdateShipToFSQC, btns
+	]
+});
+
 var contentLayout =
 	isc.VLayout.create({
 	width: "100%",
 	height: "100%",
 	padding: 10,
 	show:function(){
-		this.Super("show", arguments);{
-			btns.setDisabled(loginWindow.SHIP_REGISTRATION_MAINTENANCE_READ_ONLY());
-		}
+		this.Super("show", arguments);
+		//{
+			//btns.setDisabled(loginWindow.SHIP_REGISTRATION_MAINTENANCE_READ_ONLY());
+		//}
+		getUserRoleInfo(function(userRoleInfo){
+			if (userRoleInfo!=null){
+				console.log(userRoleInfo);
+				if (userRoleInfo.roleListString.contains("SRREAD")){
+					btnSrForceUpdateShipToFSQC.show();
+					btns.hide();
+				} else {
+					btnSrForceUpdateShipToFSQC.hide();
+					btns.show();					
+				}
+			}
+		});
 	},
-    members: [ sectionTitle, searchSection, btns ]
+    members: [ sectionTitle, searchSection, btnsForSR ]
 });
 

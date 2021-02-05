@@ -92,6 +92,7 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 	private final String OPERATION_REVISE_REG_DATE_TIME = "REVISE_REG_DATE_TIME";
 	private final String OPERATION_SR_WITHDRAW_REGISTRATION = "SR_WITHDRAW_REGISTRATION";
 	private final String OPERATION_SR_REJECT_REGISTRATION = "SR_REJECT_REGISTRATION";
+	private final String OPERATION_FORCE_UPDATE_TO_FSQC = "FORCE_UPDATE_TO_FSQC";
 
 	@Override
 	public DSResponse fetch(RegMaster entity, DSRequest dsRequest){
@@ -385,10 +386,19 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 		// } else if (OPERATION_SR_REJECT_REGISTRATION.equals(operationId)){
 		//  	RegMaster result = srService.rejectRegistration(entity, taskId);
 		//  	return new DSResponse(result, DSResponse.STATUS_SUCCESS);
+		} else if (OPERATION_FORCE_UPDATE_TO_FSQC.equals(operationId)) {
+			DSResponse dsResponse = new DSResponse();
+			forceUpdateToFSQC(entity, dsRequest);
+			dsResponse.setSuccess();
+			return dsResponse;
 		}
 		return super.update(entity, dsRequest);
 	}
 	
+	private void forceUpdateToFSQC(RegMaster entity, DSRequest dsRequest) throws Exception {
+		super.update(entity, dsRequest);
+	}
+
 	private void sendRequestFsqcCert(Map clientSuppliedValues) throws Exception {
 		try {
 			if (clientSuppliedValues.containsKey("imo")) {
