@@ -218,4 +218,6 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 
 	Date getLaestDetention(String imoNo);
 
+	Date getLaestDetentionBefore(String imoNo, Date dueDate);
+
 }

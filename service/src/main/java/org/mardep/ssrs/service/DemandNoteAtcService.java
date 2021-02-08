@@ -76,7 +76,7 @@ public class DemandNoteAtcService {
 		BigDecimal calcATC = null;
 		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
 		int compareResult = 0;
-		Date regDate2Yrs = addYrsToDate(regDate, 2);
+		Date regDate2Yrs = addYrsToDate(regDate, 1);
 		compareResult = compareOnlyDayBetweenDates(regDate2Yrs, dueDate);
 		if (compareResult>=0) {  // within first 2 years, must be full ,( > 1st year, = 2nd year)
 //			calcATC = fullATC;
@@ -89,13 +89,6 @@ public class DemandNoteAtcService {
 			if (compareResult >= 0 &&detainDate.before(dueDate) ) {  //detained within 2 years (including dueDate2YrsBefore)
 				return fullATC;
 			}else {
-					
-				
-//				if(lastATC.equals(fullATC)) {
-//					return halfATC;
-//				}else{
-//					return fullATC;					
-//				}
 				//not detained in last 2 years
 				Calendar c1 = Calendar.getInstance();
 				c1.setTime(detainDate);
@@ -148,7 +141,7 @@ public class DemandNoteAtcService {
 			c2.setTime(dueDate);
 			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
 			System.out.println("compareResult "+ compareResult);
-			if (compareResult %2 == 1) {  
+			if (compareResult %2 == 0) {  
 				return halfATC;   
 			}else {
 				return fullATC;

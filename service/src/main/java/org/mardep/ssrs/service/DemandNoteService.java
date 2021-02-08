@@ -561,10 +561,10 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 //			}
 			BigDecimal calcATC;
 //			BigDecimal lastATC = getLastATC(rm.getApplNo());
-			Date laestDetention =  rmDao.getLaestDetention(rm.getImoNo());
+			Date laestDetention =  rmDao.getLaestDetentionBefore(rm.getImoNo(),dueDate);
 			//calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), rm.getDetainDate(), generationTime, amount, lastATC);
 			calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), laestDetention, dueDate, amount,null); //TODO:ACL
-			boolean discounted = !calcATC.equals(amount);
+			boolean discounted = calcATC.compareTo(amount)!=0;
 
 			item.setAmount(calcATC);
 
