@@ -1140,8 +1140,10 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	public BuilderMaker completeBuilderMakerChange(BuilderMaker entity, Long taskId, Transaction tx) {
 		IBuilderMakerDao bmDao = (IBuilderMakerDao) getDao(BuilderMaker.class);
 		inbox.proceed(taskId, "complete", "");
-		ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);
-		tx = txDao.save(null, Transaction.CODE_BUILDER_DETAILS, tx);
+		ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);		
+		//tx = txDao.save(null, Transaction.CODE_BUILDER_DETAILS, tx);
+		String txnCode = tx.getCode();
+		tx = txDao.save(null, txnCode, tx);
 		entity = bmDao.save(entity);
 		saveHistory(entity.getApplNo(), tx);
 		return entity;

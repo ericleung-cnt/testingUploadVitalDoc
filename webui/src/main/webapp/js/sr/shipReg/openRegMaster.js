@@ -1714,7 +1714,7 @@ var addBtnBuilderDetailReadyCrossCheckCoR = function(item, win, recordNum, owner
 var addBtnBuilderDetailCompleteChange = function(item, win, recordNum, ownerGrid, taskId, position){
 	item.addMember(
 		isc.Button.create({
-			title:"Complete <br>Change",
+			title:"Complete<br>Builder Change",
 			height:thickBtnHeight, width:thickBtnWidth,
 			click:function(){
 				var formData = win.form.getData();
@@ -1725,7 +1725,7 @@ var addBtnBuilderDetailCompleteChange = function(item, win, recordNum, ownerGrid
 						win.markForDestroy();
 						refreshInbox();
 					}, {data:formData, operationId:"bmComplete"});
-				});
+				}, {ctype:"Builder_Change"});
 			}
 		}), position)};
 
@@ -3253,7 +3253,7 @@ var openRegMaster = function(record, task, mode
 				},
 			});
 	var btnOwnerDetailCompleteChange = isc.Button.create(
-			{title:"Complete <br>Change", height:thickBtnHeight, width:thickBtnWidth,
+			{title:"Complete<br>Owner Detail<br>Change", height:thickBtnHeight, width:thickBtnWidth,
 				click:function(){
 					var formData = win.form.getData();
 					formData.taskId = form.taskId;

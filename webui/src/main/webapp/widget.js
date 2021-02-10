@@ -800,13 +800,15 @@ function getTransaction(callback, properties) {
 	if(properties!=null && properties.ctype){
 		var isPro = true;
 		if(properties.ctype=="Owner_Change"){
-			set = ["17","18"];
+			set = ["17","18","74","75"];
 		}else if(properties.ctype=="Registration_Change"){
-			set = ["50","51","52","53","54","55","56","57","58","59","60"];
+			set = ["52","57","60"];
 		}else if(properties.ctype=="RP_Change"){
-			set = ["21","25","26"];
+			set = ["21","25","26","27"];
 		} else if (properties.ctype=="Ownership_Change"){
-			set = ["12","13","14","15","74","75"];
+			set = ["12","13","14","15"];
+		} else if (properties.ctype=="Builder_Change"){
+			set = ["22"]
 		} 
 	}
 	var txForm = isc.DynamicForm.create({
