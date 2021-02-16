@@ -137,6 +137,9 @@ public class DemandNoteAtcService {
 //			}
 			Calendar c1 = Calendar.getInstance();
 			c1.setTime(regDate);
+			if (c1.get(Calendar.YEAR) < 2007) { //  ship reg before 2007 should start first half payment in 2007
+				c1.set(Calendar.YEAR, 2005);
+			}
 			Calendar c2 = Calendar.getInstance();
 			c2.setTime(dueDate);
 			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
