@@ -5217,7 +5217,7 @@ var openRegMaster = function(record, task, mode
 //				actions.addMember(btnSrPrintCoR);
 //			}
 //		}
-		if (record.applNo && record.regStatus=="R") {
+		if (record.applNo && (record.regStatus=="R" || record.regStatus=="D")) {
 			actions.addMember(isc.Button.create({
 				title:"Lock",
 				height:thickBtnHeight, width:thickBtnWidth,
