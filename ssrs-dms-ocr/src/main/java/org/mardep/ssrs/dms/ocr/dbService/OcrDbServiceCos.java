@@ -1,10 +1,13 @@
 package org.mardep.ssrs.dms.ocr.dbService;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.io.FilenameUtils;
 import org.mardep.ssrs.dao.ocr.IOcrRegMasterDao;
 import org.mardep.ssrs.dao.sr.IBuilderMakerDao;
 import org.mardep.ssrs.dms.ocr.service.IOcrBaseService;
@@ -70,6 +73,8 @@ public class OcrDbServiceCos implements IOcrDbServiceCos {
 			entityRegMaster.setEngModel2(xml.getModel());
 			
 			if (baseService.getDmsEnabled()) {
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+				xml.setPdfName(FilenameUtils.getBaseName(xml.getPdfName())+ "_"+timestamp.getTime()+".pdf");
 				long docId = vd.uploadCos(xml.getPdfName(), entityRegMaster.getRegName(), entityRegMaster.getImoNo(), pdf);
 				if (docId <= 0) {
 					throw new IOException("upload failure");

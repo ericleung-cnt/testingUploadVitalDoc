@@ -67,6 +67,7 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 	private final String VITALDOC_PATH_FSQC_COS_SHORTCUT = "SR\\Ship Registration\\File Number + IMO / File Number\\Printed Document\\CoD";
 
 	private final String VITALDOC_PATH_FSQC_SIGNED_COR_SHORTCUT = "Certificate of Registry (CoR)";
+	private final String VITALDOC_PATH_FSQC_SIGNED_COS_SHORTCUT = "Certificate of Survey (CoS)";
 
 	private final String VITALDOC_CLONE_RESULT_ALREADY_EXIST = "VITALDOC_CLONE_RESULT_ALREADY_EXIST";
 	private final String VITALDOC_CLONE_RESULT_SUCCESS = "VITALDOC_CLONE_RESULT_SUCCESS";
@@ -780,11 +781,9 @@ public class VitalDocClient implements IVitalDocClient, InitializingBean {
 				"SR-Certificate of Survery", properties, pdf, false);
 
 		String sessionId = getSessionId();
-		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT_NAME);
-		Long destDirId= getFsqcDirId(sessionId, VITALDOC_PATH_FSQC_ROOT + imo + "\\" + sysParam.getValue());
-		if (destDirId != -1){
-			createShortcutInFsqcVitalDoc(docId, destDirId);
-		}
+//		SystemParam sysParam = systemParamDao.findById(SYSTEM_PARAM_VITALDOC_FSQC_COS_SHORTCUT_NAME);
+		String destPath= VITALDOC_PATH_FSQC_ROOT + imo + "\\" + VITALDOC_PATH_FSQC_SIGNED_COS_SHORTCUT;
+		createShortcutInFsqcVitalDoc(sessionId,imo,docId,destPath);
 		//Long destDirId = new Long(sysParam.getValue());		
 		return docId;
 	}
