@@ -18,6 +18,7 @@ public class SystemParamJpaDao extends AbstractJpaDao<SystemParam, String> imple
 	@Override
 	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<SystemParam> listRoot) {
 		List<PredicateCriteria> list = new ArrayList<PredicateCriteria>();
+		list.add(new PredicateCriteria("id", PredicateType.EQUAL));
 		list.add(new PredicateCriteria("KEY", PredicateType.EQUAL));
 		return list;
 	}

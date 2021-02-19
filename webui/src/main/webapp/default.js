@@ -77,6 +77,23 @@ isc.Window.create({
 
 });
 
+isc.IButton.create({
+	ID: "reportServiceButton",
+	icon:"_icons8-work-32.png",
+	layoutVAlign: "top",
+	autoFit:true,
+	title: "Report Service",
+    autoFit: true,
+	click:function(){
+		systemParamDS.fetchData({ "id": "REPORT_SERVER_HOME_URL" }, function (dsResponse, data, dsRequest) {
+			if (data && data.length > 0) {
+				var url = data[0].value;
+				var win = window.open(url, '_blank');
+				win.focus();
+			}
+		})
+	}
+});
 
 isc.IButton.create({//Logout
 	ID: "changePasswordButton",
@@ -164,7 +181,7 @@ isc.TabSet.create({// Tabset
 		this.removeTabs(tabs);
 	},
 	tabBarControls: [
-		usIDLabel, isc.LayoutSpacer.create({width: 5}), changePasswordButton, logoutButton
+		usIDLabel, isc.LayoutSpacer.create({width: 5}),reportServiceButton, changePasswordButton, logoutButton
 	],
 	tabBarThickness: 22
 });
