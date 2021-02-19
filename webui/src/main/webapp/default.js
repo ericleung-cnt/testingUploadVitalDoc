@@ -79,7 +79,6 @@ isc.Window.create({
 
 isc.IButton.create({
 	ID: "reportServiceButton",
-	icon:"_icons8-work-32.png",
 	layoutVAlign: "top",
 	autoFit:true,
 	title: "Report Service",
