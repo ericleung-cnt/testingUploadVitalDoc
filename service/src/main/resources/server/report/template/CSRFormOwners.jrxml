@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSRFormOwners" pageWidth="525" pageHeight="842" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d60de621-3664-406b-9265-6f9a12b8ddd8">
 	<property name="ireport.zoom" value="1.464100000000001"/>
 	<property name="ireport.x" value="0"/>
@@ -15,7 +16,7 @@
 		<band splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="63" splitType="Stretch">
+		<band height="75" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="237" height="40" uuid="4f98eb5e-0e77-4ea7-b003-aa05f2eb1486"/>
 				<textElement>
@@ -26,12 +27,12 @@
 Registered Address:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="255" y="0" width="265" height="62" uuid="616fc0e5-c861-4acf-bd1a-68ceb56bc6ff"/>
+				<reportElement x="255" y="0" width="265" height="72" uuid="616fc0e5-c861-4acf-bd1a-68ceb56bc6ff"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ownerName} + "\n" +
-"\n" +
+($F{ownerName}.length()<=60 ? "\n": "") +
 $F{address1} + "\n" +
 $F{address2} + "\n" +
 $F{address3}]]></textFieldExpression>

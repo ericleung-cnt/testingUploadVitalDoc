@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CSRForm" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="55" bottomMargin="20" uuid="025c2706-23fa-414d-bd01-0ef788c5fd2b">
 	<property name="ireport.zoom" value="1.1000000000000048"/>
 	<property name="ireport.x" value="0"/>
@@ -276,7 +277,7 @@
 				<subreportExpression><![CDATA[$P{SUBREPORT_1}]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="35" y="92" width="237" height="40" uuid="54325ac5-c409-4d06-8eea-daa3b1d5e49a">
+				<reportElement x="35" y="119" width="237" height="40" uuid="54325ac5-c409-4d06-8eea-daa3b1d5e49a">
 					<printWhenExpression><![CDATA[$F{ownerList} == null || $F{ownerList}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement>
@@ -441,9 +442,7 @@ Body which carried out verification (if different):]]></text>
 				<textFieldExpression><![CDATA[$P{safety}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="290" y="15" width="250" height="68" uuid="71459681-0154-4f0f-893b-bb29cbeb9e31">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+				<reportElement x="290" y="15" width="250" height="68" uuid="71459681-0154-4f0f-893b-bb29cbeb9e31"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
