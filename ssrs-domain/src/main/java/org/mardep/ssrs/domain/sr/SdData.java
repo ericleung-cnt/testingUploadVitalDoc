@@ -37,7 +37,7 @@ public class SdData extends AbstractPersistentEntity<String> {
 
 	@Getter
 	@Setter
-	@Column(name = "SHIP_MANAGER", length=60)
+	@Column(name = "SHIP_MANAGER", length=120)
 	private String shipManager;
 
 	@Getter

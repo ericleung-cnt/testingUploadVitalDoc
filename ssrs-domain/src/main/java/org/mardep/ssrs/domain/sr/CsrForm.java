@@ -103,7 +103,7 @@ public class CsrForm extends AbstractPersistentEntity<CsrFormPK> {
 
 	@Getter
 	@Setter
-	@Column(name = "SHIP_MANAGER", length=60)
+	@Column(name = "SHIP_MANAGER", length=120)
 	private String shipManager;
 
 	@Getter

@@ -6,7 +6,7 @@
 		<field name="imoNo" type="text" length="9" primaryKey="true"
 			required="true" />
 		<field name="classText" type="text" length="3" />
-		<field name="shipManager" type="text" length="100" />
+		<field name="shipManager" type="text" length="120" />
 		<field name="shipMgrAddr1" type="text" length="100" />
 		<field name="shipMgrAddr2" type="text" length="100" />
 		<field name="shipMgrAddr3" type="text" length="100" />

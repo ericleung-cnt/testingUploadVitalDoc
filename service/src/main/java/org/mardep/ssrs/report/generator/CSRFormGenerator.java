@@ -129,7 +129,12 @@ public class CSRFormGenerator extends AbstractReportGenerator implements IReport
 				String address2 = csrOwner.getAddress2();
 				String address3 = csrOwner.getAddress3();
 				if (Owner.TYPE_DEMISE.equals(csrOwner.getOwnerType())) {
-					demise = ownerName + "\n";
+					if (ownerName.length()<60) {
+						demise = ownerName + "\n";
+					} else {
+						demise = ownerName;
+					}
+					//demise = ownerName + "\n";
 					if (address1 != null) {
 						demise += "\n" + address1;
 					}
@@ -247,7 +252,12 @@ public class CSRFormGenerator extends AbstractReportGenerator implements IReport
 	}
 
 	private String getSafetyAddress(Map<String, Object> inputParam) {
-		String addr = (inputParam.get("shipManager") != null ? inputParam.get("shipManager") : "") + "\n\n" +
+		String shipManager = (String) (inputParam.get("shipManager") != null ? inputParam.get("shipManager") : "");
+		
+		String addr = 
+				//(inputParam.get("shipManager") != null ? inputParam.get("shipManager") : "") + 
+				//"\n\n" +
+				shipManager + (shipManager.length()<60 ? "\n\n" : "\n") +
 				(inputParam.get("shipManagerAddress1") != null ? inputParam.get("shipManagerAddress1") : "") + "\n" +
 				(inputParam.get("shipManagerAddress2") != null ? inputParam.get("shipManagerAddress2") : "") + "\n" +
 				(inputParam.get("shipManagerAddress3") != null ? inputParam.get("shipManagerAddress3") : "") + "\n\n" +
