@@ -802,7 +802,7 @@ function getTransaction(callback, properties) {
 		if(properties.ctype=="Owner_Change"){
 			set = ["17","18","19","74","75"];
 		}else if(properties.ctype=="Registration_Change"){
-			set = ["52","57","60"];
+			set = ["52","57","60","71"];
 		}else if(properties.ctype=="RP_Change"){
 			set = ["21","25","26","27"];
 		} else if (properties.ctype=="Ownership_Change"){
@@ -826,7 +826,7 @@ function getTransaction(callback, properties) {
 //		    ],
 				required:true},
 				//{name:"TC_TXN_CODE", type:"text", title:"TC TXN CODE", required:true},
-			{ name: "code", title:"TC TXN CODE:",startRow: true,required:true, showIf:isShowTxnSelection, width:400,
+			{ name: "code", title:"TRANSACTION CODE:",startRow: true,required:true, showIf:isShowTxnSelection, width:400,
 				optionDataSource:"transactionCodeDS",
 				type:"ComboBoxItem",
 				displayField:"tcDesc",
