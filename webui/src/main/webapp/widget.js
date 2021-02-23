@@ -800,7 +800,7 @@ function getTransaction(callback, properties) {
 	if(properties!=null && properties.ctype){
 		var isPro = true;
 		if(properties.ctype=="Owner_Change"){
-			set = ["17","18","19","74","75"];
+			set = ["17","18","74","75","76"];
 		}else if(properties.ctype=="Registration_Change"){
 			set = ["52","57","60","71"];
 		}else if(properties.ctype=="RP_Change"){
