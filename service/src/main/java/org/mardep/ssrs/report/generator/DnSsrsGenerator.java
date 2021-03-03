@@ -210,7 +210,8 @@ public class DnSsrsGenerator extends AbstractReportGenerator implements IDemandN
 			feeItem.put("feeItemChi_SR", feeItemChi_SR);
 			feeItem.put("feeItemEng", feeItemEng);
 			item.setFeeCode(feeCode);
-			if (!dnHeader.getDemandNoteNo().startsWith(SR_DN_PREFIX)) {
+			//if (!dnHeader.getDemandNoteNo().startsWith(SR_DN_PREFIX)) {
+			if (dnHeader.getDemandNoteNo().startsWith(MMO_DN_PREFIX)) {
 				feeItem.put("chargedUnits",
 						item.getChargedUnits()!=null
 						? Integer.toString(item.getChargedUnits())
