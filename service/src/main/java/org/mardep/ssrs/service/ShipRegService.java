@@ -573,7 +573,13 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				String[] messages = enResult.values().iterator().next();
 				if (IReservationService.RESULT_REGISTERED.equals(messages[0]) && messages[1].equals(regMaster.getApplNo())) {
 					result.setRegName(null);
-				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) && owners.removeIf(owner->{ return owner.getName() != null && owner.getName().equals(messages[3]);})) {
+				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) 
+							&& owners.removeIf(owner->{ 
+								return owner.getName() != null 
+										&& owner.getName().equals("PreReserve Owner: " + messages[3]);
+								}
+							)
+						) {
 					result.setRegName(null);
 				} else {
 					for (int i = 1; i < messages.length; i++) {
