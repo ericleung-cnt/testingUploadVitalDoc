@@ -222,6 +222,16 @@ public class CSRFormGenerator extends AbstractReportGenerator implements IReport
 			issc = cs.getName();
 		}
 
+		//String docAudit = (String) inputParam.get("docAudit");
+//		String docAuditName = getAuditName((String) inputParam.get("docAudit"));
+//		params.put("docAudit", docAuditName);
+//		//String smcAudit = (String) inputParam.get("smcAudit");
+//		String smcAuditName = getAuditName((String) inputParam.get("smcAudit"));
+//		params.put("smcAudit", smcAuditName);
+//		//String isscAudit = (String) inputParam.get("isscAudit");
+//		String isscAuditName = getAuditName((String) inputParam.get("isscAudit"));
+//		params.put("isscAudit", isscAuditName);
+		
 		params.put("iss", issc == null ? "N/A" : issc);
 		Object remark = inputParam.get("remark");
 		params.put("remark", remark == null ? "N/A" : remark);
@@ -251,6 +261,15 @@ public class CSRFormGenerator extends AbstractReportGenerator implements IReport
 		return super.generate(Arrays.asList(single), params);
 	}
 
+	private String getAuditName(String auditId) {
+		String auditName = null;
+		if (auditId!=null) {
+			ClassSociety cs = classDao.findById(auditId);
+			auditName = cs.getName();
+		}		
+		return auditName;
+	}
+	
 	private String getSafetyAddress(Map<String, Object> inputParam) {
 		String shipManager = (String) (inputParam.get("shipManager") != null ? inputParam.get("shipManager") : "");
 		
