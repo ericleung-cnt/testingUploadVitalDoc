@@ -576,7 +576,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) 
 							&& owners.removeIf(owner->{ 
 								return owner.getName() != null 
-										&& owner.getName().equals("PreReserve Owner: " + messages[3]);
+										&& ("PreReserve Owner: " + owner.getName()).equals(messages[3]);
 								}
 							)
 						) {
