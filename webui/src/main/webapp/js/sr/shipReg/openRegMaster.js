@@ -3447,6 +3447,75 @@ var openRegMaster = function(record, task, mode
 	                                           "transferOwnerChange_approved","transferOwnerChange_pendingCrossCheck",
 	                                           "reReg_approved","reReg_pendingCrossCheck",
 	                                           ].indexOf(task.name) != -1;
+	var validateShipName = function(formData){
+		if (formData.regName!=null && formData.regName.length>0) {
+			formData.owners = form.ownerGrid.getData();		
+			var ownerNames = [];
+			formData.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
+			regMasterDS.fetchData(formData, function(resp, respData, req) {
+				var checkResultEngFailed = false;
+				var checkResultChiFailed = false;
+				var showMessages = function(itemKey, message, lang){
+					if (message) {
+						var v = {
+							  action:function(){},
+							  condition:"return false",
+							  defaultErrorMessage:message,
+							  requireServer:false,
+							  type:"checkNames"
+						}
+						form.getItem(itemKey).validators.add(v);
+						form.getItem(itemKey).validate();
+						form.getItem(itemKey).validators.remove(v);
+						if (lang=="Eng"){
+							checkResultEngFailed = true;
+						} else if (lang=="Chi") {
+							checkResultChiFailed = true;
+						}
+					} else {
+						form.getItem(itemKey).validate();
+					}
+				};
+				showMessages("regName", respData.regName, "Eng");
+				if (formData.regChiName!=null && formData.regChiName.length>0) {
+					showMessages("regChiName", respData.regChiName, "Chi");
+				}
+				showMessages("imoNo", respData.imoNo);
+				if (checkResultEngFailed){
+					form.getItem("regName").showIcon("checkedNOK");
+					form.getItem("regName").hideIcon("checkedOK");
+					//disableSrBtns();
+				} else {
+					form.getItem("regName").showIcon("checkedOK");
+					form.getItem("regName").hideIcon("checkedNOK");					
+				}
+				if (formData.regChiName!=null && formData.regChiName.length>0){
+					if (checkResultChiFailed){								
+						form.getItem("regChiName").showIcon("checkedNOK");
+						form.getItem("regChiName").hideIcon("checkedOK");
+					} else {
+						form.getItem("regChiName").showIcon("checkedOK");
+						form.getItem("regChiName").hideIcon("checkedNOK");						
+					//enableSrBtns();
+					}
+				}
+				if (checkResultEngFailed||checkResultChiFailed){
+					disableSrBtns();
+					form.getField(btnSrCheckShipName).setDisabled(false);
+				} else{
+					enableSrBtns();
+					form.getField(btnSrCheckShipName).setDisabled(true);
+				}
+				//form.getField(btnSrCheckShipName).setDisabled(!checkResultEngFailed);
+			}, {operationId:"RegMasterDS_fetchData_checkNames", data:formData});
+		} else {
+			form.getItem("regName").hideIcon("checkedNOK");
+			form.getItem("regName").hideIcon("checkedOK");
+			form.getItem("regName").validate();
+			enableSrBtns();
+		}
+	};
+	
 	var form = isc.DynamicForm.create({
 		dataSource:"regMasterDS",
 		numCols:6,
@@ -3476,52 +3545,56 @@ var openRegMaster = function(record, task, mode
 		        			tabIndex: -1
 		        		},
 		        	],
+		        	focus: function(form, item){
+		        		disableSrBtns();
+		        	},
 		        	blur: function(form, item){		        		
 		        		console.log(item);
 		        		var data = form.getData();
-		        		if (data.regName!=null && data.regName.length>0) {
-		        			data.owners = form.ownerGrid.getData();		
-		        			var ownerNames = [];
-		        			data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
-		        			regMasterDS.fetchData(data, function(resp, data, req) {
-		        				var checkResultFailed = false;
-		        				var showMessages = function(itemKey, message){
-		        					if (message) {
-		        						var v = {
-											  action:function(){},
-											  condition:"return false",
-											  defaultErrorMessage:message,
-											  requireServer:false,
-											  type:"checkNames"
-										}
-		        						form.getItem(itemKey).validators.add(v);
-		        						form.getItem(itemKey).validate();
-		        						form.getItem(itemKey).validators.remove(v);
-		        						checkResultFailed = true;
-		        					} else {
-		        						form.getItem(itemKey).validate();
-		        					}
-		        				};
-		        				showMessages("regName", data.regName);
-		        				//showMessages("regChiName", data.regChiName);
-		        				showMessages("imoNo", data.imoNo);
-		        				if (checkResultFailed){
-		        					form.getItem("regName").showIcon("checkedNOK");
-		        					form.getItem("regName").hideIcon("checkedOK");
-		        					disableSrBtns();
-		        				} else {
-		        					form.getItem("regName").showIcon("checkedOK");
-		        					form.getItem("regName").hideIcon("checkedNOK");
-		        					enableSrBtns();
-		        				}
-		        				form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
-		        			}, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
-		        		} else {
-		        			form.getItem("regName").hideIcon("checkedNOK");
-		        			form.getItem("regName").hideIcon("checkedOK");
-		        			form.getItem("regName").validate();
-		        			enableSrBtns();
-		        		}
+		        		validateShipName(data);
+//		        		if (data.regName!=null && data.regName.length>0) {
+//		        			data.owners = form.ownerGrid.getData();		
+//		        			var ownerNames = [];
+//		        			data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
+//		        			regMasterDS.fetchData(data, function(resp, data, req) {
+//		        				var checkResultFailed = false;
+//		        				var showMessages = function(itemKey, message){
+//		        					if (message) {
+//		        						var v = {
+//											  action:function(){},
+//											  condition:"return false",
+//											  defaultErrorMessage:message,
+//											  requireServer:false,
+//											  type:"checkNames"
+//										}
+//		        						form.getItem(itemKey).validators.add(v);
+//		        						form.getItem(itemKey).validate();
+//		        						form.getItem(itemKey).validators.remove(v);
+//		        						checkResultFailed = true;
+//		        					} else {
+//		        						form.getItem(itemKey).validate();
+//		        					}
+//		        				};
+//		        				showMessages("regName", data.regName);
+//		        				//showMessages("regChiName", data.regChiName);
+//		        				showMessages("imoNo", data.imoNo);
+//		        				if (checkResultFailed){
+//		        					form.getItem("regName").showIcon("checkedNOK");
+//		        					form.getItem("regName").hideIcon("checkedOK");
+//		        					disableSrBtns();
+//		        				} else {
+//		        					form.getItem("regName").showIcon("checkedOK");
+//		        					form.getItem("regName").hideIcon("checkedNOK");
+//		        					enableSrBtns();
+//		        				}
+//		        				form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
+//		        			}, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
+//		        		} else {
+//		        			form.getItem("regName").hideIcon("checkedNOK");
+//		        			form.getItem("regName").hideIcon("checkedOK");
+//		        			form.getItem("regName").validate();
+//		        			enableSrBtns();
+//		        		}
 		        	}},
 		        //{name:"regNameFail", title:"", width:300, showIf:shipnameValidation.getResult()==false },
 		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), 
@@ -3544,52 +3617,56 @@ var openRegMaster = function(record, task, mode
 			        			tabIndex: -1
 			        		},
 			        	],
+			        	focus: function(form,item){
+			        		disableSrBtns();
+			        	},
 			        	blur: function(form, item){		        		
 			        		console.log(item);
 			        		var data = form.getData();
-			        		if (data.regChiName!=null && data.regChiName.length>0){
-			        			data.owners = form.ownerGrid.getData();		
-			        			var ownerNames = [];
-			        			data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
-			        			regMasterDS.fetchData(data, function(resp, data, req) {
-			        				var checkResultFailed = false;
-			        				var showMessages = function(itemKey, message){
-			        					if (message) {
-			        						var v = {
-												  action:function(){},
-												  condition:"return false",
-												  defaultErrorMessage:message,
-												  requireServer:false,
-												  type:"checkNames"
-											}
-			        						form.getItem(itemKey).validators.add(v);
-			        						form.getItem(itemKey).validate();
-			        						form.getItem(itemKey).validators.remove(v);
-			        						checkResultFailed = true;
-			        					} else {
-			        						form.getItem(itemKey).validate();
-			        					}
-			        				};
-			        				//showMessages("regName", data.regName);
-			        				showMessages("regChiName", data.regChiName);
-			        				showMessages("imoNo", data.imoNo);
-			        				if (checkResultFailed){
-			        					form.getItem("regChiName").showIcon("checkedNOK");
-			        					form.getItem("regChiName").hideIcon("checkedOK");
-			        					disableSrBtns();
-			        				} else {
-			        					form.getItem("regChiName").showIcon("checkedOK");
-			        					form.getItem("regChiName").hideIcon("checkedNOK");
-			        					enableSrBtns();
-			        				}								  
-			        				form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
-			        			}, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
-			        		} else {
-			        			form.getItem("regChiName").hideIcon("checkedNOK");
-			        			form.getItem("regChiName").hideIcon("checkedOK");
-			        			form.getItem("regChiName").validate();
-			        			enableSrBtns();
-			        		}
+			        		validateShipName(data);
+//			        		if (data.regChiName!=null && data.regChiName.length>0){
+//			        			data.owners = form.ownerGrid.getData();		
+//			        			var ownerNames = [];
+//			        			data.owners.forEach(function (owner) { if (owner.name) ownerNames.add(owner.name);} );		        		
+//			        			regMasterDS.fetchData(data, function(resp, data, req) {
+//			        				var checkResultFailed = false;
+//			        				var showMessages = function(itemKey, message){
+//			        					if (message) {
+//			        						var v = {
+//												  action:function(){},
+//												  condition:"return false",
+//												  defaultErrorMessage:message,
+//												  requireServer:false,
+//												  type:"checkNames"
+//											}
+//			        						form.getItem(itemKey).validators.add(v);
+//			        						form.getItem(itemKey).validate();
+//			        						form.getItem(itemKey).validators.remove(v);
+//			        						checkResultFailed = true;
+//			        					} else {
+//			        						form.getItem(itemKey).validate();
+//			        					}
+//			        				};
+//			        				//showMessages("regName", data.regName);
+//			        				showMessages("regChiName", data.regChiName);
+//			        				showMessages("imoNo", data.imoNo);
+//			        				if (checkResultFailed){
+//			        					form.getItem("regChiName").showIcon("checkedNOK");
+//			        					form.getItem("regChiName").hideIcon("checkedOK");
+//			        					disableSrBtns();
+//			        				} else {
+//			        					form.getItem("regChiName").showIcon("checkedOK");
+//			        					form.getItem("regChiName").hideIcon("checkedNOK");
+//			        					enableSrBtns();
+//			        				}								  
+//			        				form.getField(btnSrCheckShipName).setDisabled(!checkResultFailed);
+//			        			}, {operationId:"RegMasterDS_fetchData_checkNames", data:data});
+//			        		} else {
+//			        			form.getItem("regChiName").hideIcon("checkedNOK");
+//			        			form.getItem("regChiName").hideIcon("checkedOK");
+//			        			form.getItem("regChiName").validate();
+//			        			enableSrBtns();
+//			        		}
 			        	}},
 		        		
 //		        	changed:function(form, item, value){
