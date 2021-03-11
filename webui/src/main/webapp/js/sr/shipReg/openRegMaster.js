@@ -3447,7 +3447,8 @@ var openRegMaster = function(record, task, mode
 	                                           "transferOwnerChange_approved","transferOwnerChange_pendingCrossCheck",
 	                                           "reReg_approved","reReg_pendingCrossCheck",
 	                                           ].indexOf(task.name) != -1;
-	var validateShipName = function(formData){
+	
+	var validateImoShipNameNoDuplication = function(formData){
 		if (formData.regName!=null && formData.regName.length>0) {
 			formData.owners = form.ownerGrid.getData();		
 			var ownerNames = [];
@@ -3455,7 +3456,8 @@ var openRegMaster = function(record, task, mode
 			regMasterDS.fetchData(formData, function(resp, respData, req) {
 				var checkResultEngFailed = false;
 				var checkResultChiFailed = false;
-				var showMessages = function(itemKey, message, lang){
+				var checkResultImoFailed = false;
+				var showMessages = function(itemKey, message, checkingType){
 					if (message) {
 						var v = {
 							  action:function(){},
@@ -3467,10 +3469,12 @@ var openRegMaster = function(record, task, mode
 						form.getItem(itemKey).validators.add(v);
 						form.getItem(itemKey).validate();
 						form.getItem(itemKey).validators.remove(v);
-						if (lang=="Eng"){
+						if (checkingType=="Eng"){
 							checkResultEngFailed = true;
-						} else if (lang=="Chi") {
+						} else if (checkingType=="Chi") {
 							checkResultChiFailed = true;
+						} else if (checkingType=="IMO"){
+							checkResultImoFailed = true;
 						}
 					} else {
 						form.getItem(itemKey).validate();
@@ -3480,7 +3484,7 @@ var openRegMaster = function(record, task, mode
 				if (formData.regChiName!=null && formData.regChiName.length>0) {
 					showMessages("regChiName", respData.regChiName, "Chi");
 				}
-				showMessages("imoNo", respData.imoNo);
+				showMessages("imoNo", respData.imoNo, "IMO");
 				if (checkResultEngFailed){
 					form.getItem("regName").showIcon("checkedNOK");
 					form.getItem("regName").hideIcon("checkedOK");
@@ -3499,7 +3503,7 @@ var openRegMaster = function(record, task, mode
 					//enableSrBtns();
 					}
 				}
-				if (checkResultEngFailed||checkResultChiFailed){
+				if (checkResultEngFailed || checkResultChiFailed || checkResultImoFailed){
 					disableSrBtns();
 					form.getField(btnSrCheckShipName).setDisabled(false);
 				} else{
@@ -3524,7 +3528,12 @@ var openRegMaster = function(record, task, mode
 		        {name:"applNo", disabled:isCompleteRegistered(), type:"staticText"},
 		        {name:"applNoSuf", valueMap:{"F":"Full-Reg", "P":"Pro-Reg"}, defaultValue:"F"},
 		        {name:"corCollect", optionDataSource:"officeDS",displayField:"name",valueField:"id", required:true},
-		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper"},
+		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper",
+		        	blur: function(form, item){
+		        		var data = form.getData();
+		        		validateImoShipNameNoDuplication(data);
+		        	}
+		        },
 		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", 
 		        	width:300, colSpan:2, //endRow:true,redrawOnChange:true,
 		        	icons: [
@@ -3551,7 +3560,7 @@ var openRegMaster = function(record, task, mode
 		        	blur: function(form, item){		        		
 		        		console.log(item);
 		        		var data = form.getData();
-		        		validateShipName(data);
+		        		validateImoShipNameNoDuplication(data);
 //		        		if (data.regName!=null && data.regName.length>0) {
 //		        			data.owners = form.ownerGrid.getData();		
 //		        			var ownerNames = [];
@@ -3623,7 +3632,7 @@ var openRegMaster = function(record, task, mode
 			        	blur: function(form, item){		        		
 			        		console.log(item);
 			        		var data = form.getData();
-			        		validateShipName(data);
+			        		validateImoShipNameNoDuplication(data);
 //			        		if (data.regChiName!=null && data.regChiName.length>0){
 //			        			data.owners = form.ownerGrid.getData();		
 //			        			var ownerNames = [];

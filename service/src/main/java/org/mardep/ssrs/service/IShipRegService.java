@@ -211,4 +211,5 @@ public interface IShipRegService extends IBaseService{
 
 	RegMaster withdrawRegistration(RegMaster entity, Long taskId, String reasonCode);
 	RegMaster rejectRegistration(RegMaster entity, Long taskId, String reasonCode);
+	
 }
