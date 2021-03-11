@@ -2073,20 +2073,22 @@ var openRegMaster = function(record, task, mode
 	};
 	
 	var enableSrBtns = function(){
-		form.getField(btnSrReceiveApplication).setDisabled(false);
-		form.getField(btnSrAcceptApplication).setDisabled(false);
-		form.getField(btnSrAssignCallSign).setDisabled(false);
-		form.getField(btnSrAssignOfficialNumber).setDisabled(false);
-		form.getField(btnSrRequestAcceptApplication).setDisabled(false);
-		form.getField(btnSrSaveShipDetails).setDisabled(false);
-		form.getField(btnSrReadyApprovalApplication).setDisabled(false);
-		form.getField(btnSrPreviewCoR).setDisabled(false);
-		form.getField(btnSrCoRIsReady).setDisabled(false);
-		form.getField(btnSrApproveApplication).setDisabled(false);
-		form.getField(btnSrPrintCoR).setDisabled(false);
-		form.getField(btnSrPrint4CoR).setDisabled(false);
-		form.getField(btnSrCompleteApplication).setDisabled(false);
-		form.getField(btnSrReadyCrossCheckCoR).setDisabled(false);
+		if (!imoFocused && !shipNameEngFocused && !shipNameChiFocused){
+			form.getField(btnSrReceiveApplication).setDisabled(false);
+			form.getField(btnSrAcceptApplication).setDisabled(false);
+			form.getField(btnSrAssignCallSign).setDisabled(false);
+			form.getField(btnSrAssignOfficialNumber).setDisabled(false);
+			form.getField(btnSrRequestAcceptApplication).setDisabled(false);
+			form.getField(btnSrSaveShipDetails).setDisabled(false);
+			form.getField(btnSrReadyApprovalApplication).setDisabled(false);
+			form.getField(btnSrPreviewCoR).setDisabled(false);
+			form.getField(btnSrCoRIsReady).setDisabled(false);
+			form.getField(btnSrApproveApplication).setDisabled(false);
+			form.getField(btnSrPrintCoR).setDisabled(false);
+			form.getField(btnSrPrint4CoR).setDisabled(false);
+			form.getField(btnSrCompleteApplication).setDisabled(false);
+			form.getField(btnSrReadyCrossCheckCoR).setDisabled(false);			
+		}
 	};
 	
 	// Ship Reg Applicaiton buttons
@@ -3448,6 +3450,10 @@ var openRegMaster = function(record, task, mode
 	                                           "reReg_approved","reReg_pendingCrossCheck",
 	                                           ].indexOf(task.name) != -1;
 	
+	var imoFocused = false;
+	var shipNameEngFocused = false;
+	var shipNameChiFocused = false;
+	
 	var validateImoShipNameNoDuplication = function(formData){
 		if (formData.regName!=null && formData.regName.length>0) {
 			formData.owners = form.ownerGrid.getData();		
@@ -3484,7 +3490,9 @@ var openRegMaster = function(record, task, mode
 				if (formData.regChiName!=null && formData.regChiName.length>0) {
 					showMessages("regChiName", respData.regChiName, "Chi");
 				}
-				showMessages("imoNo", respData.imoNo, "IMO");
+				if (formData.imoNo!=null && formData.imoNo.length>0){
+					showMessages("imoNo", respData.imoNo, "IMO");					
+				}
 				if (checkResultEngFailed){
 					form.getItem("regName").showIcon("checkedNOK");
 					form.getItem("regName").hideIcon("checkedOK");
@@ -3502,6 +3510,16 @@ var openRegMaster = function(record, task, mode
 						form.getItem("regChiName").hideIcon("checkedNOK");						
 					//enableSrBtns();
 					}
+				}
+				if (formData.imoNo!=null && formData.imoNo.length>0){
+					if (checkResultImoFailed){								
+						form.getItem("imoNo").showIcon("checkedNOK");
+						form.getItem("imoNo").hideIcon("checkedOK");
+					} else {
+						form.getItem("imoNo").showIcon("checkedOK");
+						form.getItem("imoNo").hideIcon("checkedNOK");						
+					//enableSrBtns();
+					}					
 				}
 				if (checkResultEngFailed || checkResultChiFailed || checkResultImoFailed){
 					disableSrBtns();
@@ -3529,9 +3547,32 @@ var openRegMaster = function(record, task, mode
 		        {name:"applNoSuf", valueMap:{"F":"Full-Reg", "P":"Pro-Reg"}, defaultValue:"F"},
 		        {name:"corCollect", optionDataSource:"officeDS",displayField:"name",valueField:"id", required:true},
 		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper",
+		        	icons: [
+		        		{
+		        			name: "checkedOK",
+		        			src: "../images/checked.png",
+		        			hspace: 5,
+		        			inline: false,
+		        			showIf: false, //shipnameValidation.getResult()==true,
+		        			tabIndex: -1
+		        		},
+		        		{
+		        			name: "checkedNOK",
+		        			src: "../images/remove.png",
+		        			hspace: 5,
+		        			inline: false,
+		        			showIf:false,
+		        			tabIndex: -1
+		        		},
+		        	],
+		        	focus: function(form,item){
+		        		disableSrBtns();
+		        		imoFocused = true;
+		        	},
 		        	blur: function(form, item){
 		        		var data = form.getData();
 		        		validateImoShipNameNoDuplication(data);
+		        		imoFocused = false;
 		        	}
 		        },
 		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", 
@@ -3556,11 +3597,13 @@ var openRegMaster = function(record, task, mode
 		        	],
 		        	focus: function(form, item){
 		        		disableSrBtns();
+		        		shipNameEngFocused = true;
 		        	},
 		        	blur: function(form, item){		        		
 		        		console.log(item);
 		        		var data = form.getData();
 		        		validateImoShipNameNoDuplication(data);
+		        		shipNameEngFocused = false;
 //		        		if (data.regName!=null && data.regName.length>0) {
 //		        			data.owners = form.ownerGrid.getData();		
 //		        			var ownerNames = [];
@@ -3628,11 +3671,13 @@ var openRegMaster = function(record, task, mode
 			        	],
 			        	focus: function(form,item){
 			        		disableSrBtns();
+			        		shipNameChiFocused = true;
 			        	},
 			        	blur: function(form, item){		        		
 			        		console.log(item);
 			        		var data = form.getData();
 			        		validateImoShipNameNoDuplication(data);
+			        		shipNameChiFocused = false;
 //			        		if (data.regChiName!=null && data.regChiName.length>0){
 //			        			data.owners = form.ownerGrid.getData();		
 //			        			var ownerNames = [];
