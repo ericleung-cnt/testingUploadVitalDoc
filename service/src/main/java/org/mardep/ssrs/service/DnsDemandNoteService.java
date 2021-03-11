@@ -26,6 +26,7 @@ import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusRequest;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusResponse;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusResult;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.UpdateRefundStatus;
+import org.mardep.ssrs.dns.service.inbound.IFSQCDNSService;
 import org.mardep.ssrs.dns.service.inbound.IDnService;
 import org.mardep.ssrs.dns.service.inbound.IReceiptService;
 import org.mardep.ssrs.dns.service.inbound.IRefundService;
@@ -61,7 +62,8 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 
 	
 	@Autowired
-	FSQCDnsInboundService fsqcinboundservice;
+	@Qualifier("fsqcDnsInboundService")
+	IFSQCDNSService fsqcinboundservice;
 
 	@Override
 	public DemandNoteStatusResponse processDnsRequest(DemandNoteStatusRequest demandNoteStatusRequest) {

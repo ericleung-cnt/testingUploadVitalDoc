@@ -29,6 +29,7 @@ import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusRequest;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusResponse;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.RefundStatusResult;
 import org.mardep.ssrs.dns.pojo.inbound.updateRefundStatus.UpdateRefundStatus;
+import org.mardep.ssrs.dns.service.inbound.IFSQCDNSService;
 import org.mardep.ssrs.dns.service.inbound.IDnService;
 import org.mardep.ssrs.dns.service.inbound.IReceiptService;
 import org.mardep.ssrs.dns.service.inbound.IRefundService;
@@ -49,7 +50,7 @@ import org.springframework.stereotype.Service;
 
 @Service("fsqcDnsInboundService")
 @Transactional
-public class FSQCDnsInboundService extends DemandNoteService implements IRefundService, IReceiptService, IDnService{
+public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNSService {
 
 //	@Autowired
 //	IMailService mailService;
