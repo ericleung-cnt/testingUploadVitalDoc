@@ -317,7 +317,8 @@ new java.text.DecimalFormat("#,###.##").format(
 				<textFieldExpression><![CDATA["NIL 無"]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
-				<reportElement x="26" y="-12" width="528" height="40" uuid="4058438a-f0a9-4340-b7f4-4cf5c407299d">
+				<reportElement x="26" y="-12" width="528" height="20" uuid="4058438a-f0a9-4340-b7f4-4cf5c407299d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[!$F{mortgageAgreement}.isEmpty()]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left"/>
@@ -341,13 +342,13 @@ new java.text.DecimalFormat("#,###.##").format(
 		</band>
 		<band height="5">
 			<line>
-				<reportElement x="0" y="-56" width="555" height="1" uuid="e25782ed-3cbd-4dbd-a7d9-aea34317ce55"/>
+				<reportElement positionType="Float" x="0" y="-75" width="555" height="1" uuid="e25782ed-3cbd-4dbd-a7d9-aea34317ce55"/>
 			</line>
 		</band>
-		<band height="60" splitType="Prevent">
+		<band height="30" splitType="Prevent">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<textField>
-				<reportElement x="26" y="-57" width="490" height="96" uuid="f7933fbe-9e44-4158-8299-9acd1395fdbd"/>
+				<reportElement positionType="Float" x="26" y="-73" width="490" height="96" uuid="f7933fbe-9e44-4158-8299-9acd1395fdbd"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
