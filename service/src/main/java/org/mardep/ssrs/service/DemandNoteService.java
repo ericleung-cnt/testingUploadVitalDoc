@@ -442,13 +442,53 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 		cal.setTime(from);
 		cal.add(Calendar.YEAR, 1);
 		Date newDue = cal.getTime();
+	
 
 		map.put("atfDueDateFrom", new Criteria("atfDueDate", from, Operator.GREATER_OR_EQUAL));
-		map.put("atfDueDateTo", new Criteria("atfDueDate", to, Operator.LESS_OR_EQUAL));
+		map.put("atfDueDateTo", new Criteria("atfDueDate", to, Operator.LESS_OR_EQUAL));  
 		map.put("regStatus", new Criteria("regStatus", "R"));
 		rmDao.findByPaging(map, null, null, resultList);
 		createAtcDni(resultList, newDue);
 	}
+	
+	@Override
+	public void createFollowAtcItem() {
+		User user = new User();
+		user.setId("SYSTEM");
+		UserContextThreadLocalHolder.setCurrentUser(user);
+		List<DemandNoteItem> resultList = new ArrayList<>();
+		Map<String, Criteria> map = new HashMap<String, Criteria>();
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
+		Date today0000;
+		try {
+			today0000 = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
+			//today0000 = simpleDateFormat.parse("20191212");
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(today0000);
+		cal.add(Calendar.MILLISECOND, - 1);
+		Date to = cal.getTime();
+		
+		cal.setTime(today0000);
+		cal.add(Calendar.DAY_OF_MONTH, -dayCountDownForAtcDnItem);
+		Date from = cal.getTime();
+	
+		map.put("createdDateFrom", new Criteria("createdDate", from, Operator.GREATER_OR_EQUAL));
+		map.put("createdDateTo", new Criteria("createdDate", to, Operator.LESS_OR_EQUAL));  
+		map.put("fcFeeCode", new Criteria("fcFeeCode", "01", Operator.EQUALS));  
+		
+		// find all ATC(A) in last 30 days 
+		demandNoteItemDao.findByPaging(map, null, null, resultList);
+		createaFollowAtcDni(resultList);
+	}
+	
+
+
 
 //	@Override
 //	public void createAtcDni(List<RegMaster> resultList, Date dueDate) {
@@ -495,12 +535,15 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 	}
 
 	@Override
-	public void createAtcDni(List<RegMaster> resultList, Date dueDate) {
+	public void createAtcDni(List<RegMaster> resultList, Date newDueDate) {
 		DemandNoteAtcService atcSvc = new DemandNoteAtcService();
 		Date generationTime = new Date();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(dueDate);
+		cal.setTime(newDueDate);
 		int year = cal.get(Calendar.YEAR);
+		cal.add(Calendar.YEAR, -1);
+		Date dueDate = cal.getTime();
+		
 		Map<String, BigDecimal> calculated = rmDao.calculateAtc(resultList.stream().map(rm -> { return rm.getApplNo(); } ).toArray(String[]::new));
 		for (RegMaster rm : resultList) {
 			DemandNoteItem item = new DemandNoteItem();
@@ -517,10 +560,11 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 //				amount = amount.multiply(new BigDecimal("0.5"));
 //			}
 			BigDecimal calcATC;
-			BigDecimal lastATC = getLastATC(rm.getApplNo());
+//			BigDecimal lastATC = getLastATC(rm.getApplNo());
+			Date laestDetention =  rmDao.getLaestDetentionBefore(rm.getImoNo(),dueDate);
 			//calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), rm.getDetainDate(), generationTime, amount, lastATC);
-			calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), rm.getDetainDate(), dueDate, amount, lastATC);
-			boolean discounted = !calcATC.equals(amount);
+			calcATC = atcSvc.calcAtcAmt(rm.getRegDate(), laestDetention, dueDate, amount,null); //TODO:ACL
+			boolean discounted = calcATC.compareTo(amount)!=0;
 
 			item.setAmount(calcATC);
 
@@ -532,13 +576,55 @@ public class DemandNoteService extends AbstractService implements IDemandNoteSer
 			item.setUserId("SYSTEM");
 			item.setAdhocDemandNoteText((discounted ? "50" : "100" ) + "% (Year " + (year - 1) + "-" + year + ")");
 			demandNoteItemDao.save(item);
-			if (dueDate != null) {
+			if (newDueDate != null) {
 				RegMaster update = rmDao.findById(rm.getApplNo());
-				update.setAtfDueDate(dueDate);
+				update.setAtfDueDate(newDueDate);
 				rmDao.save(update);
 			}
-			logger.info("ATC demand note item appl no {}, discount {}, amount {}, new Due Date {}",  rm.getApplNo(), discounted, calcATC, dueDate);
+			logger.info("ATC demand note item appl no {}, discount {}, amount {}, new Due Date {}",  rm.getApplNo(), discounted, calcATC, newDueDate);
 		}
+	}
+	
+	private void createaFollowAtcDni(List<DemandNoteItem> resultList) {
+		Date generationTime = new Date();
+		Calendar cal = Calendar.getInstance();
+		for (DemandNoteItem dni : resultList) {
+			
+			boolean discount = dni.getAdhocDemandNoteText().startsWith("50%");
+			if(!discount) continue;
+			RegMaster rm = rmDao.findById(dni.getApplNo());
+			
+			Date detainDate= rmDao.getLaestDetention(rm.getImoNo());
+			cal.setTime(rm.getAtfDueDate());
+			cal.add(Calendar.YEAR, -1);		
+			Date cutOff_date =cal.getTime();
+			
+		
+			if(detainDate!=null&&detainDate.after(dni.getCreatedDate())&&detainDate.before(cutOff_date)) {
+				
+				
+				DemandNoteItem item = new DemandNoteItem();		
+				
+				item.setApplNo(rm.getApplNo());
+				item.setFcFeeCode("111"); 
+				item.setAdhocDemandNoteText(dni.getAdhocDemandNoteText()); 
+				
+				List<DemandNoteItem> findByCriteria = demandNoteItemDao.findByCriteria(item);
+				if(findByCriteria.isEmpty()) {				
+				item.setAmount(dni.getAmount());				
+				item.setActive(Boolean.TRUE);
+				item.setChargedUnits(1);
+				item.setChgIndicator("Y");
+				item.setGenerationTime(generationTime);
+				item.setUserId("SYSTEM");
+				demandNoteItemDao.save(item);
+				}
+				
+				logger.info("ATC Follow demand note item appl no {},  amount {}",  rm.getApplNo(),  dni.getAmount());
+			}
+			
+		}
+		
 	}
 
 	@Override

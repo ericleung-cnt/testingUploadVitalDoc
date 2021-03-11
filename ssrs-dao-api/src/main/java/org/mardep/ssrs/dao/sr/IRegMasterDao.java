@@ -215,5 +215,10 @@ public interface IRegMasterDao extends IBaseDao<RegMaster, String> {
 	RegMaster findRegMasterHistory(Long txId) throws Exception;
 
 	void logFsqcRequest(String jsonRcvRequest, String jsonReplyResult);
+	
+		Date getLaestDetention(String imoNo);
+
+	Date getLaestDetentionBefore(String imoNo, Date dueDate);
+
 
 }
