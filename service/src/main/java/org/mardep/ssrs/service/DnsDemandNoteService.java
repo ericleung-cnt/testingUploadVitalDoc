@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.mardep.ssrs.dao.dn.IDemandNoteReceiptDao;
 import org.mardep.ssrs.dao.dn.IDemandNoteRefundDao;
+import org.mardep.ssrs.dao.dn.IFSQCDemandNoteHeaderDao;
 import org.mardep.ssrs.dns.pojo.BaseReturnResult;
 import org.mardep.ssrs.dns.pojo.ResultCode;
 import org.mardep.ssrs.dns.pojo.common.CreateReceiptAction;
@@ -34,9 +35,11 @@ import org.mardep.ssrs.domain.constant.ReceiptStatus;
 import org.mardep.ssrs.domain.dn.DemandNoteHeader;
 import org.mardep.ssrs.domain.dn.DemandNoteReceipt;
 import org.mardep.ssrs.domain.dn.DemandNoteRefund;
+import org.mardep.ssrs.domain.dn.FSQCDemandNoteHeader;
 import org.mardep.ssrs.domain.user.User;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +59,10 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 	@Autowired
 	IDemandNoteRefundDao refundDao;
 
+	
+	@Autowired
+	FSQCDnsInboundService fsqcinboundservice;
+
 	@Override
 	public DemandNoteStatusResponse processDnsRequest(DemandNoteStatusRequest demandNoteStatusRequest) {
 		logger.info("#process:{}", demandNoteStatusRequest);
@@ -68,6 +75,9 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 			demandNoteStatusResponse.setBaseResult(demandNoteStatusResult);
 			logger.info("event={}; resultCode={}; error={};", "Update Demand Note Status", brr.getResultCode().getCode(), brr.getDescription());
 			return demandNoteStatusResponse;
+		}
+		if(demandNoteStatusRequest.getUpdateDNStatus().getDnNo().startsWith(Cons.FSQC_DN_NO_PREFIX)) {
+			return  fsqcinboundservice.processDnsRequest(demandNoteStatusRequest);
 		}
 		try {
 			DemandNoteStatus req = demandNoteStatusRequest.getUpdateDNStatus();
@@ -173,6 +183,9 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 			receiptStatusResponse.setBaseResult(receiptStatusResult);
 			logger.info("event={}; resultCode={}; error={};", "Create/Cancel Receipt", brr.getResultCode().getCode(), brr.getDescription());
 			return receiptStatusResponse;
+		}
+		if(receiptStatusRequest.getCreateReceipt().getReceipt().getDnNo().startsWith(Cons.FSQC_DN_NO_PREFIX)) {
+			return  fsqcinboundservice.processDnsRequest(receiptStatusRequest);
 		}
 		try {
 			ReceiptInfo req = receiptStatusRequest.getCreateReceipt().getReceipt();
@@ -430,6 +443,9 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 			return refundResult("", ResultCode.RC_98000);
 		}
 		String demandNoteId = req.getDnNo();
+		if(demandNoteId.startsWith(Cons.FSQC_DN_NO_PREFIX)) {
+			return  fsqcinboundservice.processDnsRequest(refundStatusRequest);		
+		}
 		try {
 			logger.info("Refund, DemandNoteID:[{}]", new Object[]{demandNoteId});
 			if (demandNoteId == null || demandNoteId.isEmpty()){

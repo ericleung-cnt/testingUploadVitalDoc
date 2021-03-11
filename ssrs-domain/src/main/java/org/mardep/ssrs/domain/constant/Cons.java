@@ -32,5 +32,8 @@ public class Cons {
 	public final static String RD_London = "LD";
 	public final static String RD_Shanghai = "SH";
 	public final static String RD_Singapore = "SP";
+	
+	
+	public final static String FSQC_DN_NO_PREFIX = "0519";
 
 }
