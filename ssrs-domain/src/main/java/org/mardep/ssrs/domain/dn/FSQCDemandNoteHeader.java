@@ -24,7 +24,7 @@ import lombok.ToString;
 
 
 @Entity
-@Table(name="FSQC_DEMAND_NOTE_RECEIPTS")
+@Table(name="FSQC_DEMAND_NOTE_HEADERS")
 @NoArgsConstructor
 @Audited
 @ToString(of={"demandNoteNo"})
