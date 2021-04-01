@@ -624,9 +624,129 @@ var openOwnerEnq = function(record){
 };
 
 
+//var btnReserveShipnameChecking = isc.Button.create({
+//	icon:"search.png",
+//    title:"Check nnn",
+//    ID: "btnReserveShipnameChecking",
+//    autoFit: true,
+//    click : function () {
+//    	checkShipnameReservation();
+//    }
+//});
+//
+//var btnReserveShipnameUpdate = isc.Button.create({
+//    icon:"edit.png",
+//    title:"Update", 
+//    autoFit: true,
+//   	ID: "btnReserveShipnameUpdate",
+//  	click : function () { 
+//  		updateRecord("preReserveDS_update");
+//  	},
+//});
+//
+//var reserveShipnameForm_Toolbar = isc.ButtonToolbar.create({
+//	ID: "reserveShipnameForm_Toolbar",
+//	buttons: [
+//	    btnReserveShipnameChecking,
+//	    btnReserveShipnameUpdate
+//	]
+//});
 
 var openReserveApp=function(record, taskId, hide) {
 	console.log("pre reserve app");
+	var eName1CheckOK = true;
+	var eName2CheckOK = true;
+	var eName3CheckOK = true;
+	var cName1CheckOK = true;
+	var cName2CheckOK = true;
+	var cName3CheckOK = true;
+	
+	var btnReserveShipnameChecking = isc.Button.create({
+		icon:"search.png",
+	    title:"Check nnn",
+	    ID: "btnReserveShipnameChecking",
+	    height: 30,
+	    autoFit: true,
+	    click : function () {
+	    	checkShipnameReservation();
+	    }
+	});
+
+	var btnReserveShipnameUpdate = isc.Button.create({
+	    icon:"edit.png",
+	    title:"Update", 
+	    autoFit: true,
+	   	ID: "btnReserveShipnameUpdate",
+	    height: 30,
+	  	click : function () { 
+	  		updateRecord("preReserveDS_update");
+	  	},
+	});
+
+	var btnReserveShipnameReserve = isc.Button.create({
+		icon:"add.png",
+		title:"Reserve", 
+		autoFit: true,
+		ID: "btnReserveShipnameReserve",
+	    height: 30,
+	   	  click : function () { updateRecord("preReserveDS_reserve", taskId);},
+	   	  showIf: function(){ return reserveForm.getData().id > 0; },
+	});
+	
+	var btnReserveShipnameReject = isc.Button.create({
+		icon:"remove.png",
+		title:"Reject", 
+		autoFit: true,
+		ID: "btnReserveShipnameReject",
+	    height: 30,
+	   	  click : function () {
+	   		  reserveForm.getItem("name").setValue(null);
+	   		  reserveForm.getItem("chName").setValue(null);
+	   		  updateRecord("preReserveDS_reject", taskId);
+	   	  },
+	   	  showIf: function(){ return reserveForm.getData().id > 0; },
+	});
+
+	var reserveShipnameBtns = [
+	    btnReserveShipnameChecking,
+	    btnReserveShipnameUpdate
+	];
+	
+//	var reserveShipnameForm_Toolbar = isc.ButtonToolbar.create({
+//		ID: "reserveShipnameForm_Toolbar",
+//		buttons: reserveShipnameBtns
+////			[
+////		    btnReserveShipnameChecking,
+////		    btnReserveShipnameUpdate
+////		]
+//	});
+//	
+	var disableBtnUpdate = function(){
+		//eserveForm.getItem("btnSaveShipnameReservation").setDisabled(true);
+		if (reserveShipnameForm_Toolbar!=null) {
+				  if (eName1CheckOK && eName2CheckOK && eName3CheckOK 
+   						  && cName1CheckOK && cName2CheckOK && cName3CheckOK){
+					  reserveShipnameForm_Toolbar.getButton('btnReserveShipnameUpdate').setDisabled(true);
+					  if (reserveShipnameForm_Toolbar.getButton('btnReserveShipnameReserve')!=null) {
+						  reserveShipnameForm_Toolbar.getButton('btnReserveShipnameReserve').setDisabled(true);
+					  }
+				  }
+		}
+			//reserveShipnameForm_Toolbar.getButton('btnReserveShipnameUpdate').setDisabled(true);
+		//if (form!=undefined) form.tb.getButton('btnSaveShipnameReservation').setDisabled(true);
+	};
+	
+	var enableBtnUpdate = function(){
+		//reserveForm.getItem("btnSaveShipnameReservation").setDisabled(false);
+		if (reserveShipnameForm_Toolbar!=null) {
+			reserveShipnameForm_Toolbar.getButton('btnReserveShipnameUpdate').setDisabled(false);
+			  if (reserveShipnameForm_Toolbar.getButton('btnReserveShipnameReserve')!=null) {
+				  reserveShipnameForm_Toolbar.getButton('btnReserveShipnameReserve').setDisabled(false);
+			  }
+		}
+		//if (form!=undefined) form.tb.getButton('btnSaveShipnameReservation').setDisabled(false);
+	};
+	
 	var _update = function(form, target)
 	{
 		var vm = {"":""};
@@ -641,20 +761,51 @@ var openReserveApp=function(record, taskId, hide) {
 			form.getItem(target).setValue(null);
 		}
 	};
+	
+	var resetShipnameSelectionValueMap = function(form){
+		form.getItem("name").setValueMap({"":""});
+		form.getItem("chName").setValueMap({"":""});
+	};
+	
 	var updateName = function(form,item,value) { _update(form, "name"); };
 	var updateCName = function(form,item,value) { _update(form, "chName"); };
 
 	var reserveForm = isc.DynamicForm.create({
+		ID: "reserveForm",
 		colWidths:[100,200,100,200],
 		width: "100%", dataSource: "preReserveDS", numCols: 4,
 		fields: [
 	         { name: "id", visible:false},
-	         { name: "name1", changed:updateName, characterCasing: "upper"},
-	         { name: "chName1", changed:updateCName, characterCasing: "upper"},
-	         { name: "name2", changed:updateName, characterCasing: "upper"},
-	         { name: "chName2", changed:updateCName, characterCasing: "upper"},
-	         { name: "name3", changed:updateName, characterCasing: "upper"},
-	         { name: "chName3", changed:updateCName, characterCasing: "upper"},
+	         { name: "name1", 
+	           //changed:updateName, 
+	        	 	focus: function(form,item) {disableBtnUpdate();}, 	
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	           		characterCasing: "upper"},
+	         { name: "chName1", 
+	           //changed:updateCName, 
+	        	   focus: function(form,item) {disableBtnUpdate();}, 
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	        	   characterCasing: "upper"},
+	         { name: "name2", 
+	           //changed:updateName, 
+	        	   focus: function(form,item) {disableBtnUpdate();}, 
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	        	   characterCasing: "upper"},
+	         { name: "chName2", 
+	           //changed:updateCName, 
+	        	   focus: function(form,item) {disableBtnUpdate();}, 
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	        	   characterCasing: "upper"},
+	         { name: "name3", 
+	           //changed:updateName, 
+	        	   focus: function(form,item) {disableBtnUpdate();}, 
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	        	   characterCasing: "upper"},
+	         { name: "chName3", 
+	           //changed:updateCName, 
+	        	   focus: function(form,item) {disableBtnUpdate();}, 
+	        	 	blur: function(form,item) {disableBtnUpdate();}, 
+	        	   characterCasing: "upper"},
 	         { name: "name", title: "Reserve Name", type:"select", characterCasing: "upper"},
 	         { name: "chName", title: "Reserve Chi Name", type:"select"},
 
@@ -675,14 +826,14 @@ var openReserveApp=function(record, taskId, hide) {
 	updateCName(reserveForm);
 	var updateRecord = function(id, taskId) {
 		if (reserveForm.validate()) {
-			tb.disable();
+			reserveShipnameForm_Toolbar.disable();
 			var data = reserveForm.getData();
 			data.taskId = taskId;
 			preReserveDS.updateData(data, function(resp, data){
 				if (id == "preReserveDS_update") {
 					reserveForm.setData(data);
 					localWin.setTitle("Ship Name Reservation: " + (data.id ? data.id : "NEW"));
-					tb.enable();
+					reserveShipnameForm_Toolbar.enable();
 				} else {
 					localWin.close();
 					if (preReservedAppList) {
@@ -696,14 +847,16 @@ var openReserveApp=function(record, taskId, hide) {
 		}
 	}
 
-	var tbButtons = [
-     {
-   	  icon:"search.png",
-   	  title:"Check",
-   	  autoFit: true,
-   	  click : function () {
-   		  if (reserveForm.validate()) {
-   			  tb.disable();
+	var checkShipnameReservation = function(){
+ 		  if (reserveForm.validate()) {
+ 				eName1CheckOK = true;
+ 				eName2CheckOK = true;
+ 				eName3CheckOK = true;
+ 				cName1CheckOK = true;
+ 				cName2CheckOK = true;
+ 				cName3CheckOK = true;
+
+ 			 reserveShipnameForm_Toolbar.disable();
    			  var formData = reserveForm.getData();
    			  preReserveDS.fetchData({fetchType:"checkNames",
    				  name1: formData.name1,
@@ -713,7 +866,7 @@ var openReserveApp=function(record, taskId, hide) {
    				  chName2: formData.chName2,
    				  chName3: formData.chName3,
    			  }, function(resp, data){
-   				  tb.enable();
+   				reserveShipnameForm_Toolbar.enable();
    				  for (var field in data) {
    					  var name1 = reserveForm.getItem(field);
    					  var message = data[field][0];
@@ -733,46 +886,178 @@ var openReserveApp=function(record, taskId, hide) {
    					  default:
    						  break;
    					  }
-   					  var v = {action:function(){},condition:"return false",defaultErrorMessage:message,requireServer:false,type:"checkNames"}
+   					  var v = 
+   					  		{
+   							  action:function(){},
+   							  condition:"return false",
+   							  defaultErrorMessage:message,
+   							  requireServer:false,
+   							  type:"checkNames"
+   							}
    					  name1.validators.add(v);
    					  name1.validate();
    					  name1.validators.remove(v);
+   					  
+   					  switch (name1.getValue()){
+   					  	case formData.name1:
+   					  		eName1CheckOK = false;
+   					  		break;
+   					  	case formData.name2:
+   					  		eName2CheckOK = false;
+   					  		break;
+   					  	case formData.name3:
+   					  		eName3CheckOK = false;
+   					  		break;
+   					  	case formData.chName1:
+   					  		cName1CheckOK = false;
+   					  		break;
+   					  	case formData.chName2:
+   					  		cName2CheckOK = false;
+   					  		break;
+   					  	case formData.chName3:
+   					  		cName3CheckOK = false;
+   					  		break;
+   					  }
    				  }
+   				  if (eName1CheckOK && eName2CheckOK && eName3CheckOK 
+   						  && cName1CheckOK && cName2CheckOK && cName3CheckOK){
+   					updateName(reserveForm);
+   					updateCName(reserveForm);
+   					enableBtnUpdate();
+   				  } else {
+   					reserveForm.getItem("name").setValue(null);
+   					reserveForm.getItem("chName").setValue(null);
+   					resetShipnameSelectionValueMap(reserveForm);
+   					  disableBtnUpdate();
+   				  }
+   					  
    			  });
    		  }
-
-   	  },
-     },
-     { icon:"edit.png",title:"Update", autoFit: true,
-   	  click : function () { updateRecord("preReserveDS_update");},
-     },
+		
+	};
+	
+	var tbButtons = [
+//     {
+//   	  icon:"search.png",
+//   	  title:"Check n",
+//   	  ID: "btnCheckShipnameReservation",
+//   	  autoFit: true,
+//   	  click : function () {
+//   		  checkShipnameReservation();
+////   		  if (reserveForm.validate()) {
+////   			  tb.disable();
+////   			  var formData = reserveForm.getData();
+////   			  preReserveDS.fetchData({fetchType:"checkNames",
+////   				  name1: formData.name1,
+////   				  name2: formData.name2,
+////   				  name3: formData.name3,
+////   				  chName1: formData.chName1,
+////   				  chName2: formData.chName2,
+////   				  chName3: formData.chName3,
+////   			  }, function(resp, data){
+////   				  tb.enable();
+////   				  for (var field in data) {
+////   					  var name1 = reserveForm.getItem(field);
+////   					  var message = data[field][0];
+////   					  switch (message){
+////   					  case "OFFENSIVE":
+////   						  message = "Offensive word " + data[field][1];
+////   						  break;
+////   					  case "RESERVED":
+////   						  //message = "Name reserved by " + data[field][1] + " until " + DateUtil.format(new Date(Number.parseInt(data[field][2])), "dd/MM/yyyy");
+////                          var index = data[field][2].indexOf("20");
+////                          var datee = data[field][2].substring(index);
+////                           message = "Name reserved by " + data[field][1] + " until " + DateUtil.format(new Date(datee), "dd/MM/yyyy");
+////   						  break;
+////   					  case "REGISTERED":
+////   						  message = "Name is registered " + data[field][1];
+////   						  break;
+////   					  default:
+////   						  break;
+////   					  }
+////   					  var v = 
+////   					  		{
+////   							  action:function(){},
+////   							  condition:"return false",
+////   							  defaultErrorMessage:message,
+////   							  requireServer:false,
+////   							  type:"checkNames"
+////   							}
+////   					  name1.validators.add(v);
+////   					  name1.validate();
+////   					  name1.validators.remove(v);
+////   					  
+////   					  switch (name1.getValue()){
+////   					  	case formData.name1:
+////   					  		eName1CheckOK = false;
+////   					  		break;
+////   					  	case formData.name2:
+////   					  		eName2CheckOK = false;
+////   					  		break;
+////   					  	case formData.name3:
+////   					  		eName3CheckOK = false;
+////   					  		break;
+////   					  	case formData.chName1:
+////   					  		cName1CheckOK = false;
+////   					  		break;
+////   					  	case formData.chName2:
+////   					  		cName2CheckOK = false;
+////   					  		break;
+////   					  	case formData.chName3:
+////   					  		cName3CheckOK = false;
+////   					  		break;
+////   					  }
+////   				  }
+////   			  });
+////   		  }
+//
+//   	  },
+//     },
+//     { icon:"edit.png",title:"Update", autoFit: true,
+//    	 ID: "btnSaveShipnameReservation",
+//   	  click : function () { updateRecord("preReserveDS_update");},
+//     },
+//     btnReserveShipnameChecking,
+//     btnReserveShipnameUpdate
 
      ];
 	if (hide) {
 
 	} else {
-		tbButtons.add({ icon:"add.png",title:"Reserve", autoFit: true,
-		   	  click : function () { updateRecord("preReserveDS_reserve", taskId);},
-		   	  showIf: function(){ return reserveForm.getData().id > 0; },
-		     });
-		tbButtons.add({ icon:"remove.png",title:"Reject", autoFit: true,
-		   	  click : function () {
-		   		  reserveForm.getItem("name").setValue(null);
-		   		  reserveForm.getItem("chName").setValue(null);
-		   		  updateRecord("preReserveDS_reject", taskId);
-		   	  },
-		   	  showIf: function(){ return reserveForm.getData().id > 0; },
-		     });
+//		reserveShipnameBtns.add({ icon:"add.png",title:"Reserve", autoFit: true,
+//		   	  click : function () { updateRecord("preReserveDS_reserve", taskId);},
+//		   	  showIf: function(){ return reserveForm.getData().id > 0; },
+//		     });
+//		reserveShipnameBtns.add({ icon:"remove.png",title:"Reject", autoFit: true,
+//		   	  click : function () {
+//		   		  reserveForm.getItem("name").setValue(null);
+//		   		  reserveForm.getItem("chName").setValue(null);
+//		   		  updateRecord("preReserveDS_reject", taskId);
+//		   	  },
+//		   	  showIf: function(){ return reserveForm.getData().id > 0; },
+//		     });
+		reserveShipnameBtns.add(btnReserveShipnameReserve);
+		reserveShipnameBtns.add(btnReserveShipnameReject);
 	}
-	var tb = isc.ButtonToolbar.create({
-		buttons: tbButtons});
+//	var tb = isc.ButtonToolbar.create({
+//		//ID: "reserveShipnameForm_Toolbar",
+//		buttons: tbButtons});
+	var reserveShipnameForm_Toolbar = isc.ButtonToolbar.create({
+		ID: "reserveShipnameForm_Toolbar",
+		buttons: reserveShipnameBtns
+//			[
+//		    btnReserveShipnameChecking,
+//		    btnReserveShipnameUpdate
+//		]
+	});
+	
 	var winTitle = "Ship Name Reservation: " + (record.id ? record.id : "NEW");
 	var localWin = isc.Window.create({
 		width: 632, height: 425, isModal: false, title: winTitle,
 		items: [
 		        isc.VLayout.create({
 		        	width: "100%",	height: "100%", padding: 10,
-		        	members: [ reserveForm, tb,],
+		        	members: [ reserveForm, reserveShipnameForm_Toolbar],
 		        })
 		        ],
 		        close: function(){ localWin.markForDestroy(); },
@@ -784,6 +1069,7 @@ var openReserveApp=function(record, taskId, hide) {
 		tb.setDisabled(true);
 	}
 	localWin.show();
+	//disableBtnUpdate(reserveForm);
 	return reserveForm;
 };
 function refreshInbox() {
