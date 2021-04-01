@@ -663,7 +663,7 @@ var openReserveApp=function(record, taskId, hide) {
 	
 	var btnReserveShipnameChecking = isc.Button.create({
 		icon:"search.png",
-	    title:"Check nnn",
+	    title:"Check",
 	    ID: "btnReserveShipnameChecking",
 	    height: 30,
 	    autoFit: true,
