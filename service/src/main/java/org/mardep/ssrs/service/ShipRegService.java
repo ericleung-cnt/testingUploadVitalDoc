@@ -566,7 +566,9 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		// TODO check IMO
 		String name = regMaster.getRegName();
 		RegMaster result = new RegMaster();
-
+		List<Owner> ownersOrig = new ArrayList<Owner>();
+		ownersOrig.addAll(owners);
+		
 		if (name != null) {
 			Map<String, String[]> enResult = rs.check(Arrays.asList(name), true);
 			if (!enResult.isEmpty()) {
@@ -592,6 +594,7 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			}
 		}
 
+		owners.addAll(ownersOrig);
 		String regChiName = regMaster.getRegChiName();
 		if (regChiName != null) {
 			Map<String, String[]> chResult = rs.check(Arrays.asList(regChiName), false);
@@ -599,7 +602,14 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 				String[] messages = chResult.values().iterator().next();
 				if (IReservationService.RESULT_REGISTERED.equals(messages[0]) && messages[1].equals(regMaster.getApplNo())) {
 					result.setRegChiName(null);
-				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) && owners.removeIf(owner->{ return owner.getName() != null && owner.getName().equals(messages[3]);})) {
+//				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) && owners.removeIf(owner->{ return owner.getName() != null && owner.getName().equals(messages[3]);})) {
+				} else if (IReservationService.RESULT_RESERVED.equals(messages[0]) 
+						&& owners.removeIf(owner->{ 
+							return owner.getName() != null 
+									&& ("PreReserve Owner: " + owner.getName()).equals(messages[3]);
+							}
+						)
+					) {
 					result.setRegChiName(null);
 				} else {
 					for (int i = 1; i < messages.length; i++) {
