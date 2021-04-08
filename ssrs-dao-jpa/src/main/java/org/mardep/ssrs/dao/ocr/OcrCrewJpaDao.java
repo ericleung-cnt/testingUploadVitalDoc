@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OcrCrewJpaDao implements IOcrCrewDao {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 	@Override

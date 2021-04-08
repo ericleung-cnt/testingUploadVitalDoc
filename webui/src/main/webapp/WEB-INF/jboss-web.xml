@@ -5,4 +5,10 @@
         <res-type>javax.sql.DataSource</res-type>
         <jndi-name>java:jboss/datasources/ssrsDS</jndi-name>
     </resource-ref>
+    	<resource-ref>
+        <res-ref-name>jdbc/fsqcDS_fsqcdb</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <jndi-name>java:jboss/datasources/fsqcDS_fsqcdb</jndi-name>
+    </resource-ref>
+    
 </jboss-web>

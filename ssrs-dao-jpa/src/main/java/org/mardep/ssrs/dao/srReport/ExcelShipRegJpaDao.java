@@ -27,7 +27,7 @@ public class ExcelShipRegJpaDao implements IExcelShipRegDao {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 	private Date getFirstDayOfYearMonth(Date srcDate) {

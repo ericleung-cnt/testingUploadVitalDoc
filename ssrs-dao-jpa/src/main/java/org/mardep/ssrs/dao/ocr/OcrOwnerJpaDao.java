@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OcrOwnerJpaDao implements IOcrOwnerDao {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 	@Override

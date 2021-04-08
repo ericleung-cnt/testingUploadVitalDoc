@@ -13,10 +13,10 @@
 	</bean>
 
 	<bean id="jpaVendorAdapter"	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+	<bean id="jpaVendorAdapter_fsqcdb"	class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 
-
-	<bean id="entityManagerFactoryBean"
-		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<bean id="entityManagerFactoryBean" name ="ssrsPU"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" primary="true">
 <!-- 		data source retrieved by bean or JNDI  -->
 		<property name="dataSource" ref="dataSource" /> 
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
@@ -38,11 +38,49 @@
 			</map>
 		</property>
 	</bean>
-
+	
+	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactoryBean"/>
     </bean>
     
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	   	<bean id="entityManagerFactoryBean_fsqcdb"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"  >
+<!-- 		data source retrieved by bean or JNDI  -->
+		<property name="dataSource" ref="dataSource_fsqcdb" />
+		<property name="jpaVendorAdapter" ref="jpaVendorAdapter_fsqcdb" />
+		<property name="packagesToScan" value="org.mardep.fsqc.domain.fsqcdb" />
+		<property name="persistenceUnitName" value="fsqcPU_fsqcdb" />
+		<property name="jpaPropertyMap">
+			<map>
+				<entry key="hibernate.dialect" 							value="${ssrs.hibernate.dialect:org.hibernate.dialects.SQLServer2012Dialect}" />
+				<entry key="hibernate.hbm2ddl.auto" 					value="${fsqc.hibernate.hbm2ddl.auto:none}" />
+				<entry key="hibernate.format_sql" 						value="${fsqc.hibernate.format_sql:true}" />
+				<entry key="hibernate.show_sql" 						value="true" />
+				<entry key="hibernate.connection.useUnicode" 			value="true" />
+				<entry key="hibernate.connection.charSet" 				value="UTF8" />
+				<entry key="org.hibernate.integration.envers.enabled" 	value="false" />
+				<entry key="org.hibernate.envers.store_data_at_delete" 	value="true" />
+				<entry key="hibernate.envers.autoRegisterListeners" 	value="false" />
+				<entry key="org.hibernate.envers.autoRegisterListeners" value="false" />
+				<entry key="hibernate.connection.release_mode"			value="${fsqc.hibernate.connection.release_mode:on_close}" />
+				<entry key="org.hibernate.envers.do_not_audit_optimistic_locking_field" value="false" />
+			</map>
+		</property>
+	</bean>
+
+
+	<bean id="transactionManager_fsqcdb"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="entityManagerFactoryBean_fsqcdb" />
+		<!-- <property name="globalRollbackOnParticipationFailure" value="false" 
+			/> -->
+	</bean>
+    
+     <tx:annotation-driven transaction-manager="transactionManager"/>
+     <tx:annotation-driven transaction-manager="transactionManager_fsqcdb"/>
+
 
 </beans>

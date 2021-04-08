@@ -38,6 +38,7 @@ import org.mardep.ssrs.domain.AbstractPersistentEntity;
 import org.mardep.ssrs.domain.sr.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 public abstract class AbstractJpaDao<T extends AbstractPersistentEntity<K>, K extends Serializable> implements IBaseDao<T,K> {
 
@@ -76,8 +77,9 @@ public abstract class AbstractJpaDao<T extends AbstractPersistentEntity<K>, K ex
 		}
 	}
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
+
 	private List<Method> historyGetter;
 	private List<Method> historySetters;
 	private Method keyMethod;

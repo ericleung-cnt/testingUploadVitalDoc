@@ -35,7 +35,7 @@ public class FsqcCertProgressJpaDao implements IFsqcCertProgressDao {
 	private final String WRC_PROGRESS = "PROCESS";
 	private final String WRC_COMPLETED = "COMPLETED";
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 
 	@Override

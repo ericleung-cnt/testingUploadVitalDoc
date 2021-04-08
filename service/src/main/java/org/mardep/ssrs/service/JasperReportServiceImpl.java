@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,7 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 	private List<String> templates = new ArrayList<String>();
 
 	@Autowired
+	@Qualifier("dataSource")
 	private DataSource ssrsDataSource;
 
 	private byte[] marineIcon2;
