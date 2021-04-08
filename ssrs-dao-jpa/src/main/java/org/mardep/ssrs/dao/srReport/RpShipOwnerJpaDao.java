@@ -20,7 +20,7 @@ public class RpShipOwnerJpaDao implements IRpShipOwnerDao {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 	@Override

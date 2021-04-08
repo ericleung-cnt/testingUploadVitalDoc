@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OcrCompanySearchJpaDao extends AbstractJpaDao<OcrEntityCompanySearch, Integer>implements IOcrCompanySearchDao {
 
-	@PersistenceContext
-	protected EntityManager em;
+//	@PersistenceContext(name="ssrsPU")
+//	protected EntityManager em;
 
 	@Override
 	public List<OcrEntityCompanySearch> getAll() {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OcrCrewListJpaDao implements IOcrCrewListDao {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 //	@Autowired

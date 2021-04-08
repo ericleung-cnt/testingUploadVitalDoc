@@ -11,7 +11,8 @@
  	<import resource="classpath:/server/service.xml" />
  	
 <!--  	for test here, would be retrieved by JNDI -->
-	<jee:jndi-lookup id="dataSource" 	jndi-name="jdbc/ssrsDS" />
+	<jee:jndi-lookup id="dataSource" 	jndi-name="jdbc/ssrsDS"  />
+		<jee:jndi-lookup id="dataSource_fsqcdb" 	jndi-name="jdbc/fsqcDS_fsqcdb" />
 <!-- 	setting in jetty-dev.xml -->
 	
 <!--  	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" -->

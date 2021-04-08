@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class OcrRankJpaDao implements IOcrRankDao {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 	
 	@Override
