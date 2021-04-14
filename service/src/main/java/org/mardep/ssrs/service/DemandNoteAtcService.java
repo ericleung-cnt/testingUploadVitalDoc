@@ -135,23 +135,88 @@ public class DemandNoteAtcService {
 //			}else{
 //				return fullATC;					
 //			}
-			Calendar c1 = Calendar.getInstance();
-			c1.setTime(regDate);
-			if (c1.get(Calendar.YEAR) < 2007) { //  ship reg before 2007 should start first half payment in 2007
-				c1.set(Calendar.YEAR, 2005);
-			}
-			Calendar c2 = Calendar.getInstance();
-			c2.setTime(dueDate);
-			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
-			System.out.println("compareResult "+ compareResult);
-			if (compareResult %2 == 0) {  
-				return halfATC;   
-			}else {
-				return fullATC;
-			}
+			// 2021-04-13
+//			Calendar c1 = Calendar.getInstance();
+//			c1.setTime(regDate);
+//			if (c1.get(Calendar.YEAR) < 2007) { //  ship reg before 2007 should start first half payment in 2007
+//				c1.set(Calendar.YEAR, 2005);
+//			}
+//			Calendar c2 = Calendar.getInstance();
+//			c2.setTime(dueDate);
+//			compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+//			System.out.println("compareResult "+ compareResult);
+//			if (compareResult %2 == 0) {  
+//				return halfATC;   
+//			}else {
+//				return fullATC;
+//			}
+			// 2021-04-13
+			return calcNonDetainAtcAmt(regDate, dueDate, fullATC, halfATC);
 		}
 	}
 	
+	public BigDecimal calcNonDetainAtcAmt(Date regDate, Date dueDate, BigDecimal fullAtc, BigDecimal halfAtc) {
+		Date firstAnniversaryDate =calcFirstAnniversaryDate(regDate);
+		BigDecimal calcAtc = null;
+		if (firstAnniversaryDate!=null) {
+			Calendar calFirst = Calendar.getInstance();
+			calFirst.setTime(firstAnniversaryDate);
+			Calendar calDue = Calendar.getInstance();
+			calDue.setTime(dueDate);
+			int yearDiff = calDue.get(Calendar.YEAR) - calFirst.get(Calendar.YEAR);
+			
+			if (yearDiff<0 || (yearDiff%2)==0) {
+				calcAtc = fullAtc;
+			} else {
+				calcAtc = halfAtc;
+			}			
+		}
+		return calcAtc;
+	}
+	
+	public Date calcFirstAnniversaryDate(Date regDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		Date firstAnniversaryDate = null;
+		try {
+			Date regDateCutOff = sdf.parse("2006-02-01");
+			Calendar calRegDate = Calendar.getInstance();
+			calRegDate.setTime(regDate);
+			Calendar calCutOff = Calendar.getInstance();
+			calCutOff.setTime(regDateCutOff);
+			if (regDate.after(regDateCutOff)) {
+				firstAnniversaryDate = convertDateIfLeapYear(calRegDate.get(Calendar.YEAR)+1, regDate);
+			} else {
+				if (calRegDate.get(Calendar.YEAR)<calCutOff.get(Calendar.YEAR) 
+						&& calRegDate.get(Calendar.MONTH)>=calCutOff.get(Calendar.MONTH)
+						&& calRegDate.get(Calendar.DAY_OF_MONTH)>=calCutOff.get(Calendar.DAY_OF_MONTH)) {
+							firstAnniversaryDate = convertDateIfLeapYear(calCutOff.get(Calendar.YEAR), regDate);
+				} else {
+					firstAnniversaryDate = convertDateIfLeapYear(calCutOff.get(Calendar.YEAR)+1, regDate);
+				}
+			}
+			return firstAnniversaryDate;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+	
+	private Date convertDateIfLeapYear(int year, Date regDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		String regDateStr = sdf.format(regDate);
+		try {
+			Date resultDate = null;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(regDate);
+			if (cal.get(Calendar.MONTH)==2 && cal.get(Calendar.DAY_OF_MONTH)==29) {
+				resultDate = sdf.parse(String.valueOf(year)+"-02-28");
+			} else {
+				resultDate = sdf.parse(String.valueOf(year) + regDateStr.substring(4,6));
+			}
+			return resultDate;
+		} catch (Exception ex) {
+			return null;
+		}
+	}
 //	public BigDecimal calcAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullATC, BigDecimal lastATC) {
 //		BigDecimal calcATC = null;
 //		BigDecimal halfATC = fullATC.multiply(new BigDecimal("0.5")).setScale(1, RoundingMode.FLOOR);
