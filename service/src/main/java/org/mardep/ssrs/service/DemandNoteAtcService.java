@@ -175,7 +175,7 @@ public class DemandNoteAtcService {
 	}
 	
 	public Date calcFirstAnniversaryDate(Date regDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date firstAnniversaryDate = null;
 		try {
 			Date regDateCutOff = sdf.parse("2006-02-01");
@@ -201,7 +201,7 @@ public class DemandNoteAtcService {
 	}
 	
 	private Date convertDateIfLeapYear(int year, Date regDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String regDateStr = sdf.format(regDate);
 		try {
 			Date resultDate = null;
@@ -210,7 +210,7 @@ public class DemandNoteAtcService {
 			if (cal.get(Calendar.MONTH)==2 && cal.get(Calendar.DAY_OF_MONTH)==29) {
 				resultDate = sdf.parse(String.valueOf(year)+"-02-28");
 			} else {
-				resultDate = sdf.parse(String.valueOf(year) + regDateStr.substring(4,6));
+				resultDate = sdf.parse(String.valueOf(year) + regDateStr.substring(4,10));
 			}
 			return resultDate;
 		} catch (Exception ex) {
