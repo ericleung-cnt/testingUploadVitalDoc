@@ -39,4 +39,27 @@ public class DemandNoteAtcTest {
 		BigDecimal atcAmt = svc.calcNonDetainAtcAmt(regDate, dueDate, fullAtc, halfAtc);
 		Assert.assertEquals(halfAtc, atcAmt);
 	}
+	
+	@Test
+	public void testCalcDetainAnniversaryDate() throws ParseException {
+		DemandNoteAtcService svc = new DemandNoteAtcService();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date regDate = sdf.parse("2016-10-28");
+		Date detainDate = sdf.parse("2016-10-28");
+		Date detainAnniversaryDate = svc.calcDetainAnniversaryDate(regDate, detainDate);
+		Assert.assertEquals("2018-10-28", sdf.format(detainAnniversaryDate));
+	}
+	
+	@Test
+	public void testCalcDetainAtcAmt() throws ParseException {
+		DemandNoteAtcService svc = new DemandNoteAtcService();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date regDate = sdf.parse("2008-06-30");
+		Date detainDate = sdf.parse("2020-02-03");
+		Date dueDate = sdf.parse("2020-06-30");
+		BigDecimal fullAtc = new BigDecimal("77500");
+		BigDecimal halfAtc = new BigDecimal("38750");
+		BigDecimal atcAmt = svc.calcDetainAtcAmt(regDate, detainDate, dueDate, fullAtc, halfAtc);
+		Assert.assertEquals(fullAtc, atcAmt);		
+	}
 }

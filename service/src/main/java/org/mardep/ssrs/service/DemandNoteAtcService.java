@@ -84,51 +84,51 @@ public class DemandNoteAtcService {
 		} 
 		if(detainDate!=null) {
 			logger.info("detainDate!=null");
-			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
-			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore); 
-			if (compareResult >= 0 &&detainDate.before(dueDate) ) {  //detained within 2 years (including dueDate2YrsBefore)
-				return fullATC;
-			}else {
-				//not detained in last 2 years
-				Calendar c1 = Calendar.getInstance();
-				c1.setTime(detainDate);
-				Calendar c2 = Calendar.getInstance();
-				c2.setTime(dueDate);
-				compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
-				
-				
-				SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-				Date aniDay ;
-				Date detainDateNoyear;
-				try {
-					aniDay = sdf.parse(sdf.format(dueDate));
-					detainDateNoyear = sdf.parse(sdf.format(detainDate));
-					//detained equal or after anniversary day 
-					if(detainDateNoyear.equals(aniDay)||detainDateNoyear.after(aniDay)) {
-						if (compareResult %2 == 1) {  
-							//detained equal or after anniversary date 
-							return halfATC;   
-						}else {
-							return fullATC;
-						}
-					}else {
-						if (compareResult %2 == 0) {  
-							//detained equal or after anniversary date 
-							return halfATC;   
-						}else {
-							return fullATC;
-						}
-					}
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-
-				return fullATC;
-				
-			}
-			
+//			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
+//			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore); 
+//			if (compareResult >= 0 &&detainDate.before(dueDate) ) {  //detained within 2 years (including dueDate2YrsBefore)
+//				return fullATC;
+//			}else {
+//				//not detained in last 2 years
+//				Calendar c1 = Calendar.getInstance();
+//				c1.setTime(detainDate);
+//				Calendar c2 = Calendar.getInstance();
+//				c2.setTime(dueDate);
+//				compareResult = c2.get(Calendar.YEAR)-c1.get(Calendar.YEAR);  
+//				
+//				
+//				SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+//				Date aniDay ;
+//				Date detainDateNoyear;
+//				try {
+//					aniDay = sdf.parse(sdf.format(dueDate));
+//					detainDateNoyear = sdf.parse(sdf.format(detainDate));
+//					//detained equal or after anniversary day 
+//					if(detainDateNoyear.equals(aniDay)||detainDateNoyear.after(aniDay)) {
+//						if (compareResult %2 == 1) {  
+//							//detained equal or after anniversary date 
+//							return halfATC;   
+//						}else {
+//							return fullATC;
+//						}
+//					}else {
+//						if (compareResult %2 == 0) {  
+//							//detained equal or after anniversary date 
+//							return halfATC;   
+//						}else {
+//							return fullATC;
+//						}
+//					}
+//				} catch (ParseException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//
+//				return fullATC;
+//				
+//			}
+			return calcDetainAtcAmt(regDate, detainDate, dueDate, fullATC, halfATC);
 		}else {
 //			if(lastATC.equals(fullATC)) {
 //				return halfATC;
@@ -155,8 +155,58 @@ public class DemandNoteAtcService {
 		}
 	}
 	
+	public BigDecimal calcDetainAtcAmt(Date regDate, Date detainDate, Date dueDate, BigDecimal fullAtc, BigDecimal halfAtc) {
+		Date detainAnniversaryDate = calcDetainAnniversaryDate(regDate, detainDate);
+		BigDecimal calcAtc = null;
+
+		if (detainAnniversaryDate!=null) {
+			Calendar calDetain = Calendar.getInstance();
+			calDetain.setTime(detainAnniversaryDate);
+			Calendar calDue = Calendar.getInstance();
+			calDue.setTime(dueDate);
+			int yearDiff = calDue.get(Calendar.YEAR) - calDetain.get(Calendar.YEAR);
+			
+			if (yearDiff<0 || (yearDiff%2)==0) {
+				calcAtc = fullAtc;
+			} else {
+				calcAtc = halfAtc;
+			}			
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		logger.info("calcDetainAtcAmt: ");
+		logger.info("regDate: " + sdf.format(regDate));
+		logger.info("detainDate: " + sdf.format(detainDate));
+		logger.info("dueDate: " + sdf.format(dueDate));
+		logger.info("detainAnniversaryDate: " + sdf.format(detainAnniversaryDate));
+		logger.info("atc amt: " + calcAtc.toString());
+		return calcAtc;
+	}
+	
+	public Date calcDetainAnniversaryDate(Date regDate, Date detainDate) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date detainAnniversaryDate = null;
+		try {
+			Calendar calDetain = Calendar.getInstance();
+			calDetain.setTime(detainDate);
+			Calendar calRegDate = Calendar.getInstance();
+			calRegDate.setTime(regDate);
+			// calDetain.get(Calendar.YEAR) +1 or +2 is to advance year to something like firstAnniversaryDate
+			if ((calDetain.get(Calendar.MONTH)<calRegDate.get(Calendar.MONTH))
+					|| (calDetain.get(Calendar.MONTH)==calRegDate.get(Calendar.MONTH) 
+							&& calDetain.get(Calendar.DAY_OF_MONTH)<calRegDate.get(Calendar.DAY_OF_MONTH))) {
+				calDetain.set(calDetain.get(Calendar.YEAR)+1, calRegDate.get(Calendar.MONTH), calRegDate.get(Calendar.DAY_OF_MONTH));
+			} else {
+				calDetain.set(calDetain.get(Calendar.YEAR)+2, calRegDate.get(Calendar.MONTH), calRegDate.get(Calendar.DAY_OF_MONTH));
+			}
+			//return calDetain.getTime();
+			return convertDateIfLeapYear(calDetain.get(Calendar.YEAR), calDetain.getTime());
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+	
 	public BigDecimal calcNonDetainAtcAmt(Date regDate, Date dueDate, BigDecimal fullAtc, BigDecimal halfAtc) {
-		Date firstAnniversaryDate =calcFirstAnniversaryDate(regDate);
+		Date firstAnniversaryDate = calcFirstAnniversaryDate(regDate);
 		BigDecimal calcAtc = null;
 		if (firstAnniversaryDate!=null) {
 			Calendar calFirst = Calendar.getInstance();
@@ -171,6 +221,12 @@ public class DemandNoteAtcService {
 				calcAtc = halfAtc;
 			}			
 		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		logger.info("calcDetainAtcAmt: ");
+		logger.info("regDate: " + sdf.format(regDate));
+		logger.info("dueDate: " + sdf.format(dueDate));
+		logger.info("detainAnniversaryDate: " + sdf.format(firstAnniversaryDate));
+		logger.info("atc amt: " + calcAtc.toString());
 		return calcAtc;
 	}
 	
@@ -200,13 +256,13 @@ public class DemandNoteAtcService {
 		}
 	}
 	
-	private Date convertDateIfLeapYear(int year, Date regDate) {
+	private Date convertDateIfLeapYear(int year, Date srcDate) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		String regDateStr = sdf.format(regDate);
+		String regDateStr = sdf.format(srcDate);
 		try {
 			Date resultDate = null;
 			Calendar cal = Calendar.getInstance();
-			cal.setTime(regDate);
+			cal.setTime(srcDate);
 			if (cal.get(Calendar.MONTH)==2 && cal.get(Calendar.DAY_OF_MONTH)==29) {
 				resultDate = sdf.parse(String.valueOf(year)+"-02-28");
 			} else {
