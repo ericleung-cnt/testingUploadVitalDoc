@@ -26,7 +26,7 @@ import lombok.ToString;
 @Entity
 @Table(name="DEMAND_NOTE_HEADERS")
 @NoArgsConstructor
-//@Audited   //TODO: UNCOMMENT 
+@Audited    
 @ToString(of={"demandNoteNo"})
 public class FSQCDemandNoteHeader extends AbstractPersistentEntity<String> {
 

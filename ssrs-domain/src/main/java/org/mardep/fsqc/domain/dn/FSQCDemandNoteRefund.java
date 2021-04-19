@@ -30,7 +30,7 @@ import lombok.ToString;
 @Table(name="DEMAND_NOTE_REFUNDS")
 @NoArgsConstructor
 @ToString(of={"refundId"})
-//@Audited  //TODO: UNCOMMENT 
+@Audited   
 public class FSQCDemandNoteRefund extends AbstractPersistentEntity<Long> {
 
 	private static final long serialVersionUID = 1L;
