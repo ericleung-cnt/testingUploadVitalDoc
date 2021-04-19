@@ -1028,7 +1028,15 @@ public class RegMasterJpaDao extends AbstractJpaDao<RegMaster, String> implement
 				+ "sum (case when gross_ton between 145001 and 175000 then 1 else 0 end) g22,"
 				+ "sum (case when gross_ton between 175001 and 200000 then 1 else 0 end) g23,"
 				+ "sum (case when gross_ton > 200000 then 1 else 0 end) g24 "
-				+ "from reg_masters where (reg_status ='R' and reg_date<=:reportDate) or (reg_status = 'D' and reg_date>:reportDate)";
+				//+ "from reg_masters where (reg_status ='R' and reg_date<=:reportDate) or (reg_status = 'D' and reg_date>:reportDate)";
+				+ "from reg_masters_hist rmh "
+				+ "inner join ( "
+				+ "	select * from ( "
+				+ "		select date_change, at_ser_num, rm_appl_no, ROW_NUMBER() over (partition by rm_appl_no order by at_ser_num desc) as rowNum from transactions where DATE_CHANGE<=:reportDate ) t "
+				+ "	where rowNum=1 ) tx "
+				+ " on rmh.TX_ID = tx.AT_SER_NUM "
+				+ " where rmh.REG_STATUS = 'R'";
+
 		Query query = em.createNativeQuery(sql)
 				.setParameter("reportDate", reportDate);
 		String[] titles = new String[]{
