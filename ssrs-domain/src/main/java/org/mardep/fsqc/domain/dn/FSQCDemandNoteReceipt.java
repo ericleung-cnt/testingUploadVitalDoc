@@ -33,7 +33,7 @@ import lombok.ToString;
 @Entity
 @Table(name="DEMAND_NOTE_RECEIPTS")
 @NoArgsConstructor
-//@Audited  //TODO: UNCOMMENT 
+@Audited   
 @ToString(of={"demandNoteNo", "receiptNo"})
 public class FSQCDemandNoteReceipt extends AbstractPersistentEntity<Long> {
 
