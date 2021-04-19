@@ -222,10 +222,10 @@ public class DemandNoteAtcService {
 			}			
 		}
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		logger.info("calcDetainAtcAmt: ");
+		logger.info("calcNonDetainAtcAmt: ");
 		logger.info("regDate: " + sdf.format(regDate));
 		logger.info("dueDate: " + sdf.format(dueDate));
-		logger.info("detainAnniversaryDate: " + sdf.format(firstAnniversaryDate));
+		logger.info("FirstAnniversaryDate: " + sdf.format(firstAnniversaryDate));
 		logger.info("atc amt: " + calcAtc.toString());
 		return calcAtc;
 	}
