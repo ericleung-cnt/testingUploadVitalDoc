@@ -13,14 +13,20 @@ import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mardep.ssrs.dns.pojo.inbound.updateDemandNoteStatus.DemandNoteStatus;
+import org.mardep.ssrs.dns.pojo.inbound.updateDemandNoteStatus.DemandNoteStatusRequest;
+import org.mardep.ssrs.dns.pojo.inbound.updateDemandNoteStatus.DemandNoteStatusResponse;
 import org.mardep.ssrs.domain.dn.DemandNoteItem;
 import org.mardep.ssrs.domain.sr.RegMaster;
 import org.mardep.ssrs.service.DemandNoteAtcService;
+import org.mardep.ssrs.service.DnsDemandNoteService;
 import org.mardep.ssrs.service.IDemandNoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.mardep.ssrs.dns.pojo.inbound.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:/test-context.xml")
@@ -377,6 +383,18 @@ public class DemandNoteServiceTest {
 
 		BigDecimal expectATC = atcSvc.calcAtcAmt(regDate, detainDate, dueDate, fullATC, lastATC);
 		assertTrue(expectATC.equals(fullATC));									
+	}
+	
+	
+	@Test
+	public void testDnsDemandNoteService() {
+		DnsDemandNoteService svc =  new DnsDemandNoteService();
+		DemandNoteStatusRequest req = new DemandNoteStatusRequest();
+		DemandNoteStatus  dnstatus  = new DemandNoteStatus();
+		dnstatus.setDnNo("051900000090213");
+		req.setUpdateDNStatus(dnstatus);
+		DemandNoteStatusResponse processDnsRequest = svc.processDnsRequest(req);
+		assertNull(processDnsRequest);
 	}
 
 

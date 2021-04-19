@@ -4,8 +4,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transactional;
+//import javax.transaction.Transactional;
 
+import org.mardep.fsqc.domain.dn.FSQCDemandNoteHeader;
+import org.mardep.fsqc.domain.dn.FSQCDemandNoteReceipt;
+import org.mardep.fsqc.domain.dn.FSQCDemandNoteRefund;
 import org.mardep.ssrs.dao.dn.IDemandNoteHeaderDao;
 import org.mardep.ssrs.dao.dn.IDemandNoteReceiptDao;
 import org.mardep.ssrs.dao.dn.IDemandNoteRefundDao;
@@ -39,17 +42,16 @@ import org.mardep.ssrs.domain.constant.ReceiptStatus;
 import org.mardep.ssrs.domain.dn.DemandNoteHeader;
 import org.mardep.ssrs.domain.dn.DemandNoteReceipt;
 import org.mardep.ssrs.domain.dn.DemandNoteRefund;
-import org.mardep.ssrs.domain.dn.FSQCDemandNoteHeader;
-import org.mardep.ssrs.domain.dn.FSQCDemandNoteReceipt;
-import org.mardep.ssrs.domain.dn.FSQCDemandNoteRefund;
 import org.mardep.ssrs.domain.user.User;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service("fsqcDnsInboundService")
-@Transactional
+@Transactional("transactionManager_fsqcdb")
+//@Transactional
 public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNSService {
 
 //	@Autowired
@@ -428,6 +430,7 @@ public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNS
 		List<FSQCDemandNoteRefund> refunds = demandNoteRefundDao.findByCriteria(refundCriteria);
 		processDnStates(demandNoteHeader, receipts, refunds);
 		logger.info("update payment status demandNote {} payment status {} amount paid {}  status {}", demandNoteHeader.getId(), demandNoteHeader.getPaymentStatus(), demandNoteHeader.getAmountPaid(), demandNoteHeader.getStatus());
+		demandNoteHeader.setUpdatedBy("DNS");
 		return demandNoteHeaderDao.save(demandNoteHeader);
 	}
 	

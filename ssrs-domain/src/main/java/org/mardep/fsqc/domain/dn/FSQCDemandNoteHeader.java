@@ -1,4 +1,4 @@
-package org.mardep.ssrs.domain.dn;
+package org.mardep.fsqc.domain.dn;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -24,9 +24,9 @@ import lombok.ToString;
 
 
 @Entity
-@Table(name="FSQC_DEMAND_NOTE_HEADERS")
+@Table(name="DEMAND_NOTE_HEADERS")
 @NoArgsConstructor
-@Audited
+//@Audited   //TODO: UNCOMMENT 
 @ToString(of={"demandNoteNo"})
 public class FSQCDemandNoteHeader extends AbstractPersistentEntity<String> {
 
@@ -81,10 +81,10 @@ public class FSQCDemandNoteHeader extends AbstractPersistentEntity<String> {
 	
 	
 	
-	@Getter
-	@Setter
-	@Column(name = "BILLING_PERSON_EMAIL", length=50)
-	private String BILLING_PERSON_EMAIL;    
+//	@Getter
+//	@Setter
+//	@Column(name = "BILLING_PERSON_EMAIL", length=50)
+//	private String BILLING_PERSON_EMAIL;    
 	
 	
 	@Getter

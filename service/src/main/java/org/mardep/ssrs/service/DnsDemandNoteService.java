@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.mardep.fsqc.domain.dn.FSQCDemandNoteHeader;
 import org.mardep.ssrs.dao.dn.IDemandNoteReceiptDao;
 import org.mardep.ssrs.dao.dn.IDemandNoteRefundDao;
 import org.mardep.ssrs.dao.dn.IFSQCDemandNoteHeaderDao;
@@ -36,7 +37,6 @@ import org.mardep.ssrs.domain.constant.ReceiptStatus;
 import org.mardep.ssrs.domain.dn.DemandNoteHeader;
 import org.mardep.ssrs.domain.dn.DemandNoteReceipt;
 import org.mardep.ssrs.domain.dn.DemandNoteRefund;
-import org.mardep.ssrs.domain.dn.FSQCDemandNoteHeader;
 import org.mardep.ssrs.domain.user.User;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +79,7 @@ public class DnsDemandNoteService extends DemandNoteService implements IRefundSe
 			return demandNoteStatusResponse;
 		}
 		if(demandNoteStatusRequest.getUpdateDNStatus().getDnNo().startsWith(Cons.FSQC_DN_NO_PREFIX)) {
+//			return null;
 			return  fsqcinboundservice.processDnsRequest(demandNoteStatusRequest);
 		}
 		try {

@@ -50,7 +50,7 @@
 <!-- 		data source retrieved by bean or JNDI  -->
 		<property name="dataSource" ref="dataSource_fsqcdb" />
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter_fsqcdb" />
-		<property name="packagesToScan" value="org.mardep.fsqc.domain.fsqcdb" />
+		<property name="packagesToScan" value="org.mardep.fsqc.domain" />
 		<property name="persistenceUnitName" value="fsqcPU_fsqcdb" />
 		<property name="jpaPropertyMap">
 			<map>
