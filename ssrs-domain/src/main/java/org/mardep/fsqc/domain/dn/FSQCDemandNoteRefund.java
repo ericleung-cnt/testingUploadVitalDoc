@@ -1,4 +1,4 @@
-package org.mardep.ssrs.domain.dn;
+package org.mardep.fsqc.domain.dn;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.envers.Audited;
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
 
 import lombok.Getter;
@@ -26,9 +27,10 @@ import lombok.ToString;
 
 
 @Entity
-@Table(name="FSQC_DEMAND_NOTE_REFUNDS")
+@Table(name="DEMAND_NOTE_REFUNDS")
 @NoArgsConstructor
 @ToString(of={"refundId"})
+//@Audited  //TODO: UNCOMMENT 
 public class FSQCDemandNoteRefund extends AbstractPersistentEntity<Long> {
 
 	private static final long serialVersionUID = 1L;

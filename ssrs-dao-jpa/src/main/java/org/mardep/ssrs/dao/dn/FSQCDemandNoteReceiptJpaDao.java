@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import org.mardep.ssrs.dao.AbstractJpaDao;
-import org.mardep.ssrs.domain.dn.DemandNoteReceipt;
-import org.mardep.ssrs.domain.dn.FSQCDemandNoteReceipt;
+import org.mardep.fsqc.domain.dn.FSQCDemandNoteReceipt;
+import org.mardep.ssrs.dao.AbstractJpaDao_fsqcdb;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class FSQCDemandNoteReceiptJpaDao extends AbstractJpaDao<FSQCDemandNoteReceipt, Long> implements IFSQCDemandNoteReceiptDao {
+public class FSQCDemandNoteReceiptJpaDao extends AbstractJpaDao_fsqcdb<FSQCDemandNoteReceipt, Long> implements IFSQCDemandNoteReceiptDao {
 
 
 

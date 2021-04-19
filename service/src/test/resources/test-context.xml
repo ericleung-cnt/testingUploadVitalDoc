@@ -14,7 +14,7 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" 	value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
-		<property name="url" 				value="jdbc:sqlserver://DTW10\SQLDEVELOPER2016:1433;databaseName=SSRS" />
+		<property name="url" 				value="jdbc:sqlserver://ssrs2dbsu1.ad.md.hksarg:1433;databaseName=SSRS_UAT_1119" />
 		<property name="username" value="ssrs_user"/>
 		<property name="password" value="Q1w2e3r4t5"/>
 <!-- 		<property name="url" 				value="jdbc:sqlserver://10.23.192.101:1433;databaseName=SSRSDB_DEV" /> -->

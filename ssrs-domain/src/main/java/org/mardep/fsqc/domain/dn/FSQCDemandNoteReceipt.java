@@ -1,4 +1,4 @@
-package org.mardep.ssrs.domain.dn;
+package org.mardep.fsqc.domain.dn;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
@@ -23,6 +23,7 @@ import javax.persistence.Transient;
 import org.hibernate.envers.Audited;
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,9 +31,9 @@ import lombok.ToString;
 
 
 @Entity
-@Table(name="FSQC_DEMAND_NOTE_RECEIPTS")
+@Table(name="DEMAND_NOTE_RECEIPTS")
 @NoArgsConstructor
-@Audited
+//@Audited  //TODO: UNCOMMENT 
 @ToString(of={"demandNoteNo", "receiptNo"})
 public class FSQCDemandNoteReceipt extends AbstractPersistentEntity<Long> {
 
