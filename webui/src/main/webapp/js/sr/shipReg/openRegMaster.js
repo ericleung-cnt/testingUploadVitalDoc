@@ -3770,7 +3770,8 @@ var openRegMaster = function(record, task, mode
                 //{name:"dimUnit",  title:"Dim Unit", valueMap:{"F":"feet","B":"metres","M":"metres"}, colSpan:1},
                 {name:"genAtfInvoice",  title:"Generated ATF Invoice", length:1, colSpan:1, characterCasing: "upper" },
                 {name:"remark",  title:"Remark", length:80, colSpan:5, width:700, characterCasing: "upper" },,
-                {name:"agtAgentCode",  title:"Group Owner", length:3, colSpan:1, optionDataSource:"agentDS",displayField:"name",valueField:"id", required:true,
+                {name:"agtAgentCode",  title:"Group Owner", length:3, colSpan:1, 
+                	optionDataSource:"agentDS",displayField:"name",valueField:"id", sortField:"name", required:true,
                 	changed:function(form, item, value){
                 		form.setValue('agentCountryCode', null);
                 		if(value!=null && value!=undefined){
@@ -3784,7 +3785,8 @@ var openRegMaster = function(record, task, mode
                 	}
                 },
                 {name:"agentCountryCode",  title:"Major Agent Code", type:"staticText", length:3, colSpan:1, required:false},
-                {name:"ccCountryCode",  title:"Country", length:3, optionDataSource:"countryDS",displayField:"name",valueField:"id", colSpan:1, endRow:true, required:true},
+                {name:"ccCountryCode",  title:"Country", length:3, 
+                	optionDataSource:"countryDS",displayField:"name",valueField:"id", sortField:"name", colSpan:1, endRow:true, required:true},
                 {name:"operationTypeCode",  title:"Operation Type", length:3, optionDataSource:"operationTypeDS",displayField:"otDesc",valueField:"id", colSpan:1, required:true, },
                 {name:"rcReasonType",  title:"Reason Type", length:1, type:"hidden", defaultValue:"D"},
                 {name:"rcReasonCode",  title:"De-Reg Reason", length:2, optionDataSource:"reasonCodeDS",
