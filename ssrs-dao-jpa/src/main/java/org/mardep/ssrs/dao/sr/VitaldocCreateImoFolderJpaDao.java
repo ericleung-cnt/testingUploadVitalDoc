@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class VitaldocCreateImoFolderJpaDao implements IVitaldocCreateImoFolderDao {
 
-	@PersistenceContext
+	@PersistenceContext(unitName="ssrsPU")
 	protected EntityManager em;
 
 	@Override
