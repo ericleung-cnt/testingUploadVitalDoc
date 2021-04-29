@@ -91,7 +91,8 @@ public class ExcelShipRegJpaDao implements IExcelShipRegDao {
 			toDate = getLastMinOfDay(toDate);
 			String sql = "select REG_DATE, GROSS_TON, REG_NAME, SS_ST_SHIP_TYPE_CODE, PROV_REG_DATE from reg_masters " +
 					"where ((REG_STATUS='R' or REG_STATUS='D') and " + 
-					"(REG_DATE between :fromDate and :toDate) and (PROV_REG_DATE is null)) or " +
+					//"(REG_DATE between :fromDate and :toDate) and (PROV_REG_DATE is null)) or " +
+					"(REG_DATE between :fromDate and :toDate)) or " +
 					"(REG_STATUS='R' and PROV_REG_DATE between :fromDate and :toDate) " +
 					"order by REG_DATE";
 			Query query = em.createNativeQuery(sql)
@@ -169,7 +170,8 @@ public class ExcelShipRegJpaDao implements IExcelShipRegDao {
 					"inner join REPRESENTATIVES rp on rm.APPL_NO = rp.RM_APPL_NO " +
 					"inner join (select row_number() over (partition by rm_appl_no order by int_mixed desc) rowNum, * from owners) o on rm.APPL_NO = o.RM_APPL_NO " +
 					"where (((rm.REG_STATUS='R' or rm.REG_STATUS='D') and " +
-					"(rm.REG_DATE between :fromDate and :toDate) and (rm.PROV_REG_DATE is null)) or " +
+					//"(rm.REG_DATE between :fromDate and :toDate) and (rm.PROV_REG_DATE is null)) or " +
+					"(rm.REG_DATE between :fromDate and :toDate)) or " +
 					"(REG_STATUS='R' and PROV_REG_DATE between :fromDate and :toDate)) " +
 					"and rm.OT_OPER_TYPE_CODE='OGV' and o.INT_MIXED>0 and o.OWNER_TYPE='C' and o.rowNum = 1 " +
 					"order by rm.REG_DATE";
