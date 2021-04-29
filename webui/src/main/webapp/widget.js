@@ -785,7 +785,8 @@ var openReserveApp=function(record, taskId, hide) {
 	           //changed:updateCName, 
 	        	   focus: function(form,item) {disableBtnUpdate();}, 
 	        	 	blur: function(form,item) {disableBtnUpdate();}, 
-	        	   characterCasing: "upper"},
+	        	 	changed:upperTA //characterCasing: "upper"
+	         },
 	         { name: "name2", 
 	           //changed:updateName, 
 	        	   focus: function(form,item) {disableBtnUpdate();}, 
@@ -795,7 +796,8 @@ var openReserveApp=function(record, taskId, hide) {
 	           //changed:updateCName, 
 	        	   focus: function(form,item) {disableBtnUpdate();}, 
 	        	 	blur: function(form,item) {disableBtnUpdate();}, 
-	        	   characterCasing: "upper"},
+	        	 	changed:upperTA //characterCasing: "upper"
+	         },
 	         { name: "name3", 
 	           //changed:updateName, 
 	        	   focus: function(form,item) {disableBtnUpdate();}, 
@@ -805,7 +807,8 @@ var openReserveApp=function(record, taskId, hide) {
 	           //changed:updateCName, 
 	        	   focus: function(form,item) {disableBtnUpdate();}, 
 	        	 	blur: function(form,item) {disableBtnUpdate();}, 
-	        	   characterCasing: "upper"},
+	        	 	changed:upperTA //characterCasing: "upper"
+	         },
 	         { name: "name", title: "Reserve Name", type:"select", characterCasing: "upper"},
 	         { name: "chName", title: "Reserve Chi Name", type:"select"},
 
@@ -1340,7 +1343,8 @@ function forceUpper(listGrid) {
 			var items = listGrid.getFilterEditor().getEditForm().getItems();
 			for (var i = 0; i < items.length; i++) {
 				if (!["integer", "float"].contains(items[i].type) && items[i].characterCasing == "default") {
-					items[i].characterCasing = "upper";
+					//items[i].characterCasing = "upper";
+					items[i].changed = upperTA;
 				}
 			}
 		};

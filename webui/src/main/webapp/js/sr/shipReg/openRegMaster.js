@@ -2007,7 +2007,9 @@ var openBuilder = function(actions, applNo, record) {
 					{name:"builderMakerId", title:"", hidden:true},
 					{name:"applNo",title:"Appl No.",type:"staticText", value:applNo},
 					{name:"builderCode",title:"Code", required:true, unmodifiable:true, length:1, defaultValue:"S", hidden:true},
-					{name:"name",title:"Name", required:true, unmodifiable:true, width:400 , characterCasing: "upper"},
+					{name:"name",title:"Name", required:true, unmodifiable:true, width:400 , 
+						changed:upperTA //characterCasing: "upper"
+					},
 					//{name:"seqNo", title:"", hidden:true},
 					{name:"address1",title:"Addr", required:true, width:400, length:40, characterCasing: "upper"},
 					{name:"address2",title:"", width:400, length:40, characterCasing: "upper"},
@@ -2021,7 +2023,9 @@ var openBuilder2 = function(btns, applNo, record) {
 	return openEditor2([
 					{name:"applNo",title:"Appl No.",type:"staticText", value:applNo},
 					{name:"builderCode",title:"Code", required:true, unmodifiable:true, length:1, defaultValue:"S", hidden:true},
-					{name:"name",title:"Name", required:true, unmodifiable:true, width:400 , characterCasing: "upper"},
+					{name:"name",title:"Name", required:true, unmodifiable:true, width:400 , 
+						changed:upperTA //characterCasing: "upper"
+					},
 					{name:"address1",title:"Addr", required:true, width:400, length:40, characterCasing: "upper"},
 					{name:"address2",title:"", width:400, length:40, characterCasing: "upper"},
 					{name:"address3",title:"", width:400, length:40, characterCasing: "upper"},
@@ -3650,7 +3654,8 @@ var openRegMaster = function(record, task, mode
 		        	}},
 		        //{name:"regNameFail", title:"", width:300, showIf:shipnameValidation.getResult()==false },
 		        {name:"regChiName", width:300, disabled:!(allowImoUpdate || !isCompleteRegistered()), 
-		        		colSpan:2, characterCasing: "upper", startRow:true,
+		        		colSpan:2, //characterCasing: "upper", 
+		        		startRow:true,
 			        	icons: [
 			        		{
 			        			name: "checkedOK",
@@ -3769,7 +3774,9 @@ var openRegMaster = function(record, task, mode
                 {name:"transitInd",  title:"Transitional Ind", colSpan:1, characterCasing: "upper" },, // TODO enum
                 //{name:"dimUnit",  title:"Dim Unit", valueMap:{"F":"feet","B":"metres","M":"metres"}, colSpan:1},
                 {name:"genAtfInvoice",  title:"Generated ATF Invoice", length:1, colSpan:1, characterCasing: "upper" },
-                {name:"remark",  title:"Remark", length:80, colSpan:5, width:700, characterCasing: "upper" },,
+                {name:"remark",  title:"Remark", length:80, colSpan:5, width:700, 
+                	changed:upperTA //characterCasing: "upper" 
+                	},
                 {name:"agtAgentCode",  title:"Group Owner", length:3, colSpan:1, 
                 	optionDataSource:"agentDS",displayField:"name",valueField:"id", sortField:"name", required:true,
                 	changed:function(form, item, value){
@@ -3870,7 +3877,9 @@ var openRegMaster = function(record, task, mode
 	             //{name:"applDetails.applNo", title:"applNo", type:"staticText" },
 		         {name:"applDetails.cs1ClassSocCode", title:"Class Society", editorType:"comboBox", colSpan:2},
                  {name:"applDetails.prevName", title:"Previous Name", length:40, colSpan:2, characterCasing: "upper"},
-                 {name:"applDetails.prevChiName", title:"Previous Chinese Name", length:30, colSpan:2, characterCasing: "upper"},
+                 {name:"applDetails.prevChiName", title:"Previous Chinese Name", length:30, colSpan:2, 
+                	 changed:upperTA //characterCasing: "upper"
+                	},
                  {name:"applDetails.prevPort", title:"Previous Port", length:50, colSpan:2, characterCasing: "upper", type:"comboBox",
                 	 optionDataSource:"portDS",displayField:"code",valueField:"code",
                 	 changed:function(form, item, value){
@@ -3952,7 +3961,9 @@ var openRegMaster = function(record, task, mode
 		                  "representative.email","representative.incorpCert",
 		                  "representative.actions"
 		                 ] ,sectionExpanded:false},
-	             {name:"representative.name", title:"Name", required:true, colSpan:3, length:160, width:400, characterCasing: "upper"},
+	             {name:"representative.name", title:"Name", required:true, colSpan:3, length:160, width:400,
+		                changed:upperTA //characterCasing: "upper"
+		         },
 	             {name:"representative.status", type:"radioGroup", title:"Status", valueMap:{C:"Corporation",I:"Individual"}, vertical:false, required:true, defaultValue:"C", colSpan:2},
 	             {name:"representative.address1", title:"Address", colSpan:5, width:500, length:80, characterCasing: "upper"},
 	             {name:"representative.address2", title:"", colSpan:5, width:500, length:80, characterCasing: "upper"},
@@ -4284,7 +4295,9 @@ var openRegMaster = function(record, task, mode
 	      		        }},
 	      		        {name:"ownerSeqNo", title:"Owner Seq No.", width:100, required:true},
     					{name:"majorOwner" , title:"Major Owner", type:"radioGroup", valueMap:[true,false], vertical:false, width:100, defaultValue:true},
-	       		        {name:"name", title:"Owner Name", required:true, width:400, length:160, characterCasing: "upper"},
+	       		        {name:"name", title:"Owner Name", required:true, width:400, length:160, 
+    						changed:upperTA //characterCasing: "upper"
+    					},
 	    		        {name:"address1", title:"Address", width:400, length:80, characterCasing: "upper"},
 	    		        {name:"address2", title:"", width:400, length:80, characterCasing: "upper"},
 	    		        {name:"address3", title:"", width:400, length:80, characterCasing: "upper"},
@@ -4328,7 +4341,9 @@ var openRegMaster = function(record, task, mode
 	var builderFormFields = [
 		{name:"applNo",title:"Appl No.",type:"staticText" },// value:applNo},
 		{name:"builderCode",title:"Code", required:true, unmodifiable:true, length:1, defaultValue:"S"},
-		{name:"name",title:"Name", required:true, width:400 , characterCasing: "upper"},
+		{name:"name",title:"Name", required:true, width:400 , 
+			changed:upperTA //characterCasing: "upper"
+		},
 		{name:"address1",title:"Addr", required:true, width:400, length:40, characterCasing: "upper"},
 		{name:"address2",title:"", width:400, length:40, characterCasing: "upper"},
 		{name:"address3",title:"", width:400, length:40, characterCasing: "upper"},
@@ -4633,7 +4648,8 @@ var openRegMaster = function(record, task, mode
 
 			var mForm = isc.DynamicForm.create({
 				numCols:3,
-				fields:[{name:"name", type:"text", title:"Mortgagee Name", required:true, width:400, characterCasing: "upper",
+				fields:[{name:"name", type:"text", title:"Mortgagee Name", required:true, width:400, 
+					changed:upperTA //characterCasing: "upper",
 					},
 					{title:"Search", click:function(){
 						picker.show();
