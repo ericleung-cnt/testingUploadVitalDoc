@@ -53,7 +53,11 @@ isc.SearchForm.create({
 
 
 var seafarerSearchResultList =isc.ListGrid.create({
-	ID:"seafarerRegMainSearchResultListLG", dataSource : "seafarerSearchDS", showFilterEditor:true, filterOnKeypress:true, autoFitFieldWidths:true,
+	ID:"seafarerRegMainSearchResultListLG", 
+	dataSource : "seafarerSearchDS", 
+	showFilterEditor:true, 
+	filterOnKeypress:true, 
+	autoFitFieldWidths:true,
 	fields: [
 	         { name: "idNo", 				width:90},
 	         { name: "serbNo", 			width:90},
@@ -133,3 +137,5 @@ isc.HLayout.create({
 		})
 	  ]
 });
+
+forceUpper(seafarerRegMainSearchResultListLG);
