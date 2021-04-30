@@ -13,6 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.mardep.ssrs.dao.sr.IRegMasterDao;
 import org.mardep.ssrs.domain.sr.ApplDetail;
 import org.mardep.ssrs.domain.sr.RegMaster;
+import org.mardep.ssrs.service.IApplDetailService;
 import org.mardep.ssrs.vitaldoc.IVitalDocClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,9 @@ import com.isomorphic.datasource.DSResponse;
 @Component
 public class ApplDetailDMI extends AbstractSrDMI<ApplDetail> {
 
+	@Autowired
+	IApplDetailService applDetailSvc;
+	
 	private final String KEY_BUILDER_CERT_DOC = "Builder's Certificate";
 	private final String KEY_BILL_OF_SALE_DOC = "Bill of Sale";
 	private final String KEY_OWNER_CO_REG_DOC = "Owner company registration document (copy)";
@@ -105,8 +109,14 @@ public class ApplDetailDMI extends AbstractSrDMI<ApplDetail> {
 			//return super.update(entity, dsRequest);
 			dsResponse =  super.update(entity, dsRequest);
 			return dsResponse;
+		} else {
+			DSResponse dsResponse = new DSResponse();
+			ApplDetail savedEntity = applDetailSvc.save(entity);
+			dsResponse.setData(savedEntity);
+			dsResponse.setSuccess();
+			return dsResponse;
 		}
-		return super.update(entity, dsRequest);
+		//return super.update(entity, dsRequest);
 	}
 
 	private void fillDocName(ApplDetail entity, Map clientSuppliedValues) {
