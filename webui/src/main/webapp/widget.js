@@ -1091,7 +1091,7 @@ function getTransaction(callback, properties) {
 		if(properties.ctype=="Owner_Change"){
 			set = ["17","18","74","75","76"];
 		}else if(properties.ctype=="Registration_Change"){
-			set = ["52","57","60","71"];
+			set = ["52","57","60","71","77"];
 		}else if(properties.ctype=="RP_Change"){
 			set = ["21","25","26","27"];
 		} else if (properties.ctype=="Ownership_Change"){
