@@ -273,7 +273,8 @@ public class FsqcService extends AbstractService implements IFsqcService {
 			throws JsonProcessingException {
 		ApplDetail ad = null;
 		RegMaster rm = rmDao.findById(applNo);
-		if (rm.getImoNo() == null || !rm.getImoNo().matches("\\d{5}.*")) {
+		//if (rm.getImoNo() == null || !rm.getImoNo().matches("\\d{5}.*")) {
+		if (!rm.getImoNo().matches("\\d{5}.*")) {
 			logger.info("skip fsqc for " + applNo);
 			return;
 		}
