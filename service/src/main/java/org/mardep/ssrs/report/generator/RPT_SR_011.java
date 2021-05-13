@@ -166,6 +166,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 //		}
 		Map<String, Object> params = new HashMap<String, Object>();
 
+		params.put("pPrint2PagesCoD", print2PagesCoD(inputParam));	//2021.05.13 for print 2 pages in CoD
 		params.put("pInterestHeldEng", "---");
 		params.put("pInterestHeldChi", "---");
 
@@ -237,6 +238,14 @@ public class RPT_SR_011 extends AbstractSrReport {
 		return pdf;
 	}
 
+	private Boolean print2PagesCoD(Map<String, Object> inputParam) {
+		if (inputParam.containsKey("print2Pages")){	// 2021.05.13 for CoD to control print 2 pages 
+			return (Boolean) inputParam.get("print2Pages");
+		} else {
+			return new Boolean(false);
+		}
+	}
+	
 	private List<Map<String, Object>> prepareMortgagorList(){
 		List<Map<String, Object>> mortgagorList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> item = new HashMap<String, Object>();

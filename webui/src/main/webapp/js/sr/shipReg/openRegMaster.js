@@ -778,8 +778,9 @@ isc.Window.create({
 			this.show();
 			var report = (record && record.regStatus == "D") ? "CertOfD" : "CoR";
 			confirmPrintCODForm.setValue('registrar', record.registrar);
-			if("CoR" == report){
+			if("CoR" == report && record.deRegTime==null){
 				confirmPrintCODForm.setValue('issueDate', record.regDate);
+				confirmPrintCODForm.getField("print2Pages").hide();
 			}
 		}
 		this.callback = callback;
@@ -792,7 +793,8 @@ isc.Window.create({
 				fields:[
 					{name: "registrar", 		title: "Registrar", 		width: 200, optionDataSource:"registrarDS", displayField:"name", valueField:"id", required:false},
 					{name: "issueDate", 		title: "Issue Date", 		width: 140, type: "date", 	defaultValue:new Date()},
-					{name: "paymentRequired", 	title: "Payment Required", 	type: "boolean", 			defaultValue:true}
+					{name: "paymentRequired", 	title: "Payment Required", 	type: "boolean", 			defaultValue:true},
+					{name: "print2Pages", title: "Print 2 pages CoD", type: "boolean", defaultValue: false}
 					],
 				autoDraw:false,
 			}),
@@ -811,7 +813,7 @@ isc.Window.create({
 							 *
 							 * */
 							var record = confirmPrintCoDWindow.record;
-							var report = (record && record.regStatus == "D") ? "CertOfD" : "CoR";
+							var report = ((record && record.regStatus == "D") || (record && record.deRegTime!=null)) ? "CertOfD" : "CoR";
 							if("CoR"==report && confirmPrintCODForm.getValue('issueDate') < record.regDate){
 								isc.warn("Issue Date cannot before Reg Date:"+record.regDate);
 								return;
@@ -830,7 +832,7 @@ isc.Window.create({
 									isc.say("No Collect CoR Office");
 									return;
 								}
-								if (regStatus!="D"){
+								if (regStatus!="D" && record.deRegTime==null){
 									regMasterDS.updateData({applNo:applNo, regStatus:regStatus, issueOfficeId:issueOfficeId, issueDate:issueDate, taskId:taskId},
 											function(){ refreshInbox(); },
 											{operationId:"UPDATE_ISSUE_LOG"});
@@ -890,7 +892,7 @@ isc.Window.create({
 											callback(data);										
 										}
 									}, {data:record, operationId:"updateTrackCode"});
-								} else {
+								} else {									
 									ReportViewWindow.vitalDocReport(
 										[report,
 											{
@@ -901,6 +903,7 @@ isc.Window.create({
 												paymentRequired:confirmPrintCODForm.getValue('paymentRequired'),
 												reason:"",
 												printMortgage:true,
+												print2Pages: confirmPrintCODForm.getValue('print2Pages'),
 												zip:false,
 												issueDate:issueDate //confirmPrintCODForm.getValue('issueDate')
 											}
@@ -2639,15 +2642,16 @@ var openRegMaster = function(record, task, mode
 							var formData = form.getData()
 							regMasterDS.updateData(null, function(resp,rm,req) {
 								form.setData(rm);
-									ReportViewWindow.displayReport(
-											["CertOfD",
-												{applNo:record.applNo,
-												reportDate:new Date(),
-												registrar:record.registrar, // Long
-												crosscheck:true,
-												printMortgage:true,
-												}
-											]);
+								confirmPrintCoDWindow.showRecord(record);
+//									ReportViewWindow.displayReport(
+//											["CertOfD",
+//												{applNo:record.applNo,
+//												reportDate:new Date(),
+//												registrar:record.registrar, // Long
+//												crosscheck:true,
+//												printMortgage:true,
+//												}
+//											]);
 							}, {operationId:"previewCoD", data:formData});
 						}
 					}
@@ -2670,9 +2674,12 @@ var openRegMaster = function(record, task, mode
 //						print();
 //					}
 				}});
-	var btnSrPrintCoD = isc.IButton.create({ title:"Print CoD", height:thickBtnHeight, width:thickBtnWidth, click: function(){
-		if (typeof record.applNo == "undefined" || record.applNo == null || record.applNo.trim() == "") return;
-		var report = (record && record.regStatus == "D") ? "CertOfD" : "CoR";
+	var btnSrPrintCoD = isc.IButton.create(
+			{ title:"Print CoD", 
+				height:thickBtnHeight, width:thickBtnWidth, 
+				click: function(){
+					if (typeof record.applNo == "undefined" || record.applNo == null || record.applNo.trim() == "") return;
+					var report = (record && record.regStatus == "D") ? "CertOfD" : "CoR";
 
 //		var print = function() {
 //			isc.ask("Payment Required?", function(value){
@@ -2688,11 +2695,12 @@ var openRegMaster = function(record, task, mode
 //							zip:false,}]);
 //			});
 //		};
-		if (record && record.regStatus == "D") {
+					if (record && record.regStatus == "D") {
 //			print();
-			confirmPrintCoDWindow.showRecord(record);
-		}
-	}});
+						confirmPrintCoDWindow.showRecord(record);
+					}
+				}
+			});
 	var btnSrPrint4CoR = isc.IButton.create({
 		title:"Print / Assign<br>4 sets<br>of certificate",
 		height:thickBtnHeight, width:thickBtnWidth,

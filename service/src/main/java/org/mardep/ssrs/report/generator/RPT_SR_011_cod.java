@@ -66,8 +66,8 @@ public class RPT_SR_011_cod extends RPT_SR_011 {
 				regMaster.put("mortgageAgreement", mortgageAgreement);
 			}
 		}
-
 	}
+	
 	@Override
 	protected void processRegistrar(HashMap<Object, Object> regMasterMap, RegMaster regMasterObject, Map<String, Object> inputParam){
 		String registrarName = (String) inputParam.get("registrar");
