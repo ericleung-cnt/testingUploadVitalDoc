@@ -2536,13 +2536,16 @@ var openRegMaster = function(record, task, mode
 						return;
 					} else {
 						if (form.validate()) {
-							var formData = form.getData()
+							var formData = form.getData();
+							var issueDate = formData.certIssueDate;
+							if (issueDate==null) issueDate = new Date();
 							regMasterDS.updateData(formData, function(resp,rm,req) {
 								form.setData(rm);
 									ReportViewWindow.displayReport(
 											["CoR",
 												{applNo:record.applNo,
-												reportDate:new Date(),
+												//reportDate:new Date(),
+												reportDate: issueDate,
 												registrar:record.registrar, // Long
 												crosscheck:true,
 												}
