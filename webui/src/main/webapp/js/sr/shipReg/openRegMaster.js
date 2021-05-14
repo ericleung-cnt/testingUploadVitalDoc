@@ -781,6 +781,8 @@ isc.Window.create({
 			if("CoR" == report && record.deRegTime==null){
 				confirmPrintCODForm.setValue('issueDate', record.regDate);
 				confirmPrintCODForm.getField("print2Pages").hide();
+			} else {
+				confirmPrintCODForm.getField("print2Pages").show();
 			}
 		}
 		this.callback = callback;
