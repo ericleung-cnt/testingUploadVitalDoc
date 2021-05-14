@@ -627,7 +627,8 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 			List<RegMaster> rmList = rmDao.findByImo(imo);
 			if (rmList!=null && rmList.size()>0) {
 				for (RegMaster rm:rmList) {
-					if (!rm.getApplNo().equals(regMaster.getApplNo()) && !rm.getRegStatus().equals("D")) {
+					//if (!rm.getApplNo().equals(regMaster.getApplNo()) && !rm.getRegStatus().equals("D")) {
+					if (!rm.getApplNo().equals(regMaster.getApplNo()) && (rm.getRegStatus().equals("A")||rm.getRegStatus().equals("R"))) {
 						result.setImoNo("USED"+"|"+rm.getApplNo());
 						break;
 					}
