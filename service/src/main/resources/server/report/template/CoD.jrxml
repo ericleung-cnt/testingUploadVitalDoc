@@ -418,10 +418,6 @@ new java.text.SimpleDateFormat("dd MMMM, yyyy", java.util.Locale.ENGLISH).format
 				</textElement>
 				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+" 頁"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="180" y="20" width="91" height="21" uuid="b6e0c8bd-ca0f-4c1e-946f-8adf5054e1c2"/>
-				<textFieldExpression><![CDATA[$P{pPrint2PagesCoD}.toString()]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageFooter>
 	<summary>
