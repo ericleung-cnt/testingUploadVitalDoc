@@ -143,6 +143,9 @@ var loadCsrFormRegMaster = function(form, imoNo) {
 					if (data != null && data.imoOwnerId) {
 						form.getItem("imoOwnerId").setValue(data.imoOwnerId);
 					}
+					if (data != null && data.imoCompanyId) {
+						form.getItem("imoCompanyId").setValue(data.imoCompanyId);
+					}
 				}, {operationId:"csrFormDS_fetchLastSeq"});
 				form.getItem("formApplyDate").focusInItem();
 			});
