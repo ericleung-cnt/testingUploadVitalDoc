@@ -274,10 +274,13 @@ public class FsqcService extends AbstractService implements IFsqcService {
 		ApplDetail ad = null;
 		RegMaster rm = rmDao.findById(applNo);
 		//if (rm.getImoNo() == null || !rm.getImoNo().matches("\\d{5}.*")) {
-		if (rm.getImoNo()!=null && !rm.getImoNo().matches("\\d{5}.*")) {
-			logger.info("skip fsqc for " + applNo);
-			return;
-		}
+//		if (rm.getImoNo()!=null 
+//				&& !rm.getImoNo().matches("\\d{5}.*")
+//				&& !rm.getImoNo().equals("-")
+//				&& !rm.getImoNo().equals("_")) {
+//			logger.info("skip fsqc for " + applNo);
+//			return;
+//		}
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 		Date regDate = rm.getRegDate();
 		Date deRegTime = rm.getDeRegTime();
