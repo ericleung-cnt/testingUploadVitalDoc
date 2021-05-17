@@ -92,7 +92,7 @@ public class CsrFormOwner extends AbstractPersistentEntity<Long> {
 
 	@Getter
 	@Setter
-	@Column(name = "OWNER_NAME", length=80)
+	@Column(name = "OWNER_NAME", length=160)
 	private String ownerName;
 
 	@Getter
