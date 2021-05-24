@@ -111,6 +111,27 @@ var btnSrForceUpdateShipToFSQC = isc.IButton.create({
 			}, {operationId:"FORCE_UPDATE_TO_FSQC"});
 		}
 	},		
+}); 
+
+var btnSrPreviewCoR = isc.IButton.create({
+	title: "Preview CoR",
+	visibility: "hidden",
+	height:thickBtnHeight,
+	width:thickBtnWidth,
+	click: function() {
+		var selectRecord = shiplist.getSelectedRecord();
+		if (selectRecord!=undefined && selectRecord!=null){
+			ReportViewWindow.displayReport(
+					["CoR",
+						{applNo:selectRecord.applNo,
+						//reportDate:new Date(),
+						reportDate: selectRecord.certIssueDate,
+						registrar: selectRecord.registrar, // Long
+						crosscheck:true,
+						}
+					]);
+		}
+	}
 });
 
 //var btnsForIFIS = isc.ButtonsHLayout.create({
@@ -325,7 +346,7 @@ var btnsForSR = isc.HLayout.create({
 	height:60,
 	width: "100%",
 	members:[
-		btnSrForceUpdateShipToFSQC, btns
+		btnSrForceUpdateShipToFSQC, btnSrPreviewCoR, btns
 	]
 });
 
@@ -344,9 +365,11 @@ var contentLayout =
 				console.log(userRoleInfo);
 				if (userRoleInfo.roleListString.contains("SRREAD")){
 					btnSrForceUpdateShipToFSQC.show();
+					btnSrPreviewCoR.show();
 					btns.hide();
 				} else {
 					btnSrForceUpdateShipToFSQC.hide();
+					btnSrPreviewCoR.hide();
 					btns.show();					
 				}
 			}
