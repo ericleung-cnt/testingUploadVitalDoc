@@ -307,7 +307,7 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 				<textFieldExpression><![CDATA[$F{regMaster}.getDepth() == null ?
 "-" :
 (
-new java.text.DecimalFormat("#,###.000").format(
+new java.text.DecimalFormat("#,##0.000").format(
 $F{regMaster}.getDepth()) +
 (
 $F{regMaster}.getDimUnit() == null ? "":

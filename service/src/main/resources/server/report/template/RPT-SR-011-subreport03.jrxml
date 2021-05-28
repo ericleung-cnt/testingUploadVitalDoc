@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT-SR-011-subreport03" pageWidth="525" pageHeight="842" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d60de621-3664-406b-9265-6f9a12b8ddd8">
 	<property name="ireport.zoom" value="1.4641000000000015"/>
 	<property name="ireport.x" value="0"/>
@@ -22,6 +23,7 @@
 	<field name="proRegExpiryDateChi" class="java.lang.String"/>
 	<field name="bProReg" class="java.lang.Boolean"/>
 	<field name="reasonChi" class="java.lang.String"/>
+	<field name="chiShipName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -32,9 +34,7 @@
 		<band height="28" splitType="Prevent">
 			<printWhenExpression><![CDATA[$F{bProReg} == true]]></printWhenExpression>
 			<textField>
-				<reportElement x="5" y="5" width="254" height="20" uuid="eec9d084-d514-4835-b9bb-d50de34a71c7">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="5" width="254" height="20" uuid="eec9d084-d514-4835-b9bb-d50de34a71c7"/>
 				<textFieldExpression><![CDATA[$F{proRegExpiryDateEng}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -43,12 +43,9 @@
 			</textField>
 		</band>
 		<band height="28" splitType="Prevent">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<printWhenExpression><![CDATA[!Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="5" y="2" width="489" height="25" uuid="a55aee23-c7b1-43e1-812c-f37d1c47a0d1">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="2" width="489" height="25" uuid="a55aee23-c7b1-43e1-812c-f37d1c47a0d1"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["The foregoing are an extract from the Register as at "+
 $P{reportDate}+
@@ -65,8 +62,8 @@ Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["I hereby certify that the foregoing printed "+ ($F{mortgages} == null || $F{mortgages}.isEmpty() || $F{mortgages}.size()<=1 ? ("particular is"):("particulars are"))    +" a true extract from the Register now in my<br>charge, showing the descriptive particulars, registered ownership " +
 ($F{mortgages} != null && !$F{mortgages}.isEmpty() ?
-("and details of mortgage of this vessel<br>\"" +$F{shipName}+"\"<br>- Official Number "+$F{officialNo}+", " ) :
-("of this vessel \"" +$F{shipName}+"\"<br>- Official Number "+$F{officialNo}+", free of mortgage "))
+("and details of mortgage of this vessel<br>\"" +$F{shipName}+"\"<br>" + $F{chiShipName} + "- Official Number "+$F{officialNo}+", " ) :
+("of this vessel \"" +$F{shipName}+"\"<br>" + $F{chiShipName} +"- Official Number "+$F{officialNo}+", free of mortgage "))
 
 + "as at "+$P{reportDate}+".<br>茲證明上文所印資料為本人主管的船舶註冊紀錄冊的真確摘錄,以示截至 "
 +$P{reportDateChi}+
