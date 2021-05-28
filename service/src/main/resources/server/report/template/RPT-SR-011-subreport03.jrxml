@@ -42,18 +42,6 @@
 				<textFieldExpression><![CDATA[$F{proRegExpiryDateChi}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="28" splitType="Prevent">
-			<printWhenExpression><![CDATA[!Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="5" y="2" width="489" height="25" uuid="a55aee23-c7b1-43e1-812c-f37d1c47a0d1"/>
-				<textElement markup="html"/>
-				<textFieldExpression><![CDATA["The foregoing are an extract from the Register as at "+
-$P{reportDate}+
-".<br>上文為船舶註冊紀錄冊截至"
-+$P{reportDateChi}+
-" 為止所載資料的摘錄。"]]></textFieldExpression>
-			</textField>
-		</band>
 		<band height="75" splitType="Prevent">
 			<printWhenExpression><![CDATA[!"D".equals($F{regMaster}.getRegStatus()) &&
 Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
@@ -104,6 +92,18 @@ new java.text.SimpleDateFormat("yyyy年MM月dd日。")
 			<textField isBlankWhenNull="true">
 				<reportElement x="128" y="25" width="397" height="20" uuid="8c7ece4c-1cfe-4128-a104-7ce0aa49d587"/>
 				<textFieldExpression><![CDATA[$F{reasonChi} != null ? $F{reasonChi} : "-"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="40" splitType="Prevent">
+			<printWhenExpression><![CDATA[!Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="5" y="2" width="489" height="35" uuid="a2384f99-86a4-4897-822b-3dfcf01035bc"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA["The foregoing are an extract from the Register as at "+
+$P{reportDate}+
+".<br>上文為船舶註冊紀錄冊截至"
++$P{reportDateChi}+
+" 為止所載資料的摘錄。"]]></textFieldExpression>
 			</textField>
 		</band>
 		<band height="45" splitType="Prevent">
