@@ -363,7 +363,8 @@ public class RPT_SR_011 extends AbstractSrReport {
 		}
 		regMaster.put("regMaster", regM);
 		regMaster.put("shipName", regM.getRegName());
-
+		regMaster.put("chiShipName", regM.getRegChiName()==null ? "" : regM.getRegChiName());
+		
 		if (regM.getRcReasonCode() != null && regM.getRcReasonType() != null) {
 			ReasonCodePK id = new ReasonCodePK(regM.getRcReasonCode(), regM.getRcReasonType());
 			ReasonCode reason = reasons.findById(id);
@@ -563,7 +564,11 @@ public class RPT_SR_011 extends AbstractSrReport {
 			signatureSection.put("proRegExpiryDateEng", " ");
 			signatureSection.put("proRegExpiryDateChi", " ");
 		}
-		signatureSection.put("shipName", regMaster.get("shipName"));
+		signatureSection.put("shipName", regMaster.get("shipName"));		
+		signatureSection.put("chiShipName", 
+				(regMaster.get("chiShipName").toString().isEmpty()||regMaster.get("chiShipName")==null) 
+					? "" 
+					: "«" + regMaster.get("chiShipName") + "»");
 		signatureSection.put("officialNo", regMaster.get("officialNo"));
 		signatureSection.put("mortgages", regMaster.get("mortgages"));
 		signatureSection.put("regMaster", regMaster.get("regMaster"));
