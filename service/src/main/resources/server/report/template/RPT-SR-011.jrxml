@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RPT-SR-011" pageWidth="595" pageHeight="842" columnWidth="525" leftMargin="35" rightMargin="35" topMargin="20" bottomMargin="20" uuid="d065ac9f-8666-4053-a7d9-1d51d7dbb9fd">
 	<property name="ireport.zoom" value="1.0000000000000007"/>
 	<property name="ireport.x" value="0"/>
@@ -118,170 +118,117 @@
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[船 名]]></text>
 			</staticText>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="128" y="43" width="390" height="31" uuid="142190c1-95aa-433d-bc2e-0ed81ba0d962">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="128" y="43" width="390" height="31" uuid="142190c1-95aa-433d-bc2e-0ed81ba0d962"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{shipName}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="90" width="100" height="15" uuid="fecc5d2f-6941-44d6-8a59-289094f6f727">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="90" width="100" height="15" uuid="fecc5d2f-6941-44d6-8a59-289094f6f727"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[國際海事組織編號]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="79" width="100" height="15" uuid="450e8e35-53d4-48d3-a195-b3d7fb5ec86b">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="79" width="100" height="15" uuid="450e8e35-53d4-48d3-a195-b3d7fb5ec86b"/>
 				<text><![CDATA[IMO Number]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="79" width="135" height="31" uuid="8741bc1c-6306-4632-9c23-c373382fc5e8">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="79" width="135" height="31" uuid="8741bc1c-6306-4632-9c23-c373382fc5e8"/>
 				<textFieldExpression><![CDATA[$F{imoNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="119" width="100" height="15" uuid="88037a51-0eda-4746-9585-be800e83f183">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="270" y="119" width="100" height="15" uuid="88037a51-0eda-4746-9585-be800e83f183"/>
 				<text><![CDATA[Call Sign]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="130" width="100" height="15" uuid="b2a35d22-3dab-448d-81c3-db5093a172d9">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="130" width="100" height="15" uuid="b2a35d22-3dab-448d-81c3-db5093a172d9"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[註 冊 港]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="119" width="100" height="15" uuid="df4cfa6d-f97b-4776-a6f4-a7a78c7f765a">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="119" width="100" height="15" uuid="df4cfa6d-f97b-4776-a6f4-a7a78c7f765a"/>
 				<text><![CDATA[Port of Registry]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="130" width="100" height="15" uuid="4d62182a-b571-41e7-92a1-dc321fb98773">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="270" y="130" width="100" height="15" uuid="4d62182a-b571-41e7-92a1-dc321fb98773"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[呼 號]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="119" width="135" height="31" uuid="e2c3d6c0-1426-414a-b641-bee985daabd6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="388" y="119" width="135" height="31" uuid="e2c3d6c0-1426-414a-b641-bee985daabd6"/>
 				<textFieldExpression><![CDATA[$F{callSign}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="171" width="100" height="15" uuid="2059eaf6-5887-4e65-b05a-abe8a61e8ade">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="171" width="100" height="15" uuid="2059eaf6-5887-4e65-b05a-abe8a61e8ade"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[註冊編號]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement key="" x="128" y="160" width="149" height="31" uuid="def0c30a-62b7-4fb3-bb40-1c6f393f338b">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement key="" x="128" y="160" width="149" height="31" uuid="def0c30a-62b7-4fb3-bb40-1c6f393f338b"/>
 				<textFieldExpression><![CDATA[$F{officialNo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="160" width="100" height="15" uuid="38925a4a-b33b-455a-bf56-4b755cdeab10">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="160" width="100" height="15" uuid="38925a4a-b33b-455a-bf56-4b755cdeab10"/>
 				<text><![CDATA[Official Number]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="388" y="359" width="135" height="31" uuid="1bd3d360-7bad-42e0-adf4-6f81135b0bd7">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="388" y="359" width="135" height="31" uuid="1bd3d360-7bad-42e0-adf4-6f81135b0bd7"/>
 				<textFieldExpression><![CDATA[$F{materialOfHull}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="359" width="100" height="20" uuid="af11edb3-8ca5-4b72-bac1-106d422784e4">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="359" width="100" height="20" uuid="af11edb3-8ca5-4b72-bac1-106d422784e4"/>
 				<text><![CDATA[Material of Hull]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="212" width="100" height="15" uuid="b31e98d6-89e5-4418-afa6-b40fa3a876be">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="212" width="100" height="15" uuid="b31e98d6-89e5-4418-afa6-b40fa3a876be"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[船舶類型]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="370" width="100" height="20" uuid="5c036a97-5171-4b49-8438-6f84022ceaf0">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="370" width="100" height="20" uuid="5c036a97-5171-4b49-8438-6f84022ceaf0"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[船體材料]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="201" width="149" height="31" uuid="d88c9d2d-0374-4961-b39b-2eec8a7a6246">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="201" width="149" height="31" uuid="d88c9d2d-0374-4961-b39b-2eec8a7a6246"/>
 				<textFieldExpression><![CDATA[$F{regMaster}.getSurveyShipType() == null ?
 "-" : $F{regMaster}.getSurveyShipType()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="201" width="100" height="15" uuid="ba56285a-cf8d-4c08-9c8e-1e8a3f02da29">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="201" width="100" height="15" uuid="ba56285a-cf8d-4c08-9c8e-1e8a3f02da29"/>
 				<text><![CDATA[Type of Ship]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="253" width="100" height="15" uuid="6cb829f8-0cbb-4580-9e2b-41bee0232024">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="253" width="100" height="15" uuid="6cb829f8-0cbb-4580-9e2b-41bee0232024"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[龍骨安放日期]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="242" width="100" height="15" uuid="53ff82af-e879-4e0f-a0ce-e0eb14c08d2a">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="242" width="100" height="15" uuid="53ff82af-e879-4e0f-a0ce-e0eb14c08d2a"/>
 				<text><![CDATA[Date Keel Laid]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="242" width="149" height="31" uuid="82a1f6fa-4a46-4905-b1f0-6bcb0f7cec44">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="242" width="149" height="31" uuid="82a1f6fa-4a46-4905-b1f0-6bcb0f7cec44"/>
 				<textFieldExpression><![CDATA[$F{dateKeelLaid}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="281" width="154" height="15" uuid="b387204a-aaf2-44eb-b6ee-30b0a9020f5e">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="281" width="154" height="15" uuid="b387204a-aaf2-44eb-b6ee-30b0a9020f5e"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Name and Address of Builder]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="5" y="292" width="154" height="15" uuid="f3f52dad-40e1-4e00-80b5-16b4a8f32a8a">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="5" y="292" width="154" height="15" uuid="f3f52dad-40e1-4e00-80b5-16b4a8f32a8a"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[造船廠名稱､ 地址]]></text>
 			</staticText>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="140" y="295" width="380" height="18" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="140" y="295" width="380" height="18" uuid="2cd1597b-56fc-405f-98f2-3260f6041f28"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -291,48 +238,33 @@
 				($F{builder}.getAddress3() != null ? " " + $F{builder}.getAddress3() : "")
 				 )]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement x="140" y="281" width="380" height="15" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement x="140" y="281" width="380" height="15" uuid="de8b4d3f-0eb1-4c9b-9dce-b61bd1b7e3a7"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[($F{builder} == null || $F{builder}.getName() == null ? "-" : $F{builder}.getName())]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="319" width="100" height="20" uuid="9f2a2b10-fbc6-45a1-8a02-6cdab0c47cde">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="319" width="100" height="20" uuid="9f2a2b10-fbc6-45a1-8a02-6cdab0c47cde"/>
 				<text><![CDATA[Breadth]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="330" width="100" height="20" uuid="50f46434-41db-4f1b-bf4a-c8954bb6dfeb">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="330" width="100" height="20" uuid="50f46434-41db-4f1b-bf4a-c8954bb6dfeb"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[寬 度]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="330" width="100" height="15" uuid="cd20b863-8520-4a39-a2c8-b7013219288d">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="330" width="100" height="15" uuid="cd20b863-8520-4a39-a2c8-b7013219288d"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[長 度]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="319" width="100" height="15" uuid="957a4b76-289d-4758-ae77-8fdd375be6b6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="319" width="100" height="15" uuid="957a4b76-289d-4758-ae77-8fdd375be6b6"/>
 				<text><![CDATA[Length]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="128" y="319" width="141" height="31" uuid="b3bab8f6-6b28-4fe2-94f6-e8800d5b46bb">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="128" y="319" width="141" height="31" uuid="b3bab8f6-6b28-4fe2-94f6-e8800d5b46bb"/>
 				<textFieldExpression><![CDATA[$F{regMaster}.getLength() == null ?
 "-" :
 (
@@ -347,9 +279,7 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="388" y="319" width="135" height="31" uuid="7f97817b-811c-4750-b7c6-df3b8e0532ad">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="388" y="319" width="135" height="31" uuid="7f97817b-811c-4750-b7c6-df3b8e0532ad"/>
 				<textFieldExpression><![CDATA[$F{regMaster}.getBreadth() == null ?
 "-" :
 (
@@ -364,26 +294,20 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="370" width="100" height="15" uuid="83508dd4-48b6-428f-86de-380d1d2d99f9">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="370" width="100" height="15" uuid="83508dd4-48b6-428f-86de-380d1d2d99f9"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[型 深]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="359" width="100" height="15" uuid="b8b5815f-bba1-4222-aa34-f5b5a4046b26">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="359" width="100" height="15" uuid="b8b5815f-bba1-4222-aa34-f5b5a4046b26"/>
 				<text><![CDATA[Moulded Depth]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="128" y="359" width="141" height="31" uuid="04e45a9e-b4eb-445e-b24b-8b81c64f85d8">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="128" y="359" width="141" height="31" uuid="04e45a9e-b4eb-445e-b24b-8b81c64f85d8"/>
 				<textFieldExpression><![CDATA[$F{regMaster}.getDepth() == null ?
 "-" :
 (
-new java.text.DecimalFormat("#,###.000").format(
+new java.text.DecimalFormat("#,##0.000").format(
 $F{regMaster}.getDepth()) +
 (
 $F{regMaster}.getDimUnit() == null ? "":
@@ -394,117 +318,80 @@ $F{regMaster}.getDimUnit().equals("B") ? " metres": ""
 )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="410" width="100" height="20" uuid="1626b9bf-1e5e-4730-80e0-e0cc292a0db6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="410" width="100" height="20" uuid="1626b9bf-1e5e-4730-80e0-e0cc292a0db6"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[總噸位]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="388" y="399" width="135" height="31" uuid="baccb4bb-5a31-4cdc-83f2-05f719cbd31c">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="388" y="399" width="135" height="31" uuid="baccb4bb-5a31-4cdc-83f2-05f719cbd31c"/>
 				<textFieldExpression><![CDATA[$F{netTonnage} != null ? $F{netTonnage} : ""]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="410" width="100" height="20" uuid="29a9aa51-43ec-415c-ab49-7f32f531a081">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="410" width="100" height="20" uuid="29a9aa51-43ec-415c-ab49-7f32f531a081"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[淨噸位]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="399" width="100" height="20" uuid="479ab4b0-af38-486b-b243-e551a9082b45">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="399" width="100" height="20" uuid="479ab4b0-af38-486b-b243-e551a9082b45"/>
 				<text><![CDATA[Gross Tonnage]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="128" y="399" width="141" height="31" uuid="9bd12070-02d5-4e5b-ac08-76567a1f7fb0">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="128" y="399" width="141" height="31" uuid="9bd12070-02d5-4e5b-ac08-76567a1f7fb0"/>
 				<textFieldExpression><![CDATA[($F{grossTonnage} != null ? $F{grossTonnage} :"")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="399" width="100" height="20" uuid="0d5896cf-ea1a-4065-be37-2fbe8a6c9974">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="399" width="100" height="20" uuid="0d5896cf-ea1a-4065-be37-2fbe8a6c9974"/>
 				<text><![CDATA[Net Tonnage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="453" width="100" height="20" uuid="2c35fd71-aad9-42ad-a71a-7659a239abb6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="453" width="100" height="20" uuid="2c35fd71-aad9-42ad-a71a-7659a239abb6"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[主機種類]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="128" y="442" width="141" height="31" uuid="28a43f18-ca3e-42b1-a324-96afc34bc1d9">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="128" y="442" width="141" height="31" uuid="28a43f18-ca3e-42b1-a324-96afc34bc1d9"/>
 				<textFieldExpression><![CDATA[$F{mainEngineType}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="442" width="100" height="20" uuid="465dd9b7-49de-4031-9f45-e104168e7177">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="442" width="100" height="20" uuid="465dd9b7-49de-4031-9f45-e104168e7177"/>
 				<text><![CDATA[Main Engine Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="442" width="116" height="20" uuid="8b4e3b17-2c24-4b13-8709-059d2b5e90fb">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="442" width="116" height="20" uuid="8b4e3b17-2c24-4b13-8709-059d2b5e90fb"/>
 				<text><![CDATA[Engine Make and Model]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="453" width="116" height="20" uuid="3c849cb7-cb7e-4d66-933f-608317937859">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="453" width="116" height="20" uuid="3c849cb7-cb7e-4d66-933f-608317937859"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[主機名稱､ 型號]]></text>
 			</staticText>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="388" y="442" width="135" height="38" uuid="3150eb57-206d-4cb5-9434-3a98f5615aa1">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="388" y="442" width="135" height="38" uuid="3150eb57-206d-4cb5-9434-3a98f5615aa1"/>
 				<textFieldExpression><![CDATA[$F{engineMakeAndModel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="492" width="100" height="20" uuid="cbf14e81-9ee7-45bc-a222-7de6cc531266">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="492" width="100" height="20" uuid="cbf14e81-9ee7-45bc-a222-7de6cc531266"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[主機台數]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="128" y="481" width="141" height="31" uuid="cba23de3-4dad-4ea4-bd23-4547cb027c72">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="128" y="481" width="141" height="31" uuid="cba23de3-4dad-4ea4-bd23-4547cb027c72"/>
 				<textFieldExpression><![CDATA[$F{noOfSetsEngine}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="388" y="481" width="135" height="31" uuid="f1a6bee1-48a9-4fb6-b9bb-c7db2d65db3f">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="388" y="481" width="135" height="31" uuid="f1a6bee1-48a9-4fb6-b9bb-c7db2d65db3f"/>
 				<textFieldExpression><![CDATA[$F{totalEnginePower}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement positionType="Float" x="5" y="481" width="100" height="20" uuid="c383ed95-cad7-454e-bc47-5477550df1e4">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="5" y="481" width="100" height="20" uuid="c383ed95-cad7-454e-bc47-5477550df1e4"/>
 				<text><![CDATA[No. of Sets of Engine]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="481" width="106" height="20" uuid="18a7a168-6787-443c-9985-d545bff0f956">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="481" width="106" height="20" uuid="18a7a168-6787-443c-9985-d545bff0f956"/>
 				<text><![CDATA[Total Engine Power]]></text>
 			</staticText>
 			<staticText>
-				<reportElement positionType="Float" x="270" y="492" width="106" height="20" uuid="fc29d679-2d47-4e42-9006-0475eb22ec76">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="270" y="492" width="106" height="20" uuid="fc29d679-2d47-4e42-9006-0475eb22ec76"/>
 				<textElement verticalAlignment="Top"/>
 				<text><![CDATA[主機總功率]]></text>
 			</staticText>
@@ -559,30 +446,22 @@ String.valueOf($F{regMaster}.getNoOfShafts()) :
 				<reportElement x="0" y="22" width="525" height="1" uuid="5b943d1f-1309-4e3c-a6bd-f959e5ac5ca4"/>
 			</line>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="54" width="390" height="20" uuid="d7fc2741-b07e-4937-b428-7359d32a5597">
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="54" width="390" height="20" uuid="d7fc2741-b07e-4937-b428-7359d32a5597"/>
 				<textFieldExpression><![CDATA[$F{regMaster}.getRegChiName() != null ?
 $F{regMaster}.getRegChiName() :
 ""]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="128" y="119" width="101" height="15" uuid="0d750c2d-8de5-4cab-bf76-226c9a7b1ec9">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="119" width="101" height="15" uuid="0d750c2d-8de5-4cab-bf76-226c9a7b1ec9"/>
 				<text><![CDATA[HONG KONG]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="128" y="130" width="58" height="15" uuid="13b4a506-b09c-4bde-93a2-0ff8ea7eb038">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="128" y="130" width="58" height="15" uuid="13b4a506-b09c-4bde-93a2-0ff8ea7eb038"/>
 				<textElement textAlignment="Center" verticalAlignment="Top"/>
 				<text><![CDATA[香 港]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="388" y="201" width="137" height="31" uuid="b672e9de-e54f-4d96-aa08-e683ee9dffb2">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="388" y="201" width="137" height="31" uuid="b672e9de-e54f-4d96-aa08-e683ee9dffb2"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -594,7 +473,6 @@ new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format($F{regMaster}.getProv
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="388" y="242" width="137" height="31" uuid="13d5fb99-0a01-4803-9cd3-aa5b21ba021c">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($F{regMaster}.getApplNoSuf()) &&
 $F{regMaster}.getProvRegDate() != null &&
 $F{regMaster}.getRegDate() != null]]></printWhenExpression>
@@ -607,9 +485,7 @@ $F{regMaster}.getRegDate()
 ).toUpperCase()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="160" width="100" height="16" uuid="5922c4e5-8538-431e-b5a6-8141cae5cc85">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="270" y="160" width="100" height="16" uuid="5922c4e5-8538-431e-b5a6-8141cae5cc85"/>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
@@ -617,7 +493,6 @@ $F{regMaster}.getRegDate()
 			</staticText>
 			<staticText>
 				<reportElement x="280" y="253" width="93" height="16" uuid="a7a1977f-587c-4ec4-aaa5-571d74a27ddc">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($F{regMaster}.getApplNoSuf()) &&
 $F{regMaster}.getProvRegDate() != null &&
 $F{regMaster}.getRegDate() != null]]></printWhenExpression>
@@ -629,7 +504,6 @@ $F{regMaster}.getRegDate() != null]]></printWhenExpression>
 			</staticText>
 			<staticText>
 				<reportElement x="280" y="242" width="108" height="16" uuid="9da0d0be-685c-494c-93ad-8933aa9a89e6">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[!"P".equals($F{regMaster}.getApplNoSuf()) &&
 $F{regMaster}.getProvRegDate() != null &&
 $F{regMaster}.getRegDate() != null]]></printWhenExpression>
@@ -640,9 +514,7 @@ $F{regMaster}.getRegDate() != null]]></printWhenExpression>
 				<text><![CDATA[Registration]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="280" y="212" width="108" height="20" uuid="81ac5820-bcce-4a37-a841-b50405053ec5">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="280" y="212" width="108" height="20" uuid="81ac5820-bcce-4a37-a841-b50405053ec5"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
@@ -652,9 +524,7 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 ? "臨時註冊":"註冊"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="280" y="201" width="108" height="15" uuid="0193597c-bf19-473b-8858-c1c8388c06f4">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="280" y="201" width="108" height="15" uuid="0193597c-bf19-473b-8858-c1c8388c06f4"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
@@ -664,9 +534,7 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 ? "Provisional Registration":"Registration"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="270" y="171" width="100" height="16" uuid="06f418a8-2139-4699-a62d-999592a21689">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement x="270" y="171" width="100" height="16" uuid="06f418a8-2139-4699-a62d-999592a21689"/>
 				<textElement verticalAlignment="Top">
 					<font size="10" isBold="false"/>
 				</textElement>
@@ -674,15 +542,11 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 			</staticText>
 			<line>
 				<reportElement positionType="Float" x="0" y="318" width="300" height="1" uuid="90df0dce-7f64-49c3-82d5-b50056afba92">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
-					<property name="com.jaspersoft.studio.unit.width" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<printWhenExpression><![CDATA[false]]></printWhenExpression>
 				</reportElement>
 			</line>
 		</band>
 		<band height="122">
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
 				<reportElement x="321" y="8" width="125" height="20" uuid="d4d642bf-722c-4098-a9ad-353c6a0001d9"/>
 				<textElement verticalAlignment="Top"/>
@@ -731,31 +595,22 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 			<line>
 				<reportElement x="0" y="79" width="525" height="1" uuid="03595264-b598-46fd-840b-0ec972ecf274"/>
 			</line>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="13" y="83" width="481" height="16" uuid="12c2947d-fb00-440c-91d1-99764f376b24">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="13" y="83" width="481" height="16" uuid="12c2947d-fb00-440c-91d1-99764f376b24"/>
 				<textFieldExpression><![CDATA[$F{repName}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="13" y="101" width="481" height="16" uuid="906bb212-5468-4bf9-8f13-eebad6ce0b88">
-					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="ElementGroupHeight" x="13" y="101" width="481" height="16" uuid="906bb212-5468-4bf9-8f13-eebad6ce0b88"/>
 				<textFieldExpression><![CDATA[$F{repAddress}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement positionType="Float" x="0" y="120" width="525" height="1" uuid="d041ed58-36e9-4465-9bdd-d34448f053e3">
-					<property name="com.jaspersoft.studio.unit.y" value="px"/>
-				</reportElement>
+				<reportElement positionType="Float" x="0" y="120" width="525" height="1" uuid="d041ed58-36e9-4465-9bdd-d34448f053e3"/>
 				<graphicElement>
 					<pen lineWidth="2.0"/>
 				</graphicElement>
 			</line>
 			<textField>
 				<reportElement key="" x="228" y="90" width="61" height="21" uuid="81037614-7bff-465d-916d-a08374638586">
-					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<printWhenExpression><![CDATA[$P{noRP}=="T"]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left"/>
