@@ -42,11 +42,11 @@
 				<textFieldExpression><![CDATA[$F{proRegExpiryDateChi}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="75" splitType="Prevent">
+		<band height="90" splitType="Prevent">
 			<printWhenExpression><![CDATA[!"D".equals($F{regMaster}.getRegStatus()) &&
 Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="5" y="0" width="489" height="75" uuid="9b76ee2b-07c3-4493-a08e-5928e765a921"/>
+				<reportElement x="5" y="0" width="489" height="90" uuid="9b76ee2b-07c3-4493-a08e-5928e765a921"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["I hereby certify that the foregoing printed "+ ($F{mortgages} == null || $F{mortgages}.isEmpty() || $F{mortgages}.size()<=1 ? ("particular is"):("particulars are"))    +" a true extract from the Register now in my<br>charge, showing the descriptive particulars, registered ownership " +
 ($F{mortgages} != null && !$F{mortgages}.isEmpty() ?
@@ -108,7 +108,7 @@ $P{reportDate}+
 		</band>
 		<band height="45" splitType="Prevent">
 			<textField>
-				<reportElement x="5" y="0" width="489" height="45" uuid="422210d6-9aa0-4bad-98f3-3618c86c2e8e"/>
+				<reportElement positionType="Float" x="5" y="0" width="489" height="45" uuid="422210d6-9aa0-4bad-98f3-3618c86c2e8e"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["This Transcript of Register was issued on (Local Time) "
 +$P{issueTime}+
