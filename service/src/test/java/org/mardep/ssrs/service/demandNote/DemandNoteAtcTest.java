@@ -17,6 +17,23 @@ import junit.framework.Assert;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath:atcTest-context.xml")
 public class DemandNoteAtcTest {
+	
+	@Test
+	public void testCalcAtcAmt() throws ParseException {
+		DemandNoteAtcService svc = new DemandNoteAtcService();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date regDate = sdf.parse("2008-06-30");
+		Date detainDate = sdf.parse("2019-07-03");
+		Date dueDate = sdf.parse("2021-06-30");
+//		Date regDate = sdf.parse("2019-06-28");
+//		Date detainDate = sdf.parse("2018-01-21");
+//		Date dueDate = sdf.parse("2020-06-28");
+		BigDecimal fullAtc = new BigDecimal("77500");
+		BigDecimal halfAtc = new BigDecimal("38750");
+		//BigDecimal atcAmt = svc.calcDetainAtcAmt(regDate, detainDate, dueDate, fullAtc, halfAtc);
+		BigDecimal atcAmt = svc.calcAtcAmt(regDate, detainDate, dueDate, fullAtc, null);
+		Assert.assertEquals(fullAtc, atcAmt);				
+	}
 
 	@Test
 	public void testGetFirstAnniversaryDate() throws ParseException {
@@ -32,8 +49,8 @@ public class DemandNoteAtcTest {
 	public void testCalcNonDetainAtcAmt() throws ParseException {
 		DemandNoteAtcService svc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date regDate = sdf.parse("2019-12-31");
-		Date dueDate = sdf.parse("2021-12-31");
+		Date regDate = sdf.parse("2019-06-28");
+		Date dueDate = sdf.parse("2020-06-28");
 		BigDecimal fullAtc = new BigDecimal("39269");
 		BigDecimal halfAtc = new BigDecimal("19634.5");
 		BigDecimal atcAmt = svc.calcNonDetainAtcAmt(regDate, dueDate, fullAtc, halfAtc);
@@ -54,9 +71,11 @@ public class DemandNoteAtcTest {
 	public void testCalcDetainAtcAmt() throws ParseException {
 		DemandNoteAtcService svc = new DemandNoteAtcService();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		Date regDate = sdf.parse("2008-06-30");
-		Date detainDate = sdf.parse("2020-02-03");
-		Date dueDate = sdf.parse("2020-06-30");
+//		Date regDate = sdf.parse("2008-06-30");
+//		Date detainDate = sdf.parse("2020-02-03");
+		Date regDate = sdf.parse("2019-06-28");
+		Date detainDate = sdf.parse("2018-01-21");
+		Date dueDate = sdf.parse("2020-06-28");
 		BigDecimal fullAtc = new BigDecimal("77500");
 		BigDecimal halfAtc = new BigDecimal("38750");
 		BigDecimal atcAmt = svc.calcDetainAtcAmt(regDate, detainDate, dueDate, fullAtc, halfAtc);
