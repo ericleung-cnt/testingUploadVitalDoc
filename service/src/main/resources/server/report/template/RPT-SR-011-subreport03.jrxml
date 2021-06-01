@@ -42,30 +42,35 @@
 				<textFieldExpression><![CDATA[$F{proRegExpiryDateChi}]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="90" splitType="Prevent">
+		<band height="135" splitType="Prevent">
 			<printWhenExpression><![CDATA[!"D".equals($F{regMaster}.getRegStatus()) &&
 Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="5" y="0" width="489" height="90" uuid="9b76ee2b-07c3-4493-a08e-5928e765a921"/>
+				<reportElement x="5" y="2" width="489" height="133" uuid="9b76ee2b-07c3-4493-a08e-5928e765a921"/>
 				<textElement markup="html"/>
-				<textFieldExpression><![CDATA["I hereby certify that the foregoing printed "+ ($F{mortgages} == null || $F{mortgages}.isEmpty() || $F{mortgages}.size()<=1 ? ("particular is"):("particulars are"))    +" a true extract from the Register now in my<br>charge, showing the descriptive particulars, registered ownership " +
+				<textFieldExpression><![CDATA["I hereby certify that the foregoing printed "+ ($F{mortgages} == null || $F{mortgages}.isEmpty() || $F{mortgages}.size()<=1 ? ("particulars are"):("particulars are"))    +" a true extract from the Register now in my<br>charge, showing the descriptive particulars, registered ownership " +
 ($F{mortgages} != null && !$F{mortgages}.isEmpty() ?
 ("and details of mortgage of this vessel<br>\"" +$F{shipName}+"\"<br>" + $F{chiShipName} + "- Official Number "+$F{officialNo}+", " ) :
 ("of this vessel \"" +$F{shipName}+"\"<br>" + $F{chiShipName} +"- Official Number "+$F{officialNo}+", free of mortgage "))
-
 + "as at "+$P{reportDate}+".<br>茲證明上文所印資料為本人主管的船舶註冊紀錄冊的真確摘錄,以示截至 "
 +$P{reportDateChi}+
 " 為止,<br>本船的一般資料、註冊所有權," +
 ($F{mortgages} != null && !$F{mortgages}.isEmpty() ?
     "以及抵押資料。" :
     "而且並無抵押。"
-    )]]></textFieldExpression>
+    )
+ + "<br>"
+ + "This Transcript of Register was issued on (Local Time) "
++$P{issueTime}+
+".<br>本船舶註冊紀錄冊抄本發出日期、時間為香港時間 "
++$P{issueTimeChi}+
+"。"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="47" splitType="Prevent">
+		<band height="48" splitType="Prevent">
 			<printWhenExpression><![CDATA["D".equals($F{regMaster}.getRegStatus())]]></printWhenExpression>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="0" width="186" height="31" uuid="7d498f71-1444-44bb-856a-52eb6ad124f4"/>
+				<reportElement x="5" y="0" width="186" height="31" uuid="7d498f71-1444-44bb-856a-52eb6ad124f4"/>
 				<textFieldExpression><![CDATA["Registration closed on :" +
 new java.text.SimpleDateFormat("dd-MMM-yyyy", java.util.Locale.ENGLISH).format(
     $F{regMaster}.getDeRegTime()).toUpperCase()]]></textFieldExpression>
@@ -78,39 +83,47 @@ new java.text.SimpleDateFormat("yyyy年MM月dd日。")
 )]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="14" width="120" height="31" uuid="f0a1f8d3-1903-4fca-937b-68cb659502ad"/>
+				<reportElement x="5" y="14" width="120" height="31" uuid="f0a1f8d3-1903-4fca-937b-68cb659502ad"/>
 				<textFieldExpression><![CDATA["Reason for closing :"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="3" y="25" width="115" height="20" uuid="87efff73-586f-4564-8778-8acc49a34e91"/>
+				<reportElement x="5" y="25" width="115" height="20" uuid="87efff73-586f-4564-8778-8acc49a34e91"/>
 				<textFieldExpression><![CDATA["終止註冊原因:"]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="14" width="397" height="31" uuid="03196ca0-24c6-488c-b92a-aee333985a4a"/>
+				<reportElement x="128" y="14" width="366" height="31" uuid="03196ca0-24c6-488c-b92a-aee333985a4a"/>
 				<textFieldExpression><![CDATA[$F{reason}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="128" y="25" width="397" height="20" uuid="8c7ece4c-1cfe-4128-a104-7ce0aa49d587"/>
+				<reportElement x="128" y="25" width="366" height="20" uuid="8c7ece4c-1cfe-4128-a104-7ce0aa49d587"/>
 				<textFieldExpression><![CDATA[$F{reasonChi} != null ? $F{reasonChi} : "-"]]></textFieldExpression>
 			</textField>
 		</band>
-		<band height="40" splitType="Prevent">
+		<band height="42" splitType="Prevent">
+			<printWhenExpression><![CDATA["D".equals($F{regMaster}.getRegStatus()) && Boolean.TRUE.equals($P{certified})
+]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="5" y="2" width="489" height="40" uuid="1d0ca8c3-72e7-40ce-a474-7a4add643016"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA["This Transcript of Register was issued on (Local Time) "
++$P{issueTime}+
+".<br>本船舶註冊紀錄冊抄本發出日期、時間為香港時間 "
++$P{issueTimeChi}+
+"。"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="85" splitType="Prevent">
 			<printWhenExpression><![CDATA[!Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="5" y="2" width="489" height="35" uuid="a2384f99-86a4-4897-822b-3dfcf01035bc"/>
+				<reportElement x="5" y="2" width="489" height="80" uuid="a2384f99-86a4-4897-822b-3dfcf01035bc"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["The foregoing are an extract from the Register as at "+
 $P{reportDate}+
 ".<br>上文為船舶註冊紀錄冊截至"
 +$P{reportDateChi}+
-" 為止所載資料的摘錄。"]]></textFieldExpression>
-			</textField>
-		</band>
-		<band height="45" splitType="Prevent">
-			<textField>
-				<reportElement positionType="Float" x="5" y="0" width="489" height="45" uuid="422210d6-9aa0-4bad-98f3-3618c86c2e8e"/>
-				<textElement markup="html"/>
-				<textFieldExpression><![CDATA["This Transcript of Register was issued on (Local Time) "
+" 為止所載資料的摘錄。"
++ "<br>"
++ "This Transcript of Register was issued on (Local Time) "
 +$P{issueTime}+
 ".<br>本船舶註冊紀錄冊抄本發出日期、時間為香港時間 "
 +$P{issueTimeChi}+
