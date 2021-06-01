@@ -82,7 +82,7 @@ public class DemandNoteAtcService {
 //			calcATC = fullATC;
 			return fullATC;
 		} 
-		if(detainDate!=null) {
+		if(detainDate!=null && detainDate.after(regDate)) {
 			logger.info("detainDate!=null");
 //			Date dueDate2YrsBefore = addYrsToDate(dueDate, -2);
 //			compareResult = compareOnlyDayBetweenDates(detainDate, dueDate2YrsBefore); 
