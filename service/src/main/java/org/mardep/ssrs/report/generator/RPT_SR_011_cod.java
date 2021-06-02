@@ -46,7 +46,7 @@ public class RPT_SR_011_cod extends RPT_SR_011 {
 	
 	@Override
 	protected void processMortgages(String applNo, Date reportDate, boolean printMortgage,
-			HashMap<Object, Object> regMaster, List<Owner> owners, boolean isPercentage) {
+			HashMap<Object, Object> regMaster, List<Owner> owners, boolean isPercentage, Map<String, Object> params) {
 		regMaster.put("mortgageAgreement", "");
 		if (printMortgage) {
 			List<Mortgage> mortgages = mortgageSrv.findMortgagesByApplId(applNo);
