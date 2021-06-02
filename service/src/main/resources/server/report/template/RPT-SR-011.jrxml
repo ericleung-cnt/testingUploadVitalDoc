@@ -26,6 +26,9 @@
 	<parameter name="noRP" class="java.lang.String"/>
 	<parameter name="pInterestHeldEng" class="java.lang.String"/>
 	<parameter name="pInterestHeldChi" class="java.lang.String"/>
+	<parameter name="pLabelPlaceOfIncorpEng" class="java.lang.String"/>
+	<parameter name="pLabelPlaceOfIncorpChi" class="java.lang.String"/>
+	<parameter name="pHaveMortgages" class="java.lang.Boolean"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -633,6 +636,12 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 				<subreportParameter name="pInterestHeldEng">
 					<subreportParameterExpression><![CDATA[$P{pInterestHeldEng}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="pLabelPlaceOfIncorpEng">
+					<subreportParameterExpression><![CDATA[$P{pLabelPlaceOfIncorpEng}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pLabelPlaceOfIncorpChi">
+					<subreportParameterExpression><![CDATA[$P{pLabelPlaceOfIncorpChi}]]></subreportParameterExpression>
+				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{owners})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_1}]]></subreportExpression>
 			</subreport>
@@ -816,6 +825,9 @@ $F{regMaster}.getRegDate() != null ) || ("P".equals($F{regMaster}.getApplNoSuf()
 				</subreportParameter>
 				<subreportParameter name="reportDateChi">
 					<subreportParameterExpression><![CDATA[$P{reportDateChi}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pHaveMortgages">
+					<subreportParameterExpression><![CDATA[$P{pHaveMortgages}]]></subreportParameterExpression>
 				</subreportParameter>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource($F{subreportDataSource})]]></dataSourceExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_3}]]></subreportExpression>

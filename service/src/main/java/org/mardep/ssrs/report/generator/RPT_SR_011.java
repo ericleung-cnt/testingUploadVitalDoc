@@ -186,6 +186,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 			params.put("MortgagorList", prepareMortgagorList());
 			params.put("MortgageeList", prepareMortgageeList());
 		}
+		
 		params.put("SUBREPORT_1", jasperReportService.getJasperReport("RPT-SR-011-subreport01.jrxml"));
 		params.put("SUBREPORT_3", jasperReportService.getJasperReport("RPT-SR-011-subreport03.jrxml"));
 		params.put("issueDate", issueDateUI);
@@ -339,6 +340,25 @@ public class RPT_SR_011 extends AbstractSrReport {
 		}
 	}
 
+	private String evaluateOwnerSubreportPlaceOfIncorp(Owner owner) {
+		String place = "";
+		String placePrefixOfCorporate = "Place of Incorporation/Registration 公司成立/註冊地點 : ";
+		String placePrefixOfIndividual = "Occupation 職業 : "; 
+		if ("I".equals(owner.getStatus())) {
+			//return owner.getOccupation();
+			place =  placePrefixOfIndividual + (owner.getOccupation()==null ? "" : owner.getOccupation()); 
+
+		} else if ((owner.getOverseaCert()==null || owner.getOverseaCert().isEmpty()) &&
+				(owner.getIncortCert()==null || owner.getIncortCert().isEmpty())) {
+			//return owner.getIncorpPlace();
+			place = placePrefixOfCorporate + owner.getIncorpPlace();
+		} else {
+			//return "HONG KONG";
+			place = placePrefixOfCorporate + "HONG KONG";
+		}
+		return place;
+	}
+	
 	protected void processRegistrar(HashMap<Object, Object> regMasterMap, RegMaster regMasterObject, Map<String, Object> params){
 		Long registrarId = regMasterObject.getRegistrar();
 		regMasterMap.put("registrar", "");
@@ -385,7 +405,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 			isPercentage = true;
 		}
 		// 20200513
-
+	
 		processRegistrar(regMaster, regM, params);
 //		Long registrarId = regM.getRegistrar();
 //		regMaster.put("registrar", "");
@@ -528,7 +548,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 				} else {
 					subreportRow.put("jointlyOwned", "");
 				}
-				subreportRow.put("placeOfIncorp", evaluatePlaceOfIncorp(owner));
+				subreportRow.put("placeOfIncorp", evaluateOwnerSubreportPlaceOfIncorp(owner));
 				dataList.add(subreportRow);
 				String ownerStr = owner.getName() != null?  (owner.getName() + "\n" + ownerAddr) : "";
 				regMaster.put("ownerDetails", ownerStr);
@@ -548,7 +568,7 @@ public class RPT_SR_011 extends AbstractSrReport {
 //		}
 		regMaster.put("ownersCoD", ownerInfoForCoD);	// for CoD only
 		regMaster.put("owners", dataList);
-		processMortgages(applNo, reportDate, printMortgage, regMaster, owners, isPercentage);
+		processMortgages(applNo, reportDate, printMortgage, regMaster, owners, isPercentage, params);
 
 		Map<String, Object> signatureSection = new HashMap<>();
 		if (regM.getApplNoSuf().equals("P")) {
@@ -635,10 +655,15 @@ public class RPT_SR_011 extends AbstractSrReport {
 	}
 
 	protected void processMortgages(String applNo, Date reportDate, boolean printMortgage,
-			HashMap<Object, Object> regMaster, List<Owner> owners, boolean isPercentage) throws ParseException {
+			HashMap<Object, Object> regMaster, List<Owner> owners, boolean isPercentage, Map<String, Object> params) throws ParseException {
+		List<Mortgage> mortgages = getMortgage(applNo, reportDate);
+		if (mortgages.size()>0) {
+			params.put("pHaveMortgages", true);
+		} else {
+			params.put("pHaveMortgages", false);
+		}
 		if (printMortgage) {
 			List<Map<String, ?>> dataList2 = new ArrayList<Map<String, ?>>();
-			List<Mortgage> mortgages = getMortgage(applNo, reportDate);
 
 			//List<Transaction> transactionList = transactionDao.findForMortgage(applNo);
 			List<Transaction> transactionList = transactionDao.findForMortgage(applNo, reportDate);

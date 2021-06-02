@@ -11,6 +11,7 @@
 	<parameter name="issueTimeChi" class="java.lang.String"/>
 	<parameter name="registrar" class="java.lang.String"/>
 	<parameter name="certified" class="java.lang.Boolean" isForPrompting="false"/>
+	<parameter name="pHaveMortgages" class="java.lang.Boolean"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -49,7 +50,7 @@ Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 				<reportElement x="5" y="2" width="489" height="133" uuid="9b76ee2b-07c3-4493-a08e-5928e765a921"/>
 				<textElement markup="html"/>
 				<textFieldExpression><![CDATA["I hereby certify that the foregoing printed "+ ($F{mortgages} == null || $F{mortgages}.isEmpty() || $F{mortgages}.size()<=1 ? ("particulars are"):("particulars are"))    +" a true extract from the Register now in my<br>charge, showing the descriptive particulars, registered ownership " +
-($F{mortgages} != null && !$F{mortgages}.isEmpty() ?
+($P{pHaveMortgages}  ?
 ("and details of mortgage of this vessel<br>\"" +$F{shipName}+"\"<br>" + $F{chiShipName} + "- Official Number "+$F{officialNo}+", " ) :
 ("of this vessel \"" +$F{shipName}+"\"<br>" + $F{chiShipName} +"- Official Number "+$F{officialNo}+", free of mortgage "))
 + "as at "+$P{reportDate}+".<br>茲證明上文所印資料為本人主管的船舶註冊紀錄冊的真確摘錄,以示截至 "
@@ -100,8 +101,7 @@ new java.text.SimpleDateFormat("yyyy年MM月dd日。")
 			</textField>
 		</band>
 		<band height="42" splitType="Prevent">
-			<printWhenExpression><![CDATA["D".equals($F{regMaster}.getRegStatus()) && Boolean.TRUE.equals($P{certified})
-]]></printWhenExpression>
+			<printWhenExpression><![CDATA["D".equals($F{regMaster}.getRegStatus()) && Boolean.TRUE.equals($P{certified})]]></printWhenExpression>
 			<textField isStretchWithOverflow="true">
 				<reportElement positionType="Float" x="5" y="2" width="489" height="40" uuid="1d0ca8c3-72e7-40ce-a474-7a4add643016"/>
 				<textElement markup="html"/>
