@@ -2613,7 +2613,9 @@ var openRegMaster = function(record, task, mode
 					isc.warn("Missing Pro-Reg expiry date for this Pro-Registration");
 					return;
 				}
-				confirmPrintCoDWindow.showRecord(record);
+				confirmPrintCoDWindow.showRecord(record, function(data){
+					form.setData(data);
+				});
 			} else {
 				// track code update
 //				regMasterDS.updateData(null, function(resp, data, req) {
@@ -4038,6 +4040,7 @@ var openRegMaster = function(record, task, mode
 			this.setValues(data);
 			this.getField("regTime").setValue(data.regDate);
 			this.getField("firstRegTime").setValue(data.firstRegDate);
+			this.getField("certIssueDate").setValue(data.certIssueDate);
 			if (form.getItem("applNo").getValue()) {
 				var applNo =form.getItem("applNo").getValue();
 				latch += 6;
