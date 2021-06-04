@@ -205,11 +205,14 @@ public class RegMasterDMI extends AbstractSrDMI<RegMaster> {
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
 		}
 		case "updateTrackCode":
-			//Map suppliedValues = dsRequest.getClientSuppliedValues();
+			Map suppliedValues = dsRequest.getClientSuppliedValues();
 			//if (suppliedValues.containsKey("applNo")) {
 			//	entity = srService.updateTrackCode(suppliedValues.get("applNo").toString());
 			//}
-			entity = srService.updateTrackCode(entity.getApplNo());
+			// 20210604
+			//entity = srService.updateTrackCode(entity.getApplNo());
+			entity = srService.updateTrackCodeAndCertIssueDate(entity.getApplNo(), (Date)suppliedValues.get("certIssueDate"));
+			//20210604
 			return new DSResponse(entity, DSResponse.STATUS_SUCCESS);
 		}
 		if ("RegMasterDS_updateData_new".equals(operationId)) {

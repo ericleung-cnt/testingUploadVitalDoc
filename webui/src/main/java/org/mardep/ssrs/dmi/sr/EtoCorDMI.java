@@ -127,7 +127,10 @@ public class EtoCorDMI {
 				etoCor.setId(id);
 				
 				etoCorSvc.updateValidEtoCoR(entity);
+				// 20210604
 				RegMaster rm = srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode());
+				//RegMaster rm = srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode(), );
+				// 20210604
 			//} else if ("REPLACE_MULTI_COR".equals(operationId)) {
 				//RegMaster rm = srSvc.findById(RegMaster.class, entity.getApplNo());
 				Map<String, Object> map = new HashMap<String, Object>();

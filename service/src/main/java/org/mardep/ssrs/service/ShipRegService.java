@@ -906,6 +906,45 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 	}
 	
 	@Override
+	public RegMaster assignRegDateTrackCodeAndCertIssueDate(String applNo, String applNoSuf, Date regDate, Long registrarId, String trackCode, Date certIssueDate) {
+		RegMaster rm = rmDao.findById(applNo);
+		
+		rm.setApplNoSuf(applNoSuf);
+		rm.setRegDate(regDate);
+		rm.setCertIssueDate(certIssueDate);
+		
+		if ("P".equals(applNoSuf)) {
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(regDate);
+			cal.add(Calendar.MONTH, 1);
+			rm.setProvExpDate(cal.getTime());
+		} else if ("F".equals(applNoSuf)) {
+			rm.setProvExpDate(null);
+		}
+		rm.setRegistrar(registrarId);
+		rm.setTrackCode(trackCode);
+		RegMaster result = rmDao.save(rm);
+		
+		Transaction tx = new Transaction();
+		tx.setApplNo(result.getApplNo());
+		tx.setCode("72");
+		if ("A".equals(rm.getRegStatus())) {
+			tx.setDateChange(rm.getRegDate());
+		} else {
+			tx.setDateChange(new Date());
+		}
+		tx.setDetails("");
+		SimpleDateFormat format = new SimpleDateFormat("HHmm");
+		tx.setHourChange(format.format(tx.getDateChange()));
+		tx.setRegMaster(result);
+		ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);
+		tx = txDao.save(result.getApplNo(), tx.getCode(), tx);
+		saveHistory(applNo, tx);
+
+		return rm;
+	}
+
+	@Override
 	public RegMaster assignTrackCode(String applNo, String trackCode) {
 		RegMaster rm = rmDao.findById(applNo);
 		
@@ -930,6 +969,32 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 		return rm;
 	}
 	
+	@Override
+	public RegMaster assignTrackCodeAndCertIssueDate(String applNo, String trackCode, Date certIssueDate) {
+		RegMaster rm = rmDao.findById(applNo);
+		
+		rm.setTrackCode(trackCode);
+		rm.setCertIssueDate(certIssueDate);
+		RegMaster result = rmDao.save(rm);
+		Transaction tx = new Transaction();
+		tx.setApplNo(result.getApplNo());
+		tx.setCode("72");
+		if ("A".equals(rm.getRegStatus())) {
+			tx.setDateChange(rm.getRegDate());
+		} else {
+			tx.setDateChange(new Date());
+		}
+		tx.setDetails("");
+		SimpleDateFormat format = new SimpleDateFormat("HHmm");
+		tx.setHourChange(format.format(tx.getDateChange()));
+		tx.setRegMaster(result);
+		ITransactionDao txDao = (ITransactionDao) getDao(Transaction.class);
+		tx = txDao.save(result.getApplNo(), tx.getCode(), tx);
+		saveHistory(applNo, tx);
+		
+		return rm;
+	}
+
 	@Override
 	public RegMaster updateTrackCode(String applNo) {
 //		SystemParam param = systemParamDao.findById("SSRS_LAST_TRACK_CODE");
@@ -970,6 +1035,14 @@ public class ShipRegService extends AbstractService implements IShipRegService, 
 ////		systemParamDao.save(param);
 		return rm;
 	}
+	
+	@Override
+	public RegMaster updateTrackCodeAndCertIssueDate(String applNo, Date certIssueDate) {
+		String trackCode = prepareTrackCode(applNo);
+		RegMaster rm = assignTrackCodeAndCertIssueDate(applNo, trackCode, certIssueDate);
+		return rm;
+	}
+	
 	@Override
 	public RegMaster amendParticulars(RegMaster entity, Amendment amm) {
 		RegMaster saved = rmDao.save(entity);
