@@ -104,6 +104,11 @@ Date.prototype.hhmm = function(){
 	return '' + (hh<=9 ? '0' + hh : hh) + ":" + (mm<=9 ? '0' + mm : mm);
 }
 
+var convertString_ddMMyyyy_toDate = function(dateStr){
+	const [day, month, year] = dateStr.split("/")
+	  return new Date(year, month - 1, day);
+}
+
 var downloadFsqcCert = function(imo, type){
 	console.log(imo);
 	console.log(type);
@@ -471,6 +476,7 @@ var printMultiCoR = function(rptData, etoCorData){
 	rptData.regDate = etoCorData.regDate;
 	rptData.reportDate = etoCorData.certIssueDate;
 	rptData.trackCode = etoCorData.trackCode;
+	rptData.issueDate = etoCorData.certIssueDate;
 	ReportViewWindow.displayReport(["CoR", rptData]);
 };
 
@@ -836,9 +842,12 @@ isc.Window.create({
 								}
 								if (regStatus!="D" && record.deRegTime==null){
 									regMasterDS.updateData({applNo:applNo, regStatus:regStatus, issueOfficeId:issueOfficeId, issueDate:issueDate, taskId:taskId},
-											function(){ refreshInbox(); },
+											function(){ 
+												refreshInbox(); 
+											},
 											{operationId:"UPDATE_ISSUE_LOG"});
 									var printCoRInfo = confirmPrintCoDWindow;
+									record.certIssueDate = convertString_ddMMyyyy_toDate(issueDate);
 									regMasterDS.updateData(null, function(resp, data, req) {
 										//form.setData(data);
 										var callback = confirmPrintCoDWindow.callback;
@@ -3791,7 +3800,10 @@ var openRegMaster = function(record, task, mode
                 	changed:upperTA //characterCasing: "upper" 
                 	},
                 {name:"agtAgentCode",  title:"Group Owner", length:3, colSpan:1, 
-                	optionDataSource:"agentDS",displayField:"name",valueField:"id", sortField:"name", required:true,
+                	optionDataSource:"agentDS",
+                	displayField:"name",
+                	valueField:"id", 
+                	sortField:"name", required:true,
                 	changed:function(form, item, value){
                 		form.setValue('agentCountryCode', null);
                 		if(value!=null && value!=undefined){
@@ -3806,7 +3818,11 @@ var openRegMaster = function(record, task, mode
                 },
                 {name:"agentCountryCode",  title:"Major Agent Code", type:"staticText", length:3, colSpan:1, required:false},
                 {name:"ccCountryCode",  title:"Country", length:3, 
-                	optionDataSource:"countryDS",displayField:"name",valueField:"id", sortField:"name", colSpan:1, endRow:true, required:true},
+                	optionDataSource:"countryDS",
+                	displayField:"name",
+                	valueField:"id", 
+                	sortField:"name", 
+                	colSpan:1, endRow:true, required:true},
                 {name:"operationTypeCode",  title:"Operation Type", length:3, optionDataSource:"operationTypeDS",displayField:"otDesc",valueField:"id", colSpan:1, required:true, },
                 {name:"rcReasonType",  title:"Reason Type", length:1, type:"hidden", defaultValue:"D"},
                 {name:"rcReasonCode",  title:"De-Reg Reason", length:2, optionDataSource:"reasonCodeDS",
@@ -3833,7 +3849,7 @@ var openRegMaster = function(record, task, mode
                 {name:"imoOwnerId", title:"IMO Owner ID",		length:20, characterCasing: "upper" },
                 {name:"deratedEnginePower", title:"Derated Engine Power",		length:40 },
                 {name:"trackCode", title:"Track Code",		length:20, type:"staticText" },
-                {name:"certIssueDate", },
+                {name:"certIssueDate", disabled:true },
                 {name:"protocolDate",  },
                 {name:"atfYearCount", 		type:"decimal", 	title:"ATF year count"},
                 {name:"registrar", 		type:"integer", 	title:"Registrar", optionDataSource:"registrarDS",displayField:"name",valueField:"id"},

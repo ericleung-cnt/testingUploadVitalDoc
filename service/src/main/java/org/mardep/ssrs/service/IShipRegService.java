@@ -169,6 +169,7 @@ public interface IShipRegService extends IBaseService{
 	List<Owner> findOwnersByName(String name);
 	List<RegMaster> findByApplNoList(List list);
 	RegMaster updateTrackCode(String applNo);
+	RegMaster updateTrackCodeAndCertIssueDate(String applNo, Date certIssueDate);
 
 	RegMaster completeChangeDetails(RegMaster entity, Long taskId, Transaction tx) throws Exception;
 
@@ -200,7 +201,9 @@ public interface IShipRegService extends IBaseService{
 	
 	String prepareTrackCode(String applNo);
 	RegMaster assignTrackCode(String applNo, String trackCode);
+	RegMaster assignTrackCodeAndCertIssueDate(String applNo, String trackCode, Date certIssueDate);
 	RegMaster assignRegDateTrackCode(String applNo,  String applNoSuf, Date regDate, Long registrarId, String trackCode);
+	RegMaster assignRegDateTrackCodeAndCertIssueDate(String applNo,  String applNoSuf, Date regDate, Long registrarId, String trackCode, Date certIssueDate);
 	List<String> validateApplicationData(RegMaster entity);
 	
 	//void uploadTranscriptToVitalDoc(Map clientSuppliedValues) throws Exception;
