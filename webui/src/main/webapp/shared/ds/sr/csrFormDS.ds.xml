@@ -18,12 +18,12 @@
 		<field name="safetyActAddress1" type="text" length="100" />
 		<field name="safetyActAddress2" type="text" length="100" />
 		<field name="safetyActAddress3" type="text" length="100" />
-		<field name="docAuthority" type="text" length="3" title="DOC Authority"/>
-		<field name="docAudit" type="text" length="3" title="DOC Audit" />
-		<field name="smcAuthority" type="text" length="3" title="SMC Authority" />
-		<field name="smcAudit" type="text" length="3" title="SMC Audit" />
-		<field name="isscAuthority" type="text" length="3" title="ISSC Authority" />
-		<field name="isscAudit" type="text" length="3" title="ISSC Audit" />
+		<field name="docAuthority" type="text" length="5" title="DOC Authority"/>
+		<field name="docAudit" type="text" length="5" title="DOC Audit" />
+		<field name="smcAuthority" type="text" length="5" title="SMC Authority" />
+		<field name="smcAudit" type="text" length="5" title="SMC Audit" />
+		<field name="isscAuthority" type="text" length="5" title="ISSC Authority" />
+		<field name="isscAudit" type="text" length="5" title="ISSC Audit" />
 		<field name="csrIssueDate" type="date" title="CSR Issue Date" displayFormat="dd/MM/yyyy"/>
 		<field name="remark" type="text" length="2000" />
 		<field name="classSociety2" type="text" length="40"/>
