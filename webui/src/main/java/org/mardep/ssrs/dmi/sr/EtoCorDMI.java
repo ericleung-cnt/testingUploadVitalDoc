@@ -70,7 +70,7 @@ public class EtoCorDMI {
 					String applNo = values.get(i).get("applNo").toString();
 					Date regDate = sdf.parse(values.get(i).get("regDate").toString());
 					Date issueDate = sdf.parse(values.get(i).get("issueDate").toString());
-					Long registrarId = new Long(values.get(i).get("registrar").toString());
+					Long registrarId = new Long(values.get(i).get("registrarId").toString());
 					String trackCode = srSvc.prepareTrackCode(applNo);
 					etoCor.setApplNo(applNo);
 					etoCor.setRegDate(regDate);
@@ -127,8 +127,8 @@ public class EtoCorDMI {
 				etoCor.setId(id);
 				
 				etoCorSvc.updateValidEtoCoR(entity);
-				// 20210604
-				RegMaster rm = srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode());
+				// 20210604 
+				RegMaster rm = srSvc.assignRegDateTrackCodeAndCertIssueDate(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode(), sdfRegDate.parse(regDateStr));
 				//RegMaster rm = srSvc.assignRegDateTrackCode(entity.getApplNo(), entity.getApplNoSuf(), sdfRegDate.parse(regDateStr), entity.getRegistrarId(), entity.getTrackCode(), );
 				// 20210604
 			//} else if ("REPLACE_MULTI_COR".equals(operationId)) {
