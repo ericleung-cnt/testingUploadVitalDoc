@@ -436,6 +436,7 @@ public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNS
 	
 	public static String processDnStates(FSQCDemandNoteHeader demandNoteHeader, List<FSQCDemandNoteReceipt> receipts, List<FSQCDemandNoteRefund> refunds) {
 		BigDecimal amountPaid = BigDecimal.ZERO;
+		BigDecimal amountRefuned = BigDecimal.ZERO;
 		boolean receiptCancelled = false;
 		boolean hasRefund = false;
 		for (FSQCDemandNoteReceipt receipt : receipts) {
@@ -450,6 +451,7 @@ public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNS
 		for (FSQCDemandNoteRefund refund : refunds) {
 			if (DemandNoteRefundStatus.APPROVED.toString().equals(refund.getRefundStatus())) {
 				hasRefund = true;
+				amountRefuned = amountRefuned.add(refund.getRefundAmount());
 				amountPaid = amountPaid.subtract(refund.getRefundAmount());
 			}
 		}
@@ -458,7 +460,7 @@ public class FSQCDnsInboundService extends DemandNoteService implements IFSQCDNS
 			headerAmt = BigDecimal.ZERO;
 		}
 		demandNoteHeader.setAmountPaid(amountPaid);
-		if (!receiptCancelled && hasRefund) {
+		if (!receiptCancelled && amountRefuned.compareTo(amountPaid)>=0) {
 			demandNoteHeader.setStatus(DemandNoteHeader.STATUS_REFUNDED);
 		}
 
