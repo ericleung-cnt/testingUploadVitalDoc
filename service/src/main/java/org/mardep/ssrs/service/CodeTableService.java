@@ -9,10 +9,12 @@ import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
 import org.mardep.ssrs.dao.codetable.IShipManagerDao;
+import org.mardep.ssrs.dao.codetable.ISystemParamDao;
 import org.mardep.ssrs.dao.user.IFuncEntitleDao;
 import org.mardep.ssrs.dao.user.IUserRoleDao;
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
 import org.mardep.ssrs.domain.codetable.ShipManager;
+import org.mardep.ssrs.domain.codetable.SystemParam;
 import org.mardep.ssrs.domain.user.FuncEntitle;
 import org.mardep.ssrs.domain.user.FuncEntitlePK;
 import org.mardep.ssrs.domain.user.Role;
@@ -42,6 +44,9 @@ public class CodeTableService extends AbstractService implements ICodeTableServi
 
 	@Autowired
 	IShipManagerDao shipManagerDao;
+	
+	@Autowired
+	ISystemParamDao systemParamDao;
 	
 	@Override
 	@Transactional(value=TxType.REQUIRED)
@@ -107,4 +112,10 @@ public class CodeTableService extends AbstractService implements ICodeTableServi
 		
 	}
 	
+	@Override
+	public SystemParam findSystemParamById(String paramId)
+	{
+		SystemParam entity = systemParamDao.findById(paramId);
+		return entity;
+	}
 }
