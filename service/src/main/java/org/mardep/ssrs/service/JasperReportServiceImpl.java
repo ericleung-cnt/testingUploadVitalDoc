@@ -207,6 +207,7 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 		templates.add("RPT-SR-024.jrxml");
 		templates.add("PRG-SUPP-019_memoCor.jrxml");
 		templates.add("CSRForm.jrxml");
+		templates.add("CSRFormMultiOwners.jrxml");
 		templates.add("CSRFormOwners.jrxml");
 		templates.add("CoD.jrxml");
 		templates.add("CoR.jrxml");

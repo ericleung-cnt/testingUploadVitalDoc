@@ -333,13 +333,6 @@ Registered Address:]]></text>
 				<text><![CDATA[11]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="376" width="20" height="13" uuid="2691f92b-630b-4860-8e4b-da1a568c7612"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[14]]></text>
-			</staticText>
-			<staticText>
 				<reportElement x="10" y="255" width="20" height="13" uuid="0e785939-09eb-4abf-aab8-caf8880d07f9"/>
 				<textElement>
 					<font size="8"/>
@@ -416,17 +409,6 @@ Management Certificate:
 
 Body which carried out audit (if different):]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="35" y="376" width="250" height="60" uuid="a249e36f-d4e8-4460-8b8e-850b83c8f784"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<text><![CDATA[Administration/Government/Recognized
-Security Organization which issued
-International Ship Security Certificate:
-
-Body which carried out verification (if different):]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="290" y="0" width="210" height="14" uuid="08515d18-f51d-4865-91d1-61ac43ed496a"/>
 				<textElement verticalAlignment="Middle">
@@ -476,16 +458,6 @@ Body which carried out verification (if different):]]></text>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{safetySoc}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="290" y="376" width="210" height="39" uuid="b403c767-7464-4781-80c5-29e9b337468f"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{iss}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="434" width="555" height="1" uuid="614423ac-0a30-4a38-9c20-0beb2a2d01f4"/>
-			</line>
 			<line>
 				<reportElement x="0" y="0" width="555" height="1" uuid="74dad492-6f38-4f16-826c-ab2758d45421"/>
 			</line>
@@ -511,16 +483,16 @@ Body which carried out verification (if different):]]></text>
 				<reportElement x="0" y="374" width="555" height="1" uuid="236715ca-34ac-4fc0-838f-a203f44c0f5b"/>
 			</line>
 			<line>
-				<reportElement x="0" y="0" width="1" height="434" uuid="7da3afc2-04d3-4242-8a19-be718fb1100a"/>
+				<reportElement x="0" y="0" width="1" height="375" uuid="7da3afc2-04d3-4242-8a19-be718fb1100a"/>
 			</line>
 			<line>
-				<reportElement x="32" y="0" width="1" height="434" uuid="bbcf5726-6c59-43f8-8ae4-369b5e375be2"/>
+				<reportElement x="32" y="0" width="1" height="375" uuid="bbcf5726-6c59-43f8-8ae4-369b5e375be2"/>
 			</line>
 			<line>
-				<reportElement x="287" y="0" width="1" height="434" uuid="f7f1f268-281a-4917-a244-793891d240f2"/>
+				<reportElement x="287" y="0" width="1" height="375" uuid="f7f1f268-281a-4917-a244-793891d240f2"/>
 			</line>
 			<line>
-				<reportElement x="555" y="0" width="1" height="434" uuid="2bc02b6b-9c1d-4c71-9fbe-43366d67d3ac"/>
+				<reportElement x="555" y="0" width="1" height="375" uuid="2bc02b6b-9c1d-4c71-9fbe-43366d67d3ac"/>
 			</line>
 			<textField>
 				<reportElement x="290" y="301" width="210" height="14" uuid="62da6aab-0171-407a-a2a8-643663c42fe4"/>
@@ -540,64 +512,55 @@ $P{docAudit} : ""]]></textFieldExpression>
 !$P{smcAuthority}.equals($P{smcAudit}) ?
 $P{smcAudit} : ""]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="290" y="420" width="210" height="14" uuid="55e17e3f-3b91-44fb-88dc-cd1bca479070"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$P{isscAuthority} != null && $P{isscAudit} != null &&
-!$P{isscAuthority}.equals($P{isscAudit}) ?
-$P{isscAudit} : ""]]></textFieldExpression>
-			</textField>
 		</band>
-		<band height="570" splitType="Stretch">
+		<band height="654" splitType="Stretch">
 			<break>
 				<reportElement x="0" y="0" width="100" height="1" uuid="19a9ddf3-9005-4636-99bd-54783451be38"/>
 			</break>
 			<line>
-				<reportElement x="0" y="124" width="555" height="1" uuid="2668a29d-1d30-42c9-a5e8-3d19f6ed3d39"/>
+				<reportElement x="0" y="188" width="555" height="1" uuid="2668a29d-1d30-42c9-a5e8-3d19f6ed3d39"/>
 			</line>
 			<line>
-				<reportElement x="0" y="48" width="555" height="1" uuid="483bf414-fa40-4fb9-8298-8de6b44b06be"/>
+				<reportElement x="0" y="112" width="555" height="1" uuid="483bf414-fa40-4fb9-8298-8de6b44b06be"/>
 			</line>
 			<line>
-				<reportElement x="0" y="11" width="555" height="1" uuid="a87f820a-e983-4211-a347-709fdc2d9e8e"/>
+				<reportElement x="0" y="74" width="555" height="1" uuid="a87f820a-e983-4211-a347-709fdc2d9e8e"/>
 			</line>
 			<line>
-				<reportElement x="0" y="11" width="1" height="113" uuid="d64b3dd3-7a66-4ff1-9aa5-a08f35c05599"/>
+				<reportElement x="0" y="10" width="1" height="179" uuid="d64b3dd3-7a66-4ff1-9aa5-a08f35c05599"/>
 			</line>
 			<line>
-				<reportElement x="554" y="11" width="1" height="113" uuid="36598748-17be-4f48-8adb-0a199f4bf902"/>
+				<reportElement x="554" y="10" width="1" height="179" uuid="36598748-17be-4f48-8adb-0a199f4bf902"/>
 			</line>
 			<line>
-				<reportElement x="287" y="12" width="1" height="113" uuid="5ef9f36b-2a88-4d16-a899-dc54884f67b5"/>
+				<reportElement x="287" y="10" width="1" height="179" uuid="5ef9f36b-2a88-4d16-a899-dc54884f67b5"/>
 			</line>
 			<line>
-				<reportElement x="0" y="174" width="555" height="1" uuid="2dc29916-95dc-426e-8b5f-d73e273934ff"/>
+				<reportElement x="0" y="238" width="555" height="1" uuid="2dc29916-95dc-426e-8b5f-d73e273934ff"/>
 			</line>
 			<line>
-				<reportElement x="0" y="217" width="554" height="1" uuid="627a25d4-f7c8-4a5a-bf2c-b32e6f173828"/>
+				<reportElement x="0" y="281" width="554" height="1" uuid="627a25d4-f7c8-4a5a-bf2c-b32e6f173828"/>
 			</line>
 			<line>
-				<reportElement x="1" y="356" width="553" height="1" uuid="73825a13-0ff2-4299-b6ba-52f15212cd13"/>
+				<reportElement x="1" y="420" width="553" height="1" uuid="73825a13-0ff2-4299-b6ba-52f15212cd13"/>
 			</line>
 			<line>
-				<reportElement x="0" y="174" width="1" height="182" uuid="3854e177-9f50-4974-8faa-6199f8c92cd7"/>
+				<reportElement x="0" y="238" width="1" height="182" uuid="3854e177-9f50-4974-8faa-6199f8c92cd7"/>
 			</line>
 			<line>
-				<reportElement x="554" y="174" width="1" height="182" uuid="bfcda192-be6c-4f35-ac2a-2da475421d41"/>
+				<reportElement x="554" y="238" width="1" height="182" uuid="bfcda192-be6c-4f35-ac2a-2da475421d41"/>
 			</line>
 			<line>
-				<reportElement x="75" y="316" width="100" height="1" uuid="0252e4b6-7565-4ec4-984d-01b8619d178c"/>
+				<reportElement x="75" y="380" width="100" height="1" uuid="0252e4b6-7565-4ec4-984d-01b8619d178c"/>
 			</line>
 			<line>
-				<reportElement x="75" y="345" width="100" height="1" uuid="dd05d0c2-8816-41c4-bc46-4abf5b6d232a"/>
+				<reportElement x="75" y="409" width="100" height="1" uuid="dd05d0c2-8816-41c4-bc46-4abf5b6d232a"/>
 			</line>
 			<line>
-				<reportElement x="345" y="329" width="170" height="1" uuid="7c3d3103-cdf7-4794-84ea-c27e9990df39"/>
+				<reportElement x="345" y="393" width="170" height="1" uuid="7c3d3103-cdf7-4794-84ea-c27e9990df39"/>
 			</line>
 			<staticText>
-				<reportElement x="35" y="49" width="250" height="42" uuid="88238bdc-07f0-4c98-a174-ece022f96947"/>
+				<reportElement x="35" y="113" width="250" height="42" uuid="88238bdc-07f0-4c98-a174-ece022f96947"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -605,24 +568,24 @@ $P{isscAudit} : ""]]></textFieldExpression>
 appropriate):]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="48" width="20" height="13" uuid="46ad6083-d2c9-40be-bce5-03045f939219"/>
+				<reportElement x="10" y="112" width="20" height="13" uuid="46ad6083-d2c9-40be-bce5-03045f939219"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[16]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="10" y="11" width="20" height="13" uuid="5bb4fb74-bd7c-4ec8-9771-f68e68beccab"/>
+				<reportElement x="10" y="75" width="20" height="13" uuid="5bb4fb74-bd7c-4ec8-9771-f68e68beccab"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[15]]></text>
 			</staticText>
 			<line>
-				<reportElement x="31" y="11" width="1" height="113" uuid="a4bbde73-b81c-4073-b69e-f6f2f3161ae9"/>
+				<reportElement x="31" y="10" width="1" height="179" uuid="a4bbde73-b81c-4073-b69e-f6f2f3161ae9"/>
 			</line>
 			<staticText>
-				<reportElement x="35" y="12" width="250" height="37" uuid="ae35020c-f4ff-400e-8572-41574fcb6308"/>
+				<reportElement x="35" y="76" width="250" height="37" uuid="ae35020c-f4ff-400e-8572-41574fcb6308"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -630,98 +593,135 @@ appropriate):]]></text>
 registered with the State indicated in 2:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="175" width="288" height="43" uuid="28747547-b3ac-4c88-9f63-a1432e748376"/>
+				<reportElement x="2" y="239" width="288" height="43" uuid="28747547-b3ac-4c88-9f63-a1432e748376"/>
 				<text><![CDATA[THIS IS TO CERTIFY THAT this record is correct in all respects. Issued by the Administration of: Hong Kong, China]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="300" width="73" height="20" uuid="f027f220-c1da-4a60-8de1-ed5380586223"/>
+				<reportElement x="2" y="364" width="73" height="20" uuid="f027f220-c1da-4a60-8de1-ed5380586223"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Place of issue:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="329" width="73" height="20" uuid="2baef092-1662-403b-b000-3636b4cb718c"/>
+				<reportElement x="2" y="393" width="73" height="20" uuid="2baef092-1662-403b-b000-3636b4cb718c"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Date of issue:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="345" y="330" width="170" height="20" uuid="4a490785-aab9-43ab-8c08-e3941d76631c"/>
+				<reportElement x="345" y="394" width="170" height="20" uuid="4a490785-aab9-43ab-8c08-e3941d76631c"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Signature of authorized person]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="75" y="300" width="100" height="20" uuid="709b09db-588d-46d2-98da-8551600d8bf9"/>
+				<reportElement x="75" y="364" width="100" height="20" uuid="709b09db-588d-46d2-98da-8551600d8bf9"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Hong Kong]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="357" width="539" height="20" uuid="596b5e9a-6f54-4e7a-bdb0-d798b5f71d44"/>
+				<reportElement x="0" y="421" width="539" height="20" uuid="596b5e9a-6f54-4e7a-bdb0-d798b5f71d44"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[*w.e.f. 1-1-2015, all CSRs issued will bear the official stamp of "MARINE DEPARTMENT, HONG KONG, CHINA".]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="377" width="539" height="20" uuid="848e0a76-3d38-423d-b6b9-6e529fe96fdf"/>
+				<reportElement x="0" y="441" width="539" height="20" uuid="848e0a76-3d38-423d-b6b9-6e529fe96fdf"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[CSR issued before 1-1-2015 (bearing no official stamp) remains valid and needs not to be re-issued nor renew.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="528" width="550" height="20" uuid="7e9b6899-c303-4446-9165-58fdc2f27af8"/>
+				<reportElement x="0" y="592" width="550" height="20" uuid="7e9b6899-c303-4446-9165-58fdc2f27af8"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[This document was received by the ship and attached to the ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="548" width="550" height="20" uuid="d3a58936-d763-4ac7-831c-10fc9d84b396"/>
+				<reportElement x="0" y="612" width="550" height="20" uuid="d3a58936-d763-4ac7-831c-10fc9d84b396"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[ship's CSR file on the following date ................................ [fill in (yyyy/mm/dd)] Signature: ..................................................]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="498" y="12" width="54" height="20" uuid="7f0dacf6-1a1f-40a5-bbab-f3c625622d04"/>
+				<reportElement x="498" y="76" width="54" height="20" uuid="7f0dacf6-1a1f-40a5-bbab-f3c625622d04"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[(yyyy/mm/dd)]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="290" y="12" width="210" height="20" uuid="1620b29c-e026-45e4-9db7-e924eec13a9a"/>
+				<reportElement x="290" y="76" width="210" height="20" uuid="1620b29c-e026-45e4-9db7-e924eec13a9a"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{deregDate} == null ? "N/A" : new java.text.SimpleDateFormat("yyyy/MM/dd").format( $P{deregDate})]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="290" y="49" width="210" height="75" uuid="a361634a-d4a8-4a87-b719-25462ce0c940"/>
+				<reportElement x="290" y="113" width="210" height="75" uuid="a361634a-d4a8-4a87-b719-25462ce0c940"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{remark}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="75" y="329" width="100" height="20" uuid="a46d75a9-507c-4c3e-b3ae-d1035541c189"/>
+				<reportElement x="75" y="393" width="100" height="20" uuid="a46d75a9-507c-4c3e-b3ae-d1035541c189"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{issueDate}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="345" y="310" width="170" height="20" uuid="e6ab6d74-d703-4c8e-9d56-a9517a74ee1e"/>
+				<reportElement x="345" y="374" width="170" height="20" uuid="e6ab6d74-d703-4c8e-9d56-a9517a74ee1e"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$P{registrar}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="10" width="555" height="1" uuid="6ec5e28c-8e57-4811-a5a0-edf5d5f75ce9"/>
+			</line>
+			<staticText>
+				<reportElement x="35" y="13" width="250" height="60" uuid="d9a4b6e0-74c2-4f03-8db3-38b72145902f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Administration/Government/Recognized
+Security Organization which issued
+International Ship Security Certificate:
+
+Body which carried out verification (if different):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="290" y="57" width="210" height="14" uuid="a064ff70-c921-4b50-bdf4-9622dd208ca5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{isscAuthority} != null && $P{isscAudit} != null &&
+!$P{isscAuthority}.equals($P{isscAudit}) ?
+$P{isscAudit} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="13" width="210" height="39" uuid="859ef55a-1166-4c9a-bfcc-03063dc8b2e2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{iss}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="13" width="20" height="13" uuid="2bc468fb-381b-4160-8a50-651d1c0abadc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[14]]></text>
+			</staticText>
 		</band>
 		<band height="50"/>
 	</detail>

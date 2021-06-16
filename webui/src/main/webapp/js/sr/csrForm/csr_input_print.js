@@ -225,6 +225,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 										form.getField('applicantEmail').setDisabled(!indValue);
 						  				btnUpdate.enable();
 						  				btnPrint.enable();
+						  				btnPrintMultiOwners.enable();
 						  				btnEditOwner.enable();
 						  				btnEdit.enable();
 						  			} else {
@@ -242,6 +243,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 						  if (readOnly == true) {
 							  btnUpdate.disable();
 							  btnPrint.disable();
+							  btnPrintMultiOwners.disable();
 							  form.getField('applicantName').setDisabled(true);
 							  form.getField('applicantEmail').setDisabled(true);
 							  //btnEditOwner.disable();
@@ -406,6 +408,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 			btnEdit.setDisabled(readOnly);
 			btnUpdate.setDisabled(readOnly);
 			btnPrint.setDisabled(readOnly);
+			btnPrintMultiOwners.setDisabled(readOnly);
 			btnEditOwner.disable();
 		},
 		}
@@ -449,7 +452,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 		 }
 	 });
 
-	 var saveCsrClick = function(showPdf) {
+	 var saveCsrClick = function(showPdf, multiOwners) {
 		 console.log("update button click");
 		 if (csrFormEdit.validate()) {
 			 tb.disable();
@@ -471,17 +474,31 @@ var openCsrForm = function(record, recordNum, fieldNum){
 				 i++;
 			 }
 
-			 csrFormDS.updateData(data, function(resp, data){
-				 data["paymentRequired"] = payment;
-				 csrFormEdit.setCsrForm(data);
-				 if (showPdf) {
-					 ReportViewWindow.displayReport(["CSRForm", data]);
-				 } else {
-				 }
-				 isc.say("CSR Form is saved");
-				 csrFormEdit.saved = true;
-				 tb.enable();
-			 }) ;
+			 if (multiOwners==null || !multiOwners){
+				 csrFormDS.updateData(data, function(resp, data){
+					 data["paymentRequired"] = payment;
+					 csrFormEdit.setCsrForm(data);
+					 if (showPdf) {
+						 ReportViewWindow.displayReport(["CSRForm", data]);
+					 } else {
+					 }
+					 isc.say("CSR Form is saved");
+					 csrFormEdit.saved = true;
+					 tb.enable();
+				 }) ;				 
+			 } else {
+				 csrFormDS.updateData(data, function(resp, data){
+					 data["paymentRequired"] = payment;
+					 csrFormEdit.setCsrForm(data);
+					 if (showPdf) {
+						 ReportViewWindow.displayReport(["CSRFormMultiOwners", data]);
+					 } else {
+					 }
+					 isc.say("CSR Form is saved");
+					 csrFormEdit.saved = true;
+					 tb.enable();
+				 }) ;				 
+			 }
 			 csrFormEdit.getField('applNo').setDisabled(true);
 			 csrFormEdit.getField('registrationDate').setDisabled(true);
 			 csrFormEdit.getField('deregDate').setDisabled(true);
@@ -504,6 +521,14 @@ var openCsrForm = function(record, recordNum, fieldNum){
 		 width:100,
 		 title:"Print", click : function (form) {
 			 saveCsrClick(true);
+		 },
+	 });
+
+	 var btnPrintMultiOwners = isc.Button.create({
+		 width:100,
+		 height:50,
+		 title:"Print Multi<br> Owners", click : function (form) {
+			 saveCsrClick(true, true);
 		 },
 	 });
 
@@ -541,6 +566,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 					  ] }),
 					  btnUpdate,
 					  btnPrint,
+					  btnPrintMultiOwners,
 					  isc.Button.create({ width:100,title:"Close", click: function() {localWin.close();}})
 					  ]
 			 }
@@ -564,6 +590,7 @@ var openCsrForm = function(record, recordNum, fieldNum){
 		 btnEditOwner.setDisabled(true);
 		 btnUpdate.setDisabled(true);
 		 btnPrint.setDisabled(true);
+		 btnPrintMultiOwners.setDisabled(true);
 		 btnMissingDoc.setDisabled(true);
 		 btnCollect.setDisabled(true);
 		 btnPfl.setDisabled(true);
