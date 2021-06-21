@@ -36,9 +36,10 @@ isc.HLayout.create({
 				        	click : function () { 
 				        		openCrewListDetail(null);
 				        	 }
-				        }
+						},
 					   ]
-				})
+				}),
+
 	          ]
 });
 
@@ -68,7 +69,52 @@ isc.ListGrid.create({
 	    }
 });
 
- 
+isc.HLayout.create({
+	ID: "crewListUploadHLayout",
+	height: 30, 
+	// layoutMargin: 10,
+	members: [
+		isc.SearchForm.create({
+			ID: "crewListUploadForm",
+			numCols: 4,
+			width: 50,
+			dataSource: "crewListCoverDS",
+			fields: [
+				{ type: "blob", name: "excelData", showTitle: false, canEdit: true, accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+			]
+		}),
+
+		isc.ButtonToolbar.create({
+			ID: "crewListUploadFormToolBar",
+			width: 50,
+			buttons: [
+				{
+					name: "upload", title: "Upload", startRow: false, autoFit: true, onControl: "MMO_CREATE",
+					click: function () {
+						var requestParam = {
+							"operationType": "update",
+							"operationId": "UPLOAD_EXCEL",
+							"willHandleError":true
+						};
+						// !TODO: ADD upload function
+						if(crewListUploadForm.getValue("excelData")==null){
+							console.log("Please Select A file");
+							return;
+						}
+						crewListUploadForm.saveData(function (dsResponse, data, dsRequest) {
+							if(dsResponse.status==0){
+
+							}
+							console.log("respose",dsResponse)
+							console.log("data",data);
+						},requestParam)
+					}
+				},
+			]
+		}),
+	]
+});
+
 
 isc.HLayout.create({
 	ID: "crewListMainLayout", 
@@ -86,10 +132,14 @@ isc.HLayout.create({
 	          isc.SectionStack.create({layoutTopMargin: 0,
 	        		sections: [
 	        	          {title: "Search", expanded: true, resizeable: false, items: [ crewListSearchHLayout ]},
-	        		      {title: "Result", expanded: true, items: [ crewListSearchResultLG ]}
+						  {title: "Result", expanded: true, items: [ crewListSearchResultLG ]},
+						  
 	        		     ]
 
-	        	}) 
+				}), 
+				crewListUploadHLayout
+
+
 		]
 		})         
 	 ]

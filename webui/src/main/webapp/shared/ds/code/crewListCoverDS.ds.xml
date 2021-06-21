@@ -11,5 +11,6 @@
 		<field name="agreementPeriod" 	type="float" 	title="Agreement Period (Month)"/>
 		<field name="dgDesc" 		type="text" 	title="DG Description" 	length="30"/>
 		<field name="docLocation" 	type="text" 	title="Doucment location" 	length="100"/>
+		<field name="excelData" type="imageFile" maxFileSize="2147483647" />
 	</fields>
 </DataSource>

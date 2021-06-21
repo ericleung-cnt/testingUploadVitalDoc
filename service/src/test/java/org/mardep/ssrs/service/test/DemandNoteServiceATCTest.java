@@ -1,4 +1,4 @@
-package org.mardep.ssrs.service.demandNote;
+package org.mardep.ssrs.service.test;
 
 import static org.junit.Assert.*;
 

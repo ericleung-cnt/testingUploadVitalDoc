@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.mardep.ssrs.domain.codetable.Crew;
+import org.mardep.ssrs.service.ICrewService;
 import org.mardep.ssrs.service.ISeafarerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,10 @@ public class CrewDMI extends AbstractCodeTableDMI<Crew> {
 	private final String CREW_OPERATION_ID_GET_LIST = "GET_CREW_LIST_OF SHIP_YYMM";
 	@Autowired
 	ISeafarerService seafarerService;
+	
+	@Autowired
+	ICrewService  crewSerivce;
+	
 	
 	@Override
 	public DSResponse fetch(Crew entity, DSRequest dsRequest){

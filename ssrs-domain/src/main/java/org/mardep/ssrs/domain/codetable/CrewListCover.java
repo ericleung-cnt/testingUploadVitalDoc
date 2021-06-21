@@ -10,6 +10,7 @@ import javax.persistence.IdClass;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
 
@@ -81,6 +82,27 @@ public class CrewListCover extends AbstractPersistentEntity<CrewListCoverPK> {
 	@Setter
 	@Column(name = "DOC_LOCATION", length=100)
 	private String docLocation;
+	
+	// Excel
+	@Transient
+	@Getter
+	@Setter
+	private byte[] excelData;
+
+	@Transient
+	@Getter
+	@Setter
+	private String excelData_filename;
+
+	@Transient
+	@Getter
+	@Setter
+	private int excelData_filesize;
+	
+	@Transient
+	@Getter
+	@Setter
+	private Date excelData_date_created;
 	
 	@Override
 	public CrewListCoverPK getId() {
