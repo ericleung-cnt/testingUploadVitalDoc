@@ -318,20 +318,7 @@
 										<ignore />
 									</action>
 								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.jvnet.jaxb2.maven2</groupId>
-									    <artifactId>maven-jaxb2-plugin</artifactId>
-										<versionRange>[0.14.0,)</versionRange>
-										<goals>
-											<goal>generate</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
+															<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>org.codehaus.mojo</groupId>
 										<artifactId>build-helper-maven-plugin</artifactId>
@@ -344,6 +331,21 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								
+<!-- 								<pluginExecution> -->
+<!-- 									<pluginExecutionFilter> -->
+<!-- 										<groupId>org.jvnet.jaxb2.maven2</groupId> -->
+<!-- 									    <artifactId>maven-jaxb2-plugin</artifactId> -->
+<!-- 										<versionRange>[0.14.0,)</versionRange> -->
+<!-- 										<goals> -->
+<!-- 											<goal>generate</goal> -->
+<!-- 										</goals> -->
+<!-- 									</pluginExecutionFilter> -->
+<!-- 									<action> -->
+<!-- 										<ignore /> -->
+<!-- 									</action> -->
+<!-- 								</pluginExecution> -->
+	
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
