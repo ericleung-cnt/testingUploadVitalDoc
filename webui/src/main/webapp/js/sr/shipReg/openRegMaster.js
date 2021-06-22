@@ -4882,10 +4882,21 @@ var openRegMaster = function(record, task, mode
 						docFields.add({type:"text", name:value.doc, length:40, canEdit:false, showTitle:false});
 						docFields.add({type:"blob", name:"upload_" + value.title, showTitle:false, canEdit:true, startRow:false, endRow:false, accept:"application/pdf"});
 						docFields.add({type:"button", title:"Download", startRow:false, endRow:false, click:function() {
-							window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
-									+"&Official number=" +rmForm.getData().offNo
-									+"&Ship Name=__EMPTY__"
-									+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");
+							if (rmForm.getData().imoNo==null || rmForm.getData().imoNo==undefined){
+								window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document" //&IMO number=" +rmForm.getData().imoNo
+										+"&Official number=" +rmForm.getData().offNo
+										+"&Ship Name=__EMPTY__"
+										+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");														
+							} else {
+								window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
+										+"&Official number=" +rmForm.getData().offNo
+										+"&Ship Name=__EMPTY__"
+										+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");								
+							}
+//							window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
+//									+"&Official number=" +rmForm.getData().offNo
+//									+"&Ship Name=__EMPTY__"
+//									+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");
 						}, shouldSaveValue:false});						
 					}
 				}
@@ -4899,10 +4910,21 @@ var openRegMaster = function(record, task, mode
 				docFields.add({type:"text", name:value.doc, length:40, canEdit:false, showTitle:false});
 				docFields.add({type:"blob", name:"upload_" + value.title, showTitle:false, canEdit:true, startRow:false, endRow:false, accept:"application/pdf"});
 				docFields.add({type:"button", title:"Download", startRow:false, endRow:false, click:function() {
-					window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
-							+"&Official number=" +rmForm.getData().offNo
-							+"&Ship Name=__EMPTY__"
-							+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");
+					if (rmForm.getData().imoNo==null || rmForm.getData().imoNo==undefined){
+						window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document" //&IMO number=" +rmForm.getData().imoNo
+								+"&Official number=" +rmForm.getData().offNo
+								+"&Ship Name=__EMPTY__"
+								+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");						
+					} else {
+						window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
+								+"&Official number=" +rmForm.getData().offNo
+								+"&Ship Name=__EMPTY__"
+								+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");						
+					}
+//					window.open("./dmsImage/?DOC_TYPE=SR-Supporting Document&IMO number=" +rmForm.getData().imoNo
+//							+"&Official number=" +rmForm.getData().offNo
+//							+"&Ship Name=__EMPTY__"
+//							+"&Supporting Type=" + value.title +"&OUTPUT_FORMAT=bytes&Content-Type=application/pdf");
 				}, shouldSaveValue:false});
 			}
 		}
