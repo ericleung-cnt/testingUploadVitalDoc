@@ -1,0 +1,8 @@
+<DataSource ID="nationalityMappingDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="nationalityMappingDMI" />
+	<fields>
+		<field name="ID" type="integer" title="ID"/>
+		<field name="INPUT" type="text" title="INPUT" length="50"/>
+		<field name="OUTPUT" type="text" title="OUTPUT" length="50"/>
+	</fields>
+</DataSource>
