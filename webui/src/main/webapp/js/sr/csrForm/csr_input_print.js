@@ -525,9 +525,9 @@ var openCsrForm = function(record, recordNum, fieldNum){
 	 });
 
 	 var btnPrintMultiOwners = isc.Button.create({
-		 width:100,
-		 height:50,
-		 title:"Print Multi<br> Owners", click : function (form) {
+		 width:200,
+		 //height:50,
+		 title:"Print Multi Owners", click : function (form) {
 			 saveCsrClick(true, true);
 		 },
 	 });
@@ -540,18 +540,21 @@ var openCsrForm = function(record, recordNum, fieldNum){
 		 }, {operationType:"add",operationId:this.operationId});
 	 };
 	 var btnMissingDoc = isc.Button.create({
-		 width:300,
-		 title:"Email Applicant to submit CSR missing document",
+		 width:150,
+		 height:60,
+		 title:"Email Applicant<br>to submit CSR<br><b>missing document</b>",
 		 click: email,
 		 operationId:"emailSubmitCSRMissingDoc"});
 	 var btnCollect = isc.Button.create({
-		 width:300,
-		 title:"Email Applicant to collect generated CSR Document",
+		 width:150,
+		 height:60,
+		 title:"Email Applicant<br>to collect generated<br><b>CSR Document</b>",
 		 click: email,
 		 operationId:"emailOwnerCollectCSR"});
 	 var btnPfl = isc.Button.create({
-		 width:300,
-		 title:"Email Applicant to submit CSR Profolio",
+		 width:150,
+		 height:60,
+		 title:"Email Applicant<br>to submit<br><b>CSR Profolio</b>",
 		 click: email,operationId:"emailSubmitCSRProfolio"});
  	 var tb = isc.VLayout.create(
 			 {
@@ -562,11 +565,20 @@ var openCsrForm = function(record, recordNum, fieldNum){
 					  isc.HLayout.create({ width:"*", height:66, members:[
 							isc.VLayout.create({members:[btnEdit, btnEditOwner]}),
 							isc.VLayout.create({width:20}),
-							isc.VLayout.create({members:[btnPfl, btnCollect,btnMissingDoc]})
+							//isc.VLayout.create({members:[btnPfl, isc.VLayout.create({width:20}), btnCollect, isc.VLayout.create({width:20}), btnMissingDoc]})
+							isc.VLayout.create({members:[btnPfl]}),
+							isc.VLayout.create({width:20}),
+							isc.VLayout.create({members:[btnCollect]}),
+							isc.VLayout.create({width:20}),
+							isc.VLayout.create({members:[btnMissingDoc]})
 					  ] }),
 					  btnUpdate,
-					  btnPrint,
-					  btnPrintMultiOwners,
+					  //btnPrint,
+					  //btnPrintMultiOwners,
+					  isc.HLayout.create({
+						 width:"*",
+						 members:[btnPrint, isc.VLayout.create({width:100}), btnPrintMultiOwners]
+					  }),
 					  isc.Button.create({ width:100,title:"Close", click: function() {localWin.close();}})
 					  ]
 			 }
