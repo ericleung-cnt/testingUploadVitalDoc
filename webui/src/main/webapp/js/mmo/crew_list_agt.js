@@ -7,16 +7,33 @@ isc.HLayout.create({
 	height:30, layoutMargin:10,
 	members: [
 				isc.SearchForm.create({
-					ID:"crewListSearchForm", numCols: 4,  width:200, dataSource:"crewListCoverDS",
+					ID:"crewListSearchForm", numCols: 4,  width:200, dataSource:"crewDS",
 					saveOnEnter:true,
 					submit:function(){
 						crewListSearchFormToolBar.getButton('searchBtn').click();
 					},
 					fields: [
-				         {name: "vesselId", 		title: "Vessel Name", type: "text", wrapTitle:false}, 
-				         {name: "imoNo", 			type: "text", wrapTitle:false}/*, 
-				         {name: "official_no", 		title: "Official No", type: "text", endRow: true}, //TODO
-				         {name: "agreementPeriod", 	title: "Agreement Period (Month)", type: "text", endRow: true}*/
+				         {name: "imoNo", 		title: "Vessel Name", type: "text", wrapTitle:false,type:"ComboBoxItem",  width: 200 
+						 , optionDataSource:"crewListCoverDS"
+						 , valueField:"imoNo"
+						 , displayField:"shipName"
+						 , cachePickListResults: true
+						 , useClientFiltering: true
+						 , pickListFields:[
+							 {name:"shipName",},
+							 {name:"imoNo", },
+							 {name:"offcialNo", },
+							 {name:"regPort", },
+						 ]
+						 , pickListProperties: {
+							 showFilterEditor:true
+							 , alternateRecordStyles:true
+						 }	
+						 , pickListWidth:750
+					     },
+				         {name: "imoNo", 	type: "text", wrapTitle:false},
+				         {name: "crewName", type: "text", wrapTitle:false},
+				         {name: "serbNo",   type: "text"}, 
 				        ]
 				}),
 				isc.ButtonToolbar.create({
@@ -47,22 +64,36 @@ isc.HLayout.create({
 
 isc.ListGrid.create({
 	ID:"crewListSearchResultLG", 
-	alternateRecordStyles:true, dataSource:"crewListCoverDS",
+	alternateRecordStyles:true, 
+	dataSource:"crewDS",
 	showFilterEditor:true,
 	filterOnKeypress:true,
+	alternateRecordStyles:true, 
+	canHover:true,
+	autoFitFieldWidths:true,
+	minFieldWidth:50,
 	fields: [
-         {name: "vesselId", title: "Vessel Name", width:100}, 
-         {name: "imoNo",  width:100}, 
-         {name: "coverYymm", width:100}, 
-         {name: "commenceDate", width:110}, 
-         {name: "commencePlace", width:100}, 
-         {name: "terminateDate", width:100}, 
-         {name: "terminatePlace", width:100}, 
-         {name: "agreementPeriod", title: "Agreement Period(Month)", width:160}, 
-         {name: "dgDesc", width:150}, 
-         {name: "docLocation",  width:"*"} 
+        //  {name: "vesselId", title: "Vessel Name", width:100}, 
+        //  {name: "imoNo",  width:100}, 
+        //  {name: "coverYymm", width:100}, 
+        //  {name: "commenceDate", width:110}, 
+        //  {name: "commencePlace", width:100}, 
+        //  {name: "terminateDate", width:100}, 
+        //  {name: "terminatePlace", width:100}, 
+        //  {name: "agreementPeriod", title: "Agreement Period(Month)", width:160}, 
+        //  {name: "dgDesc", width:150}, 
+        //  {name: "docLocation",  width:"*"} 
 //         {name: "official_no", title: "Official No"},
 //         {name: "reg_port", title: "Port of Registry", type: "text", wrap: true }, 
+			{name: "imoNo", width: 80 }, 
+			{name: "referenceNo", width:50 }, 
+			{name: "crewName", width: 150 }, 
+			{name: "serbNo", width: 150 }, 
+			{name: "nationalityId", title: "Nationality", optionDataSource:"nationalityDS", valueField:"id", displayField:"engDesc"},
+			{name: "birthDate"},
+			{name: "capacityId", title: "Capacity", optionDataSource:"rankDS", valueField:"id", displayField:"engDesc"},
+			{name: "currency" } ,
+			{name: "salary", title: "Salary", format:",##0.00", type:"decimal" } 
 	    ], 
 	    rowDoubleClick:function(record, recordNum, fieldNum){
 	    	openCrewListDetail(record);
@@ -78,7 +109,7 @@ isc.HLayout.create({
 			ID: "crewListUploadForm",
 			numCols: 4,
 			width: 50,
-			dataSource: "crewListCoverDS",
+			dataSource: "crewDS",
 			fields: [
 				{ type: "blob", name: "excelData", showTitle: false, canEdit: true, accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
 			]
@@ -102,11 +133,14 @@ isc.HLayout.create({
 							return;
 						}
 						crewListUploadForm.saveData(function (dsResponse, data, dsRequest) {
-							if(dsResponse.status==0){
-
+							if(dsResponse.status<0){
+								isc.say ("Error occurs <br>" + dsResponse);
+							}else{
+								console.log(dsResponse.data)
+								openCrewListDetail(dsResponse.data);
+								console.log("respose",dsResponse)
+								isc.say("Upload Successful! please correct errors if any")
 							}
-							console.log("respose",dsResponse)
-							console.log("data",data);
 						},requestParam)
 					}
 				},
