@@ -18,10 +18,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class NationalityMappingJpaDao extends AbstractJpaDao<NationalityMapping, Long> implements INationalityMappingDao {
 
+
+	
+	public NationalityMappingJpaDao() {
+	}
+
 	@Override
 	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<NationalityMapping> listRoot) {
 		List<PredicateCriteria> list = new ArrayList<PredicateCriteria>();
-		list.add(new PredicateCriteria("ID", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("mapID", PredicateType.EQUAL));
 		list.add(new PredicateCriteria("INPUT", PredicateType.LIKE_IGNORE_CASE));
 		list.add(new PredicateCriteria("OUTPUT", PredicateType.LIKE_IGNORE_CASE));
 		
