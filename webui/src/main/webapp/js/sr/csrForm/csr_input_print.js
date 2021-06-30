@@ -542,19 +542,21 @@ var openCsrForm = function(record, recordNum, fieldNum){
 	 var btnMissingDoc = isc.Button.create({
 		 width:150,
 		 height:60,
-		 title:"Email Applicant<br>to submit CSR<br><b>missing document</b>",
+		 title:"Email Applicant<br>to submit CSR<br><b>missing document</b>",		 
 		 click: email,
 		 operationId:"emailSubmitCSRMissingDoc"});
 	 var btnCollect = isc.Button.create({
 		 width:150,
 		 height:60,
-		 title:"Email Applicant<br>to collect generated<br><b>CSR Document</b>",
+		 //title:"Email Applicant<br>to collect generated<br><b>CSR Document</b>",
+		 title:"Email Applicant<br>to collect",
 		 click: email,
 		 operationId:"emailOwnerCollectCSR"});
 	 var btnPfl = isc.Button.create({
 		 width:150,
-		 height:60,
-		 title:"Email Applicant<br>to submit<br><b>CSR Profolio</b>",
+		 height:60,		 
+		 //title:"Email Applicant<br>to submit<br><b>CSR Profolio</b>",
+		 title:"Email Applicant<br>to acknowledgement",
 		 click: email,operationId:"emailSubmitCSRProfolio"});
  	 var tb = isc.VLayout.create(
 			 {
@@ -566,11 +568,12 @@ var openCsrForm = function(record, recordNum, fieldNum){
 							isc.VLayout.create({members:[btnEdit, btnEditOwner]}),
 							isc.VLayout.create({width:20}),
 							//isc.VLayout.create({members:[btnPfl, isc.VLayout.create({width:20}), btnCollect, isc.VLayout.create({width:20}), btnMissingDoc]})
-							isc.VLayout.create({members:[btnPfl]}),
+							isc.VLayout.create({members:[btnPfl]}), 
 							isc.VLayout.create({width:20}),
-							isc.VLayout.create({members:[btnCollect]}),
-							isc.VLayout.create({width:20}),
-							isc.VLayout.create({members:[btnMissingDoc]})
+							isc.VLayout.create({members:[btnCollect]})
+							// temp hide 20210630							
+							//isc.VLayout.create({width:20})	
+							//isc.VLayout.create({members:[btnMissingDoc]})
 					  ] }),
 					  btnUpdate,
 					  //btnPrint,
