@@ -766,18 +766,6 @@ $P{pFullRegDate} != null ) || ("P".equals($P{pApplNoSuf}))
 				</textElement>
 				<text><![CDATA[船舶權益總額 :]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="377" y="92" width="85" height="15" uuid="5577dd28-c9c3-488c-a116-e84873039ee6"/>
-				<textElement>
-					<font size="11"/>
-				</textElement>
-				<textFieldExpression><![CDATA[($F{regMaster}.getIntTot() != null ? $F{regMaster}.getIntTot() : "0") +
-("S".equals($F{regMaster}.getIntUnit()) ? " Shares" :
-"%".equals($F{regMaster}.getIntUnit()) ? " Percentage" :
-"P".equals($F{regMaster}.getIntUnit()) ? " Parts" :
-"R".equals($F{regMaster}.getIntUnit()) ? " Fraction" :
-"")]]></textFieldExpression>
-			</textField>
 			<line>
 				<reportElement x="0" y="107" width="525" height="1" uuid="ad3959c7-7f9e-4c35-b987-385ffe2f1e77"/>
 			</line>
