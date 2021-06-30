@@ -14,7 +14,7 @@ import lombok.ToString;
 @Embeddable
 @NoArgsConstructor
 @RequiredArgsConstructor
-@EqualsAndHashCode(of={"vesselId", "coverYymm", "referenceNo"})
+@EqualsAndHashCode
 @Getter
 @ToString()
 public class CrewPK implements Serializable {
@@ -22,12 +22,9 @@ public class CrewPK implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@NonNull
-	private String vesselId;
+	private String imoNo;
 	
 	@NonNull
-	private String coverYymm;
-
-	@NonNull
-	private Integer referenceNo;
+	private String serbNo;
 	
 }

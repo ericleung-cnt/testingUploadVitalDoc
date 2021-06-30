@@ -7,7 +7,7 @@ import org.mardep.ssrs.dao.IBaseDao;
 import org.mardep.ssrs.domain.codetable.Crew;
 import org.mardep.ssrs.domain.codetable.CrewPK;
 
-public interface ICrewDao extends IBaseDao<Crew, CrewPK> {
+public interface ICrewDao extends IBaseDao<Crew, Integer> {
 
 	List<Crew> findByVesselIdCover(String vesselId, String cover);
 

@@ -3,6 +3,7 @@ package org.mardep.ssrs.service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -21,21 +24,25 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.castor.core.util.Assert;
-import org.mardep.ssrs.dao.codetable.ICrewDao006;
-import org.mardep.ssrs.dao.codetable.ICrewListCoverDao006;
-import org.mardep.ssrs.domain.codetable.Crew006;
+import org.mardep.ssrs.dao.codetable.ICrewDao;
+import org.mardep.ssrs.dao.codetable.ICrewListCoverDao;
+import org.mardep.ssrs.dao.codetable.INationalityDao;
+import org.mardep.ssrs.dao.codetable.INationalityMappingDao;
+import org.mardep.ssrs.dao.codetable.IRankDao;
+import org.mardep.ssrs.dao.codetable.IRankMappingDao;
+import org.mardep.ssrs.domain.codetable.Crew;
 import org.mardep.ssrs.domain.codetable.CrewListCover;
-import org.mardep.ssrs.domain.codetable.CrewListCover006;
+import org.mardep.ssrs.domain.codetable.Nationality;
+import org.mardep.ssrs.domain.codetable.NationalityMapping;
+import org.mardep.ssrs.domain.codetable.Rank;
+import org.mardep.ssrs.domain.codetable.RankMapping;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import aj.org.objectweb.asm.Type;
 
 @Service
 public class CrewService extends AbstractService implements ICrewService {
@@ -44,10 +51,24 @@ public class CrewService extends AbstractService implements ICrewService {
 	IExcelUtils excelUtils;
 	
 	@Autowired
-	ICrewDao006  crewDao;
+	ICrewDao  crewDao;
 	
 	@Autowired
-	ICrewListCoverDao006 coverDao;
+	ICrewListCoverDao coverDao;
+	
+	
+	@Autowired
+	INationalityDao nationalityDao ;
+	
+	@Autowired
+	INationalityMappingDao nationalityMappingDao ;
+	
+	@Autowired
+	IRankDao  rankDao;
+	
+	@Autowired
+	IRankMappingDao rankMappingDao;
+	
 	
 	private static final  String notValidTypeErrorMsg = "%s %s is not Valid, expect %s";
 	private static final  String requiredErrorMsg = "%s is mandatory Field";
@@ -69,11 +90,11 @@ public class CrewService extends AbstractService implements ICrewService {
 	private static final String crewName ="crewName";
 	private static final String sex ="sex";
 	private static final String address ="address";
-	private static final String capacity ="capacity";
+	private static final String capacity ="capacityBeforeMap";
 	private static final String engageDate ="engageDate";
 	private static final String engagePlace ="engagePlace";
 	private static final String serbNo ="serbNo";
-	private static final String nationality ="nationality";
+	private static final String nationality ="nationalityBeforeMap";
 	private static final String nokName ="nokName";
 	private static final String crewCert ="crewCert";
 	private static final String dischargeDate ="dischargeDate";
@@ -85,6 +106,7 @@ public class CrewService extends AbstractService implements ICrewService {
 	private static final String salary ="salary";
 	private static final String employDate ="employDate";
 	private static final String employDuration ="employDuration";
+	private static final String validationErrors ="validationErrors";
 	
 	
 
@@ -161,7 +183,7 @@ public class CrewService extends AbstractService implements ICrewService {
 		map.put(nationality, Boolean.TRUE);
 		map.put(capacity,  Boolean.TRUE);
 		map.put(serbNo,  Boolean.TRUE);
-		map.put(employDate,  Boolean.TRUE);
+		map.put(engageDate,  Boolean.TRUE);
 		return map;
 	}
 	
@@ -232,7 +254,7 @@ public class CrewService extends AbstractService implements ICrewService {
 	
 	@Transactional
 	@Override
-	public List<Crew006> readEng2Excel(CrewListCover entity,Map<String ,List<String>> errorMsg ) throws InvalidFormatException, IOException {
+	public List<Crew> readEng2Excel(Crew entity) throws InvalidFormatException, IOException {
 		logger.info("readEng2Excel");
 
 		byte[] excel = entity.getExcelData();
@@ -247,10 +269,11 @@ public class CrewService extends AbstractService implements ICrewService {
 		Map<String, String> shipInfo = new HashMap<>();
 		Map<String, Object> crewData = null;
 		List<Map<String, Object>> crewDatalist = new ArrayList<>();
+		Map<String ,List<String>> errorMsg  = new HashMap<>();
 //		List<Map<String, Object>> crewDatalistObj = new ArrayList<>();
-		List<Crew006> crewlist = new ArrayList<>();
+		List<Crew> crewlist = new ArrayList<>();
 		errorMsg.put("errors", new ArrayList<>());
-		List<Crew006> findCrewsByImono= new ArrayList<>();
+		List<Crew> findCrewsByImono= new ArrayList<>();
 		boolean abort =false;
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
@@ -289,38 +312,37 @@ public class CrewService extends AbstractService implements ICrewService {
 				}
 			}
 			if (subRow == 2) {
-//				if (crewData.get("crewName").equals("")) {
-//					break; // stop when whole name is blank
-//				}
+				//stop reading if the group only contain reference No
 				boolean containsOnlyRefNo= true;
 				for(String key : crewData.keySet()) {
 					if(key!= referenceNo &&crewData.get(key)!=null) {
 						containsOnlyRefNo=false;
+						break;
 					}
 				}
 				if(containsOnlyRefNo) {
 					break;
 				}
-
-//				crewData.put("rowNum", rowNum-1);
 				crewDatalist.add(crewData);
 			}
 
 		}
 
 		logger.info(shipInfo.toString());
-		logger.info("find {} valid crew records"+crewDatalist.toString(),crewDatalist.size());
+		logger.info("find {} valid crew records {}", new Object[] {crewDatalist.size(),crewDatalist.toString()});
 		
 		//validate 
 		for(Map<String, Object> map :crewDatalist) {
-			String rowNum =  map.get(referenceNo).toString();
-			errorMsg.put(rowNum ,new ArrayList<>());
+			String refNo =  map.get(referenceNo).toString();
+			errorMsg.put(refNo ,new ArrayList<>());
 			 for(Map.Entry<String, Object> entry : map.entrySet()) {
 				 if(entry.getKey()!="rowNum") {
 					 map.put(entry.getKey(), 
-							 validateCellValue(entry.getKey(),entry.getValue(),errorMsg.get(rowNum)));					 
+							 validateCellValue(entry.getKey(),entry.getValue(),errorMsg.get(refNo)));					 
 				 }
 			 }
+			 map.put(validationErrors, (errorMsg.get(refNo).size()>0) ? String.join("; ", errorMsg.get(refNo)):null);
+			 
 		}
 		
 		
@@ -329,12 +351,12 @@ public class CrewService extends AbstractService implements ICrewService {
 		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		crewDatalist.forEach(map->{
 			map.put("imoNo",shipInfo.get(ImoNo));
-			crewlist.add(objectMapper.convertValue(map,Crew006.class));
+			crewlist.add(objectMapper.convertValue(map,Crew.class));
 		});
 		
-		logger.info(errorMsg.toString());
+		logger.warn(errorMsg.toString());
 		if(abort) {
-			logger.info("readEng2Excel Abort because errors");
+			logger.warn("readEng2Excel Abort because errors");
 			return null;
 		}
 		
@@ -343,90 +365,12 @@ public class CrewService extends AbstractService implements ICrewService {
 
 	}
 	
-
-	private List<Crew006> updateCrewList( Map<String, String>shipInfo, List<Crew006> crewlist) {
-		List<Crew006>  updateRecords = new ArrayList<>();
-		Crew006 query = new Crew006();
-		query.setImoNo(shipInfo.get("ImoNo"));
-		CrewListCover006 crewlistCover = coverDao.findById(shipInfo.get(ImoNo));
-		if(crewlistCover==null) {
-			 CrewListCover006 crewListCover006 = new CrewListCover006();
-			 crewListCover006.setImoNo(shipInfo.get(ImoNo));
-			 crewListCover006.setShipName(shipInfo.get(NameOfShip));
-			 crewListCover006.setOffcialNo(shipInfo.get(OffcialNumber));
-			 crewListCover006.setRegPort(shipInfo.get(PortOfRegistry));
-			 coverDao.save(crewListCover006);
-		}
-		List<Crew006> findCrewsByImono = crewDao.findByCriteria(query);
-		if(findCrewsByImono.size()==0) {
-			crewlist.stream().forEach(o->o.setStatus(Crew006.STATUS_ACTIVE));
-			 saveCrewList(crewlist);
-			 return crewlist;
-		}
-		
-		for(Crew006 crew :crewlist) {
-			List<Crew006> findExistCrewRecords = findExistCrewRecords(crew,findCrewsByImono);
-			if(findExistCrewRecords.size()>0) { // exist
-				if(!findExistCrewRecords.get(0).equals(updateRecords)) {
-					updateRecords.add(crew);
-				}
-				
-				
-			}else {
-				findExistCrewRecords.stream().forEach(o->{
-					o.setStatus(Crew006.STATUS_INACTIVE);
-				});
-				crew.setStatus(Crew006.STATUS_ACTIVE);
-				updateRecords.add(crew);
-			}
-		}
-		
-		
-		saveCrewList(updateRecords);
-		return updateRecords;
-		
-	}
-
-
-
-
-	@Transactional
-	public void saveCrewList(List<Crew006> updateRecords) {
-		//TODO: MAP data for capacity and nationality
-		updateRecords.stream().forEach(o->crewDao.save(o));
-		
-		
-	}
-
-
-
-
-
-
-
-
-
-	private List<Crew006> findExistCrewRecords(Crew006 crew, List<Crew006> findCrewsByImono) {
-		String serb =crew.getSerbNo();
-		Date employDate = crew.getEmployDate();
-		return findCrewsByImono.stream()
-		.filter(o->StringUtils.equals(o.getSerbNo(),serb))
-		.filter(o->o.getEmployDate().compareTo(employDate)==0)
-		.collect(Collectors.toList());
-	}
-
-
-
-
-
 	private Object validateCellValue(String key , Object cellVal,  List<String> errorMsg){
 		String dataType = crewGridDataType.get(key);
-		Assert.notNull(dataType, key + " is null");
 		boolean required = Boolean.TRUE.equals(crewGridIsRequired.get(key));
 		if(required&&cellVal==null) {
 			errorMsg.add(String.format(requiredErrorMsg, key));
 			 Object object = crewGridFallbackValues.get(key);
-			 Assert.notNull(object, key +" default value null ");
 			 return object;
 		}
 
@@ -483,35 +427,230 @@ public class CrewService extends AbstractService implements ICrewService {
 		
 	}
 	
-	
-//	public List<Map<String, String>> validateExcel(List<Map<String, String>> data){
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyyMMdd][yyyy MM dd]");
-//		getCrewGridDataType();
-//	 for(Map<String, String> map : data) {
-//		 for(Map.Entry<String, String>  entry :map.entrySet()) {
-//			 
-//		 }
-//		 
-//		 
-//		 
-//		 
-//	 }
-//		
-//		
-//	LocalDate.parse(str);	
-//	return data;
-//		
-//	}
-	
-	
-	public List<Map<String, String>> mapExcel(List<Map<String, String>> data){
-		return data;
+	/**
+	 *  - if a branch new record (can't find with SEA date and SERB) in DB , insert it; if found others with same SERB, update them inactive)
+		- if old record (can find matched SEA date and SERB) in DB, update it 
+	 * @param shipInfo
+	 * @param crewlist
+	 * @return
+	 */
+	private List<Crew> updateCrewList( Map<String, String>shipInfo, List<Crew> crewlist) {
+		List<Crew>  updateRecords = new ArrayList<>();
+		List<Crew>  outDetedRecords = new ArrayList<>();
+		Crew query = new Crew();
+		query.setImoNo(shipInfo.get(ImoNo));
+		CrewListCover crewlistCover = coverDao.findById(shipInfo.get(ImoNo));
+		if(crewlistCover==null) {
+			 CrewListCover crewListCover006 = new CrewListCover();
+			 crewListCover006.setImoNo(shipInfo.get(ImoNo));
+			 crewListCover006.setShipName(shipInfo.get(NameOfShip));
+			 crewListCover006.setOffcialNo(shipInfo.get(OffcialNumber));
+			 crewListCover006.setRegPort(shipInfo.get(PortOfRegistry));
+			 coverDao.save(crewListCover006);
+		}
+		List<Crew> allCrewsByImono = crewDao.findByCriteria(query);
+//		if(findCrewsByImono.size()==0) {
+//			crewlist.stream().forEach(o->o.setStatus(Crew.STATUS_ACTIVE));
+//			 saveCrewList(crewlist);
+//			 return crewlist;
+//		}
+		
+		for(Crew crew :crewlist) {
+			List<Crew> existCrewFound = findExistCrewRecords(crew,allCrewsByImono);
+			logger.debug("crewlist size"+existCrewFound.size() );
+			
+			if(existCrewFound.size()==0) {
+				// new one 
+//				existCrew.setStatus(Crew.STATUS_INACTIVE);
+//				updateRecords.add(existCrew);
+				crew.setStatus(Crew.STATUS_ACTIVE);
+				updateRecords.add(crew);
+				
+				
+				// if have old records
+				outDetedRecords.addAll(allCrewsByImono.stream()
+						.filter(o->StringUtils.equals(o.getSerbNo(),crew.getSerbNo()))
+						.collect(Collectors.toList()));
+				
+			}
+			
+			else if(existCrewFound.size()==1) {
+				// exist one  update
+				Crew existCrew =existCrewFound.get(0);
+//				if(!existCrew.equals(crew)) {
+				existCrew.setReferenceNo(crew.getReferenceNo());
+				
+				existCrew.setBirthPlace(crew.getBirthPlace());
+				existCrew.setNationalitybeforeMap(crew.getNationalitybeforeMap());
+				existCrew.setSerbNo(crew.getSerbNo());
+				
+				existCrew.setSex(crew.getSex());
+				existCrew.setBirthDate(crew.getBirthDate());
+				existCrew.setCrewName(crew.getCrewName());
+				
+				existCrew.setAddress(crew.getAddress());
+				existCrew.setNokName(crew.getNokName());
+				existCrew.setNokAddress(crew.getNokAddress());
+				
+				existCrew.setCrewCert(crew.getCrewCert());
+				existCrew.setCapacityBeforeMap(crew.getCapacityBeforeMap());
+				existCrew.setCurrency(crew.getCurrency());
+				existCrew.setSalary(crew.getSalary());
+				
+				existCrew.setDischargeDate(crew.getDischargeDate());
+				existCrew.setDischargePlace(crew.getDischargePlace());		
+				existCrew.setEmployDate(crew.getEmployDate());
+				existCrew.setEmployDuration(crew.getEmployDuration());
+				existCrew.setEngageDate(crew.getEngageDate());
+				existCrew.setEngagePlace(crew.getEngagePlace());
+				
+				updateRecords.add(existCrew);				
+				
+			}else  {
+				Assert.notNull(null, "should not go here ");
+
+			}
+
+		}
+		
+		for(Crew crew :outDetedRecords) {
+			crew.setStatus(Crew.STATUS_INACTIVE);
+			crew.setValidationErrors("updated status to Inactive");
+			updateRecords.add(crew);	
+		}
 		
 		
+		saveCrewList(updateRecords);
+		return updateRecords;
 		
 	}
+
+
+	private List<Crew> findExistCrewRecords(Crew crew, List<Crew> allCrewsByImono) {
+		SimpleDateFormat  df = new SimpleDateFormat("yyyyMMdd");
+		String serb =crew.getSerbNo();
+		Date employDate = crew.getEmployDate();
+		return allCrewsByImono.stream()
+		.filter(o->StringUtils.equals(o.getSerbNo(),serb))
+		.filter(o-> {
+			if(StringUtils.equals(df.format(o.getEmployDate()), df.format(employDate))) {
+				return true;
+			}
+			return false;
+		})
+		.collect(Collectors.toList());
+		
+//		.orElse(null);
+//		.collect(Collectors.toList());
+	}
+
+
+
+
+
+
 	
 	
+
+	
+	
+
+	
+	
+	
+
+
+
+	@Transactional
+	public void saveCrewList(List<Crew> updateRecords) {
+		updateRecords=mapNationalityAndRank(updateRecords);
+		logger.info("Update follwing {} crew list {}", new Object[] {updateRecords.size(),updateRecords.toString()});
+		updateRecords.stream().forEach(o->crewDao.save(o));
+	}
+
+
+
+
+
+
+
+
+
+	private List<Crew> mapNationalityAndRank(List<Crew> updateRecords) {
+		List<Nationality> findByAllNationality = nationalityDao.findAll();
+		List<Rank> findAllRank = rankDao.findAll();
+		updateRecords.stream().forEach(crew->{
+			if(crew.getNationalitybeforeMap()!=null) {
+				final String nationalityValue;
+				NationalityMapping mapping = new NationalityMapping();
+				String nationalityKey = crew.getNationalitybeforeMap();
+				mapping.setINPUT(nationalityKey);
+				List<NationalityMapping> findMapping = nationalityMappingDao.findByCriteria(mapping);
+				if(findMapping.size()>0) {
+					nationalityValue= findMapping.get(0).getOUTPUT();
+				}else {
+					nationalityValue=null;
+				}
+				Optional<Nationality> findAny = findByAllNationality.stream().filter(nation->{
+					if(nationalityValue !=null) {
+						if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), nationalityValue)) return true;
+						if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), nationalityValue)) return true;
+						if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), nationalityValue)) return true;
+						if(StringUtils.equalsIgnoreCase(nation.getCountryChiDesc(), nationalityValue)) return true;
+						if(StringUtils.equalsIgnoreCase(nation.getCountryEngDesc(), nationalityValue)) return true;
+					}
+					if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), nationalityKey)) return true;
+					if(StringUtils.equalsIgnoreCase(nation.getChiDesc(),nationalityKey)) return true;
+					if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), nationalityKey)) return true;
+					if(StringUtils.equalsIgnoreCase(nation.getCountryChiDesc(), nationalityKey)) return true;
+					if(StringUtils.equalsIgnoreCase(nation.getCountryEngDesc(), nationalityKey)) return true;
+					return false;
+				}).findAny();
+				
+				if(findAny.isPresent()) {
+					crew.setNationality(findAny.get());   
+					crew.setNationalityId(findAny.get().getId());
+				}			
+			}
+			if(crew.getCapacityBeforeMap()!=null) {	
+				String capacityValue;
+				final RankMapping mapping = new RankMapping();
+				String capacityKey = crew.getCapacityBeforeMap();
+				mapping.setINPUT(capacityKey);
+				List<RankMapping> findMapping = rankMappingDao.findByCriteria(mapping);
+				if(findMapping.size()>0) {
+					capacityValue= findMapping.get(0).getOUTPUT();
+				}else {
+					capacityValue=null;
+				}
+				
+				Optional<Rank> findAny = findAllRank.stream().filter(nation->{
+					if(capacityValue !=null) {
+						if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), capacityValue)) return true;
+						if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), capacityValue)) return true;
+					}			
+					if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), capacityKey)) return true;
+					if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), capacityKey)) return true;
+					return false;
+				}).findAny();
+				
+				if(findAny.isPresent()) {
+					crew.setCapacity(findAny.get());
+					crew.setCapacityId(findAny.get().getId());
+				}			
+			}
+			
+				
+			}
+		);
+		return updateRecords;
+	}
+
+
+
+
+
+
 	
 	
 	

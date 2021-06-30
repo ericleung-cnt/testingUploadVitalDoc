@@ -6,6 +6,11 @@
 isc.DynamicForm.create({
 	ID:"crewListDetailForm", dataSource:"crewListCoverDS", numCols: 6, cellBorder:0, width:700, 
 	fields: [
+		{name: "imoNo" }  ,
+		{name: "shipName" }  ,
+		{name: "regPort" } , 
+		{name: "offcialNo" }  ,
+		/*
 			{name: "seafarerId", 		title: "Search Vessel", editorType: "comboBox", endRow: true, optionDataSource:"regMasterDS", displayField:"applNo", valueField:"applNo", endRow:true, completeOnTab:true,
 				showIf:function(item, value, form, values){
 					return form.getValue('version')==null;
@@ -57,41 +62,81 @@ isc.DynamicForm.create({
 	         {name: "docLocation", title:"Doucment location", colSpan:3, width:505, length:100, startRow:true}
 //	         {name: "upload_btn", title:"Upload", type: "button", startRow: false, endRow: false}, 
 //	         {name: "download_btn", title:"Download", type: "button", startRow: false, endRow: true}
-	         ]
+*/
+			 ]
 });
 	
 var fetchedCrewList = isc.ListGrid.create({
-	ID:"crewListDetailCrewList", dataSource:"crewDS", alternateRecordStyles:true, 
+	ID:"crewListDetailCrewList", 
+	dataSource:"crewDS", 
+	filterOnKeypress:true,
+	alternateRecordStyles:true, 
+	canHover:true,
+	autoFitFieldWidths:true,
+	minFieldWidth:50,
 	fields: [
-	         {name: "referenceNo", width: 150 }, 
-	         {name: "seafarerName", width: 150 }, 
-	         {name: "serbNo", width: 150 }, 
-	         {name: "nationalityEngDesc", title: "Nationality", dataPath:"nationality.engDesc"},
-	         {name: "birthDate"},
-	         {name: "capacityEngDesc", title: "Capacity", dataPath:"rank.engDesc"},
-	         {name: "salary", title: "Salary (HKD)", format:",##0.00", type:"decimal" } // may need to concern USD input
+			{name: "validationErrors" ,autoFitWidth:false,maxWidth:500 , hidden:true}, 
+			{name: "id", hidden:true  }, 
+			{name: "imoNo", hidden:true  }, 
+			{name: "referenceNo",  }, 
+			{name: "crewName", width: 150 }, 
+			{name: "serbNo", width: 100 }, 
+			{name: "nationalityEngDesc", title: "Nationality", dataPath:"nationality.engDesc" ,width:100},
+			{name: "capacityEngDesc", title: "Capacity", dataPath:"capacity.engDesc",width:100},
+			{name: "crewCert" ,width:100} ,
+			{name: "currency" } ,
+			{name: "salary", title: "Salary", format:",##0.00", type:"decimal" ,width:100} ,
+			{name: "sex",  }, 
+			{name: "birthDate",  }, 
+			{name: "birthPlace",  }, 
+			{name: "address",autoFitWidth:false,width:100 }  ,
+			{name: "nokName" }  ,
+			{name: "nokAddress",autoFitWidth:false,width:100 } , 
+			{name: "employDate" }  ,
+			{name: "employDuration" ,type:"decimal"} , 
+			{name: "engageDate" ,width:100}  ,
+			{name: "engagePlace" }  ,
+			{name: "dischargeDate" }  ,
+			{name: "dischargePlace" }  ,
+			{name: "status" } ,
+			{name: "nationalitybeforeMap" , hidden:true} ,
+			{name: "capacityBeforeMap" ,hidden:true} ,
 	         ],
 	         rowDoubleClick:function(record, recordNum, fieldNum){
-	        	var vesselIdValue = record.vesselId;
-		    	var coverYymmValue = record.coverYymm;
-		    	var referenceNoValue = record.referenceNo;
-	        	var fetchParam = {"vesselId":vesselIdValue, "coverYymm":coverYymmValue, "referenceNo":referenceNoValue};
-	        	crewListCoverAddSeafarerDynamicForm.fetchData(fetchParam);
+				var id = record.id;
+		    	var serbNo = record.serbNo;
+	        	var fetchParam = {"id":id};
+				crewListCoverAddSeafarerDynamicForm.clearErrors(true);
+        		crewListCoverAddSeafarerDynamicForm.setValues({});
+	        	crewListCoverAddSeafarerDynamicForm.fetchData(fetchParam,function(res,data,req){
+				});
+				crewListCoverAddSeafarerDynamicForm.hideField("seafarerId");
 		    	crewListCoverAddCrewWindow.show();
 	         },
 	         refresh:function(){
-	        	 var vesselIdValue = crewListDetailForm.getValue("vesselId");
-	        	 var coverYymmValue = crewListDetailForm.getValue("coverYymm");
+	        	 var imoNo = crewListDetailForm.getValue("imoNo");
 	        	 crewListDetailCrewList.setData([]);
-	        	 crewListDetailCrewList.fetchData({"vesselId":vesselIdValue, "coverYymm":coverYymmValue},{}, {"operationId":"GET_CREW_LIST_OF SHIP_YYMM"});
-	         }
+				 crewListDetailCrewList.fetchData({"imoNo":imoNo}
+	
+				  );
+			 },	
+			 dataArrived: function (startRow, endRow) {
+				this.Super('dataArrived', arguments);
+			},
+			getCellCSSText:function (record, rowNum, colNum){
+				if(record.validationErrors!=null){
+					return "color:#ff0000;";
+			} 
+	
+	
+			}
 });
 
 console.log("crew form");
 
 isc.Window.create({
 	ID:"crewListCoverAddCrewWindow",
-	width: 800, isModal: true, showModalMask: true, height: 360, title: "Crew List of Agreement",
+	width: 800, isModal: true, showModalMask: true, height: 500, title: "Crew List of Agreement",
 	items: [ 
 	        isc.VLayout.create({   
 	        	padding: 10, 
@@ -105,56 +150,150 @@ isc.Window.create({
 						width: "100%",
 						height:"*",
 						dataSource:"crewDS",
-						numCols: 6,
+						numCols: 4,
 						cellBorder:0,
+						wrapTitle :false,
 						fields: [
-						         {name: "seafarerId", 		title: "Search HKID", editorType: "comboBox", endRow: true, optionDataSource:"seafarerDS", displayField:"id", valueField:"id", endRow:true, completeOnTab:true,
-						        	 changed: function (form, item, value){
-						        		 var record = item.getSelectedRecord();
-						        		 if(record!=null){
-//						        			 var seafarerId = record.id;
-//						        			 seafarerDS.fetchData({'id':seafarerId}, function(dsResponse, data, dsRequest){
-//						        				 if (dsResponse.status == 0) {
-//						        					 item.pickList.hide();
-//						        					 var seafarerRecord = data[0];
-//						        					 form.setValue('seafarerName', 	seafarerRecord.surname+","+seafarerRecord.firstName);
-//						        					 form.setValue('serbNo', 		seafarerRecord.serbNo);
-//						        					 form.setValue('nationalityId', seafarerRecord.nationalityId);
-//						        					 form.setValue('birthDate', 	seafarerRecord.birthDate);
-//						        					 form.setValue('birthPlace', 	seafarerRecord.birthPlace);
-//						        					 form.setValue('address1', 		seafarerRecord.address1);
-//						        					 form.setValue('address2', 		seafarerRecord.address2);
-//						        					 form.setValue('address3', 		seafarerRecord.address3);
-//						        				 }
-//						        			 });
-						        			 		var seafarerRecord = record;
-						        					 form.setValue('seafarerName', 	seafarerRecord.surname+","+seafarerRecord.firstName);
-						        					 form.setValue('serbNo', 		seafarerRecord.serbNo);
-						        					 form.setValue('nationalityId', seafarerRecord.nationalityId);
-						        					 form.setValue('birthDate', 	seafarerRecord.birthDate);
-						        					 form.setValue('birthPlace', 	seafarerRecord.birthPlace);
-						        					 form.setValue('address1', 		seafarerRecord.address1);
-						        					 form.setValue('address2', 		seafarerRecord.address2);
-						        					 form.setValue('address3', 		seafarerRecord.address3);
-						        		 }
-						        	 },
-//						        	 pickListHeaderHeight:0,
-						        	 pickListWidth:300,
-						        	 layoutLeftMargin:0,
-						        	 pickListFields: [
-						        	                  {name:"id", width:70},
-						        	                  {name:"surname", width:70},
-						        	                  {name:"firstName", width:"*"}
-						        	                  ]
+							{name: "seafarerId", 		title: "Search HKID", type: "text", wrapTitle:false,type:"ComboBoxItem",  width: 200 ,hidden:true
+							, optionDataSource:"seafarerSearchDS"
+							, valueField:"id"
+							, displayField:"id"
+							, cachePickListResults: true
+							, useClientFiltering: true
+							,endRow:true
+							, pickListFields:[
+								{name:"id", width:70},
+								{name:"serbNo", width:70},
+								{name:"surname", width:70},
+								{name:"firstName", width:"*"},
+								{name:"nationalityId", hidden:false},
+								{name:"birthDate", hidden:false},
+								{name:"birthPlace", hidden:false},
+								{name:"rankId", hidden:false},
+								{name:"address1", hidden:false},
+								{name:"address2", hidden:false},
+								{name:"address3", hidden:false},
+							]
+							, pickListProperties: {
+								showFilterEditor:true
+								, alternateRecordStyles:true
+							}	
+							, pickListWidth:750,
+								changed: function (form, item, value){
+									var record = item.getSelectedRecord();
+									console.log(record);
+									if(record!=null){
+										crewListCoverAddSeafarerDynamicForm.clearErrors(true);
+										crewListCoverAddSeafarerDynamicForm.setValues({});
+										var seafarerRecord = {};
+										var promise=[]
+
+										promise.push(new Promise((resolve, reject) => {
+											seafarerDS.fetchData({id:record.id},function(res,dataArr,req){
+												if(res.status != 0){
+													reject();
+												}
+												if(dataArr.length>0){
+													var data =dataArr[0] 
+													seafarerRecord.crewName= data.firstName +  ' '+ data.surname ;
+													seafarerRecord.serbNo= data.serbNo;
+													seafarerRecord.nationalityId=data.nationalityId;
+													seafarerRecord.birthDate=data.birthDate;
+													seafarerRecord.birthPlace=data.birthPlace;
+													seafarerRecord.capacityId=data.rankId;
+													seafarerRecord.status=data.status;
+													var address="" ;
+													if(data.address1){
+														address += data.address1 +" "
+													}
+													if(data.address2){
+														address += data.address2 +" "
+													}
+													if(data.address3){
+														address += data.address3 ;
+													}
+													seafarerRecord.address=address;
+												}
+												resolve();
+	
+											})
+										}));
+										promise.push(new Promise((resolve, reject) => {
+											nextOfKinDS.fetchData({seafarerId:record.id},function(res,dataArr,req){
+												if(res.status != 0){
+													reject();
+												}
+												if(dataArr.length>0){
+													var data =dataArr[0] 
+													seafarerRecord.nokName= data.kinName;
+													seafarerRecord.nokAddress= data.relation;
+												}
+												resolve();
+											})
+										}));
+										promise.push(new Promise((resolve, reject) => {
+											ratingDS.fetchData({seafarerId:record.id},function(res,dataArr,req){
+												console.log(dataArr)
+												if(res.status != 0){
+													reject();
+												}
+												if(dataArr.length>0){
+													var data =dataArr[0] 
+													seafarerRecord.capacityId= data.capacityId;
+												}
+												resolve();
+											})
+										}));
+										promise.push(new Promise((resolve, reject) => {
+											certDS.fetchData({seafarerId:record.id},function(res,dataArr,req){
+												console.log(dataArr)
+												if(res.status != 0){
+													reject();
+												}
+												if(dataArr.length>0){
+													var data =dataArr[0] 
+													seafarerRecord.crewCert= data.certType;
+												}
+												resolve();
+											})
+										}));
+
+										Promise.all(promise)
+										.then((rs) => {
+											console.log("promises all resolve");
+											console.log(seafarerRecord);
+											crewListCoverAddSeafarerDynamicForm.setValues(seafarerRecord)
+										})
+										.catch((e) => {
+											isc.say(e);
+											console.err(e)
+										});
+										
+
+										// form.setValue('seafarerName', 	seafarerRecord.surname+","+seafarerRecord.firstName);
+											// form.setValue('serbNo', 		seafarerRecord.serbNo);
+											// form.setValue('nationalityId', seafarerRecord.nationalityId);
+											// form.setValue('birthDate', 	seafarerRecord.birthDate);
+											// form.setValue('birthPlace', 	seafarerRecord.birthPlace);
+											// form.setValue('address1', 		seafarerRecord.address1);
+											// form.setValue('address2', 		seafarerRecord.address2);
+											// form.setValue('address3', 		seafarerRecord.address3);
+									}
+						        },
 						        	 
 						         },
 						         {name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
-						         {name: "vesselId", 	showIf:"false"}, 
-						         {name: "coverYymm", 	showIf:"false"}, 
+						        //  {name: "vesselId", 	showIf:"false"}, 
+						         {name: "imoNo", 	showIf:"false"}, 
+						         {name: "version", 	showIf:"false"}, 
 						         
-						         {name: "seafarerName", 	title: "Seafarer Name", length:30},
-						         {name: "serbNo", 			title: "SERB No.", 		length:15},
-						         {name: "nationalityId", 	title: "Nationality", 	type: "SelectItem", required:true, endRow: true, optionDataSource:"nationalityDS", displayField:"engDesc", valueField:"id"},
+						         {name: "crewName", 	title: "Crew Name", },
+						         {name: "serbNo", 			title: "SERB No.", 		},
+						         {name: "referenceNo", 		 		},
+						         {name: "nationalityId", 	title: "Nationality", 	type: "SelectItem", required:true, optionDataSource:"nationalityDS", displayField:"engDesc", valueField:"id"},
+						         {name: "status", 	required:true, endRow: true, canEdit:true},
+								 {name: "crewCert", 		title: "Cert", 			},
+								 {name: "capacityId", 		title: "Rank", 			type: "SelectItem", required:true, endRow: true, optionDataSource:"rankDS", displayField:"engDesc", valueField:"id"},
 
 						         {name: "birthDate", 		
 						        	 title: "Birth Date", 	
@@ -174,57 +313,61 @@ isc.Window.create({
 						        	 	}
 						        	 ]						        	 
 						         },
-						         {name: "birthPlace", 		title: "Birth Place", 	length:30},
-						         {name: "capacityId", 		title: "Rank", 			type: "SelectItem", required:true, endRow: true, optionDataSource:"rankDS", displayField:"engDesc", valueField:"id"},
+						         {name: "birthPlace", 		title: "Birth Place", },
+								 {name: "employDate", 		title: "Employ Date(SEA)", 	type:"date"},
+						         {name: "employDuration", 		title: "Employ Duration", 	},
+						         {name: "engageDate", 		title: "Engage Date", 	type:"date", required:true,startRow:true},
+						         {name: "engagePlace", 		title: "Engage Place", 	},
 
-						         {name: "engageDate", 		title: "Engage Date", 	type:"date", required:true},
-						         {name: "engagePlace", 		title: "Engage Place", 	length:30},
-						         {name: "nokName", 			title: "NOK Name", 		length:30},
 
-						         {name: "dischargeDate", 	
+						         {name: "dischargeDate", 	startRow:true,
 						        	 title: "Discharge Date", 	
 						        	 type:"date",
 						        	 validators:[
 						        		 { type:"custom",
 						        			 condition: function(item, validator, value, record){
 						        				 console.log("value is: " + value);
-						        				 if (typeof(value) == "undefined") return true;
-						        				 else return (value.getTime()>record.engageDate.getTime());
+						        				 if (value && value instanceof Date){
+													 return (value.getTime()>record.engageDate.getTime());
+												 } return true;
 						        			 },
 						        			 errorMessage: "Discharge Date cannot be eariler than Engage Date"
 						        		 }
 						        	 ],
 						         },
-						         {name: "dischargePlace", 	title: "Discharge Place", 	length:30},
-						         {name: "crewCert", 		title: "Cert", 			length:30},
-
-						         {name: "currency", title: "Currency", length:5, valueMap:{"1.0":"HKD", "7.8":"USD"},
-						        	 changed: function (form, item, value){
-						        		 console.log("currency changed");
-						        		 var rSalary = form.getField("rSalary").getValue();
-						        		 if (rSalary!=null){
-						        			 form.getField("salary").setValue(parseFloat(value) * rSalary);
-						        		 }
-						        	 }
+								 {name: "dischargePlace", 	title: "Discharge Place", 	},
+								 {name: "nokName", 			title: "Name of Kin", 		startRow:true},
+						         {name: "nokAddress", 			title: "Relationship of Kin & Address(if any)", 		},
+						        
+								 {name: "currency", title: "Currency", length:5, 
+								//  valueMap:{"1.0":"HKD", "7.8":"USD"},
+						        	//  changed: function (form, item, value){
+						        	// 	 console.log("currency changed");
+						        	// 	 var rSalary = form.getField("rSalary").getValue();
+						        	// 	 if (rSalary!=null){
+						        	// 		 form.getField("salary").setValue(parseFloat(value) * rSalary);
+						        	// 	 }
+						        	//  }
 						         },
-						         {name: "rSalary", 			title: "R Salary", 		type:"integer", decimalPrecision:8, decimalPad:0,
-						        	 validators:[
-						        	             {type:"integerRange", min:0, max:99999999}
-						        	           ],
-						        	 changed: function (form, item, value){
-						        		 if (form.getField("currency")!=null){
-						        			 form.getField("salary").setValue(value * parseFloat(form.getField("currency").getValue()));						        			 
-						        		 }
-						        	 }         
-						         },
+						        //  {name: "rSalary", 			title: "R Salary", 		type:"integer", decimalPrecision:8, decimalPad:0,
+						        // 	 validators:[
+						        // 	             {type:"integerRange", min:0, max:99999999}
+						        // 	           ],
+						        // 	 changed: function (form, item, value){
+						        // 		 if (form.getField("currency")!=null){
+						        // 			 form.getField("salary").setValue(value * parseFloat(form.getField("currency").getValue()));						        			 
+						        // 		 }
+						        // 	 }         
+						        //  },
 						         {name: "salary", title: "Salary", format:",##0.00", type:"decimal", required:true,	//	type:"integer", decimalPrecision:8, decimalPad:0, required:true,
 //						        	 validators:[
 //						        	             {type:"integerRange", min:0, max:99999999}
 //						        	           ]
 						         },						         
-						         {name: "address1", 		title: "Address", 		length:40, colSpan:3, endRow:true, width:405},
-						         {name: "address2", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405},
-						         {name: "address3", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405}
+						         {name: "address", 		title: "Address",  type:"textArea",		 colSpan:3, endRow:true, width:405},
+						        //  {name: "crewListCover" ,hidden:true},
+						        //  {name: "address2", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405},
+						        //  {name: "address3", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405}
 						         
 						         ]
 					}),
@@ -238,8 +381,10 @@ isc.Window.create({
 						        		  if(crewListCoverAddSeafarerDynamicForm.validate()){
 						        			  var requestParam = {"operationType":"update"};
 						        			  if(crewListCoverAddSeafarerDynamicForm.getValue('version')==null){
-						        			  	requestParam = {"operationType":"add"};
-						        			  }
+												  requestParam = {"operationType":"add"};
+											  }
+											  crewListCoverAddSeafarerDynamicForm.setValue("imoNo",crewListDetailForm.getValue("imoNo"));
+											  console.log(crewListCoverAddSeafarerDynamicForm.getValues())
 						        			  crewListCoverAddSeafarerDynamicForm.saveData(function(dsResponse, data, dsRequest) {
 													if (dsResponse.status == 0) {
 														isc.say(saveSuccessfulMessage);
@@ -278,6 +423,7 @@ isc.Window.create({
 isc.ButtonToolbar.create({
 	ID:"crewListDetailToolBar",
 	buttons: [
+		//TODO:
         {name:"saveBtn", title:"Save", autoFit: true, onControl:"MMO_CREATE|MMO_UPDATE",
         	click : function () { 
         		if(crewListDetailForm.validate()){
@@ -300,13 +446,15 @@ isc.ButtonToolbar.create({
 	    },
 	    {name:"addSeafarerBtn", title:"Add Seafarer", autoFit: true, onControl:"MMO_CREATE|MMO_UPDATE",
 	    	click : function () {
-	    		var vesselIdValue = crewListDetailForm.getValue('vesselId');
-	    		var coverYymmValue = crewListDetailForm.getValue('coverYymm');
-	    		crewListCoverAddSeafarerDynamicForm.setValue("vesselId", vesselIdValue);
-	    		crewListCoverAddSeafarerDynamicForm.setValue("coverYymm", coverYymmValue);
-	    		crewListCoverAddCrewWindow.show();
-	    	}
-	    },
+	    		// var vesselIdValue = crewListDetailForm.getValue('vesselId');
+	    		// var coverYymmValue = crewListDetailForm.getValue('coverYymm');
+	    		// crewListCoverAddSeafarerDynamicForm.setValue("vesselId", vesselIdValue);
+				// crewListCoverAddSeafarerDynamicForm.setValue("coverYymm", coverYymmValue);
+				crewListCoverAddSeafarerDynamicForm.clearErrors(true);
+				crewListCoverAddSeafarerDynamicForm.setValues({});
+				crewListCoverAddSeafarerDynamicForm.showField("seafarerId");
+				crewListCoverAddCrewWindow.show();
+	    }},
         {name:"cancelBtn", title:"Close", autoFit: true,
         	click : function () {
         		crewListDetailForm.clearErrors(true);
@@ -359,31 +507,53 @@ isc.Window.create({
 });
 
 function openCrewListDetail(record){
+	console.log("openCrewListDetail", record);
 	crewListDetailWindow.show();
-	if(record!=null){
+	if(Array.isArray(record) ){
+		crewListDetailForm.clearErrors(true);
+		crewListDetailForm.setValues({});
+		crewListDetailCrewList.setData([]);
+		if(record.length>0){
+			var imoNo = record[0].imoNo;
+			crewListDetailForm.fetchData({"imoNo":imoNo,},
+			function (dsResponse, data, dsRequest) {
+				crewListDetailToolBar.getButton('addSeafarerBtn').setDisabled(false);
+				crewListDetailForm.getField('imoNo').setDisabled(true);
+				crewListDetailCrewList.setData(record);
+			});
+			//		crewListDetaiSectionContent.showSection('seafarerInfoSection');
+			crewListDetailCrewList.showField("validationErrors");
+			crewListDetailCrewList.markForRedraw();
+			crewListDetailCrewList.setDisabled(false);
+		}
+	}
+	else if(record!=null){
 		// Update
 		crewListDetailForm.clearErrors(true);
 		crewListDetailForm.setValues({});
 		crewListDetailCrewList.setData([]);
-		var vesselId = record.vesselId;
-		var coverYymm = record.coverYymm;
-		crewListDetailForm.fetchData({"vesselId":vesselId, "coverYymm":coverYymm},
+		var imoNo = record.imoNo;
+		var serbNo = record.serbNo;
+		var crewid = record.crewId;
+		crewListDetailForm.fetchData({"imoNo":imoNo,},
 				function (dsResponse, data, dsRequest) {
 					crewListDetailToolBar.getButton('addSeafarerBtn').setDisabled(false);
-					crewListDetailForm.getField('vesselId').setDisabled(true);
-					crewListDetailForm.getField('coverYymm').setDisabled(true);
+					crewListDetailForm.getField('imoNo').setDisabled(true);
 					crewListDetailCrewList.refresh();
 				});
 //		crewListDetaiSectionContent.showSection('seafarerInfoSection');
 		crewListDetailCrewList.setDisabled(false);
+		if(crewid){
+			crewListDetailCrewList.rowDoubleClick( {"id":crewid});
+		}
 	}else{
 		// Create
 		crewListDetailForm.clearErrors(true);
 		crewListDetailForm.setValues({});
 		crewListDetailCrewList.setData([]);
 		crewListDetailToolBar.getButton('addSeafarerBtn').setDisabled(true);
-		crewListDetailForm.getField('vesselId').setDisabled(false);
-		crewListDetailForm.getField('coverYymm').setDisabled(false);
+		crewListDetailForm.getField('imoNo').setDisabled(false);
+		// crewListDetailForm.getField('coverYymm').setDisabled(false);
 //		crewListDetaiSectionContent.hideSection('seafarerInfoSection');
 		crewListDetailCrewList.setDisabled(true);
 	}

@@ -23,10 +23,10 @@ public class NationalityMapping extends AbstractPersistentEntity<Long> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter
 	@Setter
+	@Getter
 	@Column(name = "ID ", nullable = false)
-	private Long ID;
+	private Long mapID;
 
 	@Getter
 	@Setter
@@ -40,7 +40,7 @@ public class NationalityMapping extends AbstractPersistentEntity<Long> {
 
 	@Override
 	public Long getId() {
-		return ID;
+		return mapID;
 	}
 
 

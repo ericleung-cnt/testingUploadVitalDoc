@@ -1,5 +1,6 @@
 package org.mardep.ssrs.dao.codetable;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,19 +11,54 @@ import javax.persistence.criteria.Root;
 
 import org.mardep.ssrs.dao.AbstractJpaDao;
 import org.mardep.ssrs.dao.PredicateCriteria;
+import org.mardep.ssrs.dao.PredicateCriteria.PredicateType;
 import org.mardep.ssrs.domain.codetable.Crew;
 import org.mardep.ssrs.domain.codetable.CrewPK;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CrewJpaDao extends AbstractJpaDao<Crew, CrewPK> implements ICrewDao {
+public class CrewJpaDao extends AbstractJpaDao<Crew, Integer> implements ICrewDao {
+
+
+
+	public CrewJpaDao() {
+	}
 
 	@Override
 	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<Crew> listRoot) {
+		List<PredicateCriteria> list = new ArrayList<PredicateCriteria>();
+		list.add(new PredicateCriteria("id", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("referenceNo", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("imoNo", PredicateType.LIKE_IGNORE_CASE));
+//		list.add(new PredicateCriteria("imoNoEqual","imoNo", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("serbNo", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("SERB_NO", PredicateType.LIKE_IGNORE_CASE));
+//		list.add(new PredicateCriteria("SERB_NOEqual","SERB_NO", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("sex", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("nationalitybeforeMap", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("nationalityId", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("birthDate", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("birthPlace", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("address", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("nokName", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("nokAddress", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("capacitybeforeMap", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("capacityId", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("crewCert", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("currency", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("salary", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("status", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("engageDate", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("engagePlace", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("employDate", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("employDuration", PredicateType.EQUAL));
+		list.add(new PredicateCriteria("dischargeDate", PredicateType.LIKE_IGNORE_CASE));
+		list.add(new PredicateCriteria("dischargePlace", PredicateType.LIKE_IGNORE_CASE));
 		listRoot.fetch("nationality", JoinType.LEFT);
 		listRoot.fetch("crewListCover", JoinType.LEFT);
-		listRoot.fetch("rank", JoinType.LEFT);
-		return super.resolvePredicateCriteriaList(cb, listRoot);
+		listRoot.fetch("capacity", JoinType.LEFT);
+		return list;
+//		return super.resolvePredicateCriteriaList(cb, listRoot);
 	}
 
 	@SuppressWarnings("unchecked")

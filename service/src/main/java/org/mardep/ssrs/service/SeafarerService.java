@@ -184,15 +184,16 @@ public class SeafarerService extends AbstractService implements ISeafarerService
 
 	@Override
 	public Crew add(Crew crew) {
-		String vesselId = crew.getVesselId();
-		String coverYymm = crew.getCoverYymm();
-		logger.info("#addCrew, Vessel ID:[{}], CoverYYMM:[{}", new Object[]{vesselId, coverYymm});
-		List<Crew> crewList = crewDao.findByVesselIdCover(vesselId, coverYymm);
-		Integer refNo = crewList.size()+1;
-		crew.setReferenceNo(refNo);
+		//TODO: 
+//		String vesselId = crew.getVesselId();
+//		String coverYymm = crew.getCoverYymm();
+//		logger.info("#addCrew, Vessel ID:[{}], CoverYYMM:[{}", new Object[]{vesselId, coverYymm});
+//		List<Crew> crewList = crewDao.findByVesselIdCover(vesselId, coverYymm);
+//		Integer refNo = crewList.size()+1;
+//		crew.setReferenceNo(refNo);
 		Crew newCrew = crewDao.save(crew);
-		newCrew.getNationality();
-		newCrew.getRank();
+//		newCrew.getNationality();
+//		newCrew.getRank();
 		return newCrew;
 	}
 	

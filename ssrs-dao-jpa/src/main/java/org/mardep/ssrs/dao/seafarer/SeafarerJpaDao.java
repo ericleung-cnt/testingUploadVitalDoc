@@ -23,10 +23,10 @@ public class SeafarerJpaDao extends AbstractJpaDao<Seafarer, String> implements 
 	@Override
 	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<Seafarer> listRoot) {
 		listRoot.fetch("nationality", JoinType.LEFT);
-		listRoot.fetch("rating", JoinType.LEFT);
-		listRoot.fetch("previousSerb", JoinType.LEFT);
-		listRoot.fetch("ratings", JoinType.LEFT);
-		listRoot.fetch("previousSerbs", JoinType.LEFT);
+//		listRoot.fetch("rating", JoinType.LEFT);   //TODO: UNCOMMENT Unable to locate Attribute  with the the given name [rating] on this ManagedType [org.mardep.ssrs.domain.AbstractPersistentEntity]
+//		listRoot.fetch("previousSerb", JoinType.LEFT);//TODO: UNCOMMENT Unable to locate Attribute  with the the given name [rating] on this ManagedType [org.mardep.ssrs.domain.AbstractPersistentEntity]
+//		listRoot.fetch("ratings", JoinType.LEFT);/TODO: UNCOMMENT Unable to locate Attribute  with the the given name [rating] on this ManagedType [org.mardep.ssrs.domain.AbstractPersistentEntity]
+//		listRoot.fetch("previousSerbs", JoinType.LEFT);/TODO: UNCOMMENT Unable to locate Attribute  with the the given name [rating] on this ManagedType [org.mardep.ssrs.domain.AbstractPersistentEntity]
 		List<PredicateCriteria> list = new ArrayList<PredicateCriteria>();
 		list.add(new PredicateCriteria("id", PredicateType.LIKE_IGNORE_CASE));
 		list.add(new PredicateCriteria("idEqual", "id", PredicateType.EQUAL));

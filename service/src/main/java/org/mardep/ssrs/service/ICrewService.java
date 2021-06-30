@@ -5,16 +5,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.mardep.ssrs.domain.codetable.Crew006;
+import org.mardep.ssrs.domain.codetable.Crew;
 import org.mardep.ssrs.domain.codetable.CrewListCover;
 
 public interface ICrewService extends IBaseService {
 
-//	List<String> readEng2Excel(byte[] excel) throws InvalidFormatException, IOException;
 
-
-	List<Crew006> readEng2Excel(CrewListCover entity, Map<String, List<String>> errorMsg)
+	List<Crew> readEng2Excel(Crew entity)
 			throws InvalidFormatException, IOException;
+
 
 
 }

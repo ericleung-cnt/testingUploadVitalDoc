@@ -1,0 +1,13 @@
+<DataSource ID="crewViewDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="crewViewDMI" />
+	<fields>
+		<field name="imoNo" 		type="text"   title="IMO No." 		length="9"/>
+		<field name="shipName" 		type="text" 	title="Ship Name"			length="140"/>
+		<field name="regPort" 		type="text" 		title="Port of Registry "		length="100"/>
+		<field name="offcialNo" 		type="text" 		title="Official No."		length="18"/>
+		<field name="crewName" 	type="text" 	title="Crew Name" 	length="50"/>
+		<field name="serbNo" 		type="text" 	title="SERB NO."		length="15"/>
+		<field name="refNo" 		type="text" title="Reference NO." />
+		<field name="crewId" 		type="text"  />
+	</fields>
+</DataSource>

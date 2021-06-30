@@ -1,112 +1,69 @@
 package org.mardep.ssrs.domain.codetable;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 
 @NoArgsConstructor
 @Entity
-@Table(name="CREW_LIST_COVER")
-@IdClass(CrewListCoverPK.class)
-@ToString(of={"vesselId", "coverYymm"})
-public class CrewListCover extends AbstractPersistentEntity<CrewListCoverPK> {
+@Table(name="CREW_LIST_COVER006")
+//@IdClass(CrewPK.class)
+//@ToString(of={"vesselId", "coverYymm", "referenceNo"})
+public class CrewListCover extends AbstractPersistentEntity<String> {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Getter
-	@Setter
-	@Column(name = "VESSEL_ID", nullable=false, length=50) // TODO 50 or 10
-	private String vesselId;
 
 	@Id
 	@Getter
 	@Setter
-	@Column(name = "COVER_YYMM", length=6, nullable=false)
-	private String coverYymm;
-	
-	@Getter
-	@Setter
-	@Column(name = "IMO_NO", length=9)
+	@Column(name = "IMO_NO" , length =9)
 	private String imoNo;
 	
-	@Column(name = "COMMENCE_DATE")
-	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
-	private Date commenceDate;
+	@Column(name = "SHIP_NAME", length =140)
+	private String shipName;
 	
-	@Getter
-	@Setter
-	@Column(name = "COMMENCE_PLACE", length=30)
-	private String commencePlace;
-
-	@Column(name = "TERMINATE_DATE")
-	@Temporal(TemporalType.DATE)
-	@Getter
-	@Setter
-	private Date terminateDate;
-	
-	@Getter
-	@Setter
-	@Column(name = "TERMINATE_PLACE", length=30)
-	private String terminatePlace;
 
 	@Getter
 	@Setter
-	@Column(name = "AGREEMENT_PERIOD")
-	private BigDecimal agreementPeriod;
+	@Column(name = "REG_PORT", length=100)
+	private String regPort;
 	
-	@Getter
-	@Setter
-	@Column(name = "DG_DESC", length=30)
-	private String dgDesc;
 
 	@Getter
 	@Setter
-	@Column(name = "DOC_LOCATION", length=100)
-	private String docLocation;
+	@Column(name = "OFF_NO", length=18)
+	private String offcialNo;
 	
-	// Excel
-	@Transient
 	@Getter
 	@Setter
-	private byte[] excelData;
+	@OneToMany(fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true, mappedBy = "crewListCover")
+	private List<Crew> Crew;
+	
 
-	@Transient
-	@Getter
-	@Setter
-	private String excelData_filename;
 
-	@Transient
-	@Getter
-	@Setter
-	private int excelData_filesize;
-	
-	@Transient
-	@Getter
-	@Setter
-	private Date excelData_date_created;
-	
 	@Override
-	public CrewListCoverPK getId() {
-		return new CrewListCoverPK(getVesselId(), getCoverYymm());
+	public String getId() {
+		return imoNo;
 	}
+	
+	
+
+
+
 
 }

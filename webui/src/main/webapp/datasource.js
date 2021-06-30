@@ -17,6 +17,7 @@ var datasourcesList = [
 	"courseCodeDS",
 	"codeTableDS",
 	"crewDS",
+	"crewViewDS",
 	"crewListCoverDS",
 	"csrFormDS",
 	"csrOwnerDS",
