@@ -72,15 +72,11 @@ public class CrewJpaDao extends AbstractJpaDao<Crew, Integer> implements ICrewDa
 
 	@Override
 	public List<?> getRankWiseCrewAverageWagesByNationality(Date reportDate, Long rankId) {
-		Query q = em.createNativeQuery("select " +
-		"r.ENG_DESC rank,  SS_ST_SHIP_TYPE_CODE, N.ENG_DESC nation, avg(C.SALARY) SALARY, count(C.SALARY) CNT_SALARY " +
-		"from CREW c " +
-		"inner join REG_MASTERS rm on c.VESSEL_ID = rm.APPL_NO " +
-		"inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID " +
-		"inner join NATIONALITY N on n.NATIONALITY_ID = c.NATIONALITY_ID " +
-		"where :rankId is null or r.CAPACITY_ID = :rankId " +
-		"group by SS_ST_SHIP_TYPE_CODE, c.CAPACITY_ID, r.ENG_DESC, N.ENG_DESC ");
-		q.setParameter("rankId", rankId);
+		String sql ="select r.ENG_DESC rank,  SS_ST_SHIP_TYPE_CODE, N.ENG_DESC nation, SALARY,CURRENCY from CREW_CR006 c inner join (select * ,ROW_NUMBER()over(PARTITION BY IMO_NO  order by appl_no desc ) AS RowNum from REG_MASTERS) rm on c.IMO_NO = rm.IMO_NO and RowNum=1 inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID inner join NATIONALITY N on n.NATIONALITY_ID = c.NATIONALITY_ID where c.ENGAGE_DATE<=:reportDate ";
+		
+		Query q = em.createNativeQuery(sql);
+//		q.setParameter("rankId", rankId);
+		q.setParameter("reportDate", reportDate);
 		return q.getResultList();
 	}
 

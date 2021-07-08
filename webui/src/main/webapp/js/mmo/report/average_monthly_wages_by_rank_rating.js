@@ -28,11 +28,16 @@ var sectionTitle =
 	
 var searchForm = 
 	isc.ReportDynamicForm.create({
-		width: 320, numCols: 4,	
+		width: 320, numCols: 6,	
 		ID:"RPT_MMO_009_Form",
 		fields: [
 					{name: "reportDate", title: "Report Date", defaultValue : new Date(), required:true, type: "date", displayFormat:"dd/MM/yyyy"},
-					{name: "rankingRating", title: "Ranking / Rating", valueMap:{"O":"Officer", "R":"Rating"}, allowEmptyValue:false}					
+					{name: "rankingRating", title: "Ranking / Rating", valueMap:{"O":"Officer", "R":"Rating"}, allowEmptyValue:false, endRow:true}	,				
+					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
+					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
+					{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
+					{name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
+					{name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,				
 				]
 	});
 	

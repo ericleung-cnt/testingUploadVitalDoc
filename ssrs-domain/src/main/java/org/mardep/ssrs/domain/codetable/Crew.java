@@ -182,6 +182,8 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Column(name = "CREW_CERT", length=50)
 	private String crewCert;
 
+
+	  
 	@Getter
 	@Setter
 	@Column(name = "CURRENCY", nullable=false, length= 5)

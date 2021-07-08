@@ -18,13 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-/**
- *
- * MMO Report-005: Summary of Average Wages of HK Registered Seafarer
- *
- * @author Leo.LIANG
- *
- */
+
 @Service("RPT_MMO_005")
 public class MMO_005 extends AbstractAgeRange implements IReportGenerator{
 

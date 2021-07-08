@@ -46,8 +46,8 @@ public class MMO_008 extends AbstractKeyValue implements IReportGenerator{
 		logger.info("Report Date:{}", reportDate);
 		logger.info("Nationality, {}-{}", new Object[]{nationalityId, nationalityEngDesc});
 		
-		List<KeyValue> officerList = ratingDao.countNationalityRank(reportDate, nationalityId, "O").stream().map(o->new KeyValue((String)o[0], ((Integer)o[1]).toString())).collect(Collectors.toList());
-		List<KeyValue> ratingList = ratingDao.countNationalityRank(reportDate, nationalityId, "R").stream().map(o->new KeyValue((String)o[0], ((Integer)o[1]).toString())).collect(Collectors.toList());
+		List<KeyValue> officerList = ratingDao.countNationalityRank(reportDate, nationalityId, "O").stream().map(o->new KeyValue((String)o[1], ((Integer)o[2]).toString())).collect(Collectors.toList());
+		List<KeyValue> ratingList = ratingDao.countNationalityRank(reportDate, nationalityId, "R").stream().map(o->new KeyValue((String)o[1], ((Integer)o[2]).toString())).collect(Collectors.toList());
 	
 		int officerSum = officerList.stream().mapToInt(kv -> (Integer.valueOf(kv.getValue()))).sum();
 		int ratingSum = ratingList.stream().mapToInt(kv -> (Integer.valueOf(kv.getValue()))).sum();

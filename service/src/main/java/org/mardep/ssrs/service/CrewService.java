@@ -9,9 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -295,8 +297,10 @@ public class CrewService extends AbstractService implements ICrewService {
 
 			if(shipInfo.get("ImoNo")==null) {
 				errorMsg.get("errors").add(String.format("IMO Number is missing processing aborted"));
-				abort = true;
-				break;
+				logger.warn("readEng2Excel Abort because errors");
+				throw new IllegalArgumentException("IMO Number is missing or can't find, processing aborted");
+				
+			
 			}
 			int subRow = (rowNum - startRow) % 3; // every 3 row as a group
 			if (subRow == 0) {
@@ -341,7 +345,7 @@ public class CrewService extends AbstractService implements ICrewService {
 							 validateCellValue(entry.getKey(),entry.getValue(),errorMsg.get(refNo)));					 
 				 }
 			 }
-			 map.put(validationErrors, (errorMsg.get(refNo).size()>0) ? String.join("; ", errorMsg.get(refNo)):null);
+			 map.put(validationErrors, (errorMsg.get(refNo).size()>0) ? "Errors: "+String.join("; ", errorMsg.get(refNo)):null);
 			 
 		}
 		
@@ -355,10 +359,7 @@ public class CrewService extends AbstractService implements ICrewService {
 		});
 		
 		logger.warn(errorMsg.toString());
-		if(abort) {
-			logger.warn("readEng2Excel Abort because errors");
-			return null;
-		}
+
 		
 
 		return updateCrewList(shipInfo,crewlist);			
@@ -474,10 +475,10 @@ public class CrewService extends AbstractService implements ICrewService {
 				
 			}
 			
-			else if(existCrewFound.size()==1) {
-				// exist one  update
-				Crew existCrew =existCrewFound.get(0);
-//				if(!existCrew.equals(crew)) {
+			else  {
+				//update exists
+				for(Crew existCrew  : existCrewFound) {
+					
 				existCrew.setReferenceNo(crew.getReferenceNo());
 				
 				existCrew.setBirthPlace(crew.getBirthPlace());
@@ -502,26 +503,23 @@ public class CrewService extends AbstractService implements ICrewService {
 				existCrew.setEmployDate(crew.getEmployDate());
 				existCrew.setEmployDuration(crew.getEmployDuration());
 				existCrew.setEngageDate(crew.getEngageDate());
-				existCrew.setEngagePlace(crew.getEngagePlace());
-				
+				existCrew.setEngagePlace(crew.getEngagePlace());				
 				updateRecords.add(existCrew);				
+				}
 				
-			}else  {
-				Assert.notNull(null, "should not go here ");
-
 			}
 
 		}
 		
 		for(Crew crew :outDetedRecords) {
 			crew.setStatus(Crew.STATUS_INACTIVE);
-			crew.setValidationErrors("updated status to Inactive");
+			crew.setValidationErrors("status to Inactive");
 			updateRecords.add(crew);	
 		}
 		
 		
-		saveCrewList(updateRecords);
-		return updateRecords;
+		 List<Crew> saveCrewList = saveCrewList(updateRecords);
+		return saveCrewList;
 		
 	}
 
@@ -529,11 +527,11 @@ public class CrewService extends AbstractService implements ICrewService {
 	private List<Crew> findExistCrewRecords(Crew crew, List<Crew> allCrewsByImono) {
 		SimpleDateFormat  df = new SimpleDateFormat("yyyyMMdd");
 		String serb =crew.getSerbNo();
-		Date employDate = crew.getEmployDate();
+		Date engageDate = crew.getEngageDate();
 		return allCrewsByImono.stream()
 		.filter(o->StringUtils.equals(o.getSerbNo(),serb))
 		.filter(o-> {
-			if(StringUtils.equals(df.format(o.getEmployDate()), df.format(employDate))) {
+			if(StringUtils.equals(df.format(o.getEngageDate()), df.format(engageDate))) {
 				return true;
 			}
 			return false;
@@ -562,10 +560,44 @@ public class CrewService extends AbstractService implements ICrewService {
 
 
 	@Transactional
-	public void saveCrewList(List<Crew> updateRecords) {
-		updateRecords=mapNationalityAndRank(updateRecords);
-		logger.info("Update follwing {} crew list {}", new Object[] {updateRecords.size(),updateRecords.toString()});
-		updateRecords.stream().forEach(o->crewDao.save(o));
+	public List<Crew> saveCrewList(List<Crew> records) {
+		records=mapNationalityAndRank(records);
+		List<Crew> updatedRecords = new ArrayList<>();
+		logger.info("Update follwing {} crew list {}", new Object[] {records.size(),records.toString()});
+		
+		for(Crew o : records) {
+			Long version1 = o.getVersion();
+			Crew saved = crewDao.save(o);
+			if(version1==null) {
+				saved.setValidationErrors("new "+ Objects.toString(saved.getValidationErrors(),""));
+			}
+			
+			updatedRecords.add(saved);	
+		}
+		
+		
+//		updateRecords.stream().forEach(o->{
+//			Long version1 = o.getVersion();
+//			Crew saved = crewDao.save(o);
+//			Long version2 = saved.getVersion();
+//			logger.info(version1+"");
+//			logger.info(version2+"");
+//			if(version1==null) {
+//				saved.setValidationErrors("new "+ Objects.toString(saved.getValidationErrors(),""));
+//			}else if (version1!=version2) {
+//				saved.setValidationErrors("updated "+ Objects.toString(saved.getValidationErrors(),""));
+//			}
+//			updatedRecords.add(saved);
+//			});
+		
+		HashSet<Object> seen=new HashSet<>();
+		updatedRecords.removeIf(e->!seen.add(e.getId()));// remove duplicate 
+		
+//		Set<Crew> set = new HashSet<>(updatedRecords);
+//		updatedRecords.clear();
+//		updatedRecords.addAll(set);  // remove duplicate 
+		
+		return updatedRecords;
 	}
 
 

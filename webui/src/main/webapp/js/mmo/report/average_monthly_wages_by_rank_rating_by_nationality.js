@@ -31,9 +31,14 @@ var searchForm =
 		ID:"RPT_MMO_018_Form",
 		numCols: 6,		
 		fields: [
-					{name: "reportDateFrom", title: "From Date", type: "date", displayFormat:"dd/MM/yyyy"},
-					{name: "reportDateTo", title: "To Date", type: "date", displayFormat:"dd/MM/yyyy"},
-					{name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true}					
+					{name: "reportDateFrom", title: "From Date", type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
+					{name: "reportDateTo", title: "To Date", type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
+					{name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true, endRow:true},					
+					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
+					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
+					{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
+					{name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
+					{name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,				
 				]
 	});
 	

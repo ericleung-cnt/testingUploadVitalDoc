@@ -21,7 +21,5 @@ public abstract class AbstractKeyValue extends AbstractReportGenerator{
 	@Autowired
 	INationalityDao nationalityDao;
 	
-	public byte[] generate(Map<String, Object> inputParam) throws Exception{
-		return null;
-	}
+
 }

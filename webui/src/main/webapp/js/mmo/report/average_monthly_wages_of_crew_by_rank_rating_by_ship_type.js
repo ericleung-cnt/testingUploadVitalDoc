@@ -28,11 +28,16 @@ var sectionTitle =
 
 var searchForm =
 	isc.ReportDynamicForm.create({
-		width: 320, numCols: 4,
+		width: 320, numCols: 6,
 		ID:"RPT_MMO_011_Form",
 		fields: [
 					{name: "reportDate", title: "Report Date", required:true, type: "date", defaultValue : new Date(), dateFormatter:"dd/MM/yyyy"},
-					{name: "shipTypeCode", title: "Vessel Type", optionDataSource:"shipTypeDS", displayField:"stDesc", valueField:"id", allowEmptyValue:true}
+					{name: "shipTypeCode", title: "Vessel Type", optionDataSource:"shipTypeDS", displayField:"stDesc", valueField:"id", allowEmptyValue:true, endRow:true},
+					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
+					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
+					{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
+					{name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
+					{name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,				
 				]
 	});
 

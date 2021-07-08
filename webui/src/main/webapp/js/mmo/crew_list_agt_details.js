@@ -124,9 +124,10 @@ var fetchedCrewList = isc.ListGrid.create({
 				this.Super('dataArrived', arguments);
 			},
 			getCellCSSText:function (record, rowNum, colNum){
+				// console.log(record.validationErrors);
 				if(record.validationErrors!=null){
-					return "color:#ff0000;";
-			} 
+					return "color:#f1e740;";
+				} 
 	
 	
 			}

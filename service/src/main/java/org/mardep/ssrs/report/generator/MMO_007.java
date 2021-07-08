@@ -17,13 +17,7 @@ import org.springframework.stereotype.Service;
 
 import net.sf.jasperreports.engine.JasperReport;
 
-/**
- * 
- * MMO Report-007: Summary of seafarer Waiting for Employment
- * 
- * @author Leo.LIANG
- *
- */
+
 @Service("RPT_MMO_007")
 public class MMO_007 extends AbstractKeyValue implements IReportGenerator{
 
@@ -41,8 +35,8 @@ public class MMO_007 extends AbstractKeyValue implements IReportGenerator{
 		logger.info("####### RPT_MMO_007  #########");
 		logger.info("Report Date:{}", reportDate);
 		
-		List<KeyValue> officerList = ratingDao.countRank(reportDate, "O").stream().map(o->new KeyValue((String)o[0], ((Integer)o[1]).toString())).collect(Collectors.toList());
-		List<KeyValue> ratingList = ratingDao.countRank(reportDate, "R").stream().map(o->new KeyValue((String)o[0], ((Integer)o[1]).toString())).collect(Collectors.toList());
+		List<KeyValue> officerList = ratingDao.countRank(reportDate, "O").stream().map(o->new KeyValue((String)o[1], ((Integer)o[2]).toString())).collect(Collectors.toList());
+		List<KeyValue> ratingList = ratingDao.countRank(reportDate, "R").stream().map(o->new KeyValue((String)o[1], ((Integer)o[2]).toString())).collect(Collectors.toList());
 	
 		int officerSum = officerList.stream().mapToInt(kv -> (Integer.valueOf(kv.getValue()))).sum();
 		int ratingSum = ratingList.stream().mapToInt(kv -> (Integer.valueOf(kv.getValue()))).sum();

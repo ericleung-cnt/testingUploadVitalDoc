@@ -28,10 +28,15 @@ var sectionTitle =
 	
 var searchForm = 
 	isc.ReportDynamicForm.create({
-		numCols: 4,	
+		numCols: 6,	
 		fields: [
-		         {name: "report_date", title: "Report Date",type: "date", displayFormat:"dd/MM/yyyy"},
-		         {name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true}					
+		         {name: "report_date", title: "Report Date",type: "date",defaultValue : new Date(), displayFormat:"dd/MM/yyyy"},
+				 {name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true, endRow:true}		,
+				 {name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
+				 {name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
+				 {name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
+				 {name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
+				 {name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,							
 				]
 	});
 	

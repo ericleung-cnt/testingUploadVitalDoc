@@ -44,4 +44,17 @@ public class MMO_010Bean{
 	private BigDecimal avg5;
 	private BigDecimal avg6;
 	private BigDecimal avg7;
+	
+	private BigDecimal sumSalary1 = BigDecimal.ZERO;
+	private BigDecimal sumSalary2= BigDecimal.ZERO;
+	private BigDecimal sumSalary3= BigDecimal.ZERO;
+	private BigDecimal sumSalary4= BigDecimal.ZERO;
+	private BigDecimal sumSalary5= BigDecimal.ZERO;
+	private BigDecimal sumSalary6= BigDecimal.ZERO;
+	private BigDecimal sumSalary7= BigDecimal.ZERO;
+	
+	
+
+	
+	
 }

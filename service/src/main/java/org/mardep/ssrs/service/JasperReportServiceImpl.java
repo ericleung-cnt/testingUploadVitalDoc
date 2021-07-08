@@ -172,6 +172,7 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 		templates.add("MMO_PrintHorizontal.jrxml"); //
 		templates.add("KeyValue.jrxml"); //
 		templates.add("MMO_010.jrxml"); //010 -
+		templates.add("Average_Monthly_Wages_of_Rank_Wise.jrxml"); //010 -
 		templates.add("MMO_018.jrxml"); //010 -
 		templates.add("RPT-SR-011-subreport01.jrxml");
 		templates.add("RPT-SR-011-subreport02.jrxml");

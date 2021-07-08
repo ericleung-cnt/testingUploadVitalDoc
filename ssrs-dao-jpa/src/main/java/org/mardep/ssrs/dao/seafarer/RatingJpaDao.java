@@ -194,29 +194,9 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 	 */
 	@Override
 	public List<Object[]> countRank(Date reportDate, String rankRating){
-		StringBuffer sb = new StringBuffer();
-//		sb.append(" SELECT N.ENG_DESC AS NATIONALITY, COUNT(SR.SEAFARER_ID) AS NO FROM SEAFARER_RATING SR   ");
-//		sb.append(" LEFT JOIN SEAFARER S ON SR.SEAFARER_ID = S.SEAFARER_ID ");
-//		sb.append(" LEFT JOIN RANK R ON SR.CAPACITY_ID = R.CAPACITY_ID ");
-//		sb.append(" LEFT JOIN NATIONALITY N ON S.NATIONALITY_ID = N.NATIONALITY_ID ");
-//		sb.append(" WHERE SR.RATING_DATE<=:reportDate ");
-//		sb.append(" AND R.RANK_RATING =:rankRating ");
-//		sb.append(" GROUP BY N.ENG_DESC ORDER BY N.ENG_DESC ");
+		String sql ="select n.NATIONALITY_ID, n.ENG_DESC , count (c.id) as count  from ( select * from [CREW_CR006] where CAPACITY_ID  in (select CAPACITY_ID from rank where RANK_RATING = :rankRating) and ENGAGE_DATE < :reportDate ) c right join  NATIONALITY n on c.NATIONALITY_ID = n.NATIONALITY_ID group by n.NATIONALITY_ID , n.ENG_DESC order by n.ENG_DESC";
 
-		sb.append(" SELECT N.ENG_DESC AS NATIONALITY, COUNT(C.SEAFARER_NAME) AS NO FROM CREW C   ");
-		sb.append(" LEFT JOIN RANK R ON C.CAPACITY_ID = R.CAPACITY_ID ");
-		sb.append(" LEFT JOIN NATIONALITY N ON C.NATIONALITY_ID = N.NATIONALITY_ID ");
-		sb.append(" WHERE C.ENGAGE_DATE<=:reportDate ");
-		sb.append(" AND R.RANK_RATING =:rankRating ");
-		sb.append(" GROUP BY N.ENG_DESC ORDER BY N.ENG_DESC ");
-
-//		select n.ENG_DESC, count(c.seafarer_name) from crew c
-//		left join [rank] r on c.CAPACITY_ID = r.CAPACITY_ID
-//		left join NATIONALITY n on c.NATIONALITY_ID = n.NATIONALITY_ID
-//		where c.cover_yymm like '180%'
-//		group by n.ENG_DESC
-
-		Query query = em.createNativeQuery(sb.toString());
+		Query query = em.createNativeQuery(sql);
 		query.setParameter("reportDate", reportDate);
 		query.setParameter("rankRating", rankRating);
 
@@ -233,24 +213,9 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 	 */
 	@Override
 	public List<Object[]> countNationalityRank(Date reportDate, Long nationalityId, String rankRating){
-		StringBuffer sb = new StringBuffer();
-//		sb.append(" SELECT R.ENG_DESC AS RANK, COUNT(SR.SEAFARER_ID) AS NO FROM SEAFARER_RATING SR  ");
-//		sb.append(" LEFT JOIN SEAFARER S ON SR.SEAFARER_ID = S.SEAFARER_ID ");
-//		sb.append(" LEFT JOIN RANK R ON SR.CAPACITY_ID = R.CAPACITY_ID ");
-//		sb.append(" WHERE S.NATIONALITY_ID =:nationalityId");
-//		sb.append(" AND SR.RATING_DATE<=:reportDate");
-//		sb.append(" AND R.RANK_RATING =:rankRating ");
-//		sb.append(" GROUP BY R.ENG_DESC ");
+		String sql ="select r.CAPACITY_ID, r.ENG_DESC , count (c.id) as count  from ( select * from [CREW_CR006] where NATIONALITY_ID  =:nationalityId and ENGAGE_DATE < :reportDate ) c right join  Rank  r on c.CAPACITY_ID = r.CAPACITY_ID where r.RANK_RATING=:rankRating group by r.CAPACITY_ID, r.ENG_DESC order by  r.ENG_DESC";
 
-		sb.append(" SELECT R.ENG_DESC AS NATIONALITY, COUNT(C.SEAFARER_NAME) AS NO FROM CREW C   ");
-		sb.append(" LEFT JOIN RANK R ON C.CAPACITY_ID = R.CAPACITY_ID ");
-		sb.append(" LEFT JOIN NATIONALITY N ON C.NATIONALITY_ID = N.NATIONALITY_ID ");
-		sb.append(" WHERE C.NATIONALITY_ID = :nationalityId");
-		sb.append("	AND C.ENGAGE_DATE<=:reportDate ");
-		sb.append(" AND R.RANK_RATING =:rankRating ");
-		sb.append(" GROUP BY R.ENG_DESC ");
-
-		Query query = em.createNativeQuery(sb.toString());
+		Query query = em.createNativeQuery(sql);
 		query.setParameter("reportDate", reportDate);
 		query.setParameter("nationalityId", nationalityId);
 		query.setParameter("rankRating", rankRating);

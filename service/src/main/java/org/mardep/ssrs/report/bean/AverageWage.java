@@ -27,6 +27,12 @@ public class AverageWage{
 	@Setter
 	String rank;
 	
+
+	@Getter
+	@Setter
+	String nationality;
+	
+	
 	@Getter
 	@Setter
 	long noOfSeafarer; // 20 below
@@ -53,4 +59,10 @@ public class AverageWage{
 		this.noOfSeafarer = noOfSeafarer;
 		this.averageWage = averageWage;
 	}
+	
+	public AverageWage( ){
+	
+	}
+	
+	
 }
