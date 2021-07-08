@@ -18,7 +18,7 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<smartclient_home>E:\tools\SmartClient_v101p_2018-12-15_Evaluation</smartclient_home>
 		<smartclient_version>10.1</smartclient_version>
-		<smartclient_lib_home>D:\mdtrusted-workspace\smartclientSDK\WEB-INF\lib</smartclient_lib_home>
+		<smartclient_lib_home>D:\mdtrusted\smartclientSDK\WEB-INF\lib</smartclient_lib_home>
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->

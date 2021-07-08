@@ -122,7 +122,7 @@ format($P{reportDate})]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="114" y="0" width="114" height="20" uuid="59b6486c-d68f-4cbe-b896-f9f9f99a2685"/>
-				<textElement textAlignment="Center" markup="">
+				<textElement textAlignment="Center">
 					<font fontName="Courier New"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{rank2}]]></textFieldExpression>

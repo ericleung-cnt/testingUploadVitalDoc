@@ -1,12 +1,16 @@
 package org.mardep.ssrs.report.generator;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.mardep.ssrs.dao.codetable.INationalityDao;
 import org.mardep.ssrs.dao.codetable.IRankDao;
+import org.mardep.ssrs.domain.codetable.Nationality;
 import org.mardep.ssrs.report.IReportGenerator;
 import org.mardep.ssrs.service.IJasperReportService;
 import org.slf4j.Logger;
@@ -25,7 +29,10 @@ public class MMO_Avg_Age implements IReportGenerator{
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
-	IRankDao rankDao;
+	IRankDao rankDao; 
+	
+	@Autowired
+	INationalityDao NationalityDao;
 
 	@Autowired
 	IJasperReportService jasper;
@@ -44,14 +51,15 @@ public class MMO_Avg_Age implements IReportGenerator{
 
 		List<HashMap<String, Object>> results = new ArrayList<HashMap<String,Object>>();
 		Object lastRating = null;
+		Nationality nationality_name = NationalityDao.findById(nationality);
 		for (int i = 0; i < rows.size(); i+= 7) {
 			Object rating = ((Object[]) rows.get(i))[3];
 			lastRating = rating;
 			HashMap<String, Object> result = new HashMap<String, Object>();
-			result.put("nationality", ((Object[]) rows.get(i))[1]);
+			result.put("nationality", nationality_name.getEngDesc());
 			result.put("rank1", ((Object[]) rows.get(i))[0]);
-			Object age = ((Object[]) rows.get(i))[2];
-			result.put("age1", age);
+			BigDecimal age = (BigDecimal)((Object[]) rows.get(i))[2];
+			result.put("age1", age.intValue());
 			result.put("rating", rating);
 			for (int j = 2; j <= 7; j++) {
 				if (rows.size() >= i + j) {
@@ -59,7 +67,7 @@ public class MMO_Avg_Age implements IReportGenerator{
 					rating = rowArray[3];
 					if (rating.equals(lastRating)) {
 						result.put("rank" + j, rowArray[0]);
-						result.put("age" + j, rowArray[2]);
+						result.put("age" + j, ((BigDecimal)rowArray[2]).intValue());
 					} else {
 						i = i -7 + j - 1;
 						break;

@@ -29,6 +29,7 @@ if (loginWindow.MMO_REPORT_ENABLED()) {
 				    {categoryName:"Average Monthly Wages of Crew by Rank/Rating by Ship Type", js:"js/mmo/report/average_monthly_wages_of_crew_by_rank_rating_by_ship_type.js",},
 				    {categoryName:"Average Monthly Wages of Crew by Rank/Rating", js:"js/mmo/report/average_monthly_wages_by_rank_rating.js",},
 				    {categoryName:"Average Age of Crew by Rank/Rating", js:"js/mmo/report/average_age_by_rank_rating.js",},
+				    {categoryName:"Template Reporting", js:"js/mmo/report/template_report.js",},
 			    ]
 			}
 		);
