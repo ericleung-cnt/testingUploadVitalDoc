@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MMO_018.jrxml" pageWidth="842" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3bfd0cda-de2a-402e-8f89-133a8d0b1841">
+	<property name="ireport.zoom" value="1.2100000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Dataset1" uuid="3b7527f1-b563-43a4-8234-06730dae85ca">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+	</subDataset>
+	<parameter name="reportDateFrom" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="reportDateTo" class="java.util.Date" isForPrompting="false">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nationality" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["CHINESE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg1" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg2" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg3" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg4" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg5" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg6" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg7" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg8" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg9" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg10" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg11" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="avg12" class="java.lang.Double" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank3" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank4" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank5" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank6" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank7" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank8" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank9" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank10" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank11" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="rank12" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="avg1" class="java.math.BigDecimal"/>
+	<field name="avg2" class="java.lang.Double"/>
+	<field name="avg3" class="java.lang.Double"/>
+	<field name="avg4" class="java.lang.Double"/>
+	<field name="avg5" class="java.lang.Double"/>
+	<field name="avg6" class="java.lang.Double"/>
+	<field name="avg7" class="java.lang.Double"/>
+	<field name="avg8" class="java.lang.Double"/>
+	<field name="avg9" class="java.lang.Double"/>
+	<field name="avg10" class="java.lang.Double"/>
+	<field name="avg11" class="java.lang.Double"/>
+	<field name="avg12" class="java.lang.Double"/>
+	<field name="rank1" class="java.lang.String"/>
+	<field name="rank2" class="java.lang.String"/>
+	<field name="rank3" class="java.lang.String"/>
+	<field name="rank4" class="java.lang.String"/>
+	<field name="rank5" class="java.lang.String"/>
+	<field name="rank6" class="java.lang.String"/>
+	<field name="rank7" class="java.lang.String"/>
+	<field name="rank8" class="java.lang.String"/>
+	<field name="rank9" class="java.lang.String"/>
+	<field name="rank10" class="java.lang.String"/>
+	<field name="rank11" class="java.lang.String"/>
+	<field name="rank12" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="20" uuid="d60b8e11-d334-4386-a73b-f1b6109b8241"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[SHIPS AND SEAFERERS REGISTRATION SYSTEM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="19" width="802" height="20" uuid="28721942-22c3-4170-b1ca-f9715c1e6dbb"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Average Monthly Wages by Rank / Rating by Nationality]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="39" width="802" height="20" uuid="a65e3c70-ac2f-4473-9b80-8f2ea3916728"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["FROM " + new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{reportDateFrom}) + " TO " + new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{reportDateTo})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="59" width="802" height="20" uuid="c31f085c-bcec-46d7-8e30-ed235065d26a"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["AVERAGE MONTLY WAGES OF " + $P{nationality}.toUpperCase() + " OFFICER"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="682" y="19" width="95" height="20" uuid="b4d3fd08-b5bd-4553-9a94-3e2893be23cc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="777" y="19" width="25" height="20" uuid="f0b20574-5a41-49b7-a680-a5cac8804ec4"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="eb4ed1d3-6c7c-4e3f-a213-1cfb78a3c60a"/>
+				<text><![CDATA[SRS1130]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="702" y="-1" width="100" height="20" uuid="aed68ced-aa4a-451b-84eb-5e1902e7f71b"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="10" width="1" height="26" uuid="bb5787e5-365d-498c-bf2d-f7a6c35badd6"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="17" width="77" height="18" uuid="b4a952a8-9f85-49f7-b3c8-a9f834ff5aab"/>
+				<text><![CDATA[Department]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="193" y="17" width="77" height="18" uuid="31ab0e8a-7a5c-492f-a2c8-35ca2948fb47"/>
+				<text><![CDATA[Rank]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="15" width="211" height="18" uuid="8e11754b-65e2-4613-a24c-bd75591dd99b"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[No. of Seafarers]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="632" y="15" width="162" height="18" uuid="e84f8ffd-3bf2-4d9d-9443-992f32691aad"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Average Wages]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="10" width="796" height="1" uuid="41f89e3e-13ae-4e66-9750-3245a7d5f98d"/>
+			</line>
+			<line>
+				<reportElement x="1" y="35" width="796" height="1" uuid="21b189a3-17a0-4f5b-8b98-db07284bcd19"/>
+			</line>
+			<line>
+				<reportElement x="180" y="10" width="1" height="26" uuid="848377a9-11e4-4ded-a91a-1ca0226bf4c2"/>
+			</line>
+			<line>
+				<reportElement x="796" y="10" width="1" height="26" uuid="b886d2f3-4543-4285-a2f0-b08855cd1938"/>
+			</line>
+			<line>
+				<reportElement x="419" y="10" width="1" height="26" uuid="13b3e991-d10d-4328-8118-5cd633ce51f6"/>
+			</line>
+			<line>
+				<reportElement x="631" y="10" width="1" height="26" uuid="e9c412c0-9130-499b-9116-69cc09f4f731"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement x="680" y="0" width="55" height="20" uuid="07f8c4b4-711e-4f4b-a52c-c2fb9b8ff5c4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{avg1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="190" y="1" width="55" height="20" uuid="10c3846c-08f5-47f1-93b4-f58503675fff">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{rank1}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="1" y="0" width="1" height="21" uuid="d54d8c75-679c-4b96-97c1-14b935a50f86"/>
+			</line>
+			<line>
+				<reportElement x="180" y="0" width="1" height="21" uuid="b7367ec0-3bfd-429c-a1ad-9f0ffbab53d3"/>
+			</line>
+			<line>
+				<reportElement x="631" y="0" width="1" height="21" uuid="445f5c06-5ff8-46dc-ad79-9f261b77fc40"/>
+			</line>
+			<line>
+				<reportElement x="419" y="0" width="1" height="21" uuid="740cc64e-6158-4bdd-becd-390389ee5abc"/>
+			</line>
+			<line>
+				<reportElement x="796" y="0" width="1" height="21" uuid="bae5f8be-37c5-4536-8edd-fc4b022baf12"/>
+			</line>
+			<line>
+				<reportElement x="2" y="21" width="795" height="1" uuid="37d52854-073f-4bd9-832a-1f8a81383872"/>
+			</line>
+			<line>
+				<reportElement x="2" y="-1" width="796" height="1" uuid="e576da86-479a-4d3e-b978-8b47bc45291f"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="110" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="60" width="802" height="50" uuid="24710a61-2fa1-46e6-81e1-8e097093f5b2"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[*** End of Report ***]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

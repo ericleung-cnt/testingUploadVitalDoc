@@ -174,6 +174,7 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 		templates.add("MMO_010.jrxml"); //010 -
 		templates.add("Average_Monthly_Wages_of_Rank_Wise.jrxml"); //010 -
 		templates.add("MMO_018.jrxml"); //010 -
+		templates.add("MMO_018_1.jrxml");//testing
 		templates.add("RPT-SR-011-subreport01.jrxml");
 		templates.add("RPT-SR-011-subreport02.jrxml");
 		templates.add("RPT-SR-011-subreport03.jrxml");
@@ -213,7 +214,8 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 		templates.add("CoR.jrxml");
 		templates.add("CoR-subreport01.jrxml");
 		templates.add("MMO_Avg_Age.jrxml");
-
+		templates.add("Temp_report.jrxml");
+		
 		templates.add("DN_SSRS.jrxml");
 		templates.add("DN_Subreport.jrxml");
 
