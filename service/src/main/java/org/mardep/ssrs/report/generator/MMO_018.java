@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import org.mardep.ssrs.dao.codetable.INationalityDao;
 import org.mardep.ssrs.dao.codetable.IRankDao;
@@ -28,7 +31,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service("RPT_MMO_018")
-public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
+public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -65,7 +68,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage1 = new Wages(); 
 		wage1.ranking = "Master";
-		wage1.nationalityId = 1L;
+		wage1.nationalityId = BigDecimal.valueOf(13);
 		wage1.currency = "USD";
 		wage1.salary =BigDecimal.valueOf( 1.0);
 		wage1.count = 1;
@@ -73,7 +76,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage2 = new Wages(); 
 		wage2.ranking = "Master";
-		wage2.nationalityId = 1L;
+		wage2.nationalityId = BigDecimal.valueOf(13);
 		wage2.currency = "USD";
 		wage2.salary = BigDecimal.valueOf(1.1);
 		wage2.count = 1;
@@ -81,7 +84,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage3 = new Wages(); 
 		wage3.ranking = "Master";
-		wage3.nationalityId = 1L;
+		wage3.nationalityId = BigDecimal.valueOf(13);
 		wage3.currency = "USD";
 		wage3.salary = BigDecimal.valueOf(1.2);
 		wage3.count = 1;
@@ -89,7 +92,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage4 = new Wages(); 
 		wage4.ranking = "Master";
-		wage4.nationalityId = 1L;
+		wage4.nationalityId = BigDecimal.valueOf(13);
 		wage4.currency = "JPY";
 		wage4.salary = BigDecimal.valueOf(100);
 		wage4.count = 1;
@@ -97,7 +100,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage5 = new Wages(); 
 		wage5.ranking = "Chief Officer";
-		wage5.nationalityId = 1L;
+		wage5.nationalityId = BigDecimal.valueOf(13);
 		wage5.currency = "HKD";
 		wage5.salary = BigDecimal.valueOf(1.4);
 		wage5.count = 1;
@@ -105,7 +108,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage6 = new Wages(); 
 		wage6.ranking = "Officer 1";
-		wage6.nationalityId = 1L;
+		wage6.nationalityId = BigDecimal.valueOf(13);
 		wage6.currency = "HKD";
 		wage6.salary = BigDecimal.valueOf(1.4);
 		wage6.count = 1;
@@ -113,7 +116,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage7 = new Wages(); 
 		wage7.ranking = "Officer 2";
-		wage7.nationalityId = 1L;
+		wage7.nationalityId = BigDecimal.valueOf(13);
 		wage7.currency = "HKD";
 		wage7.salary = BigDecimal.valueOf(1.4);
 		wage7.count = 1;
@@ -121,7 +124,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage8 = new Wages(); 
 		wage8.ranking = "Officer 3";
-		wage8.nationalityId = 1L;
+		wage8.nationalityId = BigDecimal.valueOf(13);
 		wage8.currency = "HKD";
 		wage8.salary = BigDecimal.valueOf(1.4);
 		wage8.count = 1;
@@ -129,7 +132,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage9 = new Wages(); 
 		wage9.ranking = "Officer 4";
-		wage9.nationalityId = 1L;
+		wage9.nationalityId = BigDecimal.valueOf(13);
 		wage9.currency = "HKD";
 		wage9.salary = BigDecimal.valueOf(1.4);
 		wage9.count = 1;
@@ -137,7 +140,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage10 = new Wages(); 
 		wage10.ranking = "Officer 5";
-		wage10.nationalityId = 1L;
+		wage10.nationalityId = BigDecimal.valueOf(13);
 		wage10.currency = "HKD";
 		wage10.salary = BigDecimal.valueOf(1.4);
 		wage10.count = 1;
@@ -145,7 +148,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage11 = new Wages(); 
 		wage11.ranking = "Officer 6";
-		wage11.nationalityId = 1L;
+		wage11.nationalityId = BigDecimal.valueOf(13);
 		wage11.currency = "HKD";
 		wage11.salary = BigDecimal.valueOf(1.4);
 		wage11.count = 1;
@@ -153,7 +156,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage12 = new Wages(); 
 		wage12.ranking = "Officer 7";
-		wage12.nationalityId = 1L;
+		wage12.nationalityId = BigDecimal.valueOf(13);
 		wage12.currency = "HKD";
 		wage12.salary = BigDecimal.valueOf(1.4);
 		wage12.count = 1;
@@ -161,7 +164,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage13 = new Wages(); 
 		wage13.ranking = "Officer 8";
-		wage13.nationalityId = 1L;
+		wage13.nationalityId = BigDecimal.valueOf(13);
 		wage13.currency = "HKD";
 		wage13.salary = BigDecimal.valueOf(1.4);
 		wage13.count = 1;
@@ -169,7 +172,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage14 = new Wages(); 
 		wage14.ranking = "Officer 9";
-		wage14.nationalityId = 1L;
+		wage14.nationalityId = BigDecimal.valueOf(13);
 		wage14.currency = "HKD";
 		wage14.salary = BigDecimal.valueOf(1.4);
 		wage14.count = 1;
@@ -177,7 +180,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage15 = new Wages(); 
 		wage15.ranking = "Officer 10";
-		wage15.nationalityId = 1L;
+		wage15.nationalityId = BigDecimal.valueOf(13);
 		wage15.currency = "HKD";
 		wage15.salary = BigDecimal.valueOf(1.4);
 		wage15.count = 1;
@@ -185,7 +188,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage16 = new Wages(); 
 		wage16.ranking = "Officer 11";
-		wage16.nationalityId = 1L;
+		wage16.nationalityId = BigDecimal.valueOf(13);
 		wage16.currency = "HKD";
 		wage16.salary = BigDecimal.valueOf(1.4);
 		wage16.count = 1;
@@ -193,7 +196,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		
 		Wages wage17 = new Wages(); 
 		wage17.ranking = "Officer 12";
-		wage17.nationalityId = 1L;
+		wage17.nationalityId = BigDecimal.valueOf(13);
 		wage17.currency = "HKD";
 		wage17.salary = BigDecimal.valueOf(1.4);
 		wage17.count = 1;
@@ -207,7 +210,6 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 	}
 	
 	public List<HashMap<String, Object>> generateReportData(List<Object> rows, Map<String, Double> exchangeMap){
-		List<List<HashMap<String, Object>>> resultss = new ArrayList<List<HashMap<String, Object>>>();
 		
 		HashMap<String, WagesSummary> prepareWages = new LinkedHashMap<String, WagesSummary>();
 		//Map<String, Double> reportData = new HashMap<String, Double>();
@@ -228,13 +230,15 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 				prepareWages.put(wage.ranking, ws);
 			}
 			WagesSummary wageSummary = prepareWages.get(wage.ranking);
-			BigDecimal rate = BigDecimal.valueOf(exchangeMap.get(wage.currency));
+			//BigDecimal rate = BigDecimal.valueOf( ((Number) exchangeMap.get(wage.currency)).doubleValue());
 			
-			if (rate==null) {
-				rate = BigDecimal.valueOf(exchangeMap.get("OTHERS"));
-//				errorMsg+="There is unknow exchange rate. The exchange rate should filed properly!!";
+			if (exchangeMap.get(wage.currency)==null) {
+				
+				//rate = BigDecimal.valueOf(exchangeMap.get("OTHERS"));
+				dollorCodeNotFoundSet.add(wage.currency);
+				//errorMsg += String.format("%s have a unknown exchange rate.\n",wage.ranking);
 			}else{
-
+				BigDecimal rate = BigDecimal.valueOf( ((Number) exchangeMap.get(wage.currency)).doubleValue());
 				wageSummary.totalExchangedSalary = wageSummary.totalExchangedSalary.add(wage.salary.multiply(rate));
 				
 				wageSummary.totalCount += wage.count;
@@ -248,7 +252,7 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 
 			String rank = entry.getKey();
 			WagesSummary wageSummary = entry.getValue();
-			BigDecimal avg = wageSummary.totalExchangedSalary.divide(BigDecimal.valueOf(wageSummary.totalCount)).setScale(3, BigDecimal.ROUND_HALF_EVEN) ;
+			BigDecimal avg = wageSummary.totalExchangedSalary.divide(BigDecimal.valueOf(wageSummary.totalCount == 0 ? 1 : wageSummary.totalCount)).setScale(3, BigDecimal.ROUND_HALF_EVEN) ;
 			result.put("rank"+count, rank);
 			result.put("avg"+count, avg);
 
@@ -264,7 +268,6 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 		//end of data set
 		
 			results.add(result);
-		
 			//reportData.put(rank, avg);
 			return results;
 }
@@ -282,19 +285,27 @@ public class MMO_018 extends AbstractKeyValue implements IReportGenerator{
 			//rate inputParam missing
 		
 		//Define Mock exchange rate
-		Map<String, Double> exchangeMap = new HashMap<String, Double>(); 
-		exchangeMap.put("USD", 1.0);
-		exchangeMap.put("HKD", 7.78);
-		exchangeMap.put("RMB", 0.15477);
-		exchangeMap.put("EUR", 1.1855);
-		exchangeMap.put("GBP", 1.3833);
-		exchangeMap.put("JPY", 0.0090052);
-
-		String errorMsg= "";
+		//Map<String, Double> exchangeMap = new HashMap<String, Double>(); 
+//		exchangeMap.put("USD", 1.0);
+//		exchangeMap.put("HKD", 7.78);
+//		exchangeMap.put("RMB", 0.15477);
+//		exchangeMap.put("EUR", 1.1855);
+//		exchangeMap.put("GBP", 1.3833);
+//		exchangeMap.put("JPY", 0.0090052);
+		
+		//Define custom exchange rate
+		Map<String,Double> exchangeMap = (Map)inputParam.get("Currency");
+		exchangeMap.keySet().removeIf(Objects::isNull);
+		exchangeMap.values().removeAll(Collections.singleton(null));
 		
 		//get data from mock Data set
 		List<Object> rows = getDataSet(reportDateFrom, reportDateTo, nationalityId);
 		List<HashMap<String, Object>> results = generateReportData(rows, exchangeMap);
+		//Map<String, Object> map = new HashMap<String, Object>();
+		if(dollorCodeNotFoundSet.size()>0) {
+			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
+			inputParam.put("errorCode", msg);
+		}
 		System.out.println("hello");
 		String nationality_name = NationalityDao.findById(nationalityId).getCountryEngDesc();
 		inputParam.put("nationality",nationality_name);

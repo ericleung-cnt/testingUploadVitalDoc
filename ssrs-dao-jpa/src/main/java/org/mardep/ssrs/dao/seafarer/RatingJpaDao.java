@@ -233,13 +233,31 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 	 */
 	@Override
 	public List<Object[]> sumSalaryByRank(Date reportDate, String rankRating){
-		Query query = em.createNativeQuery("select r.ENG_DESC, case when count(salary) = 0 then 0 else sum(salary)/count(salary) end avgsalary from CREW_CR006 c inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID where engage_date <=:reportDate   and R.RANK_RATING =:rankRating group by r.CAPACITY_ID , r.ENG_DESC");
+		String sql ="select r.ENG_DESC, c.NATIONALITY_ID, " 
+				+ "isnull(SUM(c.SALARY),0) SALARY, isnull(c.CURRENCY,'USD') CURRENCY,  "
+				+ "c.ENGAGE_DATE, CASE WHEN COUNT(c.ID)<>0 THEN COUNT(c.ID) ELSE 1 END [COUNT], "
+				+ "r.RANK_RATING " 
+				+ "FROM [SSRS_UAT_1119].[dbo].[RANK] r" 
+				+ "LEFT JOIN [SSRS_UAT_1119].[dbo].[CREW_CR006] c "
+				+ "ON  c.CAPACITY_ID = r.CAPACITY_ID  "
+				+ "and ENGAGE_DATE<= :reportDateTo) " 
+				+ "GROUP BY r.ENG_DESC, c.NATIONALITY_ID, c.SALARY, "
+				+ "c.CURRENCY, c.ENGAGE_DATE, r.CAPACITY_ID, r.RANK_RATING "
+				+ "ORDER BY r.CAPACITY_ID";
+		
+		Query query = em.createNativeQuery(sql);
 		query.setParameter("reportDate", reportDate);
 		query.setParameter("rankRating", rankRating);
-
-		@SuppressWarnings("unchecked")
-		List<Object[]> resultList = query.getResultList();
-		return resultList;
+		return query.getResultList();
+		
+		
+//		Query query = em.createNativeQuery("select r.ENG_DESC, case when count(salary) = 0 then 0 else sum(salary)/count(salary) end avgsalary from CREW_CR006 c inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID where engage_date <=:reportDate   and R.RANK_RATING =:rankRating group by r.CAPACITY_ID , r.ENG_DESC");
+//		query.setParameter("reportDate", reportDate);
+//		query.setParameter("rankRating", rankRating);
+//
+//		@SuppressWarnings("unchecked")
+//		List<Object[]> resultList = query.getResultList();
+//		return resultList;
 
 	}
 

@@ -36,12 +36,67 @@ var searchForm =
 					{name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true, endRow:true},					
 					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
 					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
-					{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
-					{name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
-					{name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,				
+					//{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
+					//{name: "USD/RMB", title: "RMB", type:"decimal", defaultValue:6.46}	,			
+					//{name: "USD/BGP", title: "BGP", type:"decimal", defaultValue:0.72}	,				
 				]
 	});
 	
+	var  APW_SearchResultListLG=   isc.ListGrid.create({
+		ID: "RPT_MMO_DollorListLG",
+		// autoFetchData :true,
+		canEdit:true,
+		editEvent:"click",
+		autoSaveEdits:false,
+		canRemoveRecords:false,
+		warnOnRemoval:true,            
+	
+		useClientFiltering: true,
+		showAllRecords: true,
+		// showFilterEditor: true,
+		filterOnKeypress: false,
+	//    showRowNumbers: true,
+	   headerHeight:30,
+		alternateRecordStyles:true,
+		width:"200",
+		height:"200",
+	
+		initialSort: [
+	
+		],
+		fields: [
+	 
+			{ name: "DollorCode", title:"Currency",  width: 80 ,},
+			// { name: "fsa_score",  width: 80 },
+			{ name: "Exchange", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
+			// { name: "sol_guid_created", title:"Solution Created", width: "*" ,type:"boolean",width: 80, canEdit:false},
+			// { name: "sol_guid", title:"Solution id", width: "*" ,hidden:true},
+			// { name: "createdDate", hidden:true },
+		],
+	
+	
+	});
+	var APW_add_ships_btn= isc.IAddButton.create({
+				ID:"MMO_add_dollor_btn",
+				title: 'Add new Dollor',
+				height:30,
+				autoFit:true,
+				// autoDraw:false,
+				// hidden:true,
+				// onControl: '',
+				click: function() {
+					RPT_MMO_DollorListLG.startEditingNew();
+				}
+	})
+	
+	
+	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:0.128713},
+	{DollorCode:"USD",Exchange:1.0},
+	{DollorCode:"RMB",Exchange:0.15477},
+	{DollorCode:"EUR",Exchange:1.1855},
+	{DollorCode:"GBP",Exchange:1.3833},
+	{DollorCode:"JPY",Exchange:0.0090052},
+	{DollorCode:"GBP",Exchange:1.3833}])
 
 var searchFormToolBar = 
 	isc.ReportToolbar.create({
@@ -49,7 +104,14 @@ var searchFormToolBar =
 			{ name:"generateBtn", title:"Generate Report", autoFit: true, disabled: false,
 			  click : function () { 
 				  if(RPT_MMO_018_Form.validate()){
-						ReportViewWindow.displayReport(["RPT_MMO_018", RPT_MMO_018_Form.getValues()]);
+					  RPT_MMO_DollorListLG.saveAllEdits();
+					  CurrencyObj = {};
+					  RPT_MMO_DollorListLG.getData().forEach(o => {
+						  CurrencyObj[o.DollorCode] = o.Exchange;
+					  })
+					  var values = Object.assign(RPT_MMO_018_Form.getValues(), { Currency: CurrencyObj })
+					  var requestArguments = ["RPT_MMO_018", values];
+					  ReportViewWindow.displayReport(["RPT_MMO_018", RPT_MMO_018_Form.getValues()]);
 					}
 			  }
 			}
@@ -57,17 +119,41 @@ var searchFormToolBar =
 	});	
 
 	
+//var searchSectionContent = 
+//	isc.ReportSectionStack.create({
+//		sections: [
+//			{ title: "Report", expanded: true, resizeable: false, 
+//				items: [ 
+//					
+//					
+//					isc.HLayout.create({membersMargin:10, 
+//						members:
+//							[isc.HLayout.create({ height: 30, membersMargin: 10, members: [searchForm, searchFormToolBar] }), RPT_MMO_DollorListLG,MMO_add_dollor_btn] }) 
+//			]
+//			}
+//
+//		]
+//
+//});	
+
 var searchSectionContent = 
 	isc.ReportSectionStack.create({
 		sections: [
 			{ title: "Report", expanded: true, resizeable: false, 
-				items: [ isc.HLayout.create({membersMargin:10, members:[searchForm, searchFormToolBar]}) ]
+
+				items: [ 
+					
+
+					isc.VLayout.create({ membersMargin: 10,
+						 members: 
+						[isc.HLayout.create({ height: 30, membersMargin: 10, members: [searchForm, searchFormToolBar] }), RPT_MMO_DollorListLG,MMO_add_dollor_btn] })
+			
+			]
 			}
 
 		]
 
 });	
-
 
 
 
