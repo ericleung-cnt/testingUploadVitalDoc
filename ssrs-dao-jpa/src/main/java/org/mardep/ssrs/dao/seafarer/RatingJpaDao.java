@@ -233,11 +233,7 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 	 */
 	@Override
 	public List<Object[]> sumSalaryByRank(Date reportDate, String rankRating){
-		Query query = em.createNativeQuery("select r.ENG_DESC, case when count(salary) = 0 then 0 else sum(salary)/count(salary) end avgsalary " +
-				"from CREW c " +
-				"inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID " +
-				"where :reportDate between engage_date and isnull(discharge_date, convert(datetime, '3019-12-31',102))   and R.RANK_RATING =:rankRating " +
-				"group by r.CAPACITY_ID , r.ENG_DESC ");
+		Query query = em.createNativeQuery("select r.ENG_DESC, case when count(salary) = 0 then 0 else sum(salary)/count(salary) end avgsalary from CREW_CR006 c inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID where engage_date <=:reportDate   and R.RANK_RATING =:rankRating group by r.CAPACITY_ID , r.ENG_DESC");
 		query.setParameter("reportDate", reportDate);
 		query.setParameter("rankRating", rankRating);
 
@@ -424,14 +420,7 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 
 	@Override
 	public List<Object[]> sumSalaryByShipType(Date reportDate, String shipTypeCode) {
-		Query query = em.createNativeQuery("select r.ENG_DESC, case when count(salary) = 0 then 0 else sum(salary)/count(salary) end avgsalary,"
-				+ " case when count(salary) = 0 then 0 else count(salary) end countsalary " +
-				"from CREW c "
-				+ "inner join REG_MASTERS rm on c.VESSEL_ID= rm.APPL_NO  " +
-				"inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID " +
-				"where :reportDate between engage_date and isnull(discharge_date, convert(datetime, '3019-12-31',102))   "
-				+ "and rm.SS_ST_SHIP_TYPE_CODE =:shipTypeCode " +
-				"group by r.CAPACITY_ID , r.ENG_DESC ");
+		Query query = em.createNativeQuery("select r.ENG_DESC rank,  SS_ST_SHIP_TYPE_CODE, N.ENG_DESC nation, SALARY,CURRENCY from CREW_CR006 c inner join (select * ,ROW_NUMBER()over(PARTITION BY IMO_NO  order by appl_no desc ) AS RowNum from REG_MASTERS where SS_ST_SHIP_TYPE_CODE=:shipTypeCode ) rm on c.IMO_NO = rm.IMO_NO and RowNum=1 inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID inner join NATIONALITY N on n.NATIONALITY_ID = c.NATIONALITY_ID where c.ENGAGE_DATE<=:reportDate ");
 		query.setParameter("reportDate", reportDate);
 		query.setParameter("shipTypeCode", shipTypeCode);
 

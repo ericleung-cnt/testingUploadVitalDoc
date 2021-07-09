@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class AbstractAverageWage extends AbstractReportGenerator{
 	
 	
-	public static final String dollorCodeNotFoundErr ="Dollor Code %s Not Found";
-	public Set<String> errMsg = new HashSet<>();
+	public static final String dollorCodeNotFoundErrMsg ="Dollor Code %s Not Found, related data ignored";
+	public static final String errorMsg ="errorMsg";
+	public Set<String> dollorCodeNotFoundSet = new HashSet<>();
 
 	@Autowired
 	IRatingDao ratingDao;

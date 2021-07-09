@@ -169,6 +169,7 @@ public class JasperReportServiceImpl implements IJasperReportService, Initializi
 //		templates.add("MMO_006_Summary_of_Waiting_for_Employment_of_Hong_Kong_Registered_Seafarer.jrxml"); //006 - Summary of Seafarer Waiting for Employment
 		templates.add("MMO_TenYearRange_Summary.jrxml"); //002/003/006 - Summary of Seafarer Waiting for Employment
 		templates.add("MMO_distribution.jrxml"); //007/008 -
+		templates.add("MMO_distributionWithMsg.jrxml"); //007/008 -
 		templates.add("MMO_PrintHorizontal.jrxml"); //
 		templates.add("KeyValue.jrxml"); //
 		templates.add("MMO_010.jrxml"); //010 -

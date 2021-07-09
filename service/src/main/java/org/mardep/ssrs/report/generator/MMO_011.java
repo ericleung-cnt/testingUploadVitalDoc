@@ -10,10 +10,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.mardep.ssrs.dao.codetable.IShipTypeDao;
+import org.mardep.ssrs.domain.codetable.CurrencyCode;
 import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.report.IReportGenerator;
 import org.mardep.ssrs.report.bean.KeyValue;
 import org.mardep.ssrs.report.bean.MMO_Distribution;
+import org.mardep.ssrs.report.bean.NationalityWagePojo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ import net.sf.jasperreports.engine.JasperReport;
  *
  */
 @Service("RPT_MMO_011")
-public class MMO_011 extends AbstractKeyValue implements IReportGenerator{
+public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -38,26 +40,75 @@ public class MMO_011 extends AbstractKeyValue implements IReportGenerator{
 
 	@Override
 	public String getReportFileName() {
-		return "MMO_distribution.jrxml";
+		return "MMO_distributionWithMsg.jrxml";
 	}
 
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
 		String shipTypeCode = (String)inputParam.get("shipTypeCode");
-
+		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
 		logger.info("####### RPT_MMO_011  #########");
 		logger.info("Report Date:{}", reportDate);
 		logger.info("ShipTypeCode, {}-{}", new Object[]{shipTypeCode});
 
-		List<KeyValue> resultList = ratingDao.sumSalaryByShipType(reportDate, shipTypeCode).stream().map(
-				o-> {
-					String rank = (String)o[0];
-					BigDecimal tatalSalary = o[1]!=null? (BigDecimal)o[1]:BigDecimal.ZERO;
-					BigDecimal totalSeafarer = new BigDecimal((Integer)o[2]);
-						return new KeyValue(rank, tatalSalary.divide(totalSeafarer, 0, RoundingMode.HALF_UP).toString());
-					}
-				).collect(Collectors.toList());
+		List<NationalityWagePojo> pojoList = new ArrayList<>();
+		
+		List<Object[]> list = ratingDao.sumSalaryByShipType(reportDate, shipTypeCode);
+//		.stream().map(
+//				o-> {
+//					String rank = (String)o[0];
+//					BigDecimal tatalSalary = o[1]!=null? (BigDecimal)o[1]:BigDecimal.ZERO;
+//					BigDecimal totalSeafarer = new BigDecimal((Integer)o[2]);
+//					return new KeyValue(rank, tatalSalary.divide(totalSeafarer, 0, RoundingMode.HALF_UP).toString());
+//				}
+//				).collect(Collectors.toList());
+		
+		//conver to USD dollor 
+		for(Object row : list) {
+			Object[] array = (Object[]) row;
+			NationalityWagePojo pojo = new NationalityWagePojo();
+			pojo.setRank(array[0].toString());
+			pojo.setShipTypeCode(array[1].toString());
+//			pojo.setNationality_ID(array[0].toString());
+			pojo.setNationalityEngDesc((String) array[2]);
+			pojo.setCurrency((String) array[4]);
+			pojo.setSalary( (BigDecimal)  array[3]);
+			pojo.setUSDsalary(BigDecimal.ZERO);
+			String currency = pojo.getCurrency();
+
+			if(currency!=null) {
+				
+				if(currency.equals(CurrencyCode.USD.name())){
+					pojo.setUSDsalary(pojo.getSalary());
+					pojoList.add(pojo);
+				}
+				else if(currecyMap.containsKey(currency)) {
+				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				pojo.setUSDsalary( pojo.getSalary().divide(divisor,BigDecimal.ROUND_HALF_DOWN));
+				pojoList.add(pojo);
+					
+				}
+				else {
+					dollorCodeNotFoundSet.add(currency);
+				}
+			}else {
+				pojoList.add(pojo);
+			}
+		}
+		
+		List<KeyValue> resultList=new ArrayList<>();
+		Map<String, List<NationalityWagePojo>> groupByRank = pojoList.stream().collect(Collectors.groupingBy(o->o.getRank()));
+		
+		
+		for(Map.Entry<String, List<NationalityWagePojo>> groupByRankmap :groupByRank.entrySet()) {
+			String rank = groupByRankmap.getKey();
+			BigDecimal sum = BigDecimal.ZERO;
+			for(NationalityWagePojo o :groupByRankmap.getValue()) {
+				sum = sum.add(o.getUSDsalary());
+			}
+			resultList.add(	new KeyValue(rank, sum.toString()));
+		}
 
 
 		String reportId = "SRS1150";
@@ -77,6 +128,10 @@ public class MMO_011 extends AbstractKeyValue implements IReportGenerator{
 		map.put("printHorizontal", mmoPHJR);
 		map.put("keyValue", kvJR);
 		map.put(REPORT_ID, reportId);
+		if(dollorCodeNotFoundSet.size()>0) {
+			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
+			map.put(errorMsg, msg);
+		}
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
 

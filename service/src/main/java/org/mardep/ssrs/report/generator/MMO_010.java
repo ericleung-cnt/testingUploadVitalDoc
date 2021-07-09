@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service("RPT_MMO_010")
-public class MMO_010 extends AbstractKeyValue implements IReportGenerator{
+public class MMO_010 extends AbstractAverageWage implements IReportGenerator{
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -94,7 +94,7 @@ public class MMO_010 extends AbstractKeyValue implements IReportGenerator{
 					
 				}
 				else {
-//					errMsg.add(String.format(dollorCodeNotFoundErr,currency));
+					dollorCodeNotFoundSet.add(currency);
 				}
 			}else {
 				pojoList.add(pojo);
@@ -444,6 +444,11 @@ public class MMO_010 extends AbstractKeyValue implements IReportGenerator{
 //		}
 
 		Map<String, Object> map = new HashMap<String, Object>();
+		if(dollorCodeNotFoundSet.size()>0) {
+			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
+			map.put(errorMsg, msg);
+		}
+		
 		map.put(REPORT_ID, reportId);
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
