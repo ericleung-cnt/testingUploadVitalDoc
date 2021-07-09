@@ -286,7 +286,8 @@ isc.Window.create({
 						         {name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
 						        //  {name: "vesselId", 	showIf:"false"}, 
 						         {name: "imoNo", 	showIf:"false"}, 
-						         {name: "version", 	showIf:"false"}, 
+								 {name: "version", 	showIf:"false"}, 
+								 {name: "id",showIf:"false" }, 
 						         
 						         {name: "crewName", 	title: "Crew Name", },
 						         {name: "serbNo", 			title: "SERB No.", 		},
@@ -327,7 +328,6 @@ isc.Window.create({
 						        	 validators:[
 						        		 { type:"custom",
 						        			 condition: function(item, validator, value, record){
-						        				 console.log("value is: " + value);
 						        				 if (value && value instanceof Date){
 													 return (value.getTime()>record.engageDate.getTime());
 												 } return true;
@@ -340,7 +340,7 @@ isc.Window.create({
 								 {name: "nokName", 			title: "Name of Kin", 		startRow:true},
 						         {name: "nokAddress", 			title: "Relationship of Kin & Address(if any)", 		},
 						        
-								 {name: "currency", title: "Currency", length:5, 
+								 {name: "currency", title: "Currency", length:5,addUnknownValues:true,  editorType:"comboBox"
 								//  valueMap:{"1.0":"HKD", "7.8":"USD"},
 						        	//  changed: function (form, item, value){
 						        	// 	 console.log("currency changed");
@@ -372,6 +372,7 @@ isc.Window.create({
 						         
 						         ]
 					}),
+					
 					
 					isc.ButtonToolbar.create({
 						ID:"crewListCoverAddSeafarerDynamicForm_ToolBar",
@@ -424,11 +425,9 @@ isc.Window.create({
 isc.ButtonToolbar.create({
 	ID:"crewListDetailToolBar",
 	buttons: [
-		//TODO:
         {name:"saveBtn", title:"Save", autoFit: true, onControl:"MMO_CREATE|MMO_UPDATE",
         	click : function () { 
         		if(crewListDetailForm.validate()){
-//        		TODO
         			var requestParam = {"operationType":"update"};
       			  	if(crewListDetailForm.getValue('version')==null){
       			  		requestParam = {"operationType":"add"};
@@ -541,12 +540,12 @@ function openCrewListDetail(record){
 					crewListDetailToolBar.getButton('addSeafarerBtn').setDisabled(false);
 					crewListDetailForm.getField('imoNo').setDisabled(true);
 					crewListDetailCrewList.refresh();
+					//		crewListDetaiSectionContent.showSection('seafarerInfoSection');
+					crewListDetailCrewList.setDisabled(false);
+					if (crewid) {
+						crewListDetailCrewList.rowDoubleClick({ "id": crewid });
+					}
 				});
-//		crewListDetaiSectionContent.showSection('seafarerInfoSection');
-		crewListDetailCrewList.setDisabled(false);
-		if(crewid){
-			crewListDetailCrewList.rowDoubleClick( {"id":crewid});
-		}
 	}else{
 		// Create
 		crewListDetailForm.clearErrors(true);

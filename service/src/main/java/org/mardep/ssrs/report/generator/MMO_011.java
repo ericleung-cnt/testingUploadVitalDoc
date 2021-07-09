@@ -5,8 +5,10 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.mardep.ssrs.dao.codetable.IShipTypeDao;
@@ -53,7 +55,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 		logger.info("ShipTypeCode, {}-{}", new Object[]{shipTypeCode});
 
 		List<NationalityWagePojo> pojoList = new ArrayList<>();
-		
+		Set<String> dollorCodeNotFoundSet = new HashSet<>();
 		List<Object[]> list = ratingDao.sumSalaryByShipType(reportDate, shipTypeCode);
 //		.stream().map(
 //				o-> {

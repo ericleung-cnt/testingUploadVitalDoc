@@ -20,7 +20,7 @@ import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * 
- * MMO Report-008: Summary of seafarer Waiting for Employment
+ * MMO Report-008: Distribution of Crew by Rank / Rating by Nationality
  * 
  * @author Leo.LIANG
  *

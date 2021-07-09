@@ -32,7 +32,7 @@ var searchForm =
 		ID:"RPT_MMO_009_Form",
 		fields: [
 					{name: "reportDate", title: "Report Date", defaultValue : new Date(), required:true, type: "date", displayFormat:"dd/MM/yyyy"},
-					{name: "rankingRating", title: "Ranking / Rating", valueMap:{"O":"Officer", "R":"Rating"}, allowEmptyValue:false, endRow:true}	,				
+					{name: "rankingRating", title: "Ranking / Rating", valueMap:{"O":"Officer", "R":"Rating"}, defaultToFirstOption:true,allowEmptyValue:false, endRow:true}	,				
 					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
 					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
 					// {name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
@@ -105,7 +105,7 @@ var searchFormToolBar =
 					  RPT_MMO_DollorListLG.getData().forEach(o => {
 						  CurrencyObj[o.DollorCode] = o.Exchange;
 					  })
-					  var values = Object.assign(RPT_MMO_010_Form.getValues(), { Currency: CurrencyObj })
+					  var values = Object.assign(RPT_MMO_009_Form.getValues(), { Currency: CurrencyObj })
 
 					  var requestArguments = ["RPT_MMO_009", values];
 					  ReportViewWindow.displayReport(requestArguments);

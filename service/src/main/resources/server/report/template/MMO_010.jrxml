@@ -13,6 +13,7 @@
 		<defaultValueExpression><![CDATA["E:\\ssrs_workspace\\service\\src\\main\\resources\\server\\report\\template\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="subReport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="errorMsg" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>

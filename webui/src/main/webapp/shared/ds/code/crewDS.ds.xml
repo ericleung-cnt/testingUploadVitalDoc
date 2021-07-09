@@ -23,6 +23,7 @@
 			   		<value ID="HKD">HKD</value>
 			   		<value ID="CNY">CNY</value>
 					<value ID="USD">USD</value>
+					<value ID="BGP">BGP</value>
 			</valueMap>
 		</field>
 		<field name="salary" 		type="decimal" 	title="Salary" 			required="true"/>

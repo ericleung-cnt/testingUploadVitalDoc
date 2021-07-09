@@ -233,17 +233,7 @@ public class RatingJpaDao extends AbstractJpaDao<Rating, CommonPK> implements IR
 	 */
 	@Override
 	public List<Object[]> sumSalaryByRank(Date reportDate, String rankRating){
-		String sql ="select r.ENG_DESC, c.NATIONALITY_ID, " 
-				+ "isnull(SUM(c.SALARY),0) SALARY, isnull(c.CURRENCY,'USD') CURRENCY,  "
-				+ "c.ENGAGE_DATE, CASE WHEN COUNT(c.ID)<>0 THEN COUNT(c.ID) ELSE 1 END [COUNT], "
-				+ "r.RANK_RATING " 
-				+ "FROM [SSRS_UAT_1119].[dbo].[RANK] r" 
-				+ "LEFT JOIN [SSRS_UAT_1119].[dbo].[CREW_CR006] c "
-				+ "ON  c.CAPACITY_ID = r.CAPACITY_ID  "
-				+ "and ENGAGE_DATE<= :reportDateTo) " 
-				+ "GROUP BY r.ENG_DESC, c.NATIONALITY_ID, c.SALARY, "
-				+ "c.CURRENCY, c.ENGAGE_DATE, r.CAPACITY_ID, r.RANK_RATING "
-				+ "ORDER BY r.CAPACITY_ID";
+		String sql ="select r.ENG_DESC rank,   N.ENG_DESC nation, SALARY,CURRENCY from CREW_CR006 c inner join RANK r on c.CAPACITY_ID = r.CAPACITY_ID inner join NATIONALITY N on n.NATIONALITY_ID = c.NATIONALITY_ID where c.ENGAGE_DATE<=:reportDate  and r.RANK_RATING=:rankRating order by rank ";
 		
 		Query query = em.createNativeQuery(sql);
 		query.setParameter("reportDate", reportDate);

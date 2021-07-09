@@ -5,8 +5,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.mardep.ssrs.domain.codetable.CurrencyCode;
@@ -23,7 +25,7 @@ import net.sf.jasperreports.engine.JasperReport;
 
 /**
  *
- * MMO Report-009: Summary of seafarer Waiting for Employment
+ * MMO Report-009: Average Monthly Wages by Rank/Rating
  *
  * @author Leo.LIANG
  *
@@ -56,7 +58,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 //					}
 //				).collect(Collectors.toList());
 
-
+		Set<String> dollorCodeNotFoundSet = new HashSet<>();
 		String reportId = "SRS1120";
 		String reportTitle = "Average Monthly Wages by Rank";
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
@@ -65,11 +67,11 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 			Object[] array = (Object[]) row;
 			NationalityWagePojo pojo = new NationalityWagePojo();
 			pojo.setRank(array[0].toString());
-			pojo.setShipTypeCode(array[1].toString());
+//			pojo.setShipTypeCode(array[1].toString());
 //			pojo.setNationality_ID(array[0].toString());
-			pojo.setNationalityEngDesc((String) array[2]);
-			pojo.setCurrency((String) array[4]);
-			pojo.setSalary( (BigDecimal)  array[3]);
+			pojo.setNationalityEngDesc((String) array[1]);
+			pojo.setSalary( (BigDecimal)  array[2]);
+			pojo.setCurrency((String) array[3]);
 			pojo.setUSDsalary(BigDecimal.ZERO);
 			String currency = pojo.getCurrency();
 
