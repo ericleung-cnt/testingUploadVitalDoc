@@ -31,9 +31,9 @@ var searchForm =
 		ID:"RPT_MMO_018_Form",
 		numCols: 6,		
 		fields: [
-					{name: "reportDateFrom", title: "From Date", type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
-					{name: "reportDateTo", title: "To Date", type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
-					{name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true, endRow:true},					
+					{name: "reportDateFrom", title: "From Date", required:true, type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
+					{name: "reportDateTo", title: "To Date", required:true, type: "date", defaultValue : new Date(),displayFormat:"dd/MM/yyyy"},
+					{name: "nationality", title: "Nationality", required:true, optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", allowEmptyValue:true, endRow:true},					
 					{name: "spacerItem", 	type:"SpacerItem", endRow:true}, 
 					{name:"1USD", title:"1 USD =", type:"staticText", endRow:true},
 					//{name: "USD/HKD", title: "HKD", type:"decimal", defaultValue:7.77}	,				
@@ -90,13 +90,12 @@ var searchForm =
 	})
 	
 	
-	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:0.128713},
+	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:7.7672767},
 	{DollorCode:"USD",Exchange:1.0},
-	{DollorCode:"RMB",Exchange:0.15477},
-	{DollorCode:"EUR",Exchange:1.1855},
-	{DollorCode:"GBP",Exchange:1.3833},
-	{DollorCode:"JPY",Exchange:0.0090052},
-	{DollorCode:"GBP",Exchange:1.3833}])
+	{DollorCode:"RMB",Exchange:6.4849628},
+	{DollorCode:"EUR",Exchange:0.84460179},
+	{DollorCode:"GBP",Exchange:0.72550763},
+	{DollorCode:"JPY",Exchange:110.05176}])
 
 var searchFormToolBar = 
 	isc.ReportToolbar.create({

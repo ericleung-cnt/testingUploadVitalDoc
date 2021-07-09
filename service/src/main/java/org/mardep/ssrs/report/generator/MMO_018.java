@@ -209,7 +209,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		return getDataSetFromDB(reportDateFrom, reportDateTo, nationalityId);
 	}
 	
-	public List<HashMap<String, Object>> generateReportData(List<Object> rows, Map<String, Double> exchangeMap){
+	public List<HashMap<String, Object>> generateReportData(List<Object> rows, Map<String, Double> exchangeMap, Set dollorCodeNotFoundSet){
 		
 		HashMap<String, WagesSummary> prepareWages = new LinkedHashMap<String, WagesSummary>();
 		//Map<String, Double> reportData = new HashMap<String, Double>();
@@ -239,8 +239,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 				//errorMsg += String.format("%s have a unknown exchange rate.\n",wage.ranking);
 			}else{
 				BigDecimal rate = BigDecimal.valueOf( ((Number) exchangeMap.get(wage.currency)).doubleValue());
-				wageSummary.totalExchangedSalary = wageSummary.totalExchangedSalary.add(wage.salary.multiply(rate));
-				
+				wageSummary.totalExchangedSalary = wageSummary.totalExchangedSalary.add(wage.salary.divide(rate,3,BigDecimal.ROUND_HALF_EVEN));
 				wageSummary.totalCount += wage.count;
 				prepareWages.put(wage.ranking, wageSummary);			
 			}
@@ -300,8 +299,10 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		
 		//get data from mock Data set
 		List<Object> rows = getDataSet(reportDateFrom, reportDateTo, nationalityId);
-		List<HashMap<String, Object>> results = generateReportData(rows, exchangeMap);
+		Set<String> dollorCodeNotFoundSet = new HashSet<>();
+		List<HashMap<String, Object>> results = generateReportData(rows, exchangeMap, dollorCodeNotFoundSet);
 		//Map<String, Object> map = new HashMap<String, Object>();
+		
 		if(dollorCodeNotFoundSet.size()>0) {
 			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
 			inputParam.put("errorCode", msg);
