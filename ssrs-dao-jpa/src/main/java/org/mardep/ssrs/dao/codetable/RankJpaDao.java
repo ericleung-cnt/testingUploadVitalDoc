@@ -71,8 +71,8 @@ public class RankJpaDao extends AbstractJpaDao<Rank, Long> implements IRankDao {
 		String sql = "select r.ENG_DESC, c.NATIONALITY_ID, " + 
 				"isnull(SUM(c.SALARY),0) SALARY, isnull(c.CURRENCY,'USD') CURRENCY,  "+ 
 				"c.ENGAGE_DATE,  CASE WHEN COUNT(c.ID)<>0 THEN COUNT(c.ID) ELSE 1 END [COUNT] " + 
-				"FROM [SSRS_UAT_1119].[dbo].[RANK] r " + 
-				"LEFT JOIN [SSRS_UAT_1119].[dbo].[CREW_CR006] c ON  "
+				"FROM RANK r " + 
+				"LEFT JOIN CREW_CR006 c ON  "
 				+ "c.CAPACITY_ID = r.CAPACITY_ID and "
 				+ "NATIONALITY_ID = :nationalityId and "
 				+ "(ENGAGE_DATE>= :reportDateFrom and ENGAGE_DATE<= :reportDateTo) " + 
@@ -157,8 +157,8 @@ public class RankJpaDao extends AbstractJpaDao<Rank, Long> implements IRankDao {
 		
 		String sql = "select r.ENG_DESC, c.NATIONALITY_ID, "
 				+ "isnull(FLOOR(AVG(DATEDIFF(DAY,BIRTH_DATE, :reportDate) / 365.25)),0) Avg_age, r.RANK_RATING "
-				+ "FROM [SSRS_UAT_1119].[dbo].[RANK] r "
-				+ "LEFT JOIN [SSRS_UAT_1119].[dbo].[CREW_CR006] c ON  c.CAPACITY_ID = r.CAPACITY_ID "
+				+ "FROM RANK r "
+				+ "LEFT JOIN CREW_CR006 c ON  c.CAPACITY_ID = r.CAPACITY_ID "
 				+ "and NATIONALITY_ID = :nationality "
 				+ "GROUP BY r.ENG_DESC, c.NATIONALITY_ID, r.RANK_RATING, r.CAPACITY_ID "
 				+ "ORDER BY  r.RANK_RATING, r.CAPACITY_ID";
