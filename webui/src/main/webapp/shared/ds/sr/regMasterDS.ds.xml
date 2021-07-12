@@ -84,6 +84,6 @@
 		<field name="atfYearCount" 		type="float" 	title="ATF year count"/>
 		<field name="registrar" 		type="integer" 	title="Registrar"/>
 		<field name="provRegDate"	type="datetime" displayFormat="dd/MM/yyyy" title="Prov Reg Date"/>
-
+		<field name="erksNo"	type="text" title="ERKS" length="50"/>
 	</fields>
 </DataSource>

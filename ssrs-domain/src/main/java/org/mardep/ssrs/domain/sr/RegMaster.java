@@ -455,6 +455,11 @@ public class RegMaster extends AbstractPersistentEntity<String> implements Clone
 	@JoinColumn(name="APPL_NO", insertable=false, updatable=false, nullable=true)
 	private Representative rp;
 
+	@Getter
+	@Setter
+	@Column(name = "ERKS_NO")
+	private String erksNo;
+	
 	public String getRepresentativeName() {
 		return rp != null ? rp.getName() : null;
 	}

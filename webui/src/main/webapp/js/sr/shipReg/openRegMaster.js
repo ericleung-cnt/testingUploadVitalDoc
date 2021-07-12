@@ -3574,7 +3574,7 @@ var openRegMaster = function(record, task, mode
 		        {name:"applNo", disabled:isCompleteRegistered(), type:"staticText"},
 		        {name:"applNoSuf", valueMap:{"F":"Full-Reg", "P":"Pro-Reg"}, defaultValue:"F"},
 		        {name:"corCollect", optionDataSource:"officeDS",displayField:"name",valueField:"id", required:true},
-		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), endRow:true, characterCasing: "upper",
+		        {name:"imoNo", disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper",
 		        	icons: [
 		        		{
 		        			name: "checkedOK",
@@ -3603,6 +3603,7 @@ var openRegMaster = function(record, task, mode
 		        		imoFocused = false;
 		        	}
 		        },
+		        {name:"erksNo", characterCasing:"upper", endRow:true},
 		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", 
 		        	width:300, colSpan:2, //endRow:true,redrawOnChange:true,
 		        	icons: [
