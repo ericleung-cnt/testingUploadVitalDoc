@@ -19,12 +19,12 @@
 		<field name="capacityId" 	type="integer" 	title="Capacity ID" 	required="true"/>
 		<field name="crewCert" 		type="text" 	title="Crew Cert"		length="50"/>
 		<field name="currency" 		type="text" 	title="Currency"		length="5" required="true">
-				<valueMap>
+			<!-- <valueMap>
 			   		<value ID="HKD">HKD</value>
 			   		<value ID="CNY">CNY</value>
 					<value ID="USD">USD</value>
 					<value ID="BGP">BGP</value>
-			</valueMap>
+			</valueMap> -->
 		</field>
 		<field name="salary" 		type="decimal" 	title="Salary" 			required="true"/>
 		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engage Date"		/>
@@ -43,7 +43,7 @@
 		<!-- <field name="rSalary" 		type="integer" 	title="R Salary"		/> -->
 		<field name="crewListCover" type="crewListCoverDS"/>
 		<field name="nationality" 	type="any"/>
-		<field name="capacity" 			type="any"/>
+		<field name="capacity" 			type="rankDS"/>
 		<field name="validationErrors" 			type="text"/>
 		<field name="excelData" type="imageFile" maxFileSize="2147483647" />
 	</fields>

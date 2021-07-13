@@ -74,6 +74,8 @@ var fetchedCrewList = isc.ListGrid.create({
 	canHover:true,
 	autoFitFieldWidths:true,
 	minFieldWidth:50,
+	showFilterEditor:true,
+	filterOnKeypress:false,
 	fields: [
 			{name: "validationErrors" ,autoFitWidth:false,maxWidth:500 , hidden:true}, 
 			{name: "id", hidden:true  }, 
@@ -81,8 +83,8 @@ var fetchedCrewList = isc.ListGrid.create({
 			{name: "referenceNo",  }, 
 			{name: "crewName", width: 150 }, 
 			{name: "serbNo", width: 100 }, 
-			{name: "nationalityEngDesc", title: "Nationality", dataPath:"nationality.engDesc" ,width:100},
-			{name: "capacityEngDesc", title: "Capacity", dataPath:"capacity.engDesc",width:100},
+			{name: "nationalityId", optionDataSource:"nationalityDS",valueField:"id",displayField:"engDesc", title: "Nationality" ,width:100},
+			{name: "capacityId", optionDataSource:"rankDS",valueField:"id",displayField:"engDesc", title: "Capacity", /*dataPath:"capacity.engDesc",*/width:100},
 			{name: "crewCert" ,width:100} ,
 			{name: "currency" } ,
 			{name: "salary", title: "Salary", format:",##0.00", type:"decimal" ,width:100} ,
@@ -114,12 +116,31 @@ var fetchedCrewList = isc.ListGrid.create({
 		    	crewListCoverAddCrewWindow.show();
 	         },
 	         refresh:function(){
+				 console.log("refrsh");
 	        	 var imoNo = crewListDetailForm.getValue("imoNo");
 	        	 crewListDetailCrewList.setData([]);
 				 crewListDetailCrewList.fetchData({"imoNo":imoNo}
 	
 				  );
 			 },	
+			//  filterData: function (criteria, callback, requestProperties) {
+			// 	 // fix In criteria, definition 'nationality.engDesc' refers to a related DataSource ('null') that does not exist.  Ignoring this criteria entry. 
+			// 	if(criteria==null){
+			// 		criteria={};
+			// 	}
+			// 	var newCri={};
+			// 	for (let [key, value] of Object.entries(criteria)) {
+			// 		var idx = key.indexOf(".");
+			// 		if(idx!=-1){
+			// 			newCri[key.slice(idx+1)] = value;
+			// 		 }else{
+			// 			 newCri[key] = value;
+			// 		 }
+			// 	 }
+			// 	 console.log(criteria , newCri);  // the criteria of form datasource.field is be omitted, so cut it to field
+			// 	this.fetchData(newCri);
+			// 	this.setFilterEditorCriteria(criteria);
+			// },
 			 dataArrived: function (startRow, endRow) {
 				this.Super('dataArrived', arguments);
 			},
@@ -353,7 +374,8 @@ isc.Window.create({
 								 {name: "nokName", 			title: "Name of Kin", 		startRow:true},
 						         {name: "nokAddress", 			title: "Relationship of Kin & Address(if any)", 		},
 						        
-								 {name: "currency", title: "Currency", length:5,addUnknownValues:true,  editorType:"comboBox"
+								 {name: "currency", title: "Currency", length:5,addUnknownValues:true,  editorType:"comboBox",
+								 valueMap:["HKD","CNY","USD","BGP"]
 								//  valueMap:{"1.0":"HKD", "7.8":"USD"},
 						        	//  changed: function (form, item, value){
 						        	// 	 console.log("currency changed");

@@ -466,7 +466,7 @@ public class CrewService extends AbstractService implements ICrewService {
 			List<Crew> existCrewFound = findExistCrewRecords(crew,allCrewsByImono);
 			if(duplicateRecord.contains(crewReaded)) {
 				if(existCrewFound.size()>0) {
-					existCrewFound.get(0).setValidationErrors("duplicate Found and Ignored"+Objects.toString(existCrewFound.get(0).getValidationErrors(),""));
+					existCrewFound.get(0).setValidationErrors("Errors:duplicate Found and Ignored"+Objects.toString(existCrewFound.get(0).getValidationErrors(),""));
 				}
 				continue;
 			}

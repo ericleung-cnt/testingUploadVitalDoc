@@ -13,9 +13,9 @@ isc.HLayout.create({
 						crewListSearchFormToolBar.getButton('searchBtn').click();
 					},
 					fields: [
-				         {name: "imoNo", 		title: "Vessel Name", type: "text", wrapTitle:false,type:"ComboBoxItem",  width: 200 
+				         {name: "shipName", 		title: "Vessel Name", type: "text", wrapTitle:false,type:"ComboBoxItem",  width: 200 
 						 , optionDataSource:"crewViewDS"
-						 , valueField:"imoNo"
+						 , valueField:"shipName"
 						 , displayField:"shipName"
 						 , cachePickListResults: true
 						 , useClientFiltering: true
@@ -87,7 +87,7 @@ isc.ListGrid.create({
 //         {name: "official_no", title: "Official No"},
 //         {name: "reg_port", title: "Port of Registry", type: "text", wrap: true }, 
 			{name: "imoNo", width: 80 }, 
-			{name: "shipName", width: 80 }, 
+			{name: "shipName", title:"Vessel Name",width: 80 }, 
 			{name: "regPort", width: 80 }, 
 			{name: "offcialNo", width: 80 }, 
 			// {name: "Crew.crewName", width:50 }, 
