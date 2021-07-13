@@ -1,5 +1,5 @@
 <DataSource ID="seafarerSearchDS" serverType="generic" inheritsFrom="seafarerDS">
-	<serverObject lookupStyle="spring" bean="seafarerSearchDMI" />
+	<serverObject lookupStyle="spring" bean="seafarerExtendDMI" />
 	<fields>
 		<field name="id" 			type="text" title="Seafarer table ID" primaryKey="true" length="20" required="true"/>
 		<field name="idNo" type="text" title="Seafarer ID" lenght="20" required="true" />
@@ -64,6 +64,8 @@
 <!-- 		<field name="rating"		type="any" 		title="Rank"/> -->
 		<field name="rankId"		type="integer" 	title="Rank" valueXPath="rating/capacityId"/>
 		<field name="previousSerbNo" type="text" 	title="Previous Serb NO" valueXPath="previousSerb/serbNo" length="10"/>
+		<field name="latestRegistrationRecordDate" type="date" displayFormat="dd/MM/yyyy" title="Latest Reg Rec Date" />
+		<field name="latestRegistrationExpiryDate" type="date" displayFormat="dd/MM/yyyy" title="Latest Reg Expiry Date" />
 	</fields>
 	<operationBinding operationType="singleFetch" serverMethod="fetch"/>
 </DataSource>

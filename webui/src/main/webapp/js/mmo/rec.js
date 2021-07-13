@@ -66,12 +66,15 @@ var seafarerSearchResultList =isc.ListGrid.create({
 	         { name: "surname", 		width:100},
 	         { name: "firstName",		width:120},
 	         { name: "chiName",			width:100},
+	         { name: "birthDate", width:100},
 	         { name: "sex",				width:70},
 	         { name: "rankId",			width:150, title:"Rank",
 //	        	 dataPath:"rating/capacityId",
 	        	 optionDataSource:"rankDS", sortField:"engDesc", displayField:"engDesc", valueField:"id"
 	         },
 	         { name: "previousSerbNo",	width:120},
+	         { name: "latestRegistrationRecordDate", width: 100},
+	         { name: "latestRegistrationExpiryDate", width: 100},	         
 	         { name: "telephone", 		width:150},
 	         { name: "mobile", 		width:150},
 	         { name: "nationalityId", 	width:130, optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc"}

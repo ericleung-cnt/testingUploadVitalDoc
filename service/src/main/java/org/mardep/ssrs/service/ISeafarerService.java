@@ -10,6 +10,7 @@ import org.mardep.ssrs.domain.seafarer.PreviousSerb;
 import org.mardep.ssrs.domain.seafarer.Reg;
 import org.mardep.ssrs.domain.seafarer.SeaService;
 import org.mardep.ssrs.domain.seafarer.Seafarer;
+import org.mardep.ssrs.domain.seafarer.SeafarerExtend;
 
 /**
  * 
@@ -73,4 +74,6 @@ public interface ISeafarerService extends IBaseService{
 	public List<Crew> getByVesselIdCoverYymm(String vesselId, String coverYymm); 
 	public License update(License license);
 	public License add(License license);
+	
+	public List<SeafarerExtend> getSeafarerExtendList();
 }

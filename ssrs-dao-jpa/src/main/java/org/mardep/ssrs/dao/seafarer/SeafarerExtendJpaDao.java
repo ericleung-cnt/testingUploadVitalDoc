@@ -3,26 +3,21 @@ package org.mardep.ssrs.dao.seafarer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.mardep.ssrs.dao.AbstractJpaDao;
 import org.mardep.ssrs.dao.PredicateCriteria;
 import org.mardep.ssrs.dao.PredicateCriteria.PredicateType;
-import org.mardep.ssrs.domain.seafarer.Seafarer;
 import org.mardep.ssrs.domain.seafarer.SeafarerExtend;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class SeafarerJpaDao extends AbstractJpaDao<Seafarer, String> implements ISeafarerDao {
+public class SeafarerExtendJpaDao extends AbstractJpaDao<SeafarerExtend, String> implements ISeafarerExtendDao {
 
 	@Override
-	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<Seafarer> listRoot) {
+	protected List<PredicateCriteria> resolvePredicateCriteriaList(final CriteriaBuilder cb, final Root<SeafarerExtend> listRoot) {
 		listRoot.fetch("nationality", JoinType.LEFT);
 		listRoot.fetch("rating", JoinType.LEFT);
 		listRoot.fetch("previousSerb", JoinType.LEFT);
@@ -44,53 +39,11 @@ public class SeafarerJpaDao extends AbstractJpaDao<Seafarer, String> implements 
 		list.add(new PredicateCriteria("previousSerbNo", "previousSerb/serbNo", PredicateType.LIKE_IGNORE_CASE));
 		return list;
 	}
-	
-	protected String orderFieldMap(String key){
-		if("nationalityEngDesc".equals(key)){
-			return "nationality/engDesc";
-		}
-		return null;
-	}
-
-	@Override
-	public Seafarer findByIdSerbNo(String id, String serbNo) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Seafarer> cq = cb.createQuery(Seafarer.class);
-		Root<Seafarer> from = cq.from(Seafarer.class);
-		List<Predicate> list = new ArrayList<Predicate>();
-		if(id!=null && !id.isEmpty()){
-			list.add(cb.equal(from.get("idNo"), id));
-		}
-		if(serbNo!=null && !serbNo.isEmpty()){
-			list.add(cb.equal(from.get("serbNo"), serbNo));
-		}
-		cq.where(list.toArray(new Predicate[list.size()]));
-		TypedQuery<Seafarer> query = em.createQuery(cq);
 		
-		try{
-			return query.getSingleResult();
-		}catch (NoResultException nre){
-			return null;
-		}
-	}
-	
 	@Override
-	public Seafarer findBySerbNo(String serbNo) {
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Seafarer> cq = cb.createQuery(Seafarer.class);
-		Root<Seafarer> from = cq.from(Seafarer.class);
-		List<Predicate> list = new ArrayList<Predicate>();
-		if(serbNo!=null && !serbNo.isEmpty()){
-			list.add(cb.equal(from.get("serbNo"), serbNo));
-		}
-		cq.where(list.toArray(new Predicate[list.size()]));
-		TypedQuery<Seafarer> query = em.createQuery(cq);
+	public List<SeafarerExtend> getSeafarerExtendList(){
+		List<SeafarerExtend> entities = new ArrayList<SeafarerExtend>();
 		
-		try{
-			return query.getSingleResult();
-		}catch (NoResultException nre){
-			return null;
-		}
+		return entities;
 	}
-	
 }

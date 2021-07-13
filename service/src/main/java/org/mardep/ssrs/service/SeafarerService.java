@@ -1,6 +1,7 @@
 package org.mardep.ssrs.service;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.mardep.ssrs.domain.seafarer.PreviousSerb;
 import org.mardep.ssrs.domain.seafarer.Reg;
 import org.mardep.ssrs.domain.seafarer.SeaService;
 import org.mardep.ssrs.domain.seafarer.Seafarer;
+import org.mardep.ssrs.domain.seafarer.SeafarerExtend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -667,4 +669,12 @@ public class SeafarerService extends AbstractService implements ISeafarerService
 		License update = this.update(license);
 		return update;
 	}
+	
+	@Override
+	public List<SeafarerExtend> getSeafarerExtendList(){
+		List<SeafarerExtend> lst = new ArrayList<SeafarerExtend>();
+		
+		return lst;
+	}
+
 }
