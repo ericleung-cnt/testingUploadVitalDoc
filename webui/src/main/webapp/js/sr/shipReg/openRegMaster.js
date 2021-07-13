@@ -3603,7 +3603,7 @@ var openRegMaster = function(record, task, mode
 		        		imoFocused = false;
 		        	}
 		        },
-		        {name:"erksNo", characterCasing:"upper", endRow:true},
+		        {name:"erksNo", title: "ERKS Code", colSpan:4, characterCasing:"upper", endRow:true},
 		        {name:"regName", required:true, disabled:!(allowImoUpdate || !isCompleteRegistered()), characterCasing: "upper", 
 		        	width:300, colSpan:2, //endRow:true,redrawOnChange:true,
 		        	icons: [

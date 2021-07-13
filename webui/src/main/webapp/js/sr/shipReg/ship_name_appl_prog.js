@@ -14,6 +14,7 @@ var sectionTitle =
 var regMasterSearchFields =
  [
 			{ name:"applNo", width:80, align:"center" },
+			{ name:"erksNo", title:"ERKS Code", width:100},			
 			//{ name:"applNoSuf", width:120 },
 			//{ name:"engMaker", width:120 },
 			{ name:"regName", title:"Ship Name", width:180 },
