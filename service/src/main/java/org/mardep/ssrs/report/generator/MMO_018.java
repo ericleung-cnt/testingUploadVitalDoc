@@ -307,7 +307,6 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
 			inputParam.put("errorCode", msg);
 		}
-		System.out.println("hello");
 		String nationality_name = NationalityDao.findById(nationalityId).getCountryEngDesc();
 		inputParam.put("nationality",nationality_name);
 		return jasper.generateReport(getReportFileName(), results, inputParam);

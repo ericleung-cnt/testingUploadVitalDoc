@@ -91,10 +91,7 @@ var searchForm =
 	})
 
 
-	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:7.77},
-	{DollorCode:"USD",Exchange:1},
-	{DollorCode:"RMB",Exchange:6.48},
-	{DollorCode:"GBP",Exchange:0.73}])
+	RPT_MMO_DollorListLG.setData(G_DOLLOR_EXCHANGE_RATE_DATA)
 
 
 	

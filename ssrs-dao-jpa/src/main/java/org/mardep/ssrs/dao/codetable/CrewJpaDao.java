@@ -85,5 +85,5 @@ public class CrewJpaDao extends AbstractJpaDao<Crew, Integer> implements ICrewDa
 		q.setParameter("reportDate", reportDate);
 		return q.getResultList();
 	}
-
+	
 }

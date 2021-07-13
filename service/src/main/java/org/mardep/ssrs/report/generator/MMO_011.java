@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 		Date reportDate = (Date)inputParam.get("reportDate");
 		String shipTypeCode = (String)inputParam.get("shipTypeCode");
 		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		currecyMap.keySet().removeIf(Objects::isNull);
 		logger.info("####### RPT_MMO_011  #########");
 		logger.info("Report Date:{}", reportDate);
 		logger.info("ShipTypeCode, {}-{}", new Object[]{shipTypeCode});
@@ -87,7 +89,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 				}
 				else if(currecyMap.containsKey(currency)) {
 				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
-				pojo.setUSDsalary( pojo.getSalary().divide(divisor,BigDecimal.ROUND_HALF_DOWN));
+				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
 				}

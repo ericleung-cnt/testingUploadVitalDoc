@@ -125,9 +125,22 @@ var fetchedCrewList = isc.ListGrid.create({
 			},
 			getCellCSSText:function (record, rowNum, colNum){
 				// console.log(record.validationErrors);
-				if(record.validationErrors!=null){
-					return "color:#f1e740;";
-				} 
+				if(record.validationErrors!=null &&record && record.validationErrors.indexOf("Error")!=-1){
+					return "background-color:#FF6347;";
+				}
+
+				if(record.validationErrors!=null &&record && record.validationErrors.startsWith("Update")){
+					return "background-color:#f1e740;";
+				}
+				if(record.validationErrors!=null && record && record.validationErrors.startsWith("New")){
+					return "background-color:#98FB98;";
+				}
+
+				if(record.validationErrors!=null ){
+					return "background-color:#FF6347;";
+				}
+
+		
 	
 	
 			}

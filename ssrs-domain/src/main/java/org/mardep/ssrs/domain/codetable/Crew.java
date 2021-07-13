@@ -271,7 +271,6 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
 		result = prime * result + ((birthPlace == null) ? 0 : birthPlace.hashCode());
 		result = prime * result + ((capacityBeforeMap == null) ? 0 : capacityBeforeMap.hashCode());
-		result = prime * result + ((capacityId == null) ? 0 : capacityId.hashCode());
 		result = prime * result + ((crewCert == null) ? 0 : crewCert.hashCode());
 		result = prime * result + ((crewName == null) ? 0 : crewName.hashCode());
 		result = prime * result + ((currency == null) ? 0 : currency.hashCode());
@@ -282,10 +281,10 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		result = prime * result + ((engageDate == null) ? 0 : engageDate.hashCode());
 		result = prime * result + ((engagePlace == null) ? 0 : engagePlace.hashCode());
 		result = prime * result + ((imoNo == null) ? 0 : imoNo.hashCode());
-		result = prime * result + ((nationalityId == null) ? 0 : nationalityId.hashCode());
 		result = prime * result + ((nationalitybeforeMap == null) ? 0 : nationalitybeforeMap.hashCode());
 		result = prime * result + ((nokAddress == null) ? 0 : nokAddress.hashCode());
 		result = prime * result + ((nokName == null) ? 0 : nokName.hashCode());
+		result = prime * result + ((referenceNo == null) ? 0 : referenceNo.hashCode());
 		result = prime * result + ((salary == null) ? 0 : salary.hashCode());
 		result = prime * result + ((serbNo == null) ? 0 : serbNo.hashCode());
 		result = prime * result + ((sex == null) ? 0 : sex.hashCode());
@@ -295,7 +294,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 
 	@Override
 	public boolean equals(Object obj) {
-		String foramt ="yyyy-MM-dd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd"); 
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -311,7 +310,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		if (birthDate == null) {
 			if (other.birthDate != null)
 				return false;
-		} else if (!birthDate.equals(other.birthDate))
+		} else if (!simpleDateFormat.format(birthDate).equals(simpleDateFormat.format(other.birthDate)))
 			return false;
 		if (birthPlace == null) {
 			if (other.birthPlace != null)
@@ -322,11 +321,6 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 			if (other.capacityBeforeMap != null)
 				return false;
 		} else if (!capacityBeforeMap.equals(other.capacityBeforeMap))
-			return false;
-		if (capacityId == null) {
-			if (other.capacityId != null)
-				return false;
-		} else if (!capacityId.equals(other.capacityId))
 			return false;
 		if (crewCert == null) {
 			if (other.crewCert != null)
@@ -346,7 +340,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		if (dischargeDate == null) {
 			if (other.dischargeDate != null)
 				return false;
-		} else if (!dischargeDate.equals(other.dischargeDate))
+		} else if (!simpleDateFormat.format(dischargeDate).equals(simpleDateFormat.format(other.dischargeDate)))
 			return false;
 		if (dischargePlace == null) {
 			if (other.dischargePlace != null)
@@ -356,7 +350,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		if (employDate == null) {
 			if (other.employDate != null)
 				return false;
-		} else if (!employDate.equals(other.employDate))
+		} else if (!simpleDateFormat.format(employDate).equals(simpleDateFormat.format(other.employDate)))
 			return false;
 		if (employDuration == null) {
 			if (other.employDuration != null)
@@ -366,7 +360,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 		if (engageDate == null) {
 			if (other.engageDate != null)
 				return false;
-		} else if (!engageDate.equals(other.engageDate))
+		} else if (!simpleDateFormat.format(engageDate).equals(simpleDateFormat.format(other.engageDate)))
 			return false;
 		if (engagePlace == null) {
 			if (other.engagePlace != null)
@@ -377,11 +371,6 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 			if (other.imoNo != null)
 				return false;
 		} else if (!imoNo.equals(other.imoNo))
-			return false;
-		if (nationalityId == null) {
-			if (other.nationalityId != null)
-				return false;
-		} else if (!nationalityId.equals(other.nationalityId))
 			return false;
 		if (nationalitybeforeMap == null) {
 			if (other.nationalitybeforeMap != null)
@@ -398,10 +387,15 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 				return false;
 		} else if (!nokName.equals(other.nokName))
 			return false;
+		if (referenceNo == null) {
+			if (other.referenceNo != null)
+				return false;
+		} else if (!referenceNo.equals(other.referenceNo))
+			return false;
 		if (salary == null) {
 			if (other.salary != null)
 				return false;
-		} else if (!salary.equals(other.salary))
+		} else if (salary.compareTo(other.salary)!=0)
 			return false;
 		if (serbNo == null) {
 			if (other.serbNo != null)
@@ -413,13 +407,24 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 				return false;
 		} else if (!sex.equals(other.sex))
 			return false;
-		if (status == null) {
-			if (other.status != null)
+		if (nationalityId == null) {
+			if (other.nationalityId != null)
 				return false;
-		} else if (!status.equals(other.status))
+		} else if (!nationalityId.equals(other.nationalityId))
 			return false;
+		if (capacityId == null) {
+			if (other.capacityId != null)
+				return false;
+		} else if (!capacityId.equals(other.capacityId))
+			return false;
+//		if (status == null) {
+//			if (other.status != null)
+//				return false;
+//		} else if (!status.equals(other.status))
+//			return false;
 		return true;
 	}
+	
 
 
 

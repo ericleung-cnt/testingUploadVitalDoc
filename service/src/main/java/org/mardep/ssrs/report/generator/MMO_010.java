@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -61,6 +62,7 @@ public class MMO_010 extends AbstractAverageWage implements IReportGenerator{
 		String reportTitle = "Average Monthly Wages of Rank-Wise Crew by Nationality";
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		currecyMap.keySet().removeIf(Objects::isNull);
 		List<?> list = crewDao.getRankWiseCrewAverageWagesByNationality(reportDate, rankId);
 		Map<String, Map<String, MMO_010Bean>> ranks = new HashMap<>();
 		List<String> typeSeq = new ArrayList<>();
@@ -91,7 +93,7 @@ public class MMO_010 extends AbstractAverageWage implements IReportGenerator{
 				}
 				else if(currecyMap.containsKey(currency)) {
 				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
-				pojo.setUSDsalary( pojo.getSalary().divide(divisor,BigDecimal.ROUND_HALF_DOWN));
+				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
 				}

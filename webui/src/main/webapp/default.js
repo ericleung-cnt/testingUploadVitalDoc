@@ -201,3 +201,9 @@ changePasswordButton.setDisabled(!loginData.isExternal);
 //    }, 5000);
 //};
 //startHeartbeat();
+var G_DOLLOR_EXCHANGE_RATE_DATA=	[{DollorCode:"HKD",Exchange:7.7672767},
+{DollorCode:"USD",Exchange:1.0},
+{DollorCode:"RMB",Exchange:6.4849628},
+{DollorCode:"EUR",Exchange:0.84460179},
+{DollorCode:"GBP",Exchange:0.72550763},
+{DollorCode:"JPY",Exchange:110.05176}];

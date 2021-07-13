@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -436,8 +437,12 @@ public class CrewService extends AbstractService implements ICrewService {
 	 * @return
 	 */
 	private List<Crew> updateCrewList( Map<String, String>shipInfo, List<Crew> crewlist) {
+		crewlist=mapNationalityAndRank(crewlist);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd"); 
 		List<Crew>  updateRecords = new ArrayList<>();
 		List<Crew>  outDetedRecords = new ArrayList<>();
+		//a record is duplicate if have same engage date and serbNo
+		List<String> duplicateRecord =new ArrayList<>();
 		Crew query = new Crew();
 		query.setImoNo(shipInfo.get(ImoNo));
 		CrewListCover crewlistCover = coverDao.findById(shipInfo.get(ImoNo));
@@ -457,8 +462,16 @@ public class CrewService extends AbstractService implements ICrewService {
 //		}
 		
 		for(Crew crew :crewlist) {
+			String crewReaded = crew.getSerbNo()+ simpleDateFormat.format(crew.getEngageDate());
 			List<Crew> existCrewFound = findExistCrewRecords(crew,allCrewsByImono);
-			logger.debug("crewlist size"+existCrewFound.size() );
+			if(duplicateRecord.contains(crewReaded)) {
+				if(existCrewFound.size()>0) {
+					existCrewFound.get(0).setValidationErrors("duplicate Found and Ignored"+Objects.toString(existCrewFound.get(0).getValidationErrors(),""));
+				}
+				continue;
+			}
+			
+			logger.debug(crew.getReferenceNo()+ "crewlist size"+existCrewFound.size() );
 			
 			if(existCrewFound.size()==0) {
 				// new one 
@@ -470,7 +483,9 @@ public class CrewService extends AbstractService implements ICrewService {
 				
 				// if have old records
 				outDetedRecords.addAll(allCrewsByImono.stream()
+						.filter(o->o.getId()!=null)
 						.filter(o->StringUtils.equals(o.getSerbNo(),crew.getSerbNo()))
+						.filter(o->o.getEngageDate().before(crew.getEngageDate()))
 						.collect(Collectors.toList()));
 				
 			}
@@ -478,7 +493,7 @@ public class CrewService extends AbstractService implements ICrewService {
 			else  {
 				//update exists
 				for(Crew existCrew  : existCrewFound) {
-					
+				boolean equals = crew.equals(existCrew);	
 				existCrew.setReferenceNo(crew.getReferenceNo());
 				
 				existCrew.setBirthPlace(crew.getBirthPlace());
@@ -503,17 +518,26 @@ public class CrewService extends AbstractService implements ICrewService {
 				existCrew.setEmployDate(crew.getEmployDate());
 				existCrew.setEmployDuration(crew.getEmployDuration());
 				existCrew.setEngageDate(crew.getEngageDate());
-				existCrew.setEngagePlace(crew.getEngagePlace());				
-				updateRecords.add(existCrew);				
+				existCrew.setEngagePlace(crew.getEngagePlace());	
+				existCrew.setValidationErrors(crew.getValidationErrors());	
+				if(existCrew.getId()!=null) {
+					if(!equals) {
+						logger.debug(crew.getReferenceNo()+""+ existCrew.getReferenceNo());
+						existCrew.setValidationErrors("Update"+ Objects.toString( existCrew.getValidationErrors(),""));
+					}
+					updateRecords.add(existCrew);									
+				}
 				}
 				
 			}
+			allCrewsByImono.add(crew);
+			duplicateRecord.add(crewReaded);
 
 		}
 		
 		for(Crew crew :outDetedRecords) {
 			crew.setStatus(Crew.STATUS_INACTIVE);
-			crew.setValidationErrors("status to Inactive");
+			crew.setValidationErrors("update:status to Inactive");
 			updateRecords.add(crew);	
 		}
 		
@@ -561,19 +585,21 @@ public class CrewService extends AbstractService implements ICrewService {
 
 	@Transactional
 	public List<Crew> saveCrewList(List<Crew> records) {
-		records=mapNationalityAndRank(records);
-		List<Crew> updatedRecords = new ArrayList<>();
-		logger.info("Update follwing {} crew list {}", new Object[] {records.size(),records.toString()});
+//		records=mapNationalityAndRank(records);
+		Map<Integer,Crew> uniqueMap = new LinkedHashMap<>();
+ 		logger.info("Update follwing {} crew list {}", new Object[] {records.size(),records.toString()});
 		
 		for(Crew o : records) {
 			Long version1 = o.getVersion();
-			Crew saved = crewDao.save(o);
 			if(version1==null) {
-				saved.setValidationErrors("new "+ Objects.toString(saved.getValidationErrors(),""));
+				o.setValidationErrors("New "+ Objects.toString(o.getValidationErrors(),""));
 			}
 			
-			updatedRecords.add(saved);	
+			Crew saved = crewDao.save(o);
+			saved.setValidationErrors(o.getValidationErrors());
+			uniqueMap.put(saved.getId(),saved);
 		}
+		return new ArrayList<Crew>(uniqueMap.values());   
 		
 		
 //		updateRecords.stream().forEach(o->{
@@ -590,14 +616,20 @@ public class CrewService extends AbstractService implements ICrewService {
 //			updatedRecords.add(saved);
 //			});
 		
-		HashSet<Object> seen=new HashSet<>();
-		updatedRecords.removeIf(e->!seen.add(e.getId()));// remove duplicate 
+//		updatedRecords.removeIf(e->!seen.add(e.getId()));// remove duplicate 
 		
 //		Set<Crew> set = new HashSet<>(updatedRecords);
 //		updatedRecords.clear();
 //		updatedRecords.addAll(set);  // remove duplicate 
+//		List<Crew> result = crewDao.getCrewById(updatedId);
+//		for(Crew o :result) {
+//			if(rowVersionMap.containsKey(o.getId())&& o.getVersion()!=rowVersionMap.get(o.getId())) {
+//				o.setValidationErrors("updated "+o.getValidationErrors());
+//			}
+//		}
+	
 		
-		return updatedRecords;
+//		return  result;
 	}
 
 
@@ -610,16 +642,19 @@ public class CrewService extends AbstractService implements ICrewService {
 
 	private List<Crew> mapNationalityAndRank(List<Crew> updateRecords) {
 		List<Nationality> findByAllNationality = nationalityDao.findAll();
+		List<NationalityMapping> findByAllNationalityMapping = nationalityMappingDao.findAll();
+		
 		List<Rank> findAllRank = rankDao.findAll();
+		List<RankMapping> findAllRankMapping = rankMappingDao.findAll();
 		updateRecords.stream().forEach(crew->{
 			if(crew.getNationalitybeforeMap()!=null) {
-				final String nationalityValue;
-				NationalityMapping mapping = new NationalityMapping();
 				String nationalityKey = crew.getNationalitybeforeMap();
-				mapping.setINPUT(nationalityKey);
-				List<NationalityMapping> findMapping = nationalityMappingDao.findByCriteria(mapping);
-				if(findMapping.size()>0) {
-					nationalityValue= findMapping.get(0).getOUTPUT();
+				final String nationalityValue;
+//				NationalityMapping mapping = new NationalityMapping();
+//				mapping.setINPUT(nationalityKey);
+				Optional<NationalityMapping> findMapping = findByAllNationalityMapping.stream().filter(o->o.getINPUT().contains(nationalityKey)).findFirst();
+				if(findMapping.isPresent()) {
+					nationalityValue= findMapping.get().getOUTPUT();
 				}else {
 					nationalityValue=null;
 				}
@@ -645,13 +680,13 @@ public class CrewService extends AbstractService implements ICrewService {
 				}			
 			}
 			if(crew.getCapacityBeforeMap()!=null) {	
-				String capacityValue;
-				final RankMapping mapping = new RankMapping();
 				String capacityKey = crew.getCapacityBeforeMap();
-				mapping.setINPUT(capacityKey);
-				List<RankMapping> findMapping = rankMappingDao.findByCriteria(mapping);
-				if(findMapping.size()>0) {
-					capacityValue= findMapping.get(0).getOUTPUT();
+				String capacityValue;
+//				final RankMapping mapping = new RankMapping();
+//				mapping.setINPUT(capacityKey);
+				Optional<RankMapping> findMapping = findAllRankMapping.stream().filter(o->o.getINPUT().contains(capacityKey)).findFirst();
+				if(findMapping.isPresent()) {
+					capacityValue= findMapping.get().getOUTPUT();
 				}else {
 					capacityValue=null;
 				}
