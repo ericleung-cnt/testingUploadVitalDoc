@@ -44,8 +44,8 @@ var searchForm =
 	
 	var  APW_SearchResultListLG=   isc.ListGrid.create({
 		ID: "RPT_MMO_DollorListLG",
-		dataSource:"currencyExchangeCodeDS",
-		autoFetchData :true,
+		// dataSource:"currencyExchangeCodeDS",
+		// autoFetchData :true,
 		canEdit:true,
 		editEvent:"click",
 		autoSaveEdits:false,
@@ -77,6 +77,10 @@ var searchForm =
 	
 	
 	});
+	currencyExchangeCodeDS.fetchData({from_Dollar:"USD"},function(res,data,req){
+		RPT_MMO_DollorListLG.setData(data);
+	})
+
 	var APW_add_ships_btn= isc.IAddButton.create({
 				ID:"MMO_add_dollor_btn",
 				title: 'Add new Dollor',
@@ -104,11 +108,25 @@ var searchFormToolBar =
 			{ name:"generateBtn", title:"Generate Report", autoFit: true, disabled: false,
 			  click : function () { 
 				  if(RPT_MMO_018_Form.validate()){
-					  RPT_MMO_DollorListLG.saveAllEdits();
-					  CurrencyObj = {};
-					  RPT_MMO_DollorListLG.getData().allRows.forEach(o => {
-						  CurrencyObj[o.to_Dollar] = o.rate;
-					  })
+					RPT_MMO_DollorListLG.saveAllEdits();
+					var lessEqualThanZero = RPT_MMO_DollorListLG.getData().some(o => {
+						if (o.to_Dollar != null && parseFloat(o.rate) <= 0) {
+							return true;
+						}
+						return false;
+					})
+
+					if (lessEqualThanZero) {
+						isc.say("dollor rate should greater than 0");
+						return;
+					}
+
+					var CurrencyObj =
+						RPT_MMO_DollorListLG.getData().reduce((obj, item) => {
+							obj[item["to_Dollar"]] = item["rate"]
+							return obj;
+						}, {});
+
 					  var values = Object.assign(RPT_MMO_018_Form.getValues(), { Currency: CurrencyObj })
 					  var requestArguments = ["RPT_MMO_018", values];
 					  ReportViewWindow.displayReport(["RPT_MMO_018", RPT_MMO_018_Form.getValues()]);
