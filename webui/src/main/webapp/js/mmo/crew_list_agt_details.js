@@ -2,7 +2,7 @@
 // ------------------ Page for update Crew	------------------------------------	
 // -----------------------------------------------------------------------------
 
-
+var g_crewList_editing_upload_result=false;
 isc.DynamicForm.create({
 	ID:"crewListDetailForm", dataSource:"crewListCoverDS", numCols: 6, cellBorder:0, width:700, 
 	fields: [
@@ -77,7 +77,7 @@ var fetchedCrewList = isc.ListGrid.create({
 	showFilterEditor:true,
 	filterOnKeypress:false,
 	fields: [
-			{name: "validationErrors" ,autoFitWidth:false,maxWidth:500 , hidden:true}, 
+			{name: "validationErrors" ,autoFitWidth:false,width:200, hidden:true}, 
 			{name: "id", hidden:true  }, 
 			{name: "imoNo", hidden:true  }, 
 			{name: "referenceNo",  }, 
@@ -425,7 +425,14 @@ isc.Window.create({
 						        			  crewListCoverAddSeafarerDynamicForm.saveData(function(dsResponse, data, dsRequest) {
 													if (dsResponse.status == 0) {
 														isc.say(saveSuccessfulMessage);
-														crewListDetailCrewList.refresh();
+														if(g_crewList_editing_upload_result){
+															var found =crewListDetailCrewList.getData().find(o=>o.id==data.id);
+															var validationErrors= found.validationErrors;
+															Object.assign(found,data,{validationErrors:validationErrors});
+															crewListDetailCrewList.markForRedraw();
+														}else{
+															crewListDetailCrewList.refresh();
+														}
 //														var demandNoteNo = mmoDNDetailDynamicForm.getValue('demandNoteNo');
 //														mmoDNDetailDynamicForm.fetchData({"applNo":"0", "applNoSuf":"M", "demandNoteNo":demandNoteNo});
 //														mmoDNDetailItemListGrid.setData([]);
@@ -501,10 +508,17 @@ isc.ButtonToolbar.create({
 	   ]
 });	
 
+
 var appBtns = isc.ButtonsHLayout.create({
 	members :
  	 [
-		 isc.IExportButton.create({ listGrid: fetchedCrewList }),
+		isc.IExportButton.create({ listGrid: fetchedCrewList,click:function(){
+			if(g_crewList_editing_upload_result){
+				fetchedCrewList.exportClientData({ ignoreTimeout: true, "endRow": -1, exportAs: "xls", exportFilename: "crewList_upload_result", })
+			}else{
+				this.Super('click', arguments);
+			}
+		} }),
 	 ],
 });
 
@@ -544,10 +558,13 @@ isc.Window.create({
 function openCrewListDetail(record){
 	console.log("openCrewListDetail", record);
 	crewListDetailWindow.show();
+	g_crewList_editing_upload_result=false;
 	if(Array.isArray(record) ){
 		crewListDetailForm.clearErrors(true);
 		crewListDetailForm.setValues({});
 		crewListDetailCrewList.setData([]);
+		g_crewList_editing_upload_result=true;
+		crewListDetailWindow.setTitle("Crew List of Agreement Detail (Editing upload excel result")
 		if(record.length>0){
 			var imoNo = record[0].imoNo;
 			crewListDetailForm.fetchData({"imoNo":imoNo,},

@@ -70,25 +70,25 @@
 		<variableExpression><![CDATA[$F{bean}.getSumSalary7()]]></variableExpression>
 	</variable>
 	<variable name="avg2" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount2()!=0?$V{sum2}.divide(BigDecimal.valueOf( $F{bean}.getCount2() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount2()!=0?$V{sum2}.divide(BigDecimal.valueOf( $F{bean}.getCount2() ) ,3, RoundingMode. HALF_UP):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg1" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount1()!=0?$V{sum1}.divide(BigDecimal.valueOf( $F{bean}.getCount1() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount1()!=0?$V{sum1}.divide(BigDecimal.valueOf( $F{bean}.getCount1() ),3, RoundingMode. HALF_UP):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg3" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount3()!=0?$V{sum3}.divide(BigDecimal.valueOf( $F{bean}.getCount3() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount3()!=0?$V{sum3}.divide(BigDecimal.valueOf( $F{bean}.getCount3() ) ,3, RoundingMode. HALF_UP):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg4" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount4()!=0?$V{sum4}.divide(BigDecimal.valueOf( $F{bean}.getCount4() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount4()!=0?$V{sum4}.divide(BigDecimal.valueOf( $F{bean}.getCount4() ) ,3, RoundingMode. HALF_UP):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg5" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount5()!=0?$V{sum5}.divide(BigDecimal.valueOf( $F{bean}.getCount5() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount5()!=0?$V{sum5}.divide(BigDecimal.valueOf( $F{bean}.getCount5() ) ,3, RoundingMode. HALF_UP):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg6" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount6()!=0?$V{sum6}.divide(BigDecimal.valueOf( $F{bean}.getCount6() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount6()!=0?$V{sum6}.divide(BigDecimal.valueOf( $F{bean}.getCount6() ),3, RoundingMode. HALF_UP ):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<variable name="avg7" class="java.math.BigDecimal">
-		<variableExpression><![CDATA[$F{bean}.getCount7()!=0?$V{sum7}.divide(BigDecimal.valueOf( $F{bean}.getCount7() ) ):BigDecimal.ZERO]]></variableExpression>
+		<variableExpression><![CDATA[$F{bean}.getCount7()!=0?$V{sum7}.divide(BigDecimal.valueOf( $F{bean}.getCount7() ),3, RoundingMode. HALF_UP ):BigDecimal.ZERO]]></variableExpression>
 	</variable>
 	<group name="Rank">
 		<groupExpression><![CDATA[$F{bean}.getRank()]]></groupExpression>

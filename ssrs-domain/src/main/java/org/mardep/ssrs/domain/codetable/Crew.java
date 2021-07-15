@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -205,7 +207,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
-	protected Date engageDate;
+	private Date engageDate;
 
 	@Getter
 	@Setter
@@ -222,7 +224,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Column(name = "EMPLOY_DURATION")
 	@Getter
 	@Setter
-	protected Double employDuration;
+	private Double employDuration;
 	
 	
 
@@ -230,7 +232,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
-	protected Date dischargeDate;
+	private Date dischargeDate;
 
 	@Getter
 	@Setter
@@ -241,6 +243,11 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Setter
 	@Transient
 	private String validationErrors;
+	
+	@Getter
+	@Setter
+	@Transient
+	private Map<String,List<String>> validationErrorsMap;
 	
 	// Excel
 	@Transient

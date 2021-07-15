@@ -1,10 +1,14 @@
 package org.mardep.ssrs.domain.codetable;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Immutable;
 import org.mardep.ssrs.domain.AbstractPersistentEntity;
@@ -72,6 +76,12 @@ public class CrewView extends AbstractPersistentEntity<String> {
 	@Setter
 	@Column(name = "REF_NO")
 	private String refNo;
+	
+	@Column(name = "ENGAGE_DATE", nullable=false)
+	@Temporal(TemporalType.DATE)
+	@Getter
+	@Setter
+	private Date engageDate;
 	
 	
 

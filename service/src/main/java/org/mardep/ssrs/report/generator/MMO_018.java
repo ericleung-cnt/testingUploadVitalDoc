@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -23,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.sf.jasperreports.engine.JRParameter;
 
 /**
  * 
@@ -280,6 +283,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		Date reportDateFrom = (Date)inputParam.get("reportDateFrom");
 		Date reportDateTo = (Date)inputParam.get("reportDateTo");
 		Long nationalityId = (Long)inputParam.get("nationality");
+		inputParam.put(JRParameter.REPORT_LOCALE,  new Locale("en", "US"));
 		
 			//rate inputParam missing
 		

@@ -7,7 +7,7 @@ isc.HLayout.create({
 	height:30, layoutMargin:10,
 	members: [
 				isc.SearchForm.create({
-					ID:"crewListSearchForm", numCols: 4,  width:200, dataSource:"crewViewDS",
+					ID:"crewListSearchForm", numCols: 6,  width:200, dataSource:"crewViewDS",
 					saveOnEnter:true,
 					submit:function(){
 						crewListSearchFormToolBar.getButton('searchBtn').click();
@@ -35,6 +35,7 @@ isc.HLayout.create({
 				         {name: "crewName", type: "text", wrapTitle:false},
 				         {name: "serbNo",   type: "text"}, 
 				         {name: "crewId",   type: "text" , hidden:true}, 
+				         {name: "engageDate",   type: "date" }, 
 				        ]
 				}),
 				isc.ButtonToolbar.create({
@@ -68,11 +69,11 @@ isc.ListGrid.create({
 	alternateRecordStyles:true, 
 	dataSource:"crewViewDS",
 	showFilterEditor:true,
-	filterOnKeypress:true,
+	filterOnKeypress:false,
 	alternateRecordStyles:true, 
 	canHover:true,
 	autoFitFieldWidths:true,
-	minFieldWidth:50,
+	minFieldWidth:80,
 	fields: [
         //  {name: "vesselId", title: "Vessel Name", width:100}, 
         //  {name: "imoNo",  width:100}, 
@@ -86,15 +87,16 @@ isc.ListGrid.create({
         //  {name: "docLocation",  width:"*"} 
 //         {name: "official_no", title: "Official No"},
 //         {name: "reg_port", title: "Port of Registry", type: "text", wrap: true }, 
-			{name: "imoNo", width: 80 }, 
-			{name: "shipName", title:"Vessel Name",width: 80 }, 
-			{name: "regPort", width: 80 }, 
-			{name: "offcialNo", width: 80 }, 
+			{name: "imoNo",  }, 
+			{name: "shipName", title:"Vessel Name",}, 
+			{name: "regPort", }, 
+			{name: "offcialNo", }, 
 			// {name: "Crew.crewName", width:50 }, 
 			// {name: "Crew.serbNo", width:50 }, 
 			// {name: "Crew.referenceNo", width:50 }, 
-			{name: "crewName", width: 80 }, 
-			{name: "serbNo", width: 80 }, 
+			{name: "crewName", }, 
+			{name: "serbNo", }, 
+			{name: "engageDate",  }, 
 			// {name: "serbNo", width: 150 }, 
 			// {name: "nationalityId", title: "Nationality", optionDataSource:"nationalityDS", valueField:"id", displayField:"engDesc"},
 			// {name: "birthDate"},
@@ -143,13 +145,13 @@ isc.HLayout.create({
 							return;
 						}
 						crewListUploadForm.saveData(function (dsResponse, data, dsRequest) {
+							console.log("data".data)
+							console.log("respose",dsResponse)
 							if(dsResponse.status<0){
+								// openCrewListDetail(dsResponse.data);
 								isc.say ("Error occurs <br>" + data);
-								console.log(dsResponse,data)
 							}else{
-								console.log(dsResponse.data)
 								openCrewListDetail(dsResponse.data);
-								console.log("respose",dsResponse)
 								isc.say("Upload Successful! please correct errors if any")
 							}
 						},requestParam)
@@ -157,6 +159,12 @@ isc.HLayout.create({
 				},
 			]
 		}),
+		isc.ButtonsHLayout.create({
+			members :
+			  [
+				 isc.IExportButton.create({ listGrid: crewListSearchResultLG }),
+			 ]
+		})
 	]
 });
 
