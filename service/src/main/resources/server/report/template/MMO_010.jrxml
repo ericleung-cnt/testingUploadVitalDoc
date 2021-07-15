@@ -14,6 +14,7 @@
 	</parameter>
 	<parameter name="subReport" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="errorMsg" class="java.lang.String"/>
+	<parameter name="exchangeRate" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -228,7 +229,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="80" splitType="Stretch">
+		<band height="107" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="11" width="802" height="22" uuid="7adcb022-64ea-4b47-949f-4509b124e366"/>
 				<textElement textAlignment="Center">
@@ -267,6 +268,10 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="8" y="60" width="783" height="20" uuid="79fdb596-7e9b-4eb6-8f67-20da0b84b2e9"/>
 				<textFieldExpression><![CDATA[$P{errorMsg}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="8" y="80" width="793" height="16" uuid="2b01c990-c340-49fa-a982-2299050fb856"/>
+				<textFieldExpression><![CDATA["Exchange Rate: "+$P{exchangeRate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

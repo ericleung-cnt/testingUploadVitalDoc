@@ -50,8 +50,10 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
 		String shipTypeCode = (String)inputParam.get("shipTypeCode");
-		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
+		String exchangeRateString = currecyMap.toString();
+		
 		logger.info("####### RPT_MMO_011  #########");
 		logger.info("Report Date:{}", reportDate);
 		logger.info("ShipTypeCode, {}-{}", new Object[]{shipTypeCode});
@@ -88,7 +90,8 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 					pojoList.add(pojo);
 				}
 				else if(currecyMap.containsKey(currency)) {
-				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				//BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				BigDecimal divisor = new BigDecimal( ((String)currecyMap.get(currency)));
 				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
@@ -138,6 +141,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 		}
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
+		map.put("exchangeRate",exchangeRateString);
 
 
 		return generate(distributionList, map);
