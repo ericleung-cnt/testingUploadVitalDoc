@@ -1,6 +1,7 @@
 package org.mardep.ssrs.report.generator;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,7 +108,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 			for(NationalityWagePojo o :groupByRankmap.getValue()) {
 				sum = sum.add(o.getUSDsalary());
 			}
-			resultList.add(	new KeyValue(rank, sum.toString()));
+			resultList.add(	new KeyValue(rank, (sum.divide(BigDecimal.valueOf(groupByRankmap.getValue().size()),3,RoundingMode.HALF_UP).toString())));
 		}
 		
 		

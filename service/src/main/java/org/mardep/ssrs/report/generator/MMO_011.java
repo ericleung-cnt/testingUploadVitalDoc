@@ -111,7 +111,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 			for(NationalityWagePojo o :groupByRankmap.getValue()) {
 				sum = sum.add(o.getUSDsalary());
 			}
-			resultList.add(	new KeyValue(rank, sum.toString()));
+			resultList.add(	new KeyValue(rank, (sum.divide(BigDecimal.valueOf(groupByRankmap.getValue().size()),3,RoundingMode.HALF_UP).toString())));
 		}
 
 
