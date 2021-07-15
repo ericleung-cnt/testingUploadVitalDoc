@@ -43,6 +43,7 @@ var searchForm =
 
 	var  APW_SearchResultListLG=   isc.ListGrid.create({
 		ID: "RPT_MMO_DollorListLG",
+		dataSource:"currencyExchangeCodeDS",
 		// autoFetchData :true,
 		canEdit:true,
 		editEvent:"click",
@@ -65,9 +66,9 @@ var searchForm =
 		],
 		fields: [
 	 
-			{ name: "DollorCode", title:"Currency",  width: 80 ,},
+			{ name: "to_Dollar", title:"Currency",  width: 80 ,},
 			// { name: "fsa_score",  width: 80 },
-			{ name: "Exchange", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
+			{ name: "rate", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
 			// { name: "sol_guid_created", title:"Solution Created", width: "*" ,type:"boolean",width: 80, canEdit:false},
 			// { name: "sol_guid", title:"Solution id", width: "*" ,hidden:true},
 			// { name: "createdDate", hidden:true },
@@ -89,7 +90,10 @@ var searchForm =
 	})
 
 
-	RPT_MMO_DollorListLG.setData(G_DOLLOR_EXCHANGE_RATE_DATA)
+//	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:7.77},
+//	{DollorCode:"USD",Exchange:1},
+//	{DollorCode:"RMB",Exchange:6.48},
+//	{DollorCode:"GBP",Exchange:0.73}])
 
 
 	
@@ -103,7 +107,7 @@ var searchFormToolBar =
 					  RPT_MMO_DollorListLG.saveAllEdits();
 					  CurrencyObj = {};
 					  RPT_MMO_DollorListLG.getData().forEach(o => {
-						  CurrencyObj[o.DollorCode] = o.Exchange;
+						  CurrencyObj[o.to_Dollar] = o.rate;
 					  })
 					  var values = Object.assign(RPT_MMO_010_Form.getValues(), { Currency: CurrencyObj })
 					  var requestArguments = ["RPT_MMO_010", values];

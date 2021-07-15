@@ -21,6 +21,7 @@ var datasourcesList = [
 	"crewListCoverDS",
 	"csrFormDS",
 	"csrOwnerDS",
+	"currencyExchangeCodeDS",
 	"demandNoteBillingPersonDS",
 	"demandNoteHeaderDS",
 	"demandNoteItemDS",

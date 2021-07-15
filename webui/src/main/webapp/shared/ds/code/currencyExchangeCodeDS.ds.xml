@@ -1,0 +1,11 @@
+<DataSource ID="currencyExchangeCodeDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
+	<serverObject lookupStyle="spring" bean="currencyExchangeCodeDMI" />
+	<fields>
+		<field name="id" type="integer"    title="ID" primaryKey="true"/>
+		<field name="from_Dollar" type="text"    title="From Dollar (USD)"    length="32"/>
+		<field name="to_Dollar" type="text"    title="To Dollar"    length="32"/>
+		<field name="rate" type="float"    title="Exchange Rate"/>
+	</fields>
+</DataSource>
+
+

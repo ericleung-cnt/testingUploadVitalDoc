@@ -40,6 +40,7 @@ view.getMember(0).setData(isc.Tree.create({
 					{categoryName:"Role",js:"js/code/role.js",},
 					{categoryName:"Staff",js:"js/code/staff.js",},
 					{categoryName:"Office",js:"js/code/office.js",},
-					{categoryName:"User Group",js:"js/code/user_group2.js",},		
+					{categoryName:"User Group",js:"js/code/user_group2.js",},
+					{categoryName:"Currency Exchange Code",js:"js/code/mmo_currency_exchange_code.js",},
 				]}}));
 

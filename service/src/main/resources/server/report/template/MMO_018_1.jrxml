@@ -4,6 +4,33 @@
 	<property name="ireport.zoom" value="1.2100000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
 	<parameter name="reportDateFrom" class="java.util.Date" isForPrompting="false">
 		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
 	</parameter>
@@ -50,6 +77,8 @@
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
 	<parameter name="errorCode" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="userId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="exchangeRate" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -81,7 +110,10 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="102" splitType="Stretch">
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="137" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="802" height="20" uuid="d60b8e11-d334-4386-a73b-f1b6109b8241"/>
 				<textElement textAlignment="Center"/>
@@ -90,12 +122,12 @@
 			<staticText>
 				<reportElement x="0" y="19" width="802" height="20" uuid="28721942-22c3-4170-b1ca-f9715c1e6dbb"/>
 				<textElement textAlignment="Center"/>
-				<text><![CDATA[Average Monthly Wages by Rank / Rating by Nationality]]></text>
+				<text><![CDATA[Average Monthly Wages (USD) by Rank / Rating by Nationality]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="0" y="39" width="802" height="20" uuid="a65e3c70-ac2f-4473-9b80-8f2ea3916728"/>
 				<textElement textAlignment="Center"/>
-				<textFieldExpression><![CDATA["FROM " + new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{reportDateFrom}) + " TO " + new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{reportDateTo})]]></textFieldExpression>
+				<textFieldExpression><![CDATA["FROM " + new java.text.SimpleDateFormat("dd-MMM-yyyy",Locale.ENGLISH).format($P{reportDateFrom}) + " TO " + new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{reportDateTo})]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="0" y="59" width="802" height="20" uuid="c31f085c-bcec-46d7-8e30-ed235065d26a"/>
@@ -103,14 +135,14 @@
 				<textFieldExpression><![CDATA["AVERAGE MONTLY WAGES OF " + $P{nationality}.toUpperCase() + " OFFICER"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="682" y="19" width="95" height="20" uuid="b4d3fd08-b5bd-4553-9a94-3e2893be23cc"/>
+				<reportElement x="696" y="19" width="95" height="20" uuid="b4d3fd08-b5bd-4553-9a94-3e2893be23cc"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
 				<reportElement x="777" y="19" width="25" height="20" uuid="f0b20574-5a41-49b7-a680-a5cac8804ec4"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[" "+ $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="0" width="100" height="20" uuid="eb4ed1d3-6c7c-4e3f-a213-1cfb78a3c60a"/>
@@ -122,19 +154,24 @@
 				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" x="0" y="81" width="100" height="21" uuid="b4485ff8-1969-4659-966a-71635dff1ba9"/>
+				<reportElement positionType="Float" x="0" y="81" width="480" height="21" uuid="b4485ff8-1969-4659-966a-71635dff1ba9"/>
 				<textFieldExpression><![CDATA[$P{errorCode}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="21" width="100" height="17" uuid="7bc78976-40ad-45a3-a2cd-58263f7c75f7"/>
+				<textFieldExpression><![CDATA[$P{userId}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="102" width="802" height="18" uuid="dad85409-63aa-48ff-90fd-9fa4c8b86004"/>
+				<textFieldExpression><![CDATA["Exchange Rate: "+$P{exchangeRate}]]></textFieldExpression>
+			</textField>
 		</band>
-	</title>
-	<pageHeader>
-		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
 		<band height="9" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="73" splitType="Stretch">
+		<band height="47" splitType="Stretch">
 			<textField isBlankWhenNull="true">
 				<reportElement positionType="Float" x="14" y="21" width="65" height="20" isPrintWhenDetailOverflows="true" uuid="07f8c4b4-711e-4f4b-a52c-c2fb9b8ff5c4"/>
 				<textElement textAlignment="Center"/>
