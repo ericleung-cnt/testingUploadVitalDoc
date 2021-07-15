@@ -27,12 +27,12 @@
 			</valueMap> -->
 		</field>
 		<field name="salary" 		type="decimal" 	title="Salary" 			required="true"/>
-		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engage Date"		/>
+		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engagement Date"		/>
 		<field name="engagePlace" 	type="text" 	title="Engage Place"	length="50"/>
 		<field name="dischargeDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Discharge Date"/>
 		<field name="dischargePlace" 	type="text" title="Discharge Place"	length="50"/>
-		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="EmployDate Date"/>
-		<field name="employDuration" 	type="decimal" title="Employ Duration(Months)"	/>
+		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Commencement Date(SEA)"/>
+		<field name="employDuration" 	type="decimal" title="SEA Duration(Months)"	/>
 		<field name="status" 		type="text" 	title="Status"			length="1">
 				<valueMap>
 				<value ID="A">Active</value>

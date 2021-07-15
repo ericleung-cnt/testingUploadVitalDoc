@@ -1,6 +1,7 @@
 <DataSource ID="crewViewDS" serverType="generic" inheritsFrom="abstractPersistentEntityDS">
 	<serverObject lookupStyle="spring" bean="crewViewDMI" />
 	<fields>
+		<!-- <field name="uuid" 		type="text"  primaryKey="true" /> -->
 		<field name="imoNo" 		type="text"   title="IMO No." 		length="9"/>
 		<field name="shipName" 		type="text" 	title="Ship Name"			length="140"/>
 		<field name="regPort" 		type="text" 		title="Port of Registry "		length="100"/>
@@ -11,7 +12,6 @@
 		<field name="crewId" 		type="text"  />
 
 		<field name="referenceNo" 	type="text" title="Reference NO."  required="true" length="50"/>
-		<field name="crewName" 	type="text" 	title="Crew Name" 	length="50"/>
 		<field name="sex" 	type="text" 	title="Sex" 	length="5"/>
 		<field name="nationalitybeforeMap" 		type="text" 	length="50"/>
 		<field name="nationalityId" type="integer" 	title="Nationality ID" 	required="true"/>
@@ -33,12 +33,12 @@
 			</valueMap> -->
 		</field>
 		<field name="salary" 		type="decimal" 	title="Salary" 			required="true"/>
-		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engage Date"		/>
+		<field name="engageDate" 	type="date" 	title="Engagement Date"		/>
 		<field name="engagePlace" 	type="text" 	title="Engage Place"	length="50"/>
 		<field name="dischargeDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Discharge Date"/>
 		<field name="dischargePlace" 	type="text" title="Discharge Place"	length="50"/>
-		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="EmployDate Date"/>
-		<field name="employDuration" 	type="decimal" title="Employ Duration(Months)"	/>
+		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Commencement Date(SEA)"/>
+		<field name="employDuration" 	type="decimal" title="SEA Duration(Months)"	/>
 		<field name="status" 		type="text" 	title="Status"			length="1">
 				<valueMap>
 				<value ID="A">Active</value>

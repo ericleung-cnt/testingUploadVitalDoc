@@ -720,7 +720,7 @@ public class CrewService extends AbstractService implements ICrewService {
 					if(StringUtils.equalsIgnoreCase(nation.getCountryChiDesc(), nationalityKey)) return true;
 					if(StringUtils.equalsIgnoreCase(nation.getCountryEngDesc(), nationalityKey)) return true;
 					return false;
-				}).findAny();
+				}).findFirst();
 				
 				if(findAny.isPresent()) {
 					crew.setNationality(findAny.get());   
@@ -747,7 +747,7 @@ public class CrewService extends AbstractService implements ICrewService {
 					if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), capacityKey)) return true;
 					if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), capacityKey)) return true;
 					return false;
-				}).findAny();
+				}).findFirst();
 				
 				if(findAny.isPresent()) {
 					crew.setCapacity(findAny.get());

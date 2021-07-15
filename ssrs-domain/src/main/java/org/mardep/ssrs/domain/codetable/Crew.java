@@ -126,7 +126,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 
 
 	@Column(name = "BIRTH_DATE", nullable=false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Getter
 	@Setter
 	private Date birthDate;
@@ -204,7 +204,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 
 	@Column(name = "ENGAGE_DATE", nullable=false)
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Getter
 	@Setter
 	private Date engageDate;
@@ -216,7 +216,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 	
 	@Column(name = "EMPLOY_DATE")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Getter
 	@Setter
 	private Date employDate;
@@ -229,7 +229,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 
 	@Column(name = "DISCHARGE_DATE")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Getter
 	@Setter
 	private Date dischargeDate;

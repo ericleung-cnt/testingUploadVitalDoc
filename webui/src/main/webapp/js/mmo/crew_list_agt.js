@@ -14,7 +14,7 @@ isc.HLayout.create({
 					},
 					fields: [
 				         {name: "shipName", 		title: "Vessel Name", type: "text", wrapTitle:false,type:"ComboBoxItem",  width: 200 
-						 , optionDataSource:"crewViewDS"
+						 , optionDataSource:"crewListCoverDS"
 						 , valueField:"shipName"
 						 , displayField:"shipName"
 						 , cachePickListResults: true
@@ -32,10 +32,10 @@ isc.HLayout.create({
 						 , pickListWidth:750
 					     },
 				         {name: "imoNo", 	type: "text", wrapTitle:false},
-				         {name: "crewName", type: "text", wrapTitle:false},
-				         {name: "serbNo",   type: "text"}, 
+				        //  {name: "crewName", type: "text", wrapTitle:false},
+				        //  {name: "serbNo",   type: "text"}, 
 				         {name: "crewId",   type: "text" , hidden:true}, 
-				         {name: "engageDate",   type: "date" }, 
+				        //  {name: "employDate",   type: "date" }, 
 				        ]
 				}),
 				isc.ButtonToolbar.create({
@@ -73,7 +73,7 @@ isc.ListGrid.create({
 	alternateRecordStyles:true, 
 	canHover:true,
 	autoFitFieldWidths:true,
-	minFieldWidth:80,
+	minFieldWidth:150,
 	fields: [
         //  {name: "vesselId", title: "Vessel Name", width:100}, 
         //  {name: "imoNo",  width:100}, 
@@ -87,20 +87,22 @@ isc.ListGrid.create({
         //  {name: "docLocation",  width:"*"} 
 //         {name: "official_no", title: "Official No"},
 //         {name: "reg_port", title: "Port of Registry", type: "text", wrap: true }, 
+			// {name: "uuid", type:hidden}, 
 			{name: "imoNo",  }, 
 			{name: "shipName", title:"Vessel Name",}, 
-			{name: "regPort", }, 
+			// {name: "regPort", }, 
 			{name: "offcialNo", }, 
 			// {name: "Crew.crewName", width:50 }, 
 			// {name: "Crew.serbNo", width:50 }, 
 			// {name: "Crew.referenceNo", width:50 }, 
 			{name: "crewName", }, 
-			{name: "serbNo", }, 
-			{name: "engageDate",  }, 
+			// {name: "serbNo", }, 
+			// {name: "employDate",  }, 
 			// {name: "serbNo", width: 150 }, 
-			// {name: "nationalityId", title: "Nationality", optionDataSource:"nationalityDS", valueField:"id", displayField:"engDesc"},
+			{name: "nationalityId", title: "Nationality", optionDataSource:"nationalityDS", valueField:"id", displayField:"engDesc"},
 			// {name: "birthDate"},
-			// {name: "capacityId", title: "Capacity", optionDataSource:"rankDS", valueField:"id", displayField:"engDesc"},
+			{name: "capacityId", title: "Capacity", optionDataSource:"rankDS", valueField:"id", displayField:"engDesc"},
+			{name: "employDate",  }, 
 			// {name: "currency" } ,
 			// {name: "salary", title: "Salary", format:",##0.00", type:"decimal" } 
 	    ], 
