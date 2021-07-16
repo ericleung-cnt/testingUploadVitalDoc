@@ -1,9 +1,11 @@
 package org.mardep.ssrs.report.generator;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class MMO_008 extends AbstractKeyValue implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		Long nationalityId = (Long)inputParam.get("nationalityId");
 		
 		Nationality nationality = nationalityDao.findById(nationalityId);
@@ -53,7 +56,7 @@ public class MMO_008 extends AbstractKeyValue implements IReportGenerator{
 		int ratingSum = ratingList.stream().mapToInt(kv -> (Integer.valueOf(kv.getValue()))).sum();
 
 		String reportId = "SRS1110";
-		String reportTitle = "Distribution of Crew by Rank / Rating by Nationality";
+		String reportTitle = "Distribution of Crew by Rank / Rating by Nationality "+ reportDateDisplay;
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		
 		String title1 = String.format("NUMBER OF %s OFFICER", nationalityEngDesc);

@@ -44,6 +44,7 @@ var searchForm =
 	
 	var  APW_SearchResultListLG=   isc.ListGrid.create({
 		ID: "RPT_MMO_DollorListLG",
+		// dataSource:"currencyExchangeCodeDS",
 		// autoFetchData :true,
 		canEdit:true,
 		editEvent:"click",
@@ -66,9 +67,9 @@ var searchForm =
 		],
 		fields: [
 	 
-			{ name: "DollorCode", title:"Currency",  width: 80 ,},
+			{ name: "to_Dollar", title:"Currency",  width: 80 ,},
 			// { name: "fsa_score",  width: 80 },
-			{ name: "Exchange", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
+			{ name: "rate", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
 			// { name: "sol_guid_created", title:"Solution Created", width: "*" ,type:"boolean",width: 80, canEdit:false},
 			// { name: "sol_guid", title:"Solution id", width: "*" ,hidden:true},
 			// { name: "createdDate", hidden:true },
@@ -76,6 +77,10 @@ var searchForm =
 	
 	
 	});
+	currencyExchangeCodeDS.fetchData({from_Dollar:"USD"},function(res,data,req){
+		RPT_MMO_DollorListLG.setData(data);
+	})
+
 	var APW_add_ships_btn= isc.IAddButton.create({
 				ID:"MMO_add_dollor_btn",
 				title: 'Add new Dollor',
@@ -89,10 +94,13 @@ var searchForm =
 				}
 	})
 	
-console.log(G_DOLLOR_EXCHANGE_RATE_DATA);	
-	RPT_MMO_DollorListLG.setData(
-		G_DOLLOR_EXCHANGE_RATE_DATA
-	)
+	
+//	RPT_MMO_DollorListLG.setData([{DollorCode:"HKD",Exchange:7.7672767},
+//	{DollorCode:"USD",Exchange:1.0},
+//	{DollorCode:"RMB",Exchange:6.4849628},
+//	{DollorCode:"EUR",Exchange:0.84460179},
+//	{DollorCode:"GBP",Exchange:0.72550763},
+//	{DollorCode:"JPY",Exchange:110.05176}])
 
 var searchFormToolBar = 
 	isc.ReportToolbar.create({
@@ -100,11 +108,25 @@ var searchFormToolBar =
 			{ name:"generateBtn", title:"Generate Report", autoFit: true, disabled: false,
 			  click : function () { 
 				  if(RPT_MMO_018_Form.validate()){
-					  RPT_MMO_DollorListLG.saveAllEdits();
-					  CurrencyObj = {};
-					  RPT_MMO_DollorListLG.getData().forEach(o => {
-						  CurrencyObj[o.DollorCode] = o.Exchange;
-					  })
+					RPT_MMO_DollorListLG.saveAllEdits();
+					var lessEqualThanZero = RPT_MMO_DollorListLG.getData().some(o => {
+						if (o.to_Dollar != null && parseFloat(o.rate) <= 0) {
+							return true;
+						}
+						return false;
+					})
+
+					if (lessEqualThanZero) {
+						isc.say("dollor rate should greater than 0");
+						return;
+					}
+
+					var CurrencyObj =
+						RPT_MMO_DollorListLG.getData().reduce((obj, item) => {
+							obj[item["to_Dollar"]] = item["rate"]
+							return obj;
+						}, {});
+
 					  var values = Object.assign(RPT_MMO_018_Form.getValues(), { Currency: CurrencyObj })
 					  var requestArguments = ["RPT_MMO_018", values];
 					  ReportViewWindow.displayReport(["RPT_MMO_018", RPT_MMO_018_Form.getValues()]);

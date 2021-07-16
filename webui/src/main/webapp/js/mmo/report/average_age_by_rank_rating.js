@@ -7,7 +7,7 @@ var searchForm =
 	isc.ReportDynamicForm.create({
 		numCols: 4,
 		fields: [
-		         {name: "reportDate", title: "Report Date",type: "date", displayFormat:"dd/MM/yyyy"},
+		         {name: "reportDate", title: "Report Date",type: "date", required:true, defaultValue : new Date() ,displayFormat:"dd/MM/yyyy"},
 		         {name: "nationality", title: "Nationality", optionDataSource:nationalityDS, valueField:"id", displayField:"engDesc", required:true}
 				]
 	});

@@ -1,12 +1,15 @@
 package org.mardep.ssrs.report.generator;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -44,9 +47,11 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		String rankingRating = (String)inputParam.get("rankingRating");
-		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
+		String exchangeRateString = currecyMap.toString();
 		
 		logger.info("####### RPT_MMO_009  #########");
 		logger.info("Report Date:{}", reportDate);
@@ -62,8 +67,8 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 
 		Set<String> dollorCodeNotFoundSet = new HashSet<>();
 		String reportId = "SRS1120";
-		String reportTitle = "Average Monthly Wages by Rank";
-		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
+		String reportTitle = "Average Monthly Wagess(USD) by Rank "+ reportDateDisplay;		
+				String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		List<NationalityWagePojo> pojoList = new ArrayList<>();
 		for(Object row : list) {
 			Object[] array = (Object[]) row;
@@ -84,7 +89,8 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 					pojoList.add(pojo);
 				}
 				else if(currecyMap.containsKey(currency)) {
-				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				//BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				BigDecimal divisor = new BigDecimal( ((String)currecyMap.get(currency)));
 				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
@@ -107,7 +113,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 			for(NationalityWagePojo o :groupByRankmap.getValue()) {
 				sum = sum.add(o.getUSDsalary());
 			}
-			resultList.add(	new KeyValue(rank, sum.toString()));
+			resultList.add(	new KeyValue(rank, (sum.divide(BigDecimal.valueOf(groupByRankmap.getValue().size()),3,RoundingMode.HALF_UP).toString())));
 		}
 		
 		
@@ -130,6 +136,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 		map.put(REPORT_ID, reportId);
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
+		map.put("exchangeRate",exchangeRateString);
 		if(dollorCodeNotFoundSet.size()>0) {
 			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
 			map.put(errorMsg, msg);

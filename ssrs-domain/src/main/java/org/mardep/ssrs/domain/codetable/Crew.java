@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -82,7 +84,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 
 	@Getter
 	@Setter
-	@Column(name = "CREW_NAME", length=50)
+	@Column(name = "CREW_NAME", length=50, nullable=false)
 	private String crewName;
 	
 
@@ -115,15 +117,9 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	private Nationality nationality;
 	
 	
-////	TODO no FK here
-//	@Getter
-//	@Setter
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name="NATIONALITY_ID", referencedColumnName="NATIONALITY_ID", updatable=false, insertable=false, foreignKey=@ForeignKey(name="C_NATIONALITY_FK"))
-//	private Nationality nationality;
 
 
-	@Column(name = "BIRTH_DATE", nullable=false)
+	@Column(name = "BIRTH_DATE")
 	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
@@ -171,11 +167,6 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	private Rank capacity;
 	
 	
-//	TODO 
-//	@Setter
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name="CAPACITY_ID", referencedColumnName="CAPACITY_ID", updatable=false, insertable=false, foreignKey=@ForeignKey(name="C_R_FK"))
-//	private Rank rank;
 
 	@Getter
 	@Setter
@@ -205,7 +196,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
-	protected Date engageDate;
+	private Date engageDate;
 
 	@Getter
 	@Setter
@@ -222,7 +213,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Column(name = "EMPLOY_DURATION")
 	@Getter
 	@Setter
-	protected Double employDuration;
+	private Double employDuration;
 	
 	
 
@@ -230,7 +221,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
-	protected Date dischargeDate;
+	private Date dischargeDate;
 
 	@Getter
 	@Setter
@@ -241,6 +232,11 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	@Setter
 	@Transient
 	private String validationErrors;
+	
+	@Getter
+	@Setter
+	@Transient
+	private Map<String,List<String>> validationErrorsMap;
 	
 	// Excel
 	@Transient

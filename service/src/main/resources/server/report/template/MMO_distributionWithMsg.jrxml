@@ -15,6 +15,7 @@
 	<parameter name="printHorizontal" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="keyValue" class="net.sf.jasperreports.engine.JasperReport"/>
 	<parameter name="errorMsg" class="java.lang.String"/>
+	<parameter name="exchangeRate" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -28,7 +29,7 @@
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="80" splitType="Stretch">
+		<band height="101" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="11" width="802" height="22" uuid="7adcb022-64ea-4b47-949f-4509b124e366"/>
 				<textElement textAlignment="Center">
@@ -67,6 +68,10 @@
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="8" y="60" width="794" height="20" uuid="735da571-9abd-43b0-a6d1-b49440bd1a03"/>
 				<textFieldExpression><![CDATA[$P{errorMsg}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="8" y="80" width="793" height="16" uuid="2b692bde-3a32-43c9-8c44-a4a5695aeef1"/>
+				<textFieldExpression><![CDATA["Exchange Rate: "+$P{exchangeRate}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

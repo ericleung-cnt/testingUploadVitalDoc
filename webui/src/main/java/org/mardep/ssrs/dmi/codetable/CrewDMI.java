@@ -54,10 +54,13 @@ public class CrewDMI extends AbstractCodeTableDMI<Crew> {
 		String operationId = dsRequest.getOperationId();
 		DSResponse dsResponse = new DSResponse();
 		Map<String, Object> clientValues = dsRequest.getClientSuppliedValues();
+		
+
 		if(OPERATIONID_UPLOAD_EXCEL.equals(operationId)){
-//			Map<String ,List<String>> errorMsg  = new HashMap<>();
-			List<Crew> readEng2Excel = crewService.readEng2Excel(entity);
-			dsResponse.setData(readEng2Excel);
+			List<String> errorMsg  = new ArrayList<>();
+			try {
+				List<Crew> readEng2Excel = crewService.readEng2Excel(entity,errorMsg);				
+				dsResponse.setData(readEng2Excel);
 //			dsResponse.setStatus(dsResponse.);
 //			List<String> errors = new ArrayList<String>();
 //			for(Map.Entry<String, List<String>> entry : errorMsg.entrySet()) {
@@ -65,9 +68,20 @@ public class CrewDMI extends AbstractCodeTableDMI<Crew> {
 //					errors.add(entry.getKey() +" : "+ msg);
 //				}	
 //			}
-//			dsResponse.setErrors(errors);
-			dsResponse.setStatus(dsResponse.STATUS_SUCCESS);
-			return dsResponse;
+				if(errorMsg.size()>0) {
+					dsResponse.setData(errorMsg);
+					dsResponse.setErrors(null);
+					dsResponse.setFailure();
+				}else {
+					dsResponse.setStatus(dsResponse.STATUS_SUCCESS);
+					
+				}
+				return dsResponse;
+			}
+			catch(Exception ex ) {
+				logger.error("Fail to update-{}, Exception-{}", new Object[]{entity, ex}, ex);
+				return handleException(dsResponse, ex);
+			}
 			
 		}else {
 		entity.setCrewListCover(null);   

@@ -1,6 +1,9 @@
 package org.mardep.ssrs.service;
 
+import java.text.SimpleDateFormat;
+
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -127,6 +130,9 @@ public class ExcelUtils implements IExcelUtils {
 
 		} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
 
+			if(DateUtil.isCellDateFormatted(cell)) {
+				return new SimpleDateFormat("yyyyMMdd").format(cell.getDateCellValue());
+			}
 			return String.valueOf(cell.getNumericCellValue());
 
 		} else if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
@@ -151,7 +157,7 @@ public class ExcelUtils implements IExcelUtils {
 			}
 		
 
-		return "";
+		return null;
 	}
 	
 	

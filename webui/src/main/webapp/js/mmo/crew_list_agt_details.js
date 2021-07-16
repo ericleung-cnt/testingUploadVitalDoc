@@ -2,7 +2,7 @@
 // ------------------ Page for update Crew	------------------------------------	
 // -----------------------------------------------------------------------------
 
-
+var g_crewList_editing_upload_result=false;
 isc.DynamicForm.create({
 	ID:"crewListDetailForm", dataSource:"crewListCoverDS", numCols: 6, cellBorder:0, width:700, 
 	fields: [
@@ -77,7 +77,7 @@ var fetchedCrewList = isc.ListGrid.create({
 	showFilterEditor:true,
 	filterOnKeypress:false,
 	fields: [
-			{name: "validationErrors" ,autoFitWidth:false,maxWidth:500 , hidden:true}, 
+			{name: "validationErrors" ,autoFitWidth:false,width:200, hidden:true}, 
 			{name: "id", hidden:true  }, 
 			{name: "imoNo", hidden:true  }, 
 			{name: "referenceNo",  }, 
@@ -87,7 +87,7 @@ var fetchedCrewList = isc.ListGrid.create({
 			{name: "capacityId", optionDataSource:"rankDS",valueField:"id",displayField:"engDesc", title: "Capacity", /*dataPath:"capacity.engDesc",*/width:100},
 			{name: "crewCert" ,width:100} ,
 			{name: "currency" } ,
-			{name: "salary", title: "Salary", format:",##0.00", type:"decimal" ,width:100} ,
+			{name: "salary", title: "Salary", type:"decimal" ,width:100} ,
 			{name: "sex",  }, 
 			{name: "birthDate",  }, 
 			{name: "birthPlace",  }, 
@@ -111,6 +111,7 @@ var fetchedCrewList = isc.ListGrid.create({
 				crewListCoverAddSeafarerDynamicForm.clearErrors(true);
         		crewListCoverAddSeafarerDynamicForm.setValues({});
 	        	crewListCoverAddSeafarerDynamicForm.fetchData(fetchParam,function(res,data,req){
+					console.log(data);
 				});
 				crewListCoverAddSeafarerDynamicForm.hideField("seafarerId");
 		    	crewListCoverAddCrewWindow.show();
@@ -323,18 +324,18 @@ isc.Window.create({
 								 {name: "version", 	showIf:"false"}, 
 								 {name: "id",showIf:"false" }, 
 						         
-						         {name: "crewName", 	title: "Crew Name", },
-						         {name: "serbNo", 			title: "SERB No.", 		},
+						         {name: "crewName", 	 },
+						         {name: "serbNo", 		 		},
 						         {name: "referenceNo", 		 		},
 						         {name: "nationalityId", 	title: "Nationality", 	type: "SelectItem", required:true, optionDataSource:"nationalityDS", displayField:"engDesc", valueField:"id"},
+						         {name: "sex", 		 		},
 						         {name: "status", 	required:true, endRow: true, canEdit:true},
-								 {name: "crewCert", 		title: "Cert", 			},
-								 {name: "capacityId", 		title: "Rank", 			type: "SelectItem", required:true, endRow: true, optionDataSource:"rankDS", displayField:"engDesc", valueField:"id"},
+								 {name: "crewCert", 		 			},
+								 {name: "capacityId", 		title: "Capacity", 			type: "SelectItem", required:true, endRow: true, optionDataSource:"rankDS", displayField:"engDesc", valueField:"id"},
 
 						         {name: "birthDate", 		
-						        	 title: "Birth Date", 	
+						        	//  title: "Birth Date", 	
 						        	 type:"date", 
-						        	 required:true,
 						        	 validators:[
 						        		 // alternate method for checking birthday
 //						        	        { type:"custom", 
@@ -349,15 +350,15 @@ isc.Window.create({
 						        	 	}
 						        	 ]						        	 
 						         },
-						         {name: "birthPlace", 		title: "Birth Place", },
-								 {name: "employDate", 		title: "Employ Date(SEA)", 	type:"date"},
-						         {name: "employDuration", 		title: "Employ Duration", 	},
-						         {name: "engageDate", 		title: "Engage Date", 	type:"date", required:true,startRow:true},
-						         {name: "engagePlace", 		title: "Engage Place", 	},
+						         {name: "birthPlace", 		},
+								 {name: "employDate", 		 	type:"date"},
+						         {name: "employDuration", 		},
+						         {name: "engageDate", 		 	type:"date", required:true,startRow:true},
+						         {name: "engagePlace", 		 	},
 
 
 						         {name: "dischargeDate", 	startRow:true,
-						        	 title: "Discharge Date", 	
+						        	//  title: "Discharge Date", 	
 						        	 type:"date",
 						        	 validators:[
 						        		 { type:"custom",
@@ -370,12 +371,12 @@ isc.Window.create({
 						        		 }
 						        	 ],
 						         },
-								 {name: "dischargePlace", 	title: "Discharge Place", 	},
-								 {name: "nokName", 			title: "Name of Kin", 		startRow:true},
-						         {name: "nokAddress", 			title: "Relationship of Kin & Address(if any)", 		},
+								 {name: "dischargePlace", 	 	},
+								 {name: "nokName", 		 		startRow:true},
+						         {name: "nokAddress", 					},
 						        
 								 {name: "currency", title: "Currency", length:5,addUnknownValues:true,  editorType:"comboBox",
-								 valueMap:["HKD","CNY","USD","BGP"]
+								 valueMap:["HKD","CNY","USD","BGP","JPY"]
 								//  valueMap:{"1.0":"HKD", "7.8":"USD"},
 						        	//  changed: function (form, item, value){
 						        	// 	 console.log("currency changed");
@@ -395,12 +396,12 @@ isc.Window.create({
 						        // 		 }
 						        // 	 }         
 						        //  },
-						         {name: "salary", title: "Salary", format:",##0.00", type:"decimal", required:true,	//	type:"integer", decimalPrecision:8, decimalPad:0, required:true,
+						         {name: "salary",  type:"decimal", required:true,	//	type:"integer", decimalPrecision:8, decimalPad:0, required:true,
 //						        	 validators:[
 //						        	             {type:"integerRange", min:0, max:99999999}
 //						        	           ]
 						         },						         
-						         {name: "address", 		title: "Address",  type:"textArea",		 colSpan:3, endRow:true, width:405},
+						         {name: "address", 		 type:"textArea",		 colSpan:3, endRow:true, width:405},
 						        //  {name: "crewListCover" ,hidden:true},
 						        //  {name: "address2", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405},
 						        //  {name: "address3", 		title: " ", 			length:40, colSpan:3, endRow:true, width:405}
@@ -425,7 +426,14 @@ isc.Window.create({
 						        			  crewListCoverAddSeafarerDynamicForm.saveData(function(dsResponse, data, dsRequest) {
 													if (dsResponse.status == 0) {
 														isc.say(saveSuccessfulMessage);
-														crewListDetailCrewList.refresh();
+														if(g_crewList_editing_upload_result){
+															var found =crewListDetailCrewList.getData().find(o=>o.id==data.id);
+															var validationErrors= found.validationErrors;
+															Object.assign(found,data,{validationErrors:validationErrors});
+															crewListDetailCrewList.markForRedraw();
+														}else{
+															crewListDetailCrewList.refresh();
+														}
 //														var demandNoteNo = mmoDNDetailDynamicForm.getValue('demandNoteNo');
 //														mmoDNDetailDynamicForm.fetchData({"applNo":"0", "applNoSuf":"M", "demandNoteNo":demandNoteNo});
 //														mmoDNDetailItemListGrid.setData([]);
@@ -501,10 +509,17 @@ isc.ButtonToolbar.create({
 	   ]
 });	
 
+
 var appBtns = isc.ButtonsHLayout.create({
 	members :
  	 [
-		 isc.IExportButton.create({ listGrid: fetchedCrewList }),
+		isc.IExportButton.create({ listGrid: fetchedCrewList,click:function(){
+			if(g_crewList_editing_upload_result){
+				fetchedCrewList.exportClientData({ ignoreTimeout: true, "endRow": -1, exportAs: "xls", exportFilename: "crewList_upload_result", })
+			}else{
+				this.Super('click', arguments);
+			}
+		} }),
 	 ],
 });
 
@@ -544,10 +559,13 @@ isc.Window.create({
 function openCrewListDetail(record){
 	console.log("openCrewListDetail", record);
 	crewListDetailWindow.show();
+	g_crewList_editing_upload_result=false;
 	if(Array.isArray(record) ){
 		crewListDetailForm.clearErrors(true);
 		crewListDetailForm.setValues({});
 		crewListDetailCrewList.setData([]);
+		g_crewList_editing_upload_result=true;
+		crewListDetailWindow.setTitle("Crew List of Agreement Detail (Editing upload excel result")
 		if(record.length>0){
 			var imoNo = record[0].imoNo;
 			crewListDetailForm.fetchData({"imoNo":imoNo,},

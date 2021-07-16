@@ -46,7 +46,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+/**
+ * 
+ * @author AIDAN SHI
+ *
+ */
 @Service
 public class CrewService extends AbstractService implements ICrewService {
 
@@ -109,7 +113,8 @@ public class CrewService extends AbstractService implements ICrewService {
 	private static final String salary ="salary";
 	private static final String employDate ="employDate";
 	private static final String employDuration ="employDuration";
-	private static final String validationErrors ="validationErrors";
+	private static final String validationErrorsString ="validationErrors";
+	private static final String validationErrorsMap ="validationErrorsMap";
 	
 	
 
@@ -181,7 +186,7 @@ public class CrewService extends AbstractService implements ICrewService {
 	}
 	private static Map<String, Boolean> getRequiredField() {
 		Map<String, Boolean> map = new HashMap<>();
-		map.put(birthDate, Boolean.TRUE);
+		map.put(crewName, Boolean.TRUE);
 		map.put(salary, Boolean.TRUE);
 		map.put(nationality, Boolean.TRUE);
 		map.put(capacity,  Boolean.TRUE);
@@ -224,10 +229,10 @@ public class CrewService extends AbstractService implements ICrewService {
 	
 	private static Map<String, Integer> getMaxiumnLength() {
 		Map<String, Integer> map = new HashMap<>();
-		map.put(NameOfShip, 50);
-		map.put(OffcialNumber, 50);
-		map.put(ImoNo, 50);
-		map.put(PortOfRegistry, 50);
+		map.put(NameOfShip, 140);
+		map.put(OffcialNumber, 18);
+		map.put(ImoNo, 9);
+		map.put(PortOfRegistry, 100);
 //		map.put(referenceNo, "int");
 		map.put(crewName, 50);
 		map.put(sex, 10);
@@ -257,27 +262,19 @@ public class CrewService extends AbstractService implements ICrewService {
 	
 	@Transactional
 	@Override
-	public List<Crew> readEng2Excel(Crew entity) throws InvalidFormatException, IOException {
+	public List<Crew> readEng2Excel(Crew entity, List<String> errorMsg) throws InvalidFormatException, IOException {
 		logger.info("readEng2Excel");
 
 		byte[] excel = entity.getExcelData();
 		Workbook workbook = WorkbookFactory.create(new ByteArrayInputStream(excel));
 		Sheet datatypeSheet = workbook.getSheetAt(0);
 		Iterator<Row> iterator = datatypeSheet.iterator();
-//		String[][] crewGrid = getCrewGridStructure();
-//		String[] shipRow = getShipStructure();
-//		Map<String, String> crewGridDataType = getCrewGridDataType();
 		final int startRow = 10;
 		final int shipInfoRow = 3;
 		Map<String, String> shipInfo = new HashMap<>();
 		Map<String, Object> crewData = null;
 		List<Map<String, Object>> crewDatalist = new ArrayList<>();
-		Map<String ,List<String>> errorMsg  = new HashMap<>();
-//		List<Map<String, Object>> crewDatalistObj = new ArrayList<>();
 		List<Crew> crewlist = new ArrayList<>();
-		errorMsg.put("errors", new ArrayList<>());
-		List<Crew> findCrewsByImono= new ArrayList<>();
-		boolean abort =false;
 		while (iterator.hasNext()) {
 			Row row = iterator.next();
 			int rowNum = row.getRowNum();
@@ -290,18 +287,17 @@ public class CrewService extends AbstractService implements ICrewService {
 				for (int col = 0; col < lastCol; col++) {
 					Cell currCell = row.getCell(col,Row.RETURN_BLANK_AS_NULL);
 					if (shipRow[col] != null) {
-						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], excelUtils.getCellValue(currCell),errorMsg.get("shipInfo") )));
+						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], StringUtils.trim(excelUtils.getCellValue(currCell)),errorMsg)));
 					}
 				}
 				continue;
 			}
 
-			if(shipInfo.get("ImoNo")==null) {
-				errorMsg.get("errors").add(String.format("IMO Number is missing processing aborted"));
+			if("null".equals(shipInfo.get("ImoNo"))) {
 				logger.warn("readEng2Excel Abort because errors");
-				throw new IllegalArgumentException("IMO Number is missing or can't find, processing aborted");
-				
-			
+				errorMsg.add("IMO Number is missing or can't find, processing aborted");
+//				throw new IllegalArgumentException("IMO Number is missing or can't find, processing aborted");
+				return null;
 			}
 			int subRow = (rowNum - startRow) % 3; // every 3 row as a group
 			if (subRow == 0) {
@@ -313,7 +309,7 @@ public class CrewService extends AbstractService implements ICrewService {
 //						new Object[] { subRow, col, crewGrid[subRow][col], excelUtils.getCellValue(currCell) });
 				if (crewGrid[subRow][col] != null) {
 //					crewData.put(crewGrid[subRow][col], getAndParseCellValue(crewGrid[subRow][col],currCell,crewGridDataType[subRow][col],errorMsg));
-					crewData.put(crewGrid[subRow][col],excelUtils.getCellValue(currCell));
+					crewData.put(crewGrid[subRow][col],StringUtils.trim(excelUtils.getCellValue(currCell)));
 				}
 			}
 			if (subRow == 2) {
@@ -338,15 +334,29 @@ public class CrewService extends AbstractService implements ICrewService {
 		
 		//validate 
 		for(Map<String, Object> map :crewDatalist) {
-			String refNo =  map.get(referenceNo).toString();
-			errorMsg.put(refNo ,new ArrayList<>());
+			Map<String,List<String>> validateMap = new HashMap<>(); 
+//			String refNo =  map.get(referenceNo).toString();
+			
 			 for(Map.Entry<String, Object> entry : map.entrySet()) {
 				 if(entry.getKey()!="rowNum") {
+					 validateMap.put(entry.getKey() ,new ArrayList<>());
 					 map.put(entry.getKey(), 
-							 validateCellValue(entry.getKey(),entry.getValue(),errorMsg.get(refNo)));					 
+							 validateCellValue(entry.getKey(),entry.getValue(),validateMap.get(entry.getKey())));					 
 				 }
 			 }
-			 map.put(validationErrors, (errorMsg.get(refNo).size()>0) ? "Errors: "+String.join("; ", errorMsg.get(refNo)):null);
+			 String validateErrors= null;
+			 for(List<String> ls :validateMap.values()) {
+				 if(ls.size()>0) {
+					 String s =String.join("; ", ls);
+					 if(validateErrors==null) {
+						 validateErrors="";
+					 }
+					 validateErrors+= s;
+				 }
+			 }
+			 
+			 map.put(validationErrorsString, (validateErrors!=null) ? "Errors: "+validateErrors:null);
+			 map.put(validationErrorsMap, validateMap);
 			 
 		}
 		
@@ -359,7 +369,6 @@ public class CrewService extends AbstractService implements ICrewService {
 			crewlist.add(objectMapper.convertValue(map,Crew.class));
 		});
 		
-		logger.warn(errorMsg.toString());
 
 		
 
@@ -493,36 +502,75 @@ public class CrewService extends AbstractService implements ICrewService {
 			else  {
 				//update exists
 				for(Crew existCrew  : existCrewFound) {
-				boolean equals = crew.equals(existCrew);	
-				existCrew.setReferenceNo(crew.getReferenceNo());
+				boolean equals = crew.equals(existCrew);
+				Map<String, List<String>> validateMap = crew.getValidationErrorsMap();
+				if(validateMap.get(referenceNo).size()==0) {
+					existCrew.setReferenceNo(crew.getReferenceNo());					
+				}
+				if(validateMap.get(birthDate).size()==0) {
+					existCrew.setBirthPlace(crew.getBirthPlace());				
+				}
+				if(validateMap.get(nationality).size()==0) {
+					existCrew.setNationalitybeforeMap(crew.getNationalitybeforeMap());				
+					existCrew.setNationalityId(crew.getNationalityId());
+				}
+				if(validateMap.get(serbNo).size()==0) {
+					existCrew.setSerbNo(crew.getSerbNo());
+				}
+				if(validateMap.get(sex).size()==0) {
+					existCrew.setSex(crew.getSex());
+				}
+				if(validateMap.get(birthDate).size()==0) {
+					existCrew.setBirthDate(crew.getBirthDate());
+				}
+				if(validateMap.get(crewName).size()==0) {
+					existCrew.setCrewName(crew.getCrewName());
+				}
+				if(validateMap.get(address).size()==0) {
+					existCrew.setAddress(crew.getAddress());
+				}
+				if(validateMap.get(nokName).size()==0) {
+					existCrew.setNokName(crew.getNokName());
+				}
+				if(validateMap.get(nokAddress).size()==0) {
+					existCrew.setNokAddress(crew.getNokAddress());
+				}
+				if(validateMap.get(crewCert).size()==0) {
+					existCrew.setCrewCert(crew.getCrewCert());
+				}
+				if(validateMap.get(capacity).size()==0) {
+					existCrew.setCapacityBeforeMap(crew.getCapacityBeforeMap());
+					existCrew.setCapacityId(crew.getCapacityId());
+				}
+				if(validateMap.get(currency).size()==0) {
+					existCrew.setCurrency(crew.getCurrency());
+				}
+				if(validateMap.get(salary).size()==0) {
+					existCrew.setSalary(crew.getSalary());
+				}
+				if(validateMap.get(dischargeDate).size()==0) {
+					existCrew.setDischargeDate(crew.getDischargeDate());
+				}
+				if(validateMap.get(dischargePlace).size()==0) {
+					existCrew.setDischargePlace(crew.getDischargePlace());		
+				}
+				if(validateMap.get(employDate).size()==0) {
+					existCrew.setEmployDate(crew.getEmployDate());
+				}
+				if(validateMap.get(employDuration).size()==0) {
+					existCrew.setEmployDuration(crew.getEmployDuration());
+				}
+				if(validateMap.get(engageDate).size()==0) {
+					existCrew.setEngageDate(crew.getEngageDate());
+				}
+				if(validateMap.get(engagePlace).size()==0) {
+					existCrew.setEngagePlace(crew.getEngagePlace());	
+				}
 				
-				existCrew.setBirthPlace(crew.getBirthPlace());
-				existCrew.setNationalitybeforeMap(crew.getNationalitybeforeMap());
-				existCrew.setSerbNo(crew.getSerbNo());
-				
-				existCrew.setSex(crew.getSex());
-				existCrew.setBirthDate(crew.getBirthDate());
-				existCrew.setCrewName(crew.getCrewName());
-				
-				existCrew.setAddress(crew.getAddress());
-				existCrew.setNokName(crew.getNokName());
-				existCrew.setNokAddress(crew.getNokAddress());
-				
-				existCrew.setCrewCert(crew.getCrewCert());
-				existCrew.setCapacityBeforeMap(crew.getCapacityBeforeMap());
-				existCrew.setCurrency(crew.getCurrency());
-				existCrew.setSalary(crew.getSalary());
-				
-				existCrew.setDischargeDate(crew.getDischargeDate());
-				existCrew.setDischargePlace(crew.getDischargePlace());		
-				existCrew.setEmployDate(crew.getEmployDate());
-				existCrew.setEmployDuration(crew.getEmployDuration());
-				existCrew.setEngageDate(crew.getEngageDate());
-				existCrew.setEngagePlace(crew.getEngagePlace());	
 				existCrew.setValidationErrors(crew.getValidationErrors());	
 				if(existCrew.getId()!=null) {
 					if(!equals) {
-						logger.debug(crew.getReferenceNo()+""+ existCrew.getReferenceNo());
+						logger.info("update exist crew id {}",existCrew.getId() );
 						existCrew.setValidationErrors("Update"+ Objects.toString( existCrew.getValidationErrors(),""));
 					}
 					updateRecords.add(existCrew);									
@@ -587,7 +635,7 @@ public class CrewService extends AbstractService implements ICrewService {
 	public List<Crew> saveCrewList(List<Crew> records) {
 //		records=mapNationalityAndRank(records);
 		Map<Integer,Crew> uniqueMap = new LinkedHashMap<>();
- 		logger.info("Update follwing {} crew list {}", new Object[] {records.size(),records.toString()});
+ 		logger.info("Update follwing {} crew list {}", new Object[] {records.size(),records.stream().map(o->o.getId()).collect(Collectors.toList())});
 		
 		for(Crew o : records) {
 			Long version1 = o.getVersion();
@@ -672,7 +720,7 @@ public class CrewService extends AbstractService implements ICrewService {
 					if(StringUtils.equalsIgnoreCase(nation.getCountryChiDesc(), nationalityKey)) return true;
 					if(StringUtils.equalsIgnoreCase(nation.getCountryEngDesc(), nationalityKey)) return true;
 					return false;
-				}).findAny();
+				}).findFirst();
 				
 				if(findAny.isPresent()) {
 					crew.setNationality(findAny.get());   
@@ -699,7 +747,7 @@ public class CrewService extends AbstractService implements ICrewService {
 					if(StringUtils.equalsIgnoreCase(nation.getChiDesc(), capacityKey)) return true;
 					if(StringUtils.equalsIgnoreCase(nation.getEngDesc(), capacityKey)) return true;
 					return false;
-				}).findAny();
+				}).findFirst();
 				
 				if(findAny.isPresent()) {
 					crew.setCapacity(findAny.get());

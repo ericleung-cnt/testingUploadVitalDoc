@@ -65,9 +65,9 @@ var searchForm =
 		],
 		fields: [
 	 
-			{ name: "DollorCode", title:"Currency",  width: 80 ,},
+			{ name: "to_Dollar", title:"Currency",  width: 80 ,},
 			// { name: "fsa_score",  width: 80 },
-			{ name: "Exchange", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
+			{ name: "rate", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
 			// { name: "sol_guid_created", title:"Solution Created", width: "*" ,type:"boolean",width: 80, canEdit:false},
 			// { name: "sol_guid", title:"Solution id", width: "*" ,hidden:true},
 			// { name: "createdDate", hidden:true },
@@ -89,7 +89,9 @@ var searchForm =
 	})
 
 
-	RPT_MMO_DollorListLG.setData(G_DOLLOR_EXCHANGE_RATE_DATA)
+	currencyExchangeCodeDS.fetchData({from_Dollar:"USD"},function(res,data,req){
+		RPT_MMO_DollorListLG.setData(data);
+	})
 
 var searchFormToolBar = 
 	isc.ReportToolbar.create({
@@ -97,11 +99,25 @@ var searchFormToolBar =
 			{name:"generateBtn", title:"Generate Report", autoFit: true, disabled: false,
 			  click : function () { 
 				  if(RPT_MMO_009_Form.validate()){
-					  RPT_MMO_DollorListLG.saveAllEdits();
-					  CurrencyObj = {};
-					  RPT_MMO_DollorListLG.getData().forEach(o => {
-						  CurrencyObj[o.DollorCode] = o.Exchange;
-					  })
+					RPT_MMO_DollorListLG.saveAllEdits();
+					var lessEqualThanZero = RPT_MMO_DollorListLG.getData().some(o => {
+						if (o.to_Dollar != null && parseFloat(o.rate) <= 0) {
+							return true;
+						}
+						return false;
+					})
+
+					if (lessEqualThanZero) {
+						isc.say("dollor rate should greater than 0");
+						return;
+					}
+
+					var CurrencyObj =
+						RPT_MMO_DollorListLG.getData().reduce((obj, item) => {
+							obj[item["to_Dollar"]] = item["rate"]
+							return obj;
+						}, {});
+
 					  var values = Object.assign(RPT_MMO_009_Form.getValues(), { Currency: CurrencyObj })
 
 					  var requestArguments = ["RPT_MMO_009", values];

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.mardep.ssrs.dao.codetable.INationalityDao;
 import org.mardep.ssrs.dao.codetable.IRankDao;
 import org.mardep.ssrs.domain.codetable.Nationality;
+import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.report.IReportGenerator;
 import org.mardep.ssrs.service.IJasperReportService;
 import org.slf4j.Logger;
@@ -46,6 +47,8 @@ public class MMO_Avg_Age implements IReportGenerator{
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
 		Long nationality = (Long)inputParam.get("nationality");
+		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
+		inputParam.put("userId", currentUser);
 
 		List<Object> rows = rankDao.getAverageAgeByNationality(reportDate, nationality);
 

@@ -2,11 +2,13 @@ package org.mardep.ssrs.report.generator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -49,9 +51,12 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		String shipTypeCode = (String)inputParam.get("shipTypeCode");
-		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
+		String exchangeRateString = currecyMap.toString();
+		
 		logger.info("####### RPT_MMO_011  #########");
 		logger.info("Report Date:{}", reportDate);
 		logger.info("ShipTypeCode, {}-{}", new Object[]{shipTypeCode});
@@ -88,7 +93,8 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 					pojoList.add(pojo);
 				}
 				else if(currecyMap.containsKey(currency)) {
-				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				//BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				BigDecimal divisor = new BigDecimal( ((String)currecyMap.get(currency)));
 				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
@@ -111,12 +117,12 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 			for(NationalityWagePojo o :groupByRankmap.getValue()) {
 				sum = sum.add(o.getUSDsalary());
 			}
-			resultList.add(	new KeyValue(rank, sum.toString()));
+			resultList.add(	new KeyValue(rank, (sum.divide(BigDecimal.valueOf(groupByRankmap.getValue().size()),3,RoundingMode.HALF_UP).toString())));
 		}
 
 
 		String reportId = "SRS1150";
-		String reportTitle = "Average Monthly Wages of Crew by Rank / Rating by Ship Type";
+		String reportTitle = "Average Monthly Wages(USD) of Crew by Rank / Rating by Ship Type " + reportDateDisplay;
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 
 		String titleFormat = "AVERAGE MONTHLY WAGES OF %s ON %s";
@@ -138,6 +144,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 		}
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
+		map.put("exchangeRate",exchangeRateString);
 
 
 		return generate(distributionList, map);

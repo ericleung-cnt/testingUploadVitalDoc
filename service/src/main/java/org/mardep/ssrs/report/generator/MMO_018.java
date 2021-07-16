@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -17,12 +18,15 @@ import org.mardep.ssrs.dao.codetable.INationalityDao;
 import org.mardep.ssrs.dao.codetable.IRankDao;
 import org.mardep.ssrs.dao.codetable.IShipTypeDao;
 import org.mardep.ssrs.domain.codetable.Nationality;
+import org.mardep.ssrs.domain.user.UserContextThreadLocalHolder;
 import org.mardep.ssrs.report.IReportGenerator;
 import org.mardep.ssrs.service.IJasperReportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import net.sf.jasperreports.engine.JRParameter;
 
 /**
  * 
@@ -209,7 +213,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		return getDataSetFromDB(reportDateFrom, reportDateTo, nationalityId);
 	}
 	
-	public List<HashMap<String, Object>> generateReportData(List<Object> rows, Map<String, Double> exchangeMap, Set dollorCodeNotFoundSet){
+	public List<HashMap<String, Object>> generateReportData(List<Object> rows, Map<String, Object> exchangeMap, Set dollorCodeNotFoundSet){
 		
 		HashMap<String, WagesSummary> prepareWages = new LinkedHashMap<String, WagesSummary>();
 		//Map<String, Double> reportData = new HashMap<String, Double>();
@@ -238,7 +242,9 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 				dollorCodeNotFoundSet.add(wage.currency);
 				//errorMsg += String.format("%s have a unknown exchange rate.\n",wage.ranking);
 			}else{
-				BigDecimal rate = BigDecimal.valueOf( ((Number) exchangeMap.get(wage.currency)).doubleValue());
+//				Double r = Double.valueOf(exchangeMap.get(wage.currency));
+				BigDecimal rate = new BigDecimal( ((String) exchangeMap.get(wage.currency)));
+//				BigDecimal rate = BigDecimal.valueOf(r);
 				wageSummary.totalExchangedSalary = wageSummary.totalExchangedSalary.add(wage.salary.divide(rate,3,BigDecimal.ROUND_HALF_EVEN));
 				wageSummary.totalCount += wage.count;
 				prepareWages.put(wage.ranking, wageSummary);			
@@ -251,7 +257,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 
 			String rank = entry.getKey();
 			WagesSummary wageSummary = entry.getValue();
-			BigDecimal avg = wageSummary.totalExchangedSalary.divide(BigDecimal.valueOf(wageSummary.totalCount == 0 ? 1 : wageSummary.totalCount)).setScale(3, BigDecimal.ROUND_HALF_EVEN) ;
+			BigDecimal avg = wageSummary.totalExchangedSalary.divide(BigDecimal.valueOf(wageSummary.totalCount == 0 ? 1 : wageSummary.totalCount),3, BigDecimal.ROUND_HALF_EVEN);//.setScale(3, BigDecimal.ROUND_HALF_EVEN) ;
 			result.put("rank"+count, rank);
 			result.put("avg"+count, avg);
 
@@ -280,6 +286,7 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		Date reportDateFrom = (Date)inputParam.get("reportDateFrom");
 		Date reportDateTo = (Date)inputParam.get("reportDateTo");
 		Long nationalityId = (Long)inputParam.get("nationality");
+		inputParam.put(JRParameter.REPORT_LOCALE,  new Locale("en", "US"));
 		
 			//rate inputParam missing
 		
@@ -293,9 +300,11 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 //		exchangeMap.put("JPY", 0.0090052);
 		
 		//Define custom exchange rate
-		Map<String,Double> exchangeMap = (Map)inputParam.get("Currency");
+		Map<String,Object> exchangeMap = (Map)inputParam.get("Currency");
 		exchangeMap.keySet().removeIf(Objects::isNull);
 		exchangeMap.values().removeAll(Collections.singleton(null));
+		String exchangeRateString = exchangeMap.toString();
+		inputParam.put("exchangeRate", exchangeRateString);
 		
 		//get data from mock Data set
 		List<Object> rows = getDataSet(reportDateFrom, reportDateTo, nationalityId);
@@ -309,6 +318,8 @@ public class MMO_018 extends AbstractAverageWage implements IReportGenerator{
 		}
 		String nationality_name = NationalityDao.findById(nationalityId).getCountryEngDesc();
 		inputParam.put("nationality",nationality_name);
+		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
+		inputParam.put("userId", currentUser);
 		return jasper.generateReport(getReportFileName(), results, inputParam);
 		
 //		Double avg_salary = 0.0;

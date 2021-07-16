@@ -11,7 +11,7 @@ import org.mardep.ssrs.domain.codetable.CrewListCover;
 public interface ICrewService extends IBaseService {
 
 
-	List<Crew> readEng2Excel(Crew entity)
+	List<Crew> readEng2Excel(Crew entity, List<String> errorMsg)
 			throws InvalidFormatException, IOException;
 
 

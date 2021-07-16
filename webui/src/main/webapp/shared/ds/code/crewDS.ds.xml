@@ -4,12 +4,17 @@
 		<field name="id" 		type="integer" 	primaryKey="true"/>
 		<field name="referenceNo" 	type="text" title="Reference NO."  required="true" length="50"/>
 		<field name="imoNo" 	type="text" title="IMO No."   length="9"/>
-		<field name="crewName" 	type="text" 	title="Crew Name" 	length="50"/>
-		<field name="sex" 	type="text" 	title="Sex" 	length="5"/>
+		<field name="crewName" 	type="text" 	title="Crew Name" 	length="50" required="true"/>
+		<field name="sex" 	type="text" 	title="Sex" 	length="10">
+			<valueMap>
+			   	<value ID="M">Male</value>
+			   	<value ID="F">Female</value>
+	   		</valueMap>
+		</field>
 		<field name="serbNo" 		type="text" 	title="SERB NO."	required="true"	length="15"/>
 		<field name="nationalitybeforeMap" 		type="text" 	length="50"/>
 		<field name="nationalityId" type="integer" 	title="Nationality ID" 	required="true"/>
-		<field name="birthDate" 	type="date" 	title="Birth Date"		required="true" displayFormat="dd/MM/yyyy"/>
+		<field name="birthDate" 	type="date" 	title="Birth Date"		displayFormat="dd/MM/yyyy"/>
 		<field name="birthPlace" 	type="text" 	title="Birth Place"		length="50"/>
 		<field name="address" 		type="text" 	title="Address "		length="250"/>
 
@@ -26,13 +31,13 @@
 					<value ID="BGP">BGP</value>
 			</valueMap> -->
 		</field>
-		<field name="salary" 		type="decimal" 	title="Salary" 			required="true"/>
-		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engage Date"		/>
+		<field name="salary" 		type="decimal" 	title="Salary" 	 format="$,##0.00"	required="true"/>
+		<field name="engageDate" 	type="date" displayFormat="dd/MM/yyyy" 	title="Engagement Date"		/>
 		<field name="engagePlace" 	type="text" 	title="Engage Place"	length="50"/>
 		<field name="dischargeDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Discharge Date"/>
 		<field name="dischargePlace" 	type="text" title="Discharge Place"	length="50"/>
-		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="EmployDate Date"/>
-		<field name="employDuration" 	type="decimal" title="Employ Duration(Months)"	/>
+		<field name="employDate"	type="date" displayFormat="dd/MM/yyyy" 	title="Commencement Date(SEA)"/>
+		<field name="employDuration" 	type="decimal" title="SEA Duration(Months)"	/>
 		<field name="status" 		type="text" 	title="Status"			length="1">
 				<valueMap>
 				<value ID="A">Active</value>
