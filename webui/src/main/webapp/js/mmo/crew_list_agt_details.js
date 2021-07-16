@@ -87,7 +87,7 @@ var fetchedCrewList = isc.ListGrid.create({
 			{name: "capacityId", optionDataSource:"rankDS",valueField:"id",displayField:"engDesc", title: "Capacity", /*dataPath:"capacity.engDesc",*/width:100},
 			{name: "crewCert" ,width:100} ,
 			{name: "currency" } ,
-			{name: "salary", title: "Salary", format:",##0.00", type:"decimal" ,width:100} ,
+			{name: "salary", title: "Salary", type:"decimal" ,width:100} ,
 			{name: "sex",  }, 
 			{name: "birthDate",  }, 
 			{name: "birthPlace",  }, 
@@ -111,6 +111,7 @@ var fetchedCrewList = isc.ListGrid.create({
 				crewListCoverAddSeafarerDynamicForm.clearErrors(true);
         		crewListCoverAddSeafarerDynamicForm.setValues({});
 	        	crewListCoverAddSeafarerDynamicForm.fetchData(fetchParam,function(res,data,req){
+					console.log(data);
 				});
 				crewListCoverAddSeafarerDynamicForm.hideField("seafarerId");
 		    	crewListCoverAddCrewWindow.show();
@@ -327,6 +328,7 @@ isc.Window.create({
 						         {name: "serbNo", 		 		},
 						         {name: "referenceNo", 		 		},
 						         {name: "nationalityId", 	title: "Nationality", 	type: "SelectItem", required:true, optionDataSource:"nationalityDS", displayField:"engDesc", valueField:"id"},
+						         {name: "sex", 		 		},
 						         {name: "status", 	required:true, endRow: true, canEdit:true},
 								 {name: "crewCert", 		 			},
 								 {name: "capacityId", 		title: "Capacity", 			type: "SelectItem", required:true, endRow: true, optionDataSource:"rankDS", displayField:"engDesc", valueField:"id"},
@@ -334,7 +336,6 @@ isc.Window.create({
 						         {name: "birthDate", 		
 						        	//  title: "Birth Date", 	
 						        	 type:"date", 
-						        	 required:true,
 						        	 validators:[
 						        		 // alternate method for checking birthday
 //						        	        { type:"custom", 
@@ -395,7 +396,7 @@ isc.Window.create({
 						        // 		 }
 						        // 	 }         
 						        //  },
-						         {name: "salary", format:",##0.00", type:"decimal", required:true,	//	type:"integer", decimalPrecision:8, decimalPad:0, required:true,
+						         {name: "salary",  type:"decimal", required:true,	//	type:"integer", decimalPrecision:8, decimalPad:0, required:true,
 //						        	 validators:[
 //						        	             {type:"integerRange", min:0, max:99999999}
 //						        	           ]

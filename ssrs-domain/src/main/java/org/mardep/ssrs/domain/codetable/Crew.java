@@ -84,7 +84,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 
 	@Getter
 	@Setter
-	@Column(name = "CREW_NAME", length=50)
+	@Column(name = "CREW_NAME", length=50, nullable=false)
 	private String crewName;
 	
 
@@ -117,16 +117,10 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	private Nationality nationality;
 	
 	
-////	TODO no FK here
-//	@Getter
-//	@Setter
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name="NATIONALITY_ID", referencedColumnName="NATIONALITY_ID", updatable=false, insertable=false, foreignKey=@ForeignKey(name="C_NATIONALITY_FK"))
-//	private Nationality nationality;
 
 
-	@Column(name = "BIRTH_DATE", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "BIRTH_DATE")
+	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
 	private Date birthDate;
@@ -173,11 +167,6 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	private Rank capacity;
 	
 	
-//	TODO 
-//	@Setter
-//	@ManyToOne(fetch=FetchType.LAZY)
-//	@JoinColumn(name="CAPACITY_ID", referencedColumnName="CAPACITY_ID", updatable=false, insertable=false, foreignKey=@ForeignKey(name="C_R_FK"))
-//	private Rank rank;
 
 	@Getter
 	@Setter
@@ -204,7 +193,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 
 	@Column(name = "ENGAGE_DATE", nullable=false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
 	private Date engageDate;
@@ -216,7 +205,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 	
 	@Column(name = "EMPLOY_DATE")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
 	private Date employDate;
@@ -229,7 +218,7 @@ public class Crew extends AbstractPersistentEntity<Integer> {
 	
 
 	@Column(name = "DISCHARGE_DATE")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@Getter
 	@Setter
 	private Date dischargeDate;

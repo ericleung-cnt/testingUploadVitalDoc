@@ -186,7 +186,7 @@ public class CrewService extends AbstractService implements ICrewService {
 	}
 	private static Map<String, Boolean> getRequiredField() {
 		Map<String, Boolean> map = new HashMap<>();
-		map.put(birthDate, Boolean.TRUE);
+		map.put(crewName, Boolean.TRUE);
 		map.put(salary, Boolean.TRUE);
 		map.put(nationality, Boolean.TRUE);
 		map.put(capacity,  Boolean.TRUE);
@@ -287,7 +287,7 @@ public class CrewService extends AbstractService implements ICrewService {
 				for (int col = 0; col < lastCol; col++) {
 					Cell currCell = row.getCell(col,Row.RETURN_BLANK_AS_NULL);
 					if (shipRow[col] != null) {
-						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], excelUtils.getCellValue(currCell),errorMsg)));
+						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], StringUtils.trim(excelUtils.getCellValue(currCell)),errorMsg)));
 					}
 				}
 				continue;
@@ -309,7 +309,7 @@ public class CrewService extends AbstractService implements ICrewService {
 //						new Object[] { subRow, col, crewGrid[subRow][col], excelUtils.getCellValue(currCell) });
 				if (crewGrid[subRow][col] != null) {
 //					crewData.put(crewGrid[subRow][col], getAndParseCellValue(crewGrid[subRow][col],currCell,crewGridDataType[subRow][col],errorMsg));
-					crewData.put(crewGrid[subRow][col],excelUtils.getCellValue(currCell));
+					crewData.put(crewGrid[subRow][col],StringUtils.trim(excelUtils.getCellValue(currCell)));
 				}
 			}
 			if (subRow == 2) {

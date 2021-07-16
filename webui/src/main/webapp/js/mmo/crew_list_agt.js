@@ -74,6 +74,8 @@ isc.ListGrid.create({
 	canHover:true,
 	autoFitFieldWidths:true,
 	minFieldWidth:150,
+	// showRowNumbers: true,
+	// rowNumberField:{width:50}, 
 	fields: [
         //  {name: "vesselId", title: "Vessel Name", width:100}, 
         //  {name: "imoNo",  width:100}, 
@@ -111,7 +113,9 @@ isc.ListGrid.create({
 		},
 		dataArrived: function (startRow, endRow) {
 			this.Super('dataArrived', arguments);
-			console.log('dataArrived', this);
+			// console.log('dataArrived', this.getTotalRows());
+			var c = "<p> Total no. of search item: <b> "+ this.getTotalRows() +" </b> </p>";
+			crewlistagtSearchResultListLGSummary.setContents(c);
 		},
 });
 
@@ -126,16 +130,16 @@ isc.HLayout.create({
 			width: 50,
 			dataSource: "crewDS",
 			fields: [
-				{ type: "blob", name: "excelData", showTitle: false, canEdit: true, accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+				{ type: "blob", name: "excelData", showTitle: false, canEdit: true, title :"123",accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
 			]
 		}),
 
 		isc.ButtonToolbar.create({
 			ID: "crewListUploadFormToolBar",
-			width: 50,
+			width: 100,
 			buttons: [
 				{
-					name: "upload", title: "Upload", startRow: false, autoFit: true, onControl: "MMO_CREATE",
+					name: "upload", title: "Upload ENG2", startRow: false, autoFit: true, onControl: "MMO_CREATE",icon: "_icons8-upload-32.png",
 					click: function () {
 						var requestParam = {
 							"operationType": "update",
@@ -162,9 +166,48 @@ isc.HLayout.create({
 			]
 		}),
 		isc.ButtonsHLayout.create({
+			membersMargin: 10,
 			members :
 			  [
-				 isc.IExportButton.create({ listGrid: crewListSearchResultLG }),
+				isc.TitleLabel.create({
+					ID:"crewlistagtSearchResultListLGSummary", contents: "<p> Total no. of search item: <b> 0 </b> </p>",align:"right",valign:"bottom"
+				}),
+				 isc.IExportButton.create({ listGrid: crewListSearchResultLG , prompt:"Export max limit:65535",click:function(){
+					var listGrid = this.listGrid;
+					if(listGrid!=null){
+						if(listGrid.getTotalRows()>0){
+							console.log("list grid total rows " + listGrid.getTotalRows());
+							var button = this;
+							this.setDisabled(true);
+							setTimeout(function(){
+								button.setDisabled(false);
+							}, 5000);
+							isExport = true;
+							var dataSourceID = listGrid.dataSource;
+							if (typeof dataSourceID != "string") {
+								if (typeof dataSourceID.ID == "string") {
+									dataSourceID = dataSourceID.ID;
+								}
+							}
+							var fileName = dataSourceID.substring(0, dataSourceID.length-2)+"_results.xls";
+							if (listGrid.isA('FilterListGrid')){
+								listGrid.exportData({ ignoreTimeout:true,  exportResults:true, exportAs:"xls", exportFormat:"xls", exportFilename:fileName, operationId:"exportData"});
+							} else {
+								var maxRows = 65535;
+								if (listGrid.getTotalRows() > maxRows){
+									listGrid.exportData({ignoreTimeout:true, "endRow":maxRows, exportAs:"xls", exportFilename:fileName, operationId:"exportData"});
+								} else {
+									listGrid.exportData({ignoreTimeout:true, "endRow":-1, exportAs:"xls", exportFilename:fileName, operationId:"exportData"});
+								}
+							}
+							setTimeout(function(){
+								isExport = false;
+							}, 5000);
+						}else{
+							isc.warn(pleaseFetchDataMessage);
+						}
+					}
+				}})
 			 ]
 		})
 	]
