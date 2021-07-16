@@ -3,11 +3,13 @@ package org.mardep.ssrs.report.generator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -45,6 +47,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		String rankingRating = (String)inputParam.get("rankingRating");
 		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
@@ -64,8 +67,8 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 
 		Set<String> dollorCodeNotFoundSet = new HashSet<>();
 		String reportId = "SRS1120";
-		String reportTitle = "Average Monthly Wages by Rank";
-		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
+		String reportTitle = "Average Monthly Wagess(USD) by Rank "+ reportDateDisplay;		
+				String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		List<NationalityWagePojo> pojoList = new ArrayList<>();
 		for(Object row : list) {
 			Object[] array = (Object[]) row;

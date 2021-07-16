@@ -2,11 +2,13 @@ package org.mardep.ssrs.report.generator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -49,6 +51,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		String shipTypeCode = (String)inputParam.get("shipTypeCode");
 		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
@@ -119,7 +122,7 @@ public class MMO_011 extends AbstractAverageWage implements IReportGenerator{
 
 
 		String reportId = "SRS1150";
-		String reportTitle = "Average Monthly Wages of Crew by Rank / Rating by Ship Type";
+		String reportTitle = "Average Monthly Wages(USD) of Crew by Rank / Rating by Ship Type " + reportDateDisplay;
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 
 		String titleFormat = "AVERAGE MONTHLY WAGES OF %s ON %s";

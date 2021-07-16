@@ -3,12 +3,14 @@ package org.mardep.ssrs.report.generator;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -52,6 +54,7 @@ public class MMO_010 extends AbstractAverageWage implements IReportGenerator{
 	@Override
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
+		String reportDateDisplay = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(reportDate);
 		Long rankId = (Long)inputParam.get("rank");
 
 		logger.info("####### RPT_MMO_010  #########");
@@ -59,7 +62,7 @@ public class MMO_010 extends AbstractAverageWage implements IReportGenerator{
 		logger.info("Rank, {}-{}", rankId);
 
 		String reportId = "SRS1140";
-		String reportTitle = "Average Monthly Wages of Rank-Wise Crew by Nationality";
+		String reportTitle = "Average Monthly Wages(USD) of Rank-Wise Crew by Nationality "+ reportDateDisplay;
 		String currentUser = UserContextThreadLocalHolder.getCurrentUserName();
 		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);

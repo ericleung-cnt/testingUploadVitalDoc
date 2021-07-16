@@ -82,7 +82,7 @@
 				<textElement textAlignment="Right">
 					<font fontName="Courier New"/>
 				</textElement>
-				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm",Locale.ENGLISH).format(new java.util.Date())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="684" y="30" width="80" height="20" uuid="58834986-28b8-480a-9b5b-30c9c1b4e10c"/>
