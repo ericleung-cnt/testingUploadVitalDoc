@@ -65,9 +65,9 @@ var searchForm =
 		],
 		fields: [
 	 
-			{ name: "DollorCode", title:"Currency",  width: 80 ,},
+			{ name: "to_Dollar", title:"Currency",  width: 80 ,},
 			// { name: "fsa_score",  width: 80 },
-			{ name: "Exchange", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
+			{ name: "rate", title:"Rate", width: "*", type:"decimal" , format :"#,##0.000" },
 			// { name: "sol_guid_created", title:"Solution Created", width: "*" ,type:"boolean",width: 80, canEdit:false},
 			// { name: "sol_guid", title:"Solution id", width: "*" ,hidden:true},
 			// { name: "createdDate", hidden:true },

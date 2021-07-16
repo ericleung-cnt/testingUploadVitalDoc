@@ -46,8 +46,9 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 	public byte[] generate(Map<String, Object> inputParam) throws Exception {
 		Date reportDate = (Date)inputParam.get("reportDate");
 		String rankingRating = (String)inputParam.get("rankingRating");
-		Map<String,Double> currecyMap = (Map)inputParam.get("Currency");
+		Map<String,Object> currecyMap = (Map)inputParam.get("Currency");
 		currecyMap.keySet().removeIf(Objects::isNull);
+		String exchangeRateString = currecyMap.toString();
 		
 		logger.info("####### RPT_MMO_009  #########");
 		logger.info("Report Date:{}", reportDate);
@@ -85,7 +86,8 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 					pojoList.add(pojo);
 				}
 				else if(currecyMap.containsKey(currency)) {
-				BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				//BigDecimal divisor = BigDecimal.valueOf( ((Number)currecyMap.get(currency)).doubleValue());
+				BigDecimal divisor = new BigDecimal( ((String)currecyMap.get(currency)));
 				pojo.setUSDsalary( pojo.getSalary().divide(divisor,3,BigDecimal.ROUND_HALF_EVEN));
 				pojoList.add(pojo);
 					
@@ -131,6 +133,7 @@ public class MMO_009 extends AbstractAverageWage implements IReportGenerator{
 		map.put(REPORT_ID, reportId);
 		map.put(REPORT_TITLE, reportTitle);
 		map.put(USER_ID, currentUser!=null?currentUser:"SYSTEM");
+		map.put("exchangeRate",exchangeRateString);
 		if(dollorCodeNotFoundSet.size()>0) {
 			String msg = String.format(dollorCodeNotFoundErrMsg,String.join(",", dollorCodeNotFoundSet));
 			map.put(errorMsg, msg);
