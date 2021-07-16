@@ -287,7 +287,7 @@ public class CrewService extends AbstractService implements ICrewService {
 				for (int col = 0; col < lastCol; col++) {
 					Cell currCell = row.getCell(col,Row.RETURN_BLANK_AS_NULL);
 					if (shipRow[col] != null) {
-						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], StringUtils.trim(excelUtils.getCellValue(currCell)),errorMsg)));
+						shipInfo.put(shipRow[col], String.valueOf(validateCellValue(shipRow[col], StringUtils.trimToNull(excelUtils.getCellValue(currCell)),errorMsg)));
 					}
 				}
 				continue;
@@ -305,11 +305,8 @@ public class CrewService extends AbstractService implements ICrewService {
 			}
 			for (int col = 0; col < lastCol; col++) {
 				Cell currCell = row.getCell(col,Row.RETURN_BLANK_AS_NULL);
-//				logger.info("{}{}{}{}",
-//						new Object[] { subRow, col, crewGrid[subRow][col], excelUtils.getCellValue(currCell) });
 				if (crewGrid[subRow][col] != null) {
-//					crewData.put(crewGrid[subRow][col], getAndParseCellValue(crewGrid[subRow][col],currCell,crewGridDataType[subRow][col],errorMsg));
-					crewData.put(crewGrid[subRow][col],StringUtils.trim(excelUtils.getCellValue(currCell)));
+					crewData.put(crewGrid[subRow][col],StringUtils.trimToNull(excelUtils.getCellValue(currCell)));
 				}
 			}
 			if (subRow == 2) {
@@ -385,10 +382,7 @@ public class CrewService extends AbstractService implements ICrewService {
 			 return object;
 		}
 
-//		final String fallbackDate = "1970-01-01";
-//		final int  fallbackInt = 0;
-//		final double  fallbackdouble =0;
-//		final BigDecimal fallbackBigdecimal = BigDecimal.valueOf(0);
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("[yyyyMMdd][yyyy MM dd]");
 		if(cellVal==null) {
 			return cellVal;
@@ -464,11 +458,6 @@ public class CrewService extends AbstractService implements ICrewService {
 			 coverDao.save(crewListCover006);
 		}
 		List<Crew> allCrewsByImono = crewDao.findByCriteria(query);
-//		if(findCrewsByImono.size()==0) {
-//			crewlist.stream().forEach(o->o.setStatus(Crew.STATUS_ACTIVE));
-//			 saveCrewList(crewlist);
-//			 return crewlist;
-//		}
 		
 		for(Crew crew :crewlist) {
 			String crewReaded = crew.getSerbNo()+ simpleDateFormat.format(crew.getEngageDate());
@@ -609,25 +598,8 @@ public class CrewService extends AbstractService implements ICrewService {
 			return false;
 		})
 		.collect(Collectors.toList());
-		
-//		.orElse(null);
-//		.collect(Collectors.toList());
+
 	}
-
-
-
-
-
-
-	
-	
-
-	
-	
-
-	
-	
-	
 
 
 
@@ -648,36 +620,6 @@ public class CrewService extends AbstractService implements ICrewService {
 			uniqueMap.put(saved.getId(),saved);
 		}
 		return new ArrayList<Crew>(uniqueMap.values());   
-		
-		
-//		updateRecords.stream().forEach(o->{
-//			Long version1 = o.getVersion();
-//			Crew saved = crewDao.save(o);
-//			Long version2 = saved.getVersion();
-//			logger.info(version1+"");
-//			logger.info(version2+"");
-//			if(version1==null) {
-//				saved.setValidationErrors("new "+ Objects.toString(saved.getValidationErrors(),""));
-//			}else if (version1!=version2) {
-//				saved.setValidationErrors("updated "+ Objects.toString(saved.getValidationErrors(),""));
-//			}
-//			updatedRecords.add(saved);
-//			});
-		
-//		updatedRecords.removeIf(e->!seen.add(e.getId()));// remove duplicate 
-		
-//		Set<Crew> set = new HashSet<>(updatedRecords);
-//		updatedRecords.clear();
-//		updatedRecords.addAll(set);  // remove duplicate 
-//		List<Crew> result = crewDao.getCrewById(updatedId);
-//		for(Crew o :result) {
-//			if(rowVersionMap.containsKey(o.getId())&& o.getVersion()!=rowVersionMap.get(o.getId())) {
-//				o.setValidationErrors("updated "+o.getValidationErrors());
-//			}
-//		}
-	
-		
-//		return  result;
 	}
 
 
